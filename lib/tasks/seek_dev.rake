@@ -410,6 +410,7 @@ namespace :seek_dev do
       cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title: 'age', sample_attribute_type: SampleAttributeType.where(title:'Integer').first)
       cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title: 'name', required:true, sample_attribute_type: SampleAttributeType.where(title:'String').first)
       cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title: 'date', sample_attribute_type: SampleAttributeType.where(title:'Date time').first)
+      cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title: 'date file', sample_attribute_type: SampleAttributeType.where(title:'SEEK Data file').first)
       cmt.save!
       puts "Created test CMT for Study"
     else
@@ -438,4 +439,15 @@ namespace :seek_dev do
       end
     end
   end
+
+  task make_ontology_study_cmt: :environment do
+    cmt = CustomMetadataType.new(title: 'Study Ontology CMT', supported_type:'Study')
+    cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title: 'name', required:true, sample_attribute_type: SampleAttributeType.where(title:'String').first)
+    cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title: 'ontology',
+                                                                  required:true,
+                                                                  sample_attribute_type:SampleAttributeType.where(title:'Controlled Vocabulary').first,
+                                                                  sample_controlled_vocab: SampleControlledVocab.find(4))
+    cmt.save!
+  end
+
 end

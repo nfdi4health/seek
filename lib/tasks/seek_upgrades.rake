@@ -10,6 +10,8 @@ namespace :seek do
     update_samples_json
     set_version_visibility
     remove_old_project_join_logs
+    db:seed:sample_attribute_types
+
   ]
 
   # these are the tasks that are executes for each upgrade as standard, and rarely change

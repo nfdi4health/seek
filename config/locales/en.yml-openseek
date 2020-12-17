@@ -11,9 +11,9 @@ en:
 
   investigation: "Investigation"
   study: "Study"
-  assay: "Assay"
+  assay: "Resource"
   assays:
-    assay: "Assay"
+    assay: "Resource"
     experimental_assay: "Experimental assay"
     modelling_analysis:  "Modelling analysis"
 
