@@ -1743,8 +1743,28 @@ class ProjectsControllerTest < ActionController::TestCase
       get :guided_create
     end
     assert_response :success
+    assert_select 'input#managed_programme', count:1
+
   end
 
+  test 'guided create with administered programmes' do
+    person = Factory(:programme_administrator)
+    prog = Factory(:programme, title:'THE MANAGED ONE')
+    person_prog = person.programmes.first
+    another_prog = Factory(:programme)
+    login_as(person)
+    with_config_value(:managed_programme_id, prog.id) do
+      get :guided_create
+    end
+    assert_response :success
+    assert_select 'input#managed_programme', count:0
+    assert_select 'select#programme_id' do
+      assert_select 'option',count:2
+      assert_select 'option',value:prog.id,text:prog.title
+      assert_select 'option',value:person_prog.id,text:person_prog.title
+      assert_select 'option',value:another_prog.id,text:another_prog.title, count:0
+    end
+  end
 
   test 'request_join_project with known project and institution' do
     person = Factory(:person_not_in_project)
@@ -1809,14 +1829,14 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 'http://google.com', institution_details['web_page']
   end
 
-  test 'request create project with managed programme' do
+  test 'request create project with site managed programme' do
     person = Factory(:person_not_in_project)
     programme = Factory(:programme)
     institution = Factory(:institution)
     login_as(person)
     with_config_value(:managed_programme_id, programme.id) do
       params = {
-          managed_programme: '1',
+          programme_id: programme.id,
           project: { title: 'The Project',description:'description',web_page:'web_page'},
           institution: {id: institution.id}
       }
@@ -1829,6 +1849,37 @@ class ProjectsControllerTest < ActionController::TestCase
       assert_response :success
       assert flash[:notice]
       log = MessageLog.last
+      details = JSON.parse(log.details)
+      assert_equal institution.title, details['institution']['title']
+      assert_equal institution.id, details['institution']['id']
+      assert_equal institution.country, details['institution']['country']
+      assert_equal programme.title, details['programme']['title']
+      assert_equal programme.id, details['programme']['id']
+      project_details = details['project']
+      assert_equal 'description', project_details['description']
+      assert_equal 'The Project', project_details['title']
+    end
+  end
+
+  test 'request create project with own administered programme' do
+    person = Factory(:programme_administrator)
+    programme = person.programmes.first
+    institution = Factory(:institution)
+    login_as(person)
+    with_config_value(:managed_programme_id, nil) do
+      params = {
+        programme_id: programme.id,
+        project: { title: 'The Project',description:'description',web_page:'web_page'},
+        institution: {id: institution.id}
+      }
+      assert_enqueued_emails(0) do
+        assert_difference('MessageLog.count',1) do
+          post :request_create, params: params
+        end
+      end
+      log = MessageLog.last
+      assert_redirected_to administer_create_project_request_projects_path(message_log_id:log.id)
+
       details = JSON.parse(log.details)
       assert_equal institution.title, details['institution']['title']
       assert_equal institution.id, details['institution']['id']
@@ -1884,6 +1935,47 @@ class ProjectsControllerTest < ActionController::TestCase
 
       assert_equal 'the prog',programme_details['title']
       assert_nil programme_details['id']
+    end
+  end
+
+  test 'request create project without programmes' do
+    person = Factory(:person_not_in_project)
+
+    login_as(person)
+    with_config_value(:programmes_enabled, false) do
+      params = {
+        project: { title: 'The Project',description:'description',web_page:'web_page'},
+        institution: {title:'the inst',web_page:'the page',city:'London',country:'GB'}
+      }
+      assert_enqueued_emails(1) do
+        assert_difference('MessageLog.count') do
+          assert_no_difference('Institution.count') do
+            assert_no_difference('Project.count') do
+              post :request_create, params: params
+            end
+          end
+        end
+      end
+
+      assert_response :success
+      assert flash[:notice]
+      log = MessageLog.last
+      details = JSON.parse(log.details)
+      project_details = details['project']
+      institution_details = details['institution']
+
+
+      assert_equal 'GB',institution_details['country']
+      assert_equal 'London',institution_details['city']
+      assert_equal 'the page',institution_details['web_page']
+      assert_equal 'the inst',institution_details['title']
+      assert_nil institution_details['id']
+
+      assert_equal 'description', project_details['description']
+      assert_equal 'The Project', project_details['title']
+      assert_nil  project_details['id']
+
+      assert_nil details['programme']
     end
   end
 
@@ -2394,6 +2486,98 @@ class ProjectsControllerTest < ActionController::TestCase
     assert log.responded?
     assert_equal 'Accepted',log.response
 
+  end
+
+  test 'respond create project request as the same user' do
+    person = Factory(:programme_administrator)
+    programme = person.programmes.first
+    institution = Factory(:institution)
+    login_as(person)
+    project = Project.new(title:'new project',web_page:'my new project')
+    requester = person
+    log = MessageLog.log_project_creation_request(requester,programme,project,institution)
+    assert log.sent_by_self?
+    params = {
+      message_log_id:log.id,
+      accept_request: '1',
+      project:{
+        title:'new project',
+        web_page:'http://proj.org'
+      },
+      programme:{
+        id:programme.id
+      },
+      institution:{
+        id:institution.id
+      }
+    }
+
+    assert_enqueued_emails(0) do
+      assert_no_difference('Programme.count') do
+        assert_difference('Project.count') do
+          assert_no_difference('Institution.count') do
+            assert_difference('GroupMembership.count') do
+              assert_difference('MessageLog.count',-1) do
+                post :respond_create_project_request, params:params
+              end
+            end
+          end
+        end
+      end
+    end
+
+    project = Project.last
+    programme.reload
+
+    assert_redirected_to(project_path(project))
+    assert_equal "Project created",flash[:notice]
+
+    assert_includes programme.projects,project
+    assert_includes project.people, requester
+    assert_includes project.institutions, institution
+    assert_includes project.project_administrators, requester
+
+  end
+
+  test 'respond create project request as the same user - cancel' do
+    person = Factory(:programme_administrator)
+    programme = person.programmes.first
+    institution = Factory(:institution)
+    login_as(person)
+    project = Project.new(title:'new project',web_page:'my new project')
+    requester = person
+    log = MessageLog.log_project_creation_request(requester,programme,project,institution)
+    assert log.sent_by_self?
+    params = {
+      message_log_id:log.id,
+      project:{
+        title:'new project',
+        web_page:'http://proj.org'
+      },
+      programme:{
+        id:programme.id
+      },
+      institution:{
+        id:institution.id
+      }
+    }
+
+    assert_enqueued_emails(0) do
+      assert_no_difference('Programme.count') do
+        assert_no_difference('Project.count') do
+          assert_no_difference('Institution.count') do
+            assert_no_difference('GroupMembership.count') do
+              assert_difference('MessageLog.count',-1) do
+                post :respond_create_project_request, params:params
+              end
+            end
+          end
+        end
+      end
+    end
+
+    assert_redirected_to :root
+    assert_equal "Project creation cancelled",flash[:notice]
   end
 
   test 'respond create project request - existing programme need prog admin rights' do

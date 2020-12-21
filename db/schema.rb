@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_101609) do
+ActiveRecord::Schema.define(version: 2020_12_21_153232) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -182,6 +182,8 @@ ActiveRecord::Schema.define(version: 2020_11_19_101609) do
     t.integer "suggested_technology_type_id"
     t.text "other_creators", limit: 16777215
     t.string "deleted_contributor"
+    t.integer "sample_type_id"
+    t.index ["sample_type_id"], name: "index_assays_on_sample_type_id"
   end
 
   create_table "asset_doi_logs", id: :integer,  force: :cascade do |t|
@@ -1786,7 +1788,7 @@ ActiveRecord::Schema.define(version: 2020_11_19_101609) do
   end
 
   create_table "studies", id: :integer,  force: :cascade do |t|
-    t.string "title"
+    t.text "title"
     t.text "description", limit: 16777215
     t.integer "investigation_id"
     t.text "experimentalists", limit: 16777215
