@@ -2,6 +2,50 @@ require 'csv'
 
 namespace :seek_dev_nfdi do
 
+    task :build_nfdi_assay_custom_metadata_schema, [:path] => [:environment] do |t, args|
+      path = args.path
+      puts "Using CSV at #{path}"
+
+
+      cmt_already_exist =  CustomMetadataType.where(title: 'NFDI4Health Resource metadata').any?
+      if cmt_already_exist
+        puts "CMT for NFDI Resource already exists do want to overwrite with your modification y/N"
+        answer = STDIN.gets.chomp.to_s.downcase
+        if (!answer == "y" || !answer == "yes")
+          cmt_already_exist = true
+        elsif (answer == "y" || answer == "yes")
+          old_cmt =  CustomMetadataType.where(title: 'NFDI4Health Resource metadata')
+          id = old_cmt.first.id
+          old_cmt.destroy_all
+          CustomMetadataAttribute.where(custom_metadata_type_id: id).destroy_all
+          CustomMetadata.where(custom_metadata_type_id: id).destroy_all
+          cmt_already_exist = false
+        end
+      else
+        cmt_already_exist = false
+      end
+
+      unless cmt_already_exist
+        assays = CSV.read(path)
+        cmt = CustomMetadataType.new(title: 'NFDI4Health Resource metadata', supported_type:'Assay')
+
+        assays.each  do |assay|
+          title =  assay[0]
+          if assay[1]=="Mandatory"
+            required = true
+          else
+            required = false
+          end
+          sample_attribute_type= assay[2]
+          cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title:title, required:required, sample_attribute_type: SampleAttributeType.where(title:sample_attribute_type).first)
+        end
+        cmt.save!
+        puts "Created NFDI4Health Study metadata"
+      else
+        puts "CMT for NFDI4Health Study metadata already exists"
+      end
+    end
+
     task :build_nfdi_study_custom_metadata_schema, [:path] => [:environment] do |t, args|
     path = args.path
     puts "Using CSV at #{path}"
