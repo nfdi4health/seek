@@ -1,4 +1,4 @@
-class ChangeStudiesTitleToText < ActiveRecord::Migration[5.2]
+class ChangeStudyTitleToText < ActiveRecord::Migration[5.2]
   def up
     change_column :studies,:title,:text
   end
@@ -7,3 +7,4 @@ class ChangeStudiesTitleToText < ActiveRecord::Migration[5.2]
     change_column :studies,:title,:string
   end
 end
+
