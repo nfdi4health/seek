@@ -81,9 +81,9 @@ namespace :seek_dev_nfdi do
         cmt.custom_metadata_attributes << CustomMetadataAttribute.new(title: title, required: required, sample_attribute_type: SampleAttributeType.where(title: sample_attribute_type).first)
       end
       cmt.save!
-      puts "Created NFDI4Health Study metadata"
+      puts "Created NFDI4Health Resource metadata"
     else
-      puts "CMT for NFDI4Health Study metadata already exists"
+      puts "CMT for NFDI4Health Resource metadata already exists"
     end
   end
 
@@ -96,7 +96,7 @@ namespace :seek_dev_nfdi do
     investigation = Investigation.find(investigation_id)
 
     puts user.display_name.inspect
-    puts
+    puts investigation.title
     puts "Using CSV at #{path}"
 
     cmt = CustomMetadataType.where(title: 'NFDI4Health Study metadata').first
@@ -195,8 +195,92 @@ namespace :seek_dev_nfdi do
     end
   end
 
-  task :import_nfdi_assay, [:path, :study_id, :admin_user_id] => [:environment] do |t, args|
+  task :import_nfdi_assay, [:path, :other_study_id, :admin_user_id] => [:environment] do |t, args|
 
+    path = args.path
+    other_study_id = args.other_study_id
+    admin_user = args.admin_user_id
+    user = User.find(admin_user)
+
+    puts user.display_name.inspect
+    puts "Using CSV at #{path}"
+
+    cmt = CustomMetadataType.where(title: 'NFDI4Health Resource metadata').first
+
+    CustomMetadata.where(custom_metadata_type_id: cmt.id, item_type: "Assay").each do |cm|
+      disable_authorization_checks { Assay.find(cm.item_id).destroy }
+      puts "Remove Assay id " + cm.item_id.to_s
+      disable_authorization_checks { cm.destroy }
+    end
+
+    CSV.foreach(path, headers: true) do |row|
+      parent_study = nil
+      puts "_________________________________________"
+      puts row["parent_id"].inspect
+
+      # find the study of the resource
+      if row["parent_id"]!="NULL"
+        cm = CustomMetadata.where("item_type = ? AND json_metadata like ?", "Study", "%#{row["parent_id"]}%").first
+        parent_study= Study.find(cm.item_id) unless cm.nil?
+      else
+        parent_study = Study.find(other_study_id) unless other_study_id.nil?
+      end
+
+
+      unless parent_study.nil?
+        puts parent_study.title
+        if row["id_date"] == "NULL"
+          id_date = nil
+        else
+          id_date = Date::strptime(row["id_date"], "%m/%d/%y")
+        end
+
+        metadata = {
+            "parent_id": row["parent_id"].to_i,
+            "resource_id": row["resource_id"],
+            "resource_type": row["resource_type"],
+            "resource_type_general": row["resource_type_general"],
+            "resource_language": row["resource_language"],
+            "resource_web_page": row["resource_web_page"],
+            "resource_web_studyhub": row["resource_web_studyhub"],
+            "resource_web_seek": row["resource_web_seek"],
+            "resource_web_mica": row["resource_web_mica"],
+            "resource_use_rights": row["resource_use_rights"],
+            "resource_source": row["resource_source"],
+            "description_text": row["description_text"],
+            "description_type": row["description_type"],
+            "description_language": row["description_language"],
+            "title": row["title"],
+            "title_type": row["title_type"],
+            "title_language": row["title_language"],
+            "acronym": row["acronym"],
+            "acronym_type": row["acronym_type"],
+            "id_type": row["id_type"],
+            "id": row["id"],
+            "id_date": id_date,
+            "id_relation_type": row["id_relation_type"]}
+
+        metadata.each { |k, v| metadata[k] = nil if v == "NULL" }
+
+        User.with_current_user(user) do
+          resource = Assay.new(title: row["title"],
+                               study: parent_study,
+                               assay_class_id: AssayClass.where(key: "MODEL").first.id,
+                               custom_metadata: CustomMetadata.new(
+                                   custom_metadata_type: cmt,
+                                   data: metadata
+                               ))
+          resource.policy = Policy.new(name: 'default public',
+                                       access_type: 2)
+
+          puts "create Resource " + resource.title
+          resource.save!
+        end
+      else
+        puts "I can not find the study for resource id " + row["parent_id"].to_s
+      end
+
+    end
   end
 
 end
