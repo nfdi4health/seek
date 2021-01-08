@@ -113,19 +113,20 @@ namespace :seek_dev_nfdi do
       if row["id_date"] == "NULL"
         id_date = nil
       else
-        id_date = Date::strptime(row["id_date"], "%m/%d/%y")
+        # id_date = Date::strptime(row["id_date"], "%m/%d/%y")
+        id_date = Date::strptime(row["id_date"], "%Y-%m-%d")
       end
 
       if row["study_start_date"] == "NULL"
         study_start_date = nil
       else
-        study_start_date = Date::strptime(row["study_start_date"], "%m/%d/%y")
+        study_start_date = Date::strptime(row["study_start_date"], "%Y-%m-%d")
       end
 
       if row["study_end_date"] == "NULL"
         study_end_date = nil
       else
-        study_end_date = Date::strptime(row["study_end_date"], "%m/%d/%y")
+        study_end_date = Date::strptime(row["study_end_date"], "%Y-%m-%d")
       end
 
       metadata = {
