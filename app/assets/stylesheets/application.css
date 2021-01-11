@@ -37,6 +37,7 @@
 *= require DataTables-1.10.11/buttons.bootstrap
 *= require jstree
 *= require openbis
+*= require nfdi4health
 *= require eonasdan-bootstrap-datetimepicker
 *= require cytoscape_isa_graph
 *= require multi-step-wizard.css.erb
