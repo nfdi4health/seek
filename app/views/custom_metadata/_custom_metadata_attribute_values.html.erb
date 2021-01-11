@@ -8,7 +8,8 @@
     <div class="panel-body">
 
       <% resource.custom_metadata.custom_metadata_attributes.each do |attribute| %>
-        <p>
+        <% custom_metadata_hidden_class = resource.custom_metadata.get_attribute_value(attribute).nil?? "nfdi-hidden" : nil %>
+        <p class=<%=custom_metadata_hidden_class %>>
           <label><%= attribute.title.humanize(keep_id_suffix: true)%>:</label>
           <%= display_attribute(resource.custom_metadata, attribute, link: true) %>
         </p>
