@@ -100,7 +100,7 @@ namespace :seek_dev_nfdi do
     puts "Using CSV at #{path}"
 
     cmt = CustomMetadataType.where(title: 'NFDI4Health Study metadata').first
-    # disable_authorization_checks { investigation.studies.destroy_all }
+    #disable_authorization_checks { investigation.studies.destroy_all }
 
     CustomMetadata.where(custom_metadata_type_id: cmt.id, item_type: "Study").each do |cm|
       disable_authorization_checks { Study.find(cm.item_id).destroy }
@@ -133,7 +133,7 @@ namespace :seek_dev_nfdi do
           "parent_id": row["parent_id"].to_i,
           "resource_id": row["resource_id"],
           "resource_type": row["resource_type"],
-          "resource_type_general": row["resource_type_general"],
+          #"resource_type_general": row["resource_type_general"],
           "resource_language": row["resource_language"],
           "resource_web_page": row["resource_web_page"],
           "resource_web_studyhub": row["resource_web_studyhub"],
@@ -141,14 +141,14 @@ namespace :seek_dev_nfdi do
           "resource_web_mica": row["resource_web_mica"],
           "resource_use_rights": row["resource_use_rights"],
           "resource_source": row["resource_source"],
-          "description_text": row["description_text"],
-          "description_type": row["description_type"],
-          "description_language": row["description_language"],
-          "title": row["title"],
-          "title_type": row["title_type"],
-          "title_language": row["title_language"],
+          #"description_text": row["description_text"],
+          #"description_type": row["description_type"],
+          #"description_language": row["description_language"],
+          #"title": row["title"],
+          #"title_type": row["title_type"],
+          #"title_language": row["title_language"],
           "acronym": row["acronym"],
-          "acronym_type": row["acronym_type"],
+          #"acronym_type": row["acronym_type"],
           "id_type": row["id_type"],
           "id": row["id"],
           "id_date": id_date,
@@ -178,9 +178,10 @@ namespace :seek_dev_nfdi do
           "study_phase": row["study_phase"]}
 
       metadata.each { |k, v| metadata[k] = nil if v == "NULL" }
-
+      description = ( row["description_text"] == "NULL") ? nil : row["description_text"]
       User.with_current_user(user) do
         study = Study.new(title: row["title"],
+                          description: description,
                           investigation: investigation,
                           custom_metadata: CustomMetadata.new(
                               custom_metadata_type: cmt,
@@ -240,7 +241,7 @@ namespace :seek_dev_nfdi do
             "parent_id": row["parent_id"].to_i,
             "resource_id": row["resource_id"],
             "resource_type": row["resource_type"],
-            "resource_type_general": row["resource_type_general"],
+            #"resource_type_general": row["resource_type_general"],
             "resource_language": row["resource_language"],
             "resource_web_page": row["resource_web_page"],
             "resource_web_studyhub": row["resource_web_studyhub"],
@@ -248,24 +249,25 @@ namespace :seek_dev_nfdi do
             "resource_web_mica": row["resource_web_mica"],
             "resource_use_rights": row["resource_use_rights"],
             "resource_source": row["resource_source"],
-            "description_text": row["description_text"],
-            "description_type": row["description_type"],
-            "description_language": row["description_language"],
-            "title": row["title"],
-            "title_type": row["title_type"],
-            "title_language": row["title_language"],
+            #"description_text": row["description_text"],
+            #"description_type": row["description_type"],
+            #"description_language": row["description_language"],
+            #"title": row["title"],
+            #"title_type": row["title_type"],
+            #"title_language": row["title_language"],
             "acronym": row["acronym"],
-            "acronym_type": row["acronym_type"],
+            #"acronym_type": row["acronym_type"],
             "id_type": row["id_type"],
             "id": row["id"],
             "id_date": id_date,
             "id_relation_type": row["id_relation_type"]}
 
         metadata.each { |k, v| metadata[k] = nil if v == "NULL" }
-
+        description = ( row["description_text"] == "NULL") ? nil : row["description_text"]
         User.with_current_user(user) do
           resource = Assay.new(title: row["title"],
                                study: parent_study,
+                               description: description,
                                assay_class_id: AssayClass.where(key: "MODEL").first.id,
                                custom_metadata: CustomMetadata.new(
                                    custom_metadata_type: cmt,
