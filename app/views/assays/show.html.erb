@@ -45,12 +45,12 @@
           <b><%= t('study') %>: </b>
           <%= study_link(@assay.study) %>
         </p>
-        <p id="assay_type">
+        <p id="assay_type" class="nfdi-hidden">
           <b><%= assay_type_text -%>:</b>
           <%= link_to_assay_type(@assay) -%>
         </p>
         <% unless @assay.is_modelling? -%>
-            <p id="technology_type">
+            <p id="technology_type" >
               <b>Technology type: </b>
               <%= link_to_technology_type(@assay) -%>
             </p>
