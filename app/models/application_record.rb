@@ -6,9 +6,10 @@ class ApplicationRecord < ActiveRecord::Base
   include Seek::VersionedResource
   include Seek::ExplicitVersioning
   include Seek::Favouritable
+  include Seek::ActsAsDiscussable
   include Seek::ActsAsFleximageExtension
   include Seek::UniquelyIdentifiable
-  include Seek::YellowPages
+  include Seek::ActsAsYellowPages
   include Seek::GroupedPagination
   include Seek::Scalable
   include Seek::TitleTrimmer
@@ -23,6 +24,7 @@ class ApplicationRecord < ActiveRecord::Base
   include Seek::Permissions::AuthorizationEnforcement
   include Seek::Permissions::ActsAsAuthorized
   include Seek::RelatedItems
+  include HasTasks
 
   include Annotations::Acts::Annotatable
   include Annotations::Acts::AnnotationSource
@@ -85,7 +87,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.subscribable?
-    include? Seek::Subscribable
+    false
   end
 
   def subscribable?
