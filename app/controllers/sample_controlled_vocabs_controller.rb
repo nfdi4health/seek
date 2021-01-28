@@ -74,6 +74,30 @@ class SampleControlledVocabsController < ApplicationController
     end
   end
 
+  def fetch_ols_terms
+    error_msg = nil
+    begin
+      source_ontology = params[:source_ontology_id]
+      root_uri = params[:root_uri]
+
+      raise 'No root URI provided' if root_uri.blank?
+
+      client = Ebi::OlsClient.new
+      terms = client.all_descendants(source_ontology, root_uri)
+    rescue Exception=>e
+      error_msg = e.message
+    end
+
+    respond_to do |format|
+      if error_msg
+        format.json { render json:{errors:[{details:error_msg}]}, status: :unprocessable_entity}
+      else
+        format.json { render json:terms.to_json}
+      end
+
+    end
+  end
+
   def typeahead
     scv = SampleControlledVocab.find(params[:scv_id])
     results = scv.sample_controlled_vocab_terms.where("LOWER(label) like :query OR LOWER(iri) LIKE :query",

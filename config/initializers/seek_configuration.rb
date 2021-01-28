@@ -98,7 +98,6 @@ def load_seek_config_defaults!
   Seek::Config.default :header_image_enabled,true
   Seek::Config.default :header_image_title, "FAIRDOM"
   Seek::Config.default :header_image_link,"http://www.fair-dom.org"
-  Seek::Config.default :header_home_logo_image,'seek-logo-smaller.png'
   Seek::Config.default :copyright_addendum_enabled,false
   Seek::Config.default :copyright_addendum_content,'Additions copyright ...'
 
@@ -146,9 +145,6 @@ def load_seek_config_defaults!
   Seek::Config.default :site_base_host,"http://localhost:3000"
   Seek::Config.default :open_id_authentication_store,:memory
   Seek::Config.default :session_store_timeout, 1.hour
-
-  # Custom Metadata
-  Seek::Config.default :custom_metadata_enabled, false
 
   #MERGENOTE - why are these here? they should be in the database under the Scale model. Maybe an old relic
   Seek::Config.default :scales,["organism","liver","liverLobule","intercellular","cell"]

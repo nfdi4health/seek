@@ -32,7 +32,6 @@ dm_project_link:
 header_image_link:
 header_image_title:
 header_image_enabled:
-header_home_logo_image:
 header_image_avatar_id:
 google_analytics_enabled:
 google_analytics_tracker_id:
@@ -211,6 +210,5 @@ omniauth_github_enabled:
 omniauth_github_client_id:
 omniauth_github_secret:
   encrypt: true
-custom_metadata_enabled: false
 search_results_limit:
   convert: :to_i
