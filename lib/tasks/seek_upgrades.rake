@@ -15,6 +15,7 @@ namespace :seek do
     remove_old_project_join_logs
     fix_negative_programme_role_mask
     db:seed:sample_attribute_types
+    delete_users_with_invalid_person
   ]
 
   # these are the tasks that are executes for each upgrade as standard, and rarely change
@@ -79,12 +80,12 @@ namespace :seek do
       end
     end
     puts " ... finished updating sample JSON"
-  end
+  end  
 
   task(migrate_old_jobs: :environment) do
     puts "Migrating RdfGenerationJobs..."
     count = RdfGenerationQueue.count
-    Delayed::Job.where(failed_at: nil).where('handler LIKE ?', '%RdfGenerationJob%').find_each do |job|
+    Delayed::Job.where(failed_at: nil).where('handler LIKE ?', '%RdfGenerationJob%').where('handler LIKE ?','%item_type_name%').find_each do |job|
       data = YAML.load(job.handler.sub("--- !ruby/object:RdfGenerationJob\n",''))
       item = nil
       begin
@@ -166,6 +167,15 @@ namespace :seek do
         mask = mask + 32
       end
       person.update_column(:roles_mask,mask)
+    end
+  end
+
+  # removes users with a person_id which no longer exist
+  task(delete_users_with_invalid_person: :environment) do
+    found = User.where.not(person:nil).select{|u| u.person.nil?}
+    if found.any?
+      puts "... Removing #{found.count} users with a no longer existing person"
+      found.each(&:destroy)
     end
   end
   
