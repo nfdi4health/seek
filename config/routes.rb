@@ -423,6 +423,10 @@ SEEK::Application.routes.draw do
 
   # to be removed as STI does not work in too many places
   # resources :openbis_assays, controller: 'assays', type: 'OpenbisAssay'
+  #
+    ### STUDYHUB RESOURCES ###
+
+   resources :studyhub_resources
 
   ### ASSAY AND TECHNOLOGY TYPES ###
 

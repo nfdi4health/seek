@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_09_142611) do
+ActiveRecord::Schema.define(version: 2021_02_21_200651) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1833,6 +1833,33 @@ ActiveRecord::Schema.define(version: 2021_02_09_142611) do
     t.index ["user_id", "can_view"], name: "index_study_auth_lookup_on_user_id_and_can_view"
   end
 
+  create_table "studyhub_resource_links",  force: :cascade do |t|
+    t.bigint "studyhub_resource_id"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.index ["resource_type", "resource_id"], name: "index_studyhub_resource_links_on_resource_type_and_resource_id"
+    t.index ["studyhub_resource_id"], name: "index_studyhub_resource_links_on_studyhub_resource_id"
+  end
+
+  create_table "studyhub_resources",  force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "resource_id"
+    t.string "resource_type"
+    t.json "resource_json"
+    t.string "NFDI_person_in_charge"
+    t.string "contact_stage"
+    t.string "data_source"
+    t.string "comment"
+    t.string "Exclusion_MICA_reason"
+    t.string "Exclusion_SEEK_reason"
+    t.string "Exclusion_StudyHub_reason"
+    t.boolean "Inclusion_Studyhub"
+    t.boolean "Inclusion_SEEK"
+    t.boolean "Inclusion_MICA"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "subscriptions", id: :integer,  force: :cascade do |t|
     t.integer "person_id"
     t.integer "subscribable_id"
@@ -2023,4 +2050,5 @@ ActiveRecord::Schema.define(version: 2021_02_09_142611) do
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "studyhub_resource_links", "studyhub_resources"
 end
