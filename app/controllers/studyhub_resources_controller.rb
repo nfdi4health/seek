@@ -33,7 +33,7 @@ class StudyhubResourcesController < ApplicationController
 
 
 
-  def studyhub_re source_params
+  def studyhub_resource_params
     params.require(:studyhub_resource).permit(:parent_id,:resource_id,:resource_type, {resource_json: {}})
   end
 
