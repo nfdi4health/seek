@@ -1,8 +1,7 @@
 class StudyhubResource < ApplicationRecord
 
-  has_one :studyhub_resource_link, dependent: :destroy
-  has_one :study, through: :studyhub_resource_link, source: :resource, source_type: 'Study', dependent: :destroy
-  has_one :assay, through: :studyhub_resource_link, source: :resource, source_type: 'Assay', dependent: :destroy
+  belongs_to :assay, optional: true, dependent: :destroy
+  belongs_to :study, optional: true, dependent: :destroy
 
   validates :resource_id, presence: { message:"Studyhub Resource ID is blank or invalid" }, uniqueness: { message:"Studyhub Resource ID exsits" }
   validates :resource_type, presence: { message:"Studyhub Resource Type is blank or invalid" }
@@ -16,10 +15,10 @@ class StudyhubResource < ApplicationRecord
   DOCUMENT = 'document'.freeze
   INSTRUMENT = 'instrument'.freeze
 
-   scope :study, -> { where(resource_type: StudyhubResource::STUDY) }
-   scope :substudy, -> { where(resource_type: StudyhubResource::SUBSTUDY) }
-   scope :document, -> { where(resource_type: StudyhubResource::DOCUMENT) }
-   scope :instrument, -> { where(resource_type: StudyhubResource::INSTRUMENT) }
+   scope :studyhub_study, -> { where(resource_type: StudyhubResource::STUDY) }
+   scope :studyhub_substudy, -> { where(resource_type: StudyhubResource::SUBSTUDY) }
+   scope :studyhub_document, -> { where(resource_type: StudyhubResource::DOCUMENT) }
+   scope :studyhub_instrument, -> { where(resource_type: StudyhubResource::INSTRUMENT) }
 
 
 end

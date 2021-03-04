@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_21_200651) do
+ActiveRecord::Schema.define(version: 2021_03_04_164537) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1833,14 +1833,6 @@ ActiveRecord::Schema.define(version: 2021_02_21_200651) do
     t.index ["user_id", "can_view"], name: "index_study_auth_lookup_on_user_id_and_can_view"
   end
 
-  create_table "studyhub_resource_links",  force: :cascade do |t|
-    t.bigint "studyhub_resource_id"
-    t.string "resource_type"
-    t.bigint "resource_id"
-    t.index ["resource_type", "resource_id"], name: "index_studyhub_resource_links_on_resource_type_and_resource_id"
-    t.index ["studyhub_resource_id"], name: "index_studyhub_resource_links_on_studyhub_resource_id"
-  end
-
   create_table "studyhub_resources",  force: :cascade do |t|
     t.integer "parent_id"
     t.integer "resource_id"
@@ -1858,6 +1850,10 @@ ActiveRecord::Schema.define(version: 2021_02_21_200651) do
     t.boolean "Inclusion_MICA"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "assay_id"
+    t.bigint "study_id"
+    t.index ["assay_id"], name: "index_studyhub_resources_on_assay_id"
+    t.index ["study_id"], name: "index_studyhub_resources_on_study_id"
   end
 
   create_table "subscriptions", id: :integer,  force: :cascade do |t|
@@ -2050,5 +2046,4 @@ ActiveRecord::Schema.define(version: 2021_02_21_200651) do
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
-  add_foreign_key "studyhub_resource_links", "studyhub_resources"
 end

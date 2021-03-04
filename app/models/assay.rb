@@ -48,6 +48,7 @@ class Assay < ApplicationRecord
 
   has_one :investigation, through: :study
   has_one :external_asset, as: :seek_entity, dependent: :destroy
+  has_one :studyhub_resource, dependent: :destroy
 
   validates :assay_type_uri, presence:true
   validates_with AssayTypeUriValidator
