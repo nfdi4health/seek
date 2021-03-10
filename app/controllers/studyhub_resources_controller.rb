@@ -5,7 +5,24 @@ class StudyhubResourcesController < ApplicationController
   api_actions :index, :show
 
   def index
-    @studyhub_resources = StudyhubResource.all
+    # resource_type: ..studyhub_resources?type=Document (or Study,..)
+    if params[:type].present?
+      @studyhub_resources = StudyhubResource.where(resource_type: params[:type])
+
+    # limit: ../studyhub_resources?limit=300 records..
+    elsif params[:limit].present?
+      @studyhub_resources = StudyhubResource.all.limit params[:limit]
+
+    # all: ..studyhub_resourcesces?all=true ->all records..
+    elsif params[:all].present?
+      @studyhub_resources = StudyhubResource.all
+
+    # default: ..studyhub_resources?limit=10
+    else
+      @studyhub_resources = StudyhubResource.all.limit 10
+    #@studyhub_resources = StudyhubResource.all
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml
