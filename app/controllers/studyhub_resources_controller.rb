@@ -17,6 +17,10 @@ class StudyhubResourcesController < ApplicationController
     elsif params[:all].present?
       @studyhub_resources = StudyhubResource.all
 
+    # all: ..studyhub_resourcesces?all=true ->all records..
+    elsif params[:after].present?
+      @studyhub_resources = StudyhubResource.where({updated_at: params[:after].to_time..Time.now})
+
     # default: ..studyhub_resources?limit=10
     else
       @studyhub_resources = StudyhubResource.all.limit 10
