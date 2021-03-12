@@ -1,7 +1,7 @@
 class StudyhubResourcesController < ApplicationController
 
   include Seek::AssetsCommon
-
+  before_action :find_resource, only: [:show, :update, :destroy]
   api_actions :index, :show
 
   def index
@@ -13,13 +13,17 @@ class StudyhubResourcesController < ApplicationController
     elsif params[:limit].present?
       @studyhub_resources = StudyhubResource.all.limit params[:limit]
 
-    # all: ..studyhub_resourcesces?all=true ->all records..
+    # all: ..studyhub_resources?all=true ->all records..
     elsif params[:all].present?
       @studyhub_resources = StudyhubResource.all
 
-    # all: ..studyhub_resourcesces?all=true ->all records..
+    # after: ..studyhub_resources?after=2021-03-05 ->records, updated/modified after 2021-03-05..
     elsif params[:after].present?
       @studyhub_resources = StudyhubResource.where({updated_at: params[:after].to_time..Time.now})
+
+    # before: ..studyhub_resources?before=2021-03-05 ->records, updated/modified before 2021-03-05..
+    elsif params[:before].present?
+      @studyhub_resources = StudyhubResource.where({updated_at: Time.at(0)..params[:before].to_time})
 
     # default: ..studyhub_resources?limit=10
     else
@@ -35,8 +39,7 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def show
-    @studyhub_resource = StudyhubResource.find(params[:id])
-
+    #@studyhub_resource = StudyhubResource.find(params[:id])
     respond_to do |format|
       format.html # show.html.erb
       format.xml
@@ -45,7 +48,6 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def create
-
     @resource = StudyhubResource.new(studyhub_resource_params)
     resource_type = @resource.resource_type.downcase
 
@@ -67,13 +69,31 @@ class StudyhubResourcesController < ApplicationController
     end
   end
 
+  # PATCH/PUT /studyhub_resources/1
+  def update
+    if @studyhub_resource.update(studyhub_resource_params)
+      #render json: @studyhub_resource
+      render json: { message: 'resource successfully updated.'}, status: 200
+    else
+      #render error: { error: 'unable to update studyhub_resource' }, status: 400
+      render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity
+      #render json: @resource.errors, status: :unprocessable_entity
+    end
+  end
+
+  # DELETE ....studyhub_resources/1
+  def destroy
+    if @studyhub_resource
+       @studyhub_resource.destroy
+       render json: { message: 'resource successfully deleted.'}, status: 200
+    else
+      render json:  { error: 'Unable to delete resource'}, status: 400
+    end
+  end
+
   def handle_create_studyhub_resource_failure
     Rails.logger.info("create seek resource failure!")
     render json: @resource.errors, status: :unprocessable_entity
-  end
-
-  def studyhub_resource_params
-    params.require(:studyhub_resource).permit(:parent_id, :resource_id, :resource_type, { resource_json: {} })
   end
 
   def study_params
@@ -111,4 +131,13 @@ class StudyhubResourcesController < ApplicationController
       study_id: study_id
     }
   end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def find_resource
+      @studyhub_resource = StudyhubResource.find(params[:id])
+    end
+    def studyhub_resource_params
+      params.require(:studyhub_resource).permit(:parent_id, :resource_id, :resource_type, { resource_json: {} })
+    end
 end
