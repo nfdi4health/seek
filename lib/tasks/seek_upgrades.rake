@@ -16,6 +16,7 @@ namespace :seek do
     fix_negative_programme_role_mask
     db:seed:sample_attribute_types
     delete_users_with_invalid_person
+    delete_specimen_activity_logs
   ]
 
   # these are the tasks that are executes for each upgrade as standard, and rarely change
@@ -54,7 +55,7 @@ namespace :seek do
 
   task(update_samples_json: :environment) do
     puts '... converting stored sample JSON ...'
-    SampleType.all.each do |sample_type|
+    SampleType.find_each do |sample_type|
 
       # gather the attributes that need updating
       attributes_for_update = sample_type.sample_attributes.select do |attr|
@@ -160,7 +161,7 @@ namespace :seek do
   end
 
   task(fix_negative_programme_role_mask: :environment) do
-    problems = Person.all.select{|person| person.roles_mask < 0}
+    problems = Person.where('roles_mask < 0')
     problems.each do |person|
       mask = person.roles_mask
       while mask < 0
@@ -176,6 +177,14 @@ namespace :seek do
     if found.any?
       puts "... Removing #{found.count} users with a no longer existing person"
       found.each(&:destroy)
+    end
+  end
+
+  task(delete_specimen_activity_logs: :environment) do
+    logs = ActivityLog.where(activity_loggable_type: 'Specimen')
+    if logs.any?
+      puts "... removing #{logs.count} redundant Specimen related #{'log'.pluralize(logs.count)}"
+      logs.delete_all
     end
   end
   
