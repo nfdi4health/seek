@@ -138,6 +138,10 @@ class StudyhubResourcesController < ApplicationController
       @studyhub_resource = StudyhubResource.find(params[:id])
     end
     def studyhub_resource_params
-      params.require(:studyhub_resource).permit(:parent_id, :resource_id, :resource_type, { resource_json: {} })
+      params.require(:studyhub_resource).permit(:parent_id, :resource_id, :resource_type, :comment, { resource_json: {} }, \
+      :NFDI_person_in_charge, :contact_stage, :data_source, \
+      :comment, :Exclusion_MICA_reason, :Exclusion_SEEK_reason, \
+      :Exclusion_StudyHub_reason, :Inclusion_Studyhub, :Inclusion_SEEK, \
+      :Inclusion_MICA)
     end
 end
