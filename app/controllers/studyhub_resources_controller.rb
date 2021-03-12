@@ -5,30 +5,17 @@ class StudyhubResourcesController < ApplicationController
   api_actions :index, :show
 
   def index
-    # resource_type: ..studyhub_resources?type=Document (or Study,..)
-    if params[:type].present?
-      @studyhub_resources = StudyhubResource.where(resource_type: params[:type])
-
-    # limit: ../studyhub_resources?limit=300 records..
-    elsif params[:limit].present?
-      @studyhub_resources = StudyhubResource.all.limit params[:limit]
-
-    # all: ..studyhub_resources?all=true ->all records..
+    resources_expr = "StudyhubResource.all"
+    resources_expr << ".where(resource_type: params[:type])" if params[:type].present?
+    resources_expr << ".where({updated_at: params[:after].to_time..Time.now})" if params[:after].present?
+    resources_expr << ".where({updated_at: Time.at(0)..params[:before].to_time})" if params[:before].present?
+    if params[:limit].present?
+      resources_expr << ".limit params[:limit]"  
+      @studyhub_resources = eval resources_expr
     elsif params[:all].present?
-      @studyhub_resources = StudyhubResource.all
-
-    # after: ..studyhub_resources?after=2021-03-05 ->records, updated/modified after 2021-03-05..
-    elsif params[:after].present?
-      @studyhub_resources = StudyhubResource.where({updated_at: params[:after].to_time..Time.now})
-
-    # before: ..studyhub_resources?before=2021-03-05 ->records, updated/modified before 2021-03-05..
-    elsif params[:before].present?
-      @studyhub_resources = StudyhubResource.where({updated_at: Time.at(0)..params[:before].to_time})
-
-    # default: ..studyhub_resources?limit=10
+      @studyhub_resources = eval resources_expr
     else
-      @studyhub_resources = StudyhubResource.all.limit 10
-    #@studyhub_resources = StudyhubResource.all
+      @studyhub_resources = eval resources_expr + '.limit 10'
     end
 
     respond_to do |format|
