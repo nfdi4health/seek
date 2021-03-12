@@ -2,6 +2,8 @@ class StudyhubResource < ApplicationRecord
 
   belongs_to :assay, optional: true, dependent: :destroy
   belongs_to :study, optional: true, dependent: :destroy
+  # create,update,show via resource_id
+  alias_attribute :id, :resource_id
 
   validates :resource_id, presence: { message:"Studyhub Resource ID is blank or invalid" }, uniqueness: { message:"Studyhub Resource ID exsits" }
   validates :resource_type, presence: { message:"Studyhub Resource Type is blank or invalid" }
