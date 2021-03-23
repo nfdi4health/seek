@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_04_164537) do
+ActiveRecord::Schema.define(version: 2021_03_18_092220) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1835,7 +1835,6 @@ ActiveRecord::Schema.define(version: 2021_03_04_164537) do
 
   create_table "studyhub_resources",  force: :cascade do |t|
     t.integer "parent_id"
-    t.integer "resource_id"
     t.string "resource_type"
     t.json "resource_json"
     t.string "NFDI_person_in_charge"

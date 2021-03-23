@@ -1,16 +1,18 @@
 class StudyhubResourcesController < ApplicationController
 
   include Seek::AssetsCommon
-  before_action :find_resource, only: [:show, :update, :destroy]
+  before_action :find_resource, only: %i[show update destroy]
   api_actions :index, :show
 
   def index
+
     resources_expr = "StudyhubResource.all"
     resources_expr << ".where(resource_type: params[:type])" if params[:type].present?
     resources_expr << ".where({updated_at: params[:after].to_time..Time.now})" if params[:after].present?
     resources_expr << ".where({updated_at: Time.at(0)..params[:before].to_time})" if params[:before].present?
+
     if params[:limit].present?
-      resources_expr << ".limit params[:limit]"  
+      resources_expr << ".limit params[:limit]"
       @studyhub_resources = eval resources_expr
     elsif params[:all].present?
       @studyhub_resources = eval resources_expr
@@ -35,24 +37,26 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def create
-    @resource = StudyhubResource.new(studyhub_resource_params)
-    resource_type = @resource.resource_type.downcase
+
+    @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
+    resource_type = @studyhub_resource.resource_type
 
     item = nil
     if [StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? resource_type
       Rails.logger.info('creating a SEEK Study')
-      item = @resource.build_study(study_params)
+      item = @studyhub_resource.build_study(study_params)
     elsif [StudyhubResource::DOCUMENT, StudyhubResource::INSTRUMENT].include? resource_type
       Rails.logger.info('creating a SEEK Assay')
-      item = @resource.build_assay(assay_params)
+      item = @studyhub_resource.build_assay(assay_params)
     end
 
     update_sharing_policies item
 
-    if @resource.save
-      render json: @resource, status: :created, location: @resource
+    if @studyhub_resource.save
+      update_id_in_resource_json
+      render json: @studyhub_resource, status: :created, location: @studyhub_resource
     else
-      render json: @resource.errors, status: :unprocessable_entity
+      render json: @studyhub_resource.errors, status: :unprocessable_entity
     end
   end
 
@@ -64,7 +68,7 @@ class StudyhubResourcesController < ApplicationController
     else
       #render error: { error: 'unable to update studyhub_resource' }, status: 400
       render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity
-      #render json: @resource.errors, status: :unprocessable_entity
+      #render json: @studyhub_resource.errors, status: :unprocessable_entity
     end
   end
 
@@ -80,8 +84,10 @@ class StudyhubResourcesController < ApplicationController
 
   def handle_create_studyhub_resource_failure
     Rails.logger.info("create seek resource failure!")
-    render json: @resource.errors, status: :unprocessable_entity
+    render json: @studyhub_resource.errors, status: :unprocessable_entity
   end
+
+  private
 
   def study_params
     investigation_id = params[:studyhub_resource][:investigation_id]
@@ -97,15 +103,23 @@ class StudyhubResourcesController < ApplicationController
 
   def assay_params
 
-    study_id = params[:studyhub_resource][:study_id]
-    # search for its parent study if no study id in post request
-    if study_id.nil?
-      study_id = StudyhubResource.where(resource_id: studyhub_resource_params["parent_id"]).first.study.id
-    end
-
+    study_id = nil
     #ToDo  assign assay without parent to a default study. remove the hard code.
-    another_study_id = "3"
-    study_id = another_study_id if study_id.nil?
+    another_study_id = 11
+
+    if studyhub_resource_params["parent_id"].blank?
+      study_id = another_study_id
+    else
+
+      parent = StudyhubResource.where(id: studyhub_resource_params["parent_id"]).first
+
+      # Todo: when parents are other types, such as "instrument", "document"
+      study_id = if !parent.nil? && ([StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? parent.resource_type)
+                   parent.study.id
+                 else
+                   another_study_id
+                 end
+    end
 
     resource_json = studyhub_resource_params["resource_json"]
     title = resource_json["titles"].first["title"]
@@ -119,16 +133,25 @@ class StudyhubResourcesController < ApplicationController
     }
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def find_resource
-      @studyhub_resource = StudyhubResource.find(params[:id])
-    end
-    def studyhub_resource_params
-      params.require(:studyhub_resource).permit(:parent_id, :resource_id, :resource_type, :comment, { resource_json: {} }, \
+
+
+  def studyhub_resource_params
+      params.require(:studyhub_resource).permit(:parent_id, :resource_type, :comment, { resource_json: {} }, \
       :NFDI_person_in_charge, :contact_stage, :data_source, \
       :comment, :Exclusion_MICA_reason, :Exclusion_SEEK_reason, \
       :Exclusion_StudyHub_reason, :Inclusion_Studyhub, :Inclusion_SEEK, \
       :Inclusion_MICA)
-    end
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def find_resource
+    @studyhub_resource = StudyhubResource.find(params[:id])
+  end
+
+  def update_id_in_resource_json
+    @studyhub_resource.resource_json["resource_id"]||= @studyhub_resource.id
+    @studyhub_resource.save!
+  end
+
+
 end
