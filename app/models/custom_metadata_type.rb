@@ -1,5 +1,7 @@
 class CustomMetadataType < ApplicationRecord
   has_many :custom_metadata_attributes, inverse_of: :custom_metadata_type, dependent: :destroy
+  has_many :custom_metadatas, inverse_of: :custom_metadata_type
+
 
   validates :title, presence: true
   validates :custom_metadata_attributes, presence: true
