@@ -37,23 +37,29 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def create
-
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
     resource_type = @studyhub_resource.resource_type
+    seek_type = map_to_seek_type(resource_type)
 
     item = nil
-    if [StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? resource_type
+
+    case seek_type
+    when 'Study'
       Rails.logger.info('creating a SEEK Study')
       item = @studyhub_resource.build_study(study_params)
-    elsif [StudyhubResource::DOCUMENT, StudyhubResource::INSTRUMENT].include? resource_type
+      #item.valid?
+      #pp item.errors.full_messages
+    when 'Assay'
       Rails.logger.info('creating a SEEK Assay')
       item = @studyhub_resource.build_assay(assay_params)
+      # item.valid?
+      # pp item.errors.full_messages
     end
 
     update_sharing_policies item
 
     if @studyhub_resource.save
-      update_id_in_resource_json
+
       render json: @studyhub_resource, status: :created, location: @studyhub_resource
     else
       render json: @studyhub_resource.errors, status: :unprocessable_entity
@@ -75,15 +81,15 @@ class StudyhubResourcesController < ApplicationController
   # DELETE ....studyhub_resources/1
   def destroy
     if @studyhub_resource
-       @studyhub_resource.destroy
-       render json: { message: 'resource successfully deleted.'}, status: 200
+      @studyhub_resource.destroy
+      render json: { message: 'resource successfully deleted.'}, status: 200
     else
-      render json:  { error: 'Unable to delete resource'}, status: 400
+      render json: { error: 'Unable to delete resource'}, status: 400
     end
   end
 
   def handle_create_studyhub_resource_failure
-    Rails.logger.info("create seek resource failure!")
+    Rails.logger.info('create seek resource failure!')
     render json: @studyhub_resource.errors, status: :unprocessable_entity
   end
 
@@ -91,14 +97,21 @@ class StudyhubResourcesController < ApplicationController
 
   def study_params
     investigation_id = params[:studyhub_resource][:investigation_id]
-    resource_json = studyhub_resource_params["resource_json"]
-    title = resource_json["titles"].first["title"]
-    description = resource_json["descriptions"].first["text"] unless resource_json["descriptions"].blank?
-    return {
+    resource_json = studyhub_resource_params['resource_json']
+    title = resource_json['titles'].first['title']
+    description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
+
+    cmt,metadata = extract_custom_metadata('study')
+
+    {
       title: title,
       description: description,
-      investigation_id: investigation_id
+      investigation_id: investigation_id,
+      custom_metadata_attributes: {
+        custom_metadata_type_id: cmt.id, data: metadata
+      }
     }
+
   end
 
   def assay_params
@@ -107,6 +120,7 @@ class StudyhubResourcesController < ApplicationController
     #ToDo  assign assay without parent to a default study. remove the hard code.
     another_study_id = 11
 
+    # if resource has no parents, assign it to "other studies"s
     if studyhub_resource_params["parent_id"].blank?
       study_id = another_study_id
     else
@@ -114,6 +128,7 @@ class StudyhubResourcesController < ApplicationController
       parent = StudyhubResource.where(id: studyhub_resource_params["parent_id"]).first
 
       # Todo: when parents are other types, such as "instrument", "document"
+      # Todo: if parent doesnt exist, still need to sort out the relationship
       study_id = if !parent.nil? && ([StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? parent.resource_type)
                    parent.study.id
                  else
@@ -121,19 +136,23 @@ class StudyhubResourcesController < ApplicationController
                  end
     end
 
-    resource_json = studyhub_resource_params["resource_json"]
-    title = resource_json["titles"].first["title"]
-    description = resource_json["descriptions"].first["text"] unless resource_json["descriptions"].blank?
-    return {
+    resource_json = studyhub_resource_params['resource_json']
+    title = resource_json['titles'].first['title']
+    description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
+
+    cmt,metadata = extract_custom_metadata('assay')
+
+    {
       # currently the assay class is set as modelling type by default
-      assay_class_id: AssayClass.for_type("modelling").id,
+      assay_class_id: AssayClass.for_type('modelling').id,
       title: title,
       description: description,
-      study_id: study_id
+      study_id: study_id,
+      custom_metadata_attributes: {
+        custom_metadata_type_id: cmt.id, data: metadata
+      }
     }
   end
-
-
 
   def studyhub_resource_params
       params.require(:studyhub_resource).permit(:parent_id, :resource_type, :comment, { resource_json: {} }, \
@@ -148,10 +167,47 @@ class StudyhubResourcesController < ApplicationController
     @studyhub_resource = StudyhubResource.find(params[:id])
   end
 
-  def update_id_in_resource_json
-    @studyhub_resource.resource_json["resource_id"]||= @studyhub_resource.id
-    @studyhub_resource.save!
+  def map_to_seek_type(resource_type)
+    if [StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? resource_type.downcase
+      'Study'
+    elsif [StudyhubResource::DOCUMENT, StudyhubResource::INSTRUMENT].include? resource_type.downcase
+      'Assay'
+    else
+      nil
+    end
   end
 
+  def extract_custom_metadata(resource_type)
+
+    if CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata',supported_type: resource_type).any?
+      cmt = CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata', supported_type: resource_type).first
+    end
+
+    resource_json = @studyhub_resource.resource_json
+
+    metadata = {
+      "resource_web_studyhub": resource_json['resource_web_studyhub'],
+      "resource_type": resource_json['resource_type'].capitalize,
+      "resource_web_page": resource_json['resource_web_page'],
+      "resource_web_mica": resource_json['resource_web_mica'],
+      "acronym": resource_json['acronyms'].first['acronym']
+    }
+
+    if resource_json.key? 'study'
+      study_start_date = resource_json['study']['study_start_date'].nil? ? nil : Date.strptime(resource_json['study']['study_start_date'], '%Y-%m-%d')
+      study_end_date = resource_json['study']['study_end_date'].nil? ? nil : Date.strptime(resource_json['study']['study_end_date'], '%Y-%m-%d')
+
+      metadata = metadata.merge({
+                                  "study_type": resource_json['study']['study_type'],
+                                  "study_start_date": study_start_date,
+                                  "study_end_date": study_end_date,
+                                  "study_status": resource_json['study']['study_status'],
+                                  "study_country": resource_json['study']['study_country'],
+                                  "study_eligibility": resource_json['study']['study_eligibility']
+                                })
+    end
+
+    [cmt, metadata]
+  end
 
 end
