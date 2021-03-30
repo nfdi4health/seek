@@ -1,16 +1,95 @@
 require 'json'
-  max_studyhub_study_json_text = '{"studySecondaryOutcomes": null, "studyAnalysisUnit": "Individual", "acronyms": [{"type": "Original", "acronym": "SHARE"}], "studyPopulation": "Older individuals", "studyDesignComment": null, "studyEndDate": null, "studyObtainedSampleSize": null, "childs": [20004, 50005], "studyType": "Cohort", "studyRegion": null, "webSeek": "https://seek.studyhub.nfdi4health.de/documents/19", "source": "manually collected", "studyInterventions": null, "studyDatasource": null, "studyEligibility": null, "studyCountry": "Denmark, Sweden, Austria, Germany, France, Belgium, Netherlands, Switzerland, Greece, Italy, Spain", "parents": [], "webMica": null, "contacts": [{"email": "info@share-project.org", "type": "Contact person", "specificType": null, "name": "SHARE Central", "webPage": "", "phone": "", "address": "", "specificNumber": null}, {"email": "boersch-supan@mea.mpisoc.mpg.de", "type": "Principal investigator", "specificType": null, "name": "Prof. Axel Bu00f6rsch-Supan", "webPage": "", "phone": "+49 (0)893 8602355", "address": "Munich Center for the Economics of Aging (MEA), Max Planck Institute for Social Law and Social Policy, Technical University of Munich, Amalienstr. 33, 80799 Munich, Germany", "specificNumber": null}], "hasAssociatedDocuments": false, "language": null, "titles": [{"type": "Original", "title": "Survey of Health, Ageing and Retirement in Europe (SHARE)", "language": "EN"}], "studyHypothesis": null, "hasAssociatedInstruments": true, "descriptions": [{"type": "offical", "text": "The main aim of SHARE is understanding ageing and how it affects individuals in the diverse cultural settings of Europe.", "language": "EN"}, {"type": "created", "text": "The main aim of SHARE is understanding ageing and how it affects individuals in the diverse cultural settings of Europe.", "language": "EN"}], "studyAgeMin": 50, "resourceType": "Study", "webPage": "http://www.share-project.org/home0.html", "studyPrimaryOutcomes": null, "studyStatus": "Recruiting", "studyPrimaryDesign": "Non-interventional", "studySampling": null, "studyStartDate": null, "studyPhase": null, "studyTargetSampleSize": 27000, "studyAgeMax": -1, "webStudyhub": "http://covid19.studyhub.nfdi4health.de/resource/10004", "alternativeIds": [], "resourceId": 10004, "useRights": "EN", "studyConditions": null}'
+
+max_studyhub_study_json_text = '{
+  "resource_type": "study",
+  "resource_type_general": "Other",
+  "resource_language": "DE",
+  "resource_web_page": "https://nako.de/",
+  "resource_web_studyhub": "http://covid19.studyhub.nfdi4health.de/resource/10011",
+  "resource_web_seek": "https://seek.studyhub.nfdi4health.de/documents/1",
+  "resource_web_mica": "https://studycataloguebrowser.ship-med.uni-greifswald.de/study/nako-1",
+  "resource_use_rights": "DE",
+  "resource_source": "manually collected",
+  "study": {
+    "study_primary_design": "Non-interventional",
+    "study_type": null,
+    "study_analysis_unit": "Individual",
+    "study_status": "Recruiting",
+    "study_eligibility": "German residents in the age range of 20u201369 years",
+    "study_sampling": null,
+    "study_country": "Germany",
+    "study_region": null,
+    "study_conditions": "Investigation of causes underlying major chronic diseases, i.e..",
+    "study_population": "General population",
+    "study_target_sample_size": 200000,
+    "study_obtained_sample_size": null,
+    "study_age_min": 20,
+    "study_age_max": 69,
+    "study_start_date": "2014-10-01",
+    "study_end_date": null,
+    "study_design_comment": null,
+    "study_datasource": "Blood; Urine; Questionnaires; Other",
+    "study_hypothesis": null,
+    "study_interventions": null,
+    "study_primary_outcomes": null,
+    "study_secondary_outcomes": null,
+    "study_phase": null
+  },
+  "acronyms": [
+    {
+      "acronym_type": "Original",
+      "acronym": "NAKO"
+    }
+  ],
+  "alternativeIds": [
+    {
+      "id_id": "ISRCTN33578935",
+      "id_type": "WHO",
+      "relation_type": null
+    }
+  ],
+  "contacts": [
+    {
+      "role_type": "Contact person",
+      "role_name": "Lisa Kofink",
+      "role_email": "lisa.kofink@nako.de",
+      "role_phone": "+49 (0)622 1426200",
+      "role_address": "",
+      "role_specific_type": null,
+      "role_specific_number": null,
+      "role_web_page": ""
+    }
+  ],
+  "descriptions": [
+    {
+      "description_text": "The German National Cohort (GNC) has been inviting men and women aged between 20 and 69 to 18 study centers throughout Germany since 2014. The participants are medically examined and questioned about their living conditions. The GNCu2019s aim is to investigate the causes of chronic diseases, such as cancer, diabetes, cardiovascular diseases, rheumatism, infectious diseases, and dementia in order to improve prevention, early diagnoses and treatment of these very widely spread diseases.",
+      "description_type": "offical",
+      "description_language": "EN"
+    },
+    {
+      "description_text": "Die NAKO Gesundheitsstudie ist die bundesweite Gesundheitsstudie mit Ziel, die Entstehung von Krankheiten wie Krebs, Diabetes, Herzinfarkt und anderen besser zu verstehen, um Vorbeugung, Fru00fcherkennung und Behandlung in Deutschland zu verbessern. Warum wird der eine krank, der andere aber bleibt gesund? Das ist die zentrale Frage, die die NAKO beantworten mu00f6chte.",
+      "description_type": "created",
+      "description_language": "DE"
+    }
+  ],
+  "titles": [
+    {
+      "title_type": "Original",
+      "title": "Die NAKO Gesundheitsstudie",
+      "title_language": "DE"
+    }
+  ]
+}'
+
 max_studyhub_study_json = JSON.parse(max_studyhub_study_json_text)
 
 # StudyhubResource
 Factory.define(:studyhub_study, class: StudyhubResource) do |f|
-  f.sequence(:resource_id) { |n| n }
+  f.sequence(:id) { |n| n }
   f.resource_type 'study'
 end
 
 Factory.define(:max_studyhub_study, class: StudyhubResource) do |f|
-  f.parent_id nil
-  f.resource_id 10004
   f.resource_type 'study'
   f.resource_json max_studyhub_study_json
   f.NFDI_person_in_charge nil
@@ -26,6 +105,6 @@ Factory.define(:max_studyhub_study, class: StudyhubResource) do |f|
 end
 
 Factory.define(:studyhub_assay, class: StudyhubResource) do |f|
-  f.sequence(:resource_id) { |n| n }
+  f.sequence(:id) { |n| n }
   f.resource_type 'assay'
 end

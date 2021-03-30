@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_26_140656) do
+ActiveRecord::Schema.define(version: 2021_03_30_074112) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1831,6 +1831,16 @@ ActiveRecord::Schema.define(version: 2021_03_26_140656) do
     t.boolean "can_delete", default: false
     t.index ["user_id", "asset_id", "can_view"], name: "index_study_auth_lookup_on_user_id_and_asset_id_and_can_view"
     t.index ["user_id", "can_view"], name: "index_study_auth_lookup_on_user_id_and_can_view"
+  end
+
+  create_table "studyhub_resource_relationships",  force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "child_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_studyhub_resource_relationships_on_child_id"
+    t.index ["parent_id", "child_id"], name: "index_studyhub_resource_relationships_on_parent_id_and_child_id", unique: true
+    t.index ["parent_id"], name: "index_studyhub_resource_relationships_on_parent_id"
   end
 
   create_table "studyhub_resources",  force: :cascade do |t|

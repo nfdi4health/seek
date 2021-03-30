@@ -2,12 +2,24 @@ class StudyhubResource < ApplicationRecord
 
   belongs_to :assay, optional: true, dependent: :destroy
   belongs_to :study, optional: true, dependent: :destroy
-  # create,update,show via resource_id  not needed anymore since we plan to use SEEK-id as resource_id
-  # alias_attribute :id, :resource_id
 
-  validates :resource_type, presence: { message:"Studyhub Resource Type is blank or invalid" }
+  has_many :children_relationships, class_name: 'StudyhubResourceRelationship',
+                                  foreign_key: 'parent_id',
+                                  dependent: :destroy
 
-  #add more later
+  has_many :children, through: :children_relationships
+
+  has_many :parents_relationships, class_name: 'StudyhubResourceRelationship',
+           foreign_key: 'child_id',
+           dependent: :destroy
+
+  has_many :parents, through: :parents_relationships
+
+
+  validates :resource_type, presence: { message:'Studyhub Resource Type is blank or invalid' }
+
+  #todo: validate the double titles. add more validations later
+
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
 
   STUDY = 'study'.freeze
@@ -15,9 +27,34 @@ class StudyhubResource < ApplicationRecord
   DOCUMENT = 'document'.freeze
   INSTRUMENT = 'instrument'.freeze
 
-   scope :studyhub_study, -> { where(resource_type: StudyhubResource::STUDY) }
-   scope :studyhub_substudy, -> { where(resource_type: StudyhubResource::SUBSTUDY) }
-   scope :studyhub_document, -> { where(resource_type: StudyhubResource::DOCUMENT) }
-   scope :studyhub_instrument, -> { where(resource_type: StudyhubResource::INSTRUMENT) }
+  scope :studyhub_study, -> { where(resource_type: StudyhubResource::STUDY) }
+  scope :studyhub_substudy, -> { where(resource_type: StudyhubResource::SUBSTUDY) }
+  scope :studyhub_document, -> { where(resource_type: StudyhubResource::DOCUMENT) }
+  scope :studyhub_instrument, -> { where(resource_type: StudyhubResource::INSTRUMENT) }
+
+
+  def add_child(child)
+    children_relationships.create(child_id: child.id)
+  end
+
+  def remove_child(child)
+    children_relationships.find_by(child_id: child.id).destroy
+  end
+
+  def is_parent?(child)
+    children.include?(child)
+  end
+
+  def add_parent(parent)
+    parents_relationships.create(parent_id: parent.id)
+  end
+
+  def remove_parent(parent)
+    parents_relationships.find_by(parent_id: parent.id).destroy
+  end
+
+  def is_child?(parent)
+    parents.include?(parent)
+  end
 
 end
