@@ -8,6 +8,6 @@ class CreateStudyhubResourceRelationships < ActiveRecord::Migration[5.2]
     end
     add_index :studyhub_resource_relationships, :parent_id
     add_index :studyhub_resource_relationships, :child_id
-    add_index :studyhub_resource_relationships, %i[parent_id child_id], unique: true
+    add_index :studyhub_resource_relationships, [:parent_id, :child_id], name: 'index_studyhub_resource_parent_id_child_id', unique: true
   end
 end

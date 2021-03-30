@@ -1839,7 +1839,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_074112) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_studyhub_resource_relationships_on_child_id"
-    t.index ["parent_id", "child_id"], name: "index_studyhub_resource_relationships_on_parent_id_and_child_id", unique: true
+    t.index ["parent_id", "child_id"], name: "index_studyhub_resource_parent_id_child_id", unique: true
     t.index ["parent_id"], name: "index_studyhub_resource_relationships_on_parent_id"
   end
 
