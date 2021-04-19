@@ -21,6 +21,7 @@
         <%= render :partial => "layouts/navbar/browse_menu" %>
         <%= render :partial => "layouts/navbar/create_menu" if logged_in_and_registered? %>
         <%= render :partial => "layouts/navbar/help_menu" if Seek::Config.documentation_enabled %>
+        <li><%= link_to 'Studyhub', studyhub_resources_path -%></li>
       </ul>
 
       <%= render :partial => 'layouts/navbar/search_bar' if Seek::Config.solr_enabled %>
