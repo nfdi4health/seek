@@ -1,8 +1,8 @@
 class StudyhubResourcesController < ApplicationController
 
   include Seek::AssetsCommon
-  before_action :find_resource, only: %i[show update destroy]
-  api_actions :index, :show
+  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage show]
+  api_actions :index, :show, :create, :update, :destroy
 
   def index
 
@@ -21,16 +21,16 @@ class StudyhubResourcesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
       format.xml
       format.json { render json: @studyhub_resources }
     end
   end
 
   def show
-    #@studyhub_resource = StudyhubResource.find(params[:id])
+    @studyhub_resource = StudyhubResource.find(params[:id])
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
       format.xml
       format.json { render json: @studyhub_resource }
     end
@@ -58,11 +58,16 @@ class StudyhubResourcesController < ApplicationController
 
     update_sharing_policies item
 
-    if @studyhub_resource.save
-
-      render json: @studyhub_resource, status: :created, location: @studyhub_resource
+    #todo only save @studyhub_resource when item(study/assay) is created successfully
+    if item.valid?
+      if @studyhub_resource.save
+        update_parent_child_relationships(relationship_params)
+        render json: @studyhub_resource, status: :created, location: @studyhub_resource
+      else
+        render json: @studyhub_resource.errors, status: :unprocessable_entity
+      end
     else
-      render json: @studyhub_resource.errors, status: :unprocessable_entity
+      render json: item.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -101,7 +106,7 @@ class StudyhubResourcesController < ApplicationController
     title = resource_json['titles'].first['title']
     description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
 
-    cmt,metadata = extract_custom_metadata('study')
+    cmt, metadata = extract_custom_metadata('study')
 
     {
       title: title,
@@ -117,22 +122,24 @@ class StudyhubResourcesController < ApplicationController
   def assay_params
 
     study_id = nil
-    #ToDo  assign assay without parent to a default study. remove the hard code.
-    another_study_id = 11
+
+    #ToDo assign assay without parent to a default study. remove the hard code.
+    other_studyhub_resource_id = Seek::Config.nfdi_other_studyhub_resource_id
 
     # if resource has no parents, assign it to "other studies"s
-    if studyhub_resource_params["parent_id"].blank?
-      study_id = another_study_id
+    if relationship_params["parent_ids"].blank?
+      study_id = other_studyhub_resource_id
     else
 
-      parent = StudyhubResource.where(id: studyhub_resource_params["parent_id"]).first
+      parent = StudyhubResource.where(id: relationship_params["parent_ids"]).first
 
-      # Todo: when parents are other types, such as "instrument", "document"
-      # Todo: if parent doesnt exist, still need to sort out the relationship
-      study_id = if !parent.nil? && ([StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? parent.resource_type)
+      # TODO: when parents are other types, such as "instrument", "document"
+      # TODO: if parent doesnt exist, still need to sort out the relationship
+      study_id = if !parent.nil? && ([StudyhubResource::STUDY,
+                                      StudyhubResource::SUBSTUDY].include? parent.resource_type)
                    parent.study.id
                  else
-                   another_study_id
+                   other_studyhub_resource_id
                  end
     end
 
@@ -140,7 +147,7 @@ class StudyhubResourcesController < ApplicationController
     title = resource_json['titles'].first['title']
     description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
 
-    cmt,metadata = extract_custom_metadata('assay')
+    cmt, metadata = extract_custom_metadata('assay')
 
     {
       # currently the assay class is set as modelling type by default
@@ -155,16 +162,15 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def studyhub_resource_params
-      params.require(:studyhub_resource).permit(:parent_id, :resource_type, :comment, { resource_json: {} }, \
-      :NFDI_person_in_charge, :contact_stage, :data_source, \
-      :comment, :Exclusion_MICA_reason, :Exclusion_SEEK_reason, \
-      :Exclusion_StudyHub_reason, :Inclusion_Studyhub, :Inclusion_SEEK, \
-      :Inclusion_MICA)
+    params.require(:studyhub_resource).permit(:resource_type, :comment, { resource_json: {} }, \
+                                              :nfdi_person_in_charge, :contact_stage, :data_source, \
+                                              :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
+                                              :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
+                                              :inclusion_mica)
   end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def find_resource
-    @studyhub_resource = StudyhubResource.find(params[:id])
+  def relationship_params
+    params.require(:studyhub_resource).permit(parent_ids: [], child_ids: [])
   end
 
   def map_to_seek_type(resource_type)
@@ -172,15 +178,13 @@ class StudyhubResourcesController < ApplicationController
       'Study'
     elsif [StudyhubResource::DOCUMENT, StudyhubResource::INSTRUMENT].include? resource_type.downcase
       'Assay'
-    else
-      nil
     end
   end
 
   def extract_custom_metadata(resource_type)
-
-    if CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata',supported_type: resource_type).any?
-      cmt = CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata', supported_type: resource_type).first
+    if CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata', supported_type: resource_type).any?
+      cmt = CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata',
+                                     supported_type: resource_type).first
     end
 
     resource_json = @studyhub_resource.resource_json
@@ -194,8 +198,20 @@ class StudyhubResourcesController < ApplicationController
     }
 
     if resource_json.key? 'study'
-      study_start_date = resource_json['study']['study_start_date'].nil? ? nil : Date.strptime(resource_json['study']['study_start_date'], '%Y-%m-%d')
-      study_end_date = resource_json['study']['study_end_date'].nil? ? nil : Date.strptime(resource_json['study']['study_end_date'], '%Y-%m-%d')
+      study_start_date = if resource_json['study']['study_start_date'].nil?
+                           nil
+                         else
+                           Date.strptime(
+                             resource_json['study']['study_start_date'], '%Y-%m-%d'
+                           )
+                         end
+      study_end_date = if resource_json['study']['study_end_date'].nil?
+                         nil
+                       else
+                         Date.strptime(
+                           resource_json['study']['study_end_date'], '%Y-%m-%d'
+                         )
+                       end
 
       metadata = metadata.merge({
                                   "study_type": resource_json['study']['study_type'],
@@ -208,6 +224,31 @@ class StudyhubResourcesController < ApplicationController
     end
 
     [cmt, metadata]
+  end
+
+  def update_parent_child_relationships(params)
+
+    if params.key?(:parent_ids)
+      params["parent_ids"].each do |x|
+        parent = StudyhubResource.find(x)
+        if parent.nil?
+          pp 'Studyhub Resource id #{x} doesnt exist'
+        else
+          @studyhub_resource.add_parent(parent)
+        end
+      end
+    end
+
+    if params.key?(:child_ids)
+      params["child_ids"].each do |x|
+        child = StudyhubResource.find(x)
+        if child.nil?
+          pp 'Studyhub Resource id #{x} doesnt exist'
+        else
+          @studyhub_resource.add_child(child)
+        end
+      end
+    end
   end
 
 end

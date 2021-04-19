@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_074112) do
+ActiveRecord::Schema.define(version: 2021_03_31_132840) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1846,16 +1846,16 @@ ActiveRecord::Schema.define(version: 2021_03_30_074112) do
   create_table "studyhub_resources",  force: :cascade do |t|
     t.string "resource_type"
     t.json "resource_json"
-    t.string "NFDI_person_in_charge"
+    t.string "nfdi_person_in_charge"
     t.string "contact_stage"
     t.string "data_source"
     t.string "comment"
-    t.string "Exclusion_MICA_reason"
-    t.string "Exclusion_SEEK_reason"
-    t.string "Exclusion_StudyHub_reason"
-    t.boolean "Inclusion_Studyhub"
-    t.boolean "Inclusion_SEEK"
-    t.boolean "Inclusion_MICA"
+    t.string "exclusion_mica_reason"
+    t.string "exclusion_seek_reason"
+    t.string "exclusion_studyhub_reason"
+    t.boolean "inclusion_studyhub"
+    t.boolean "inclusion_seek"
+    t.boolean "inclusion_mica"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "assay_id"
