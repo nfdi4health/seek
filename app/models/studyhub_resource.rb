@@ -34,10 +34,10 @@ class StudyhubResource < ApplicationRecord
   scope :studyhub_instrument, -> { where(resource_type: StudyhubResource::INSTRUMENT) }
 
   def title
-    unless resource_json.nil?
-    "#{resource_json['titles'].first['title']}"
-    else
+    if resource_json.nil?
       'No title.'
+    else
+      "#{resource_json['titles'].first['title']}"
     end
   end
 
