@@ -4,21 +4,22 @@ class StudyhubResource < ApplicationRecord
   belongs_to :study, optional: true, dependent: :destroy
 
   has_many :children_relationships, class_name: 'StudyhubResourceRelationship',
-                                  foreign_key: 'parent_id',
-                                  dependent: :destroy
+                                    foreign_key: 'parent_id',
+                                    dependent: :destroy
 
   has_many :children, through: :children_relationships
 
   has_many :parents_relationships, class_name: 'StudyhubResourceRelationship',
-           foreign_key: 'child_id',
-           dependent: :destroy
+                                   foreign_key: 'child_id',
+                                   dependent: :destroy
 
   has_many :parents, through: :parents_relationships
 
 
   validates :resource_type, presence: { message:'Studyhub Resource Type is blank or invalid' }
+  validate :check_title_uniqueness
 
-  #todo: validate the double titles. add more validations later
+  #todo: add more validations later
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
 
@@ -32,6 +33,18 @@ class StudyhubResource < ApplicationRecord
   scope :studyhub_document, -> { where(resource_type: StudyhubResource::DOCUMENT) }
   scope :studyhub_instrument, -> { where(resource_type: StudyhubResource::INSTRUMENT) }
 
+  def title
+    unless resource_json.nil?
+    "#{resource_json['titles'].first['title']}"
+    else
+      'No title.'
+    end
+  end
+
+  def check_title_uniqueness
+    title = resource_json['titles'].first['title']
+    errors.add(:title, 'A studyhub resource with the same title exists. ') unless Study.where(:title => title).blank? && Assay.where(:title => title).blank?
+  end
 
   def add_child(child)
     children_relationships.create(child_id: child.id)
