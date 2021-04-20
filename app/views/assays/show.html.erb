@@ -60,6 +60,8 @@
             <%= list_assay_organisms("Organisms", @assay.assay_organisms,{:id=>"organism"}) %>
         <% end %>
 
+        <%= render partial: 'studyhub_resources/parent_child_relationships', locals: {resource: @assay} %>
+
         <%= render partial: 'custom_metadata/custom_metadata_attribute_values', locals: {resource: @assay} %>
 
         <% if Seek::Config.human_diseases_enabled %>

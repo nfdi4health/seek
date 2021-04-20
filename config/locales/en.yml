@@ -151,3 +151,10 @@ en:
       <p>
       You have the option to either <strong>Join</strong> a %{project} you already know about, or <b>Create</b> a new one.
       </p>"
+
+  studyhub_resource:
+    id: 'Resource ID'
+    study: 'Study'
+    substudy: 'Study'
+    instrument: 'Instrument'
+    document: 'Document'

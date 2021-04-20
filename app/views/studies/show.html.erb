@@ -42,6 +42,8 @@
         </div>
     <% end %>
 
+    <%= render partial: 'studyhub_resources/parent_child_relationships', locals: {resource: @study} %>
+
     <%= render partial: 'custom_metadata/custom_metadata_attribute_values', locals: {resource: @study} %>
 
     <%= render partial: 'general/isa_graph', locals: { root_item: @study, options: { depth: 4 } } %>

@@ -1,0 +1,30 @@
+<%
+  label = 'Associated Studyhub Resource:'
+  studyhub_resource = resource.studyhub_resource
+%>
+<% if studyhub_resource %>
+
+  <div id="studyhub_resource" class="panel panel-default">
+    <div class="panel-heading"><%= label %></div>
+    <div class="panel-body">
+      <p class="studyhub_resource">
+        <label>Associated Studyhub Resource:</label>
+      </p>
+
+      <%= persistent_studyhub_resource_id_json(studyhub_resource) %>
+
+      <% unless studyhub_resource.parents.blank? %>
+        <% studyhub_resource.parents.each do |parent| %>
+          <%= persistent_studyhub_resource_id_json(parent) %>
+        <% end %>
+      <% end %>
+
+      <% unless studyhub_resource.children.blank? %>
+        <% studyhub_resource.children.each do |child| %>
+          <%= persistent_studyhub_resource_id_json(child) %>
+        <% end %>
+      <% end %>
+
+    </div>
+  </div>
+<% end %>
