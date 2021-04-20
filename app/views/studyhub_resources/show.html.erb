@@ -1,4 +1,4 @@
-<%= persistent_studyhub_resource_id_json(@studyhub_resource) %>
+<%= studyhub_resource_in_seek_id_json(@studyhub_resource) %>
   <%= @studyhub_resource.resource_type %>
   <br>
   <%= @studyhub_resource.title %>
@@ -8,10 +8,7 @@
   <h3>It's associated item</h3>
   <% if @studyhub_resource.resource_type == StudyhubResource::STUDY || @studyhub_resource.resource_type == StudyhubResource::SUBSTUDY %>
     <%= persistent_resource_id(@studyhub_resource.study) %>
-  <%= persistent_studyhub_resource_id_json(@studyhub_resource.study) %>
-
 <% else %>
     <%= persistent_resource_id(@studyhub_resource.assay) %>
-  <%= persistent_studyhub_resource_id_json(@studyhub_resource.assay) %>
 
 <% end %>

@@ -1,0 +1,15 @@
+<%
+  label = 'Studyhub Resource in SEEK'
+  studyhub_resource = resource.studyhub_resource
+%>
+<% if studyhub_resource %>
+
+  <div id="studyhub_resource" class="panel panel-default">
+    <div class="panel-heading"><%= label %></div>
+    <div class="panel-body">
+      <p class="studyhub_resource">
+      <%= studyhub_resource_in_seek_id_json(studyhub_resource) %>
+      </p>
+    </div>
+  </div>
+<% end %>
