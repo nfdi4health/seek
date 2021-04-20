@@ -1543,7 +1543,7 @@ ActiveRecord::Schema.define(version: 2021_03_31_132840) do
   end
 
   create_table "sample_controlled_vocab_terms", id: :integer,  force: :cascade do |t|
-    t.string "label"
+    t.text "label"
     t.integer "sample_controlled_vocab_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
