@@ -93,10 +93,10 @@ class StudyhubResourcesController < ApplicationController
     end
   end
 
-  def handle_create_studyhub_resource_failure
-    Rails.logger.info('create seek resource failure!')
-    render json: @studyhub_resource.errors, status: :unprocessable_entity
-  end
+  # def handle_create_studyhub_resource_failure
+  #   Rails.logger.info('create seek resource failure!')
+  #   render json: @studyhub_resource.errors, status: :unprocessable_entity
+  # end
 
   private
 

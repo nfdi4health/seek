@@ -77,7 +77,7 @@
 
     <%= render partial: 'custom_metadata/custom_metadata_attribute_values', locals: {resource: @assay} %>
     <%= render partial: 'studyhub_resources/parent_child_relationships', locals: {resource: @assay} %>
-    <%= render partial: 'studyhub_resources/associated_studyhub_resource.html.erb', locals: {resource: @assay} %>
+    <%#= render partial: 'studyhub_resources/associated_studyhub_resource.html.erb', locals: {resource: @assay} %>
 
 
     <% if ((@assay.is_modelling?) && !@assay.models.empty? && !@assay.data_files.empty?) %><%#MODELLING ASSAY %>
