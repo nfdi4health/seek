@@ -47,13 +47,9 @@ class StudyhubResourcesController < ApplicationController
     when 'Study'
       Rails.logger.info('creating a SEEK Study')
       item = @studyhub_resource.build_study(study_params)
-      #item.valid?
-      #pp item.errors.full_messages
     when 'Assay'
       Rails.logger.info('creating a SEEK Assay')
       item = @studyhub_resource.build_assay(assay_params)
-      # item.valid?
-      # pp item.errors.full_messages
     end
 
     update_sharing_policies item
@@ -67,7 +63,8 @@ class StudyhubResourcesController < ApplicationController
         render json: @studyhub_resource.errors, status: :unprocessable_entity
       end
     else
-      render json: item.errors.full_messages, status: :unprocessable_entity
+      @studyhub_resource.errors.add(:base, item.errors.full_messages)
+      render json: @studyhub_resource.errors, status: :unprocessable_entity
     end
   end
 
@@ -230,7 +227,7 @@ class StudyhubResourcesController < ApplicationController
       params["parent_ids"].each do |x|
         parent = StudyhubResource.find(x)
         if parent.nil?
-          pp 'Studyhub Resource id #{x} doesnt exist'
+          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
         else
           @studyhub_resource.add_parent(parent)
         end
@@ -241,7 +238,7 @@ class StudyhubResourcesController < ApplicationController
       params["child_ids"].each do |x|
         child = StudyhubResource.find(x)
         if child.nil?
-          pp 'Studyhub Resource id #{x} doesnt exist'
+          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
         else
           @studyhub_resource.add_child(child)
         end
