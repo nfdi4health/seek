@@ -73,13 +73,16 @@ class StudyhubResourcesController < ApplicationController
 
   # PATCH/PUT /studyhub_resources/1
   def update
-    if @studyhub_resource.update(studyhub_resource_params)
-      #render json: @studyhub_resource
-      render json: { message: 'resource successfully updated.'}, status: 200
-    else
-      #render error: { error: 'unable to update studyhub_resource' }, status: 400
-      render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity
-      #render json: @studyhub_resource.errors, status: :unprocessable_entity
+    @studyhub_resource.update(studyhub_resource_params)
+    # update_sharing_policies @studyhub_resource
+    update_parent_child_relationships(relationship_params)
+
+    respond_to do |format|
+      if @studyhub_resource.save
+        format.json {render json: @studyhub_resource, status: 200}
+      else
+        format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
+      end
     end
   end
 
@@ -92,11 +95,6 @@ class StudyhubResourcesController < ApplicationController
       render json: { error: 'Unable to delete resource'}, status: 400
     end
   end
-
-  # def handle_create_studyhub_resource_failure
-  #   Rails.logger.info('create seek resource failure!')
-  #   render json: @studyhub_resource.errors, status: :unprocessable_entity
-  # end
 
   private
 

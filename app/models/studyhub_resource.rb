@@ -18,10 +18,12 @@ class StudyhubResource < ApplicationRecord
 
   validates :resource_type, presence: { message:'Studyhub Resource Type is blank or invalid' }
   validate :check_title_uniqueness
+  validate :resource_type_not_changed, on: :update
 
   #todo: add more validations later
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
+  attr_readonly :resource_type
 
   STUDY = 'study'.freeze
   SUBSTUDY = 'substudy'.freeze
@@ -44,6 +46,12 @@ class StudyhubResource < ApplicationRecord
   def check_title_uniqueness
     title = resource_json['titles'].first['title']
     errors.add(:title, 'A studyhub resource with the same title exists. ') unless Study.where(:title => title).blank? && Assay.where(:title => title).blank?
+  end
+
+  def resource_type_not_changed
+    if resource_type_changed? && self.persisted?
+      errors.add(:resource_type, "Change of resource type is not allowed!")
+    end
   end
 
   def add_child(child)
