@@ -76,7 +76,8 @@ class StudyhubResourcesController < ApplicationController
 
     respond_to do |format|
       if @studyhub_resource.save
-        format.json {render json: @studyhub_resource, status: 200}
+        @studyhub_resource.reload
+        format.json { render json: @studyhub_resource, status: 200 }
       else
         format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
       end
@@ -87,9 +88,9 @@ class StudyhubResourcesController < ApplicationController
   def destroy
     if @studyhub_resource
       @studyhub_resource.destroy
-      render json: { message: 'resource successfully deleted.'}, status: 200
+      render json: { message: 'resource successfully deleted.' }, status: 200
     else
-      render json: { error: 'Unable to delete resource'}, status: 400
+      render json: { error: 'Unable to delete resource' }, status: 400
     end
   end
 
@@ -221,29 +222,47 @@ class StudyhubResourcesController < ApplicationController
     [cmt, metadata]
   end
 
-  def update_parent_child_relationships(params)
+  #@todo check the validation of parent and child relationship and add constraints
+  # def is_parent_valid?(parent)
+  #   child_type = @studyhub_resource.resource_type.downcase
+  #   parent_type = parent.resource_type.downcase
+  #
+  #   pp "child_type:"+child_type
+  #   pp "parent_type:"+parent_type
+  #     if parent_type == StudyhubResource::STUDY && child_type == StudyhubResource::SUBSTUDY
+  #       true
+  #     elsif ([StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? parent_type) && ([StudyhubResource::INSTRUMENT, StudyhubResource::DOCUMENT].include? child_type)
+  #       true
+  #     else
+  #       @studyhub_resource.errors.add(:base, "Wrong parent and child relationship.")
+  #       false
+  #     end
+  # end
 
+
+  def update_parent_child_relationships(params)
     if params.key?(:parent_ids)
+      @studyhub_resource.parents = []
       params["parent_ids"].each do |x|
-        parent = StudyhubResource.find(x)
-        if parent.nil?
-          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
-        else
-          @studyhub_resource.add_parent(parent)
+          parent = StudyhubResource.find(x)
+          if parent.nil?
+            @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
+          else
+            @studyhub_resource.add_parent(parent)
         end
       end
     end
 
     if params.key?(:child_ids)
+      @studyhub_resource.children = []
       params["child_ids"].each do |x|
-        child = StudyhubResource.find(x)
-        if child.nil?
-          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
-        else
+      child = StudyhubResource.find(x)
+      if child.nil?
+        @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
+      else
           @studyhub_resource.add_child(child)
-        end
+      end
       end
     end
   end
-
 end
