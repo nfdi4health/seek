@@ -8,4 +8,5 @@ class StudyhubResourceSerializer < SkeletonSerializer
   has_one :assay
   has_many :children
   has_many :parents
+  has_many :documents
 end

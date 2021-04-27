@@ -14,6 +14,7 @@ class StudyhubResource < ApplicationRecord
                                    dependent: :destroy
 
   has_many :parents, through: :parents_relationships
+  has_many :documents, through: :assay
 
 
   validates :resource_type, presence: { message:'Studyhub Resource Type is blank or invalid' }
