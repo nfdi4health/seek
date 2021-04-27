@@ -28,6 +28,7 @@ class AssaySerializer < SnapshottableSerializer
   has_many :projects
   has_one :investigation
   has_one :study
+  has_one :studyhub_resource
   has_many :data_files
   has_many :models
   has_many :sops

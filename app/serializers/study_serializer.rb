@@ -4,6 +4,7 @@ class StudySerializer < SnapshottableSerializer
     object.person_responsible_id.to_s
   end
 
+  has_one :studyhub_resource
   has_many :people
   has_many :projects
   has_one :investigation

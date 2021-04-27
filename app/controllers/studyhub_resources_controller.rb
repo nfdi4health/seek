@@ -1,6 +1,8 @@
 class StudyhubResourcesController < ApplicationController
 
   include Seek::AssetsCommon
+  include Seek::DestroyHandling
+
   before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage show]
   api_actions :index, :show, :create, :update, :destroy
 
@@ -81,16 +83,6 @@ class StudyhubResourcesController < ApplicationController
       else
         format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE ....studyhub_resources/1
-  def destroy
-    if @studyhub_resource
-      @studyhub_resource.destroy
-      render json: { message: 'resource successfully deleted.' }, status: 200
-    else
-      render json: { error: 'Unable to delete resource' }, status: 400
     end
   end
 
