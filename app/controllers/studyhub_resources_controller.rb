@@ -72,9 +72,17 @@ class StudyhubResourcesController < ApplicationController
 
   # PATCH/PUT /studyhub_resources/1
   def update
-    @studyhub_resource.update(studyhub_resource_params)
+    @studyhub_resource.update_attributes(studyhub_resource_params)
     # update_sharing_policies @studyhub_resource
     update_parent_child_relationships(relationship_params)
+
+    unless @studyhub_resource.study.nil?
+      @studyhub_resource.study.update_attributes(study_params)
+    end
+
+    unless @studyhub_resource.assay.nil?
+      @studyhub_resource.assay.update_attributes(assay_params)
+    end
 
     respond_to do |format|
       if @studyhub_resource.save
@@ -92,7 +100,7 @@ class StudyhubResourcesController < ApplicationController
     investigation_id = params[:studyhub_resource][:investigation_id]
     resource_json = studyhub_resource_params['resource_json']
     title = resource_json['titles'].first['title']
-    description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
+    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?s
 
     cmt, metadata = extract_custom_metadata('study')
 
@@ -109,28 +117,7 @@ class StudyhubResourcesController < ApplicationController
 
   def assay_params
 
-    study_id = nil
-
-    #ToDo assign assay without parent to a default study. remove the hard code.
-    other_studyhub_resource_id = Seek::Config.nfdi_other_studyhub_resource_id
-
-    # if resource has no parents, assign it to "other studies"s
-    if relationship_params["parent_ids"].blank?
-      study_id = other_studyhub_resource_id
-    else
-
-      parent = StudyhubResource.where(id: relationship_params["parent_ids"]).first
-
-      # TODO: when parents are other types, such as "instrument", "document"
-      # TODO: if parent doesnt exist, still need to sort out the relationship
-      study_id = if !parent.nil? && ([StudyhubResource::STUDY,
-                                      StudyhubResource::SUBSTUDY].include? parent.resource_type)
-                   parent.study.id
-                 else
-                   other_studyhub_resource_id
-                 end
-    end
-
+    study_id = get_study_id(relationship_params)
     resource_json = studyhub_resource_params['resource_json']
     title = resource_json['titles'].first['title']
     description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
@@ -145,7 +132,8 @@ class StudyhubResourcesController < ApplicationController
       study_id: study_id,
       custom_metadata_attributes: {
         custom_metadata_type_id: cmt.id, data: metadata
-      }
+      },
+      document_ids: seek_relationship_params["document_ids"]
     }
   end
 
@@ -161,12 +149,42 @@ class StudyhubResourcesController < ApplicationController
     params.require(:studyhub_resource).permit(parent_ids: [], child_ids: [])
   end
 
+  def seek_relationship_params
+    params.require(:studyhub_resource).permit(document_ids:[])
+  end
+
   def map_to_seek_type(resource_type)
     if [StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? resource_type.downcase
       'Study'
     elsif [StudyhubResource::DOCUMENT, StudyhubResource::INSTRUMENT].include? resource_type.downcase
       'Assay'
     end
+  end
+
+  def get_study_id(relationship_params)
+
+    study_id = nil
+
+    #ToDo assign assay without parent to a default study. remove the hard code.
+    other_studyhub_resource_id = Seek::Config.nfdi_other_studyhub_resource_id
+
+    # if resource has no parents, assign it to "other studies"
+    if relationship_params["parent_ids"].blank?
+      study_id = other_studyhub_resource_id
+    else
+
+      parent = StudyhubResource.where(id: relationship_params["parent_ids"]).first
+
+      # TODO: when parents are other types, such as "instrument", "document"
+      # TODO: if parent doesnt exist, still need to sort out the relationship
+      study_id = if !parent.nil? && ([StudyhubResource::STUDY,
+                                      StudyhubResource::SUBSTUDY].include? parent.resource_type)
+                   parent.study.id
+                 else
+                   other_studyhub_resource_id
+                 end
+    end
+    study_id
   end
 
   def extract_custom_metadata(resource_type)
