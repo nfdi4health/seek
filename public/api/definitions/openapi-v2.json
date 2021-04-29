@@ -20,7 +20,8 @@
             "backgroundColor": "#FFFFFF"
         }
     },
-    "host": "fairdomhub.org",
+    "host": "seek.covid19.studyhub.nfdi4health.de",
+    
     "basePath": "/",
     "schemes": [
         "https"
@@ -125,6 +126,12 @@
             "name": "search",
             "description": {
                 "$ref": "../descriptions/search.md"
+            }
+        },
+        {
+            "name": "studyhubResources",
+            "description": {
+                "$ref": "../descriptions/studyhubResources.md"
             }
         },
         {
@@ -262,6 +269,12 @@
             ]
         },
         {
+            "name": "Studyhub Resources",
+            "tags": [
+                "studyhubResources"
+            ]
+        },
+        {            
             "name": "Yellow Pages",
             "tags": [
                 "institutions",
@@ -414,6 +427,7 @@
                         "sample_types",
                         "sops",
                         "studies",
+                        "studyhub_resources",
                         "workflows"
                     ],
                     "default": "data_files"
@@ -4734,6 +4748,7 @@
                 "sample_types",
                 "sops",
                 "studies",
+                "studyhub_resources",
                 "workflows"
             ]
         },
@@ -6370,6 +6385,9 @@
                                 },
                                 "study": {
                                     "$ref": "#/definitions/studySingletonReference"
+                                },
+                                "studyhubResource": {
+                                    "$ref": "#/definitions/studyhubResourceReferencesList"
                                 },
                                 "data_files": {
                                     "$ref": "#/definitions/dataFileReferencesList"
@@ -10034,6 +10052,195 @@
             "example": {
                 "$ref": "../examples/studyPatch.json"
             }
+        },
+        "studyhubResourceObject": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [ "Object describing the data of a studyhub_resource" ]
+        },
+                "studyhubResourcePatch": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "$ref": "#/definitions/nonEmptyString"
+                        },
+                        "type": {
+                            "$ref": "#/definitions/studyType"
+                        },
+                        "attributes": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "$ref": "#/definitions/nonEmptyString"
+                                },
+                                "description": {
+                                    "$ref": "#/definitions/nullableNonEmptyString"
+                                },
+                                "experimentalists": {
+                                    "$ref": "#/definitions/nullableNonEmptyString"
+                                },
+                                "other_creators": {
+                                    "$ref": "#/definitions/nullableOtherCreatorsString"
+                                },
+                                "person_responsible_id": {
+                                    "$ref": "#/definitions/nullableNonEmptyString"
+                                },
+                                "policy": {
+                                    "$ref": "#/definitions/policy"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "relationships": {
+                            "type": "object",
+                            "properties": {
+                                "creators": {
+                                    "$ref": "#/definitions/peopleReferenceList"
+                                },
+                                "investigation": {
+                                    "$ref": "#/definitions/investigationSingletonReference"
+                                },
+                                "publications": {
+                                    "$ref": "#/definitions/publicationReferencesList"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false,
+            "example": {
+                "$ref": "../examples/studyPatch.json"
+            }
+        },
+        "studyhubResourcePost": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "type": { "$ref": "#/definitions/studyhubResourceType" },
+                        "attributes": {
+                            "type": "object",
+                            "properties": {
+                                "resource_type": {
+                                    "$ref": "#/definitions/studyhubResourceTypes" 
+                                },
+                                "resource_json": { 
+                                    "$ref": "#/definitions/studyhubResourceObject"
+                                },
+                                "nfdi_person_in_charge": {
+                                    "type": "string"
+                                },
+                                "contact_stage": {
+                                    "type": "string"
+                                },
+                                "data_source": {
+                                    "type": "string"
+                                },
+                                "comment": {
+                                    "type": "string"
+                                },
+                                "exclusion_mica_reason": {
+                                    "type": "string"
+                                },
+                                "exclusion_seek_reason": {
+                                    "type": "string"
+                                },
+                                "exclusion_studyhub_reason": {
+                                    "type": "string"
+                                },
+                                "inclusion_mica": {
+                                    "type": "boolean"
+                                },
+                                "inclusion_seek": {
+                                    "type": "boolean"
+                                },
+                                "inclusion_studyhub": {
+                                    "type": "boolean"
+                                },
+                                "policy": {
+                                    "$ref": "#/definitions/policy"
+                                }
+                            },
+                            "required": [
+                                "resource_type", "resource_json", "policy"
+                            ],
+                            "additionalProperties": false
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "attributes"
+                    ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false,
+            "example": {
+                "$ref": "../examples/studyhubResourcePost.json"
+            }
+        },
+        "studyhubResourceReference": {
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/nonEmptyString"
+                },
+                "type": {
+                    "$ref": "#/definitions/studyhubResourceType"
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceReferences": {
+            "type": "array",
+            "minItems": 0,
+            "uniqueItems": true,
+            "items": {
+                "$ref": "#/definitions/studyhubResourceReference"
+            }
+        },
+        "studyhubResourceReferencesList": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/studyhubResourceReferences"
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false
+        },
+        
+        "studyhubResourceType": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [ "studyhub_resources" ]
+        },
+        "studyhubResourceTypes": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [ "study", "document", "instrument" ]
         },
         "workflowResponse": {
             "type": "object",
