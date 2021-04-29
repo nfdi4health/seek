@@ -100,7 +100,7 @@ class StudyhubResourcesController < ApplicationController
     investigation_id = params[:studyhub_resource][:investigation_id]
     resource_json = studyhub_resource_params['resource_json']
     title = resource_json['titles'].first['title']
-    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?s
+    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
 
     cmt, metadata = extract_custom_metadata('study')
 
