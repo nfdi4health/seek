@@ -18,7 +18,7 @@ class StudyhubResource < ApplicationRecord
 
 
   validates :resource_type, presence: { message:'Studyhub Resource Type is blank or invalid' }
-  validate :check_title_uniqueness
+  validate :check_title_uniqueness,on: :create
   validate :resource_type_not_changed, on: :update
 
   #todo: add more validations later
