@@ -97,7 +97,7 @@ class StudyhubResourcesController < ApplicationController
   private
 
   def study_params
-    investigation_id = params[:studyhub_resource][:investigation_id]
+    investigation_id =  params[:studyhub_resource][:investigation_id] || (@studyhub_resource.study.investigation.id unless @studyhub_resource.study.nil?)
     resource_json = studyhub_resource_params['resource_json']
     title = resource_json['titles'].first['title']
     description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
@@ -120,7 +120,7 @@ class StudyhubResourcesController < ApplicationController
     study_id = get_study_id(relationship_params)
     resource_json = studyhub_resource_params['resource_json']
     title = resource_json['titles'].first['title']
-    description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
+    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
 
     cmt, metadata = extract_custom_metadata('assay')
 
