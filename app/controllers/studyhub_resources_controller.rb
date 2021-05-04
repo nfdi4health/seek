@@ -76,10 +76,12 @@ class StudyhubResourcesController < ApplicationController
     update_parent_child_relationships(relationship_params)
 
     unless @studyhub_resource.study.nil?
+      update_sharing_policies @studyhub_resource.study
       @studyhub_resource.study.update_attributes(study_params)
     end
 
     unless @studyhub_resource.assay.nil?
+      update_sharing_policies @studyhub_resource.assay
       @studyhub_resource.assay.update_attributes(assay_params)
     end
 
