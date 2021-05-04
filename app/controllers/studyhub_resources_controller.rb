@@ -3,7 +3,7 @@ class StudyhubResourcesController < ApplicationController
   include Seek::AssetsCommon
   include Seek::DestroyHandling
 
-  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage show]
+  before_action :find_and_authorize_studyhub_resource, only: %i[edit update destroy manage show]
   api_actions :index, :show, :create, :update, :destroy
 
   def index
@@ -73,7 +73,6 @@ class StudyhubResourcesController < ApplicationController
   # PATCH/PUT /studyhub_resources/1
   def update
     @studyhub_resource.update_attributes(studyhub_resource_params)
-    # update_sharing_policies @studyhub_resource
     update_parent_child_relationships(relationship_params)
 
     unless @studyhub_resource.study.nil?
@@ -265,6 +264,27 @@ class StudyhubResourcesController < ApplicationController
   #     end
   # end
 
+
+  def find_and_authorize_studyhub_resource
+    @studyhub_resource = StudyhubResource.find(params[:id])
+    privilege = Seek::Permissions::Translator.translate(action_name)
+
+    @seek_item ||= @studyhub_resource.study
+    @seek_item ||= @studyhub_resource.assay
+
+    return if privilege.nil?
+    unless is_auth?(@seek_item, privilege)
+      respond_to do |format|
+        flash[:error] = 'You are not authorized to perform this action'
+        format.html { redirect_to @studyhub_resource }
+        format.json do
+          render json: { "title": 'Forbidden',
+                         "detail": "You are not authorized to perform this action." },
+                 status: :forbidden
+        end
+      end
+    end
+  end
 
   def update_parent_child_relationships(params)
     if params.key?(:parent_ids)
