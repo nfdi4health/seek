@@ -3,7 +3,7 @@ class StudyhubResourcesController < ApplicationController
   include Seek::AssetsCommon
   include Seek::DestroyHandling
 
-  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage show]
+  before_action :find_and_authorize_studyhub_resource, only: %i[edit update destroy manage show]
   api_actions :index, :show, :create, :update, :destroy
 
   def index
@@ -73,14 +73,15 @@ class StudyhubResourcesController < ApplicationController
   # PATCH/PUT /studyhub_resources/1
   def update
     @studyhub_resource.update_attributes(studyhub_resource_params)
-    # update_sharing_policies @studyhub_resource
     update_parent_child_relationships(relationship_params)
 
     unless @studyhub_resource.study.nil?
+      update_sharing_policies @studyhub_resource.study
       @studyhub_resource.study.update_attributes(study_params)
     end
 
     unless @studyhub_resource.assay.nil?
+      update_sharing_policies @studyhub_resource.assay
       @studyhub_resource.assay.update_attributes(assay_params)
     end
 
@@ -97,14 +98,15 @@ class StudyhubResourcesController < ApplicationController
   private
 
   def study_params
-    investigation_id = params[:studyhub_resource][:investigation_id]
+    assay_ids = get_assay_ids(relationship_params) if relationship_params.key?('child_ids')
+    investigation_id =  params[:studyhub_resource][:investigation_id] || (@studyhub_resource.study.investigation.id unless @studyhub_resource.study.nil?)
     resource_json = studyhub_resource_params['resource_json']
     title = resource_json['titles'].first['title']
-    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?s
+    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
 
     cmt, metadata = extract_custom_metadata('study')
 
-    {
+    params_hash = {
       title: title,
       description: description,
       investigation_id: investigation_id,
@@ -112,7 +114,8 @@ class StudyhubResourcesController < ApplicationController
         custom_metadata_type_id: cmt.id, data: metadata
       }
     }
-
+    params_hash['assay_ids'] = assay_ids unless assay_ids.nil?
+    params_hash
   end
 
   def assay_params
@@ -120,7 +123,7 @@ class StudyhubResourcesController < ApplicationController
     study_id = get_study_id(relationship_params)
     resource_json = studyhub_resource_params['resource_json']
     title = resource_json['titles'].first['title']
-    description = resource_json['descriptions'].first['text'] unless resource_json['descriptions'].blank?
+    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
 
     cmt, metadata = extract_custom_metadata('assay')
 
@@ -133,7 +136,7 @@ class StudyhubResourcesController < ApplicationController
       custom_metadata_attributes: {
         custom_metadata_type_id: cmt.id, data: metadata
       },
-      document_ids: seek_relationship_params["document_ids"]
+      document_ids: seek_relationship_params['document_ids']
     }
   end
 
@@ -161,6 +164,7 @@ class StudyhubResourcesController < ApplicationController
     end
   end
 
+  #due to the constraints of ISA, a assay can only have one study associated.
   def get_study_id(relationship_params)
 
     study_id = nil
@@ -169,22 +173,35 @@ class StudyhubResourcesController < ApplicationController
     other_studyhub_resource_id = Seek::Config.nfdi_other_studyhub_resource_id
 
     # if resource has no parents, assign it to "other studies"
-    if relationship_params["parent_ids"].blank?
+    if relationship_params['parent_ids'].blank?
       study_id = other_studyhub_resource_id
     else
 
-      parent = StudyhubResource.where(id: relationship_params["parent_ids"]).first
+        parent = StudyhubResource.find(relationship_params['parent_ids'].first)
 
-      # TODO: when parents are other types, such as "instrument", "document"
-      # TODO: if parent doesnt exist, still need to sort out the relationship
-      study_id = if !parent.nil? && ([StudyhubResource::STUDY,
-                                      StudyhubResource::SUBSTUDY].include? parent.resource_type)
-                   parent.study.id
-                 else
-                   other_studyhub_resource_id
-                 end
+        # TODO: when parents are other types, such as "instrument", "document"
+        # TODO: if parent doesnt exist, still need to sort out the relationship
+        study_id = if !parent.nil? && ([StudyhubResource::STUDY,
+                                        StudyhubResource::SUBSTUDY].include? parent.resource_type)
+                     parent.study.id
+                   else
+                     other_studyhub_resource_id
+                   end
     end
     study_id
+  end
+
+  def get_assay_ids(relationship_params)
+    assay_ids = []
+      unless relationship_params['child_ids'].blank?
+        relationship_params['child_ids'].each do |child_id|
+          child = StudyhubResource.find(child_id)
+          unless child.nil?
+            assay_ids << child.assay.id
+          end
+        end
+      end
+      assay_ids
   end
 
   def extract_custom_metadata(resource_type)
@@ -250,28 +267,49 @@ class StudyhubResourcesController < ApplicationController
   # end
 
 
+  def find_and_authorize_studyhub_resource
+    @studyhub_resource = StudyhubResource.find(params[:id])
+    privilege = Seek::Permissions::Translator.translate(action_name)
+
+    @seek_item ||= @studyhub_resource.study
+    @seek_item ||= @studyhub_resource.assay
+
+    return if privilege.nil?
+    unless is_auth?(@seek_item, privilege)
+      respond_to do |format|
+        flash[:error] = 'You are not authorized to perform this action'
+        format.html { redirect_to @studyhub_resource }
+        format.json do
+          render json: { "title": 'Forbidden',
+                         "detail": "You are not authorized to perform this action." },
+                 status: :forbidden
+        end
+      end
+    end
+  end
+
   def update_parent_child_relationships(params)
     if params.key?(:parent_ids)
       @studyhub_resource.parents = []
-      params["parent_ids"].each do |x|
-          parent = StudyhubResource.find(x)
-          if parent.nil?
-            @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
-          else
-            @studyhub_resource.add_parent(parent)
-        end
+      params['parent_ids'].each do |x|
+        parent = StudyhubResource.find(x)
+        if parent.nil?
+          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
+        else
+          @studyhub_resource.add_parent(parent)
+      end
       end
     end
 
     if params.key?(:child_ids)
       @studyhub_resource.children = []
-      params["child_ids"].each do |x|
-      child = StudyhubResource.find(x)
-      if child.nil?
-        @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
-      else
+      params['child_ids'].each do |x|
+        child = StudyhubResource.find(x)
+        if child.nil?
+          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
+        else
           @studyhub_resource.add_child(child)
-      end
+        end
       end
     end
   end

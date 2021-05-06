@@ -91,6 +91,9 @@
           "type": "studies"
         }
       },
+      "studyhub_resource": {
+        "data": null
+      },
       "data_files": {
         "data": [
           {
