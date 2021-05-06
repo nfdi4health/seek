@@ -1,0 +1,20 @@
+{
+    "data": {
+        "id": 1,
+        "type": "studyhub_resources",
+        "attributes": {
+            "policy": {
+                "access": "view",
+                "permissions": [
+                    {
+                        "resource": {
+                            "id": "1",
+                            "type": "investigations"
+                        },
+                        "access": "manage"
+                    }
+                ]
+            }
+        }
+    }
+}
