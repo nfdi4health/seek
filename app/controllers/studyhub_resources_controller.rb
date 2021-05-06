@@ -214,7 +214,7 @@ class StudyhubResourcesController < ApplicationController
 
     metadata = {
       "resource_web_studyhub": resource_json['resource_web_studyhub'],
-      "resource_type": resource_json['resource_type'].capitalize,
+      "resource_type": resource_type.capitalize,
       "resource_web_page": resource_json['resource_web_page'],
       "resource_web_mica": resource_json['resource_web_mica'],
       "acronym": resource_json['acronyms'].first['acronym']
