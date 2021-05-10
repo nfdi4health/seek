@@ -4336,7 +4336,7 @@
                         },
                         "examples": {
                             "application/json": {
-                                "$ref": "../examples/studyhubResourcesResponse.json"
+                                "$ref": "../examples/studyhubResourcesGetResponse.json"
                             }
                         }
                     }
@@ -4388,7 +4388,7 @@
                         },
                         "examples": {
                             "application/json": {
-                                "$ref": "../examples/studyhubResourceResponse.json"
+                                "$ref": "../examples/studyhubResourcePostResponse.json"
                             }
                         }
                     }
@@ -4434,7 +4434,7 @@
                         },
                         "examples": {
                             "application/json": {
-                                "$ref": "../examples/studyhubResourceResponseRead.json"
+                                "$ref": "../examples/studyhubResourceGetResponse.json"
                             }
                         }
                     }
@@ -4486,7 +4486,7 @@
                         },
                         "examples": {
                             "application/json": {
-                                "$ref": "../examples/studyhubResourceResponsePatch.json"
+                                "$ref": "../examples/studyhubResourcePatchResponse.json"
                             }
                         }
                     }
@@ -4538,7 +4538,7 @@
                         },
                         "examples": {
                             "application/json": {
-                                "$ref": "../examples/studyhubResourceResponsePut.json"
+                                "$ref": "../examples/studyhubResourcePutResponse.json"
                             }
                         }
                     }
@@ -4625,9 +4625,6 @@
                         "$ref": "#/definitions/studyhubResourceObjectIDs"
                     }  
                 },
-                "resource_type": {
-                    "$ref": "#/definitions/studyhubResourceTypes"
-                },
                 "resource_language":{"type": "string"},
                 "resource_web_mica":{"type": "string"},
                 "resource_web_page":{"type": "string"},
@@ -4637,7 +4634,6 @@
                 "resource_type_general":{"type": "string"}
             },
             "required": [
-                "resource_type",
                 "titles",
                 "contacts",
                 "descriptions",

@@ -80,7 +80,6 @@
                         "description_language": "DE"
                     }
                 ],
-                "resource_type": "study",
                 "related_ids": [
                     {
                         "id_id": "ISRCTN1234567",
@@ -89,14 +88,13 @@
                         "id_date": "2021-04-27"
                     }
                 ],
-                "resource_source": "manually collected",
-                "resource_language": "DE",
-                "resource_web_mica": "https://studycataloguebrowser.ship-med.uni-greifswald.de/study/xyz-1",
-                "resource_web_page": "https://xyz.de/",
-                "resource_web_seek": "https://seek.studyhub.nfdi4health.de/documents/1",
-                "resource_use_rights": "DE",
                 "resource_type_general": "Other",
-                "resource_web_studyhub": "http://covid19.studyhub.nfdi4health.de/resource/10011"
+                "resource_language": "DE",
+                "resource_use_rights": "DE",
+                "resource_web_page": "https://xyz.de/",
+                "resource_web_studyhub": "http://covid19.studyhub.nfdi4health.de/resource/10011",
+                "resource_web_seek": "https://seek.studyhub.nfdi4health.de/documents/1",
+                "resource_web_mica": "https://studycataloguebrowser.ship-med.uni-greifswald.de/study/xyz-1"
             }
         },
         "relationships": {

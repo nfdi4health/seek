@@ -42,7 +42,7 @@
                 },
                 "titles": [
                     {
-                        "title": "Die XYZ Gesundheitsstudie",
+                        "title": "Die XYZ Studie",
                         "title_type": "Original",
                         "title_language": "DE"
                     }
@@ -73,26 +73,26 @@
                         "description_language": "EN"
                     },
                     {
-                        "description_text": "Die XYZ Gesundheitsstudie ist die bundesweite Gesundheitsstudie mit Ziel, ..",
+                        "description_text": "Die XYZ Studie ist die bundesweite Studie mit Ziel, ..",
                         "description_type": "created",
                         "description_language": "DE"
                     }
                 ],
-                "resource_type": "study",
                 "related_ids": [
                     {
                         "id_id": "ISRCTN1234567",
                         "id_type": "WHO",
-                        "relation_type": null
+                        "relation_type": null,
+                        "id_date": "2021-04-27"
                     }
                 ],
-                "resource_language": "DE",
-                "resource_web_mica": "https://studycataloguebrowser.ship-med.uni-greifswald.de/study/xyz-1",
-                "resource_web_page": "https://xyz.de/",
-                "resource_web_seek": "https://seek.studyhub.nfdi4health.de/documents/1",
-                "resource_use_rights": "DE",
                 "resource_type_general": "Other",
-                "resource_web_studyhub": "http://covid19.studyhub.nfdi4health.de/resource/10011"
+                "resource_language": "DE",
+                "resource_use_rights": "DE",
+                "resource_web_page": "https://xyz.de/",
+                "resource_web_studyhub": "http://covid19.studyhub.nfdi4health.de/resource/10011",
+                "resource_web_seek": "https://seek.studyhub.nfdi4health.de/documents/1",
+                "resource_web_mica": "https://studycataloguebrowser.ship-med.uni-greifswald.de/study/xyz-1"
             },
             "policy": {
                 "access": "view",
