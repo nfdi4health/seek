@@ -20,7 +20,7 @@
             "backgroundColor": "#FFFFFF"
         }
     },
-    "host": "fairdomhub.org",
+    "host": "seek.covid19.studyhub.nfdi4health.de",
     "basePath": "/",
     "schemes": [
         "https"
@@ -125,6 +125,12 @@
             "name": "search",
             "description": {
                 "$ref": "../descriptions/search.md"
+            }
+        },
+        {
+            "name": "studyhubResources",
+            "description": {
+                "$ref": "../descriptions/studyhubResources.md"
             }
         },
         {
@@ -243,6 +249,12 @@
         }
     ],
     "x-tagGroups": [
+        {
+            "name": "Studyhub Resources",
+            "tags": [
+                "studyhubResources"
+            ]
+        },
         {
             "name": "operation types",
             "tags": [
@@ -414,6 +426,7 @@
                         "sample_types",
                         "sops",
                         "studies",
+                        "studyhub_resources",
                         "workflows"
                     ],
                     "default": "data_files"
@@ -4263,9 +4276,920 @@
                     }
                 }
             }
+        },
+        "/studyhub_resources": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "all",
+                        "in": "path",
+                        "required": 0,
+                        "description": "optional, **all=true**: fetch **all** studyhub_resources. If omitted, the first 10 resources are listed.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "path",
+                        "required": false,
+                        "description": "optional, **limit=50**: fetch the **first 50 resources**.",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "required": false,
+                        "description": "optional, **type=study**: fetch resources of **resource_type study**.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "before",
+                        "in": "path",
+                        "required": false,
+                        "description": "optional, **before=2021-04-10**: fetch resources updated **before April 10, 2021, 0:00 a.m.**.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "path",
+                        "description": "optional, **after=2021-04-10**: fetch resources updated **after April 10, 2021, 0:00 a.m.**.",
+                        "required": false,
+                        "type": "string"
+                    }
+
+                ],
+                "operationId": "listStudyhubResources",
+                "description": {
+                    "$ref": "../descriptions/listStudyhubResources.md"
+                },
+                "tags": [
+                    "list",
+                    "studyhubResources"
+                ],
+                "responses": {
+                    "501": {
+                        "description": "Not implemented"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourcesResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "$ref": "../examples/studyhubResourcesGetResponse.json"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createStudyhubResource",
+                "security": [{ "OAuth2": ["write"] }, { "apiToken": [] }, { "basicAuth": [] }],
+                "description": {
+                    "$ref": "../descriptions/createStudyhubResource.md"
+                },
+                "tags": [
+                    "create",
+                    "studyhubResources"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "resource",
+                        "description": "The Studyhub Resource to create.",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourcePost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/bad_request"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/forbidden"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity",
+                        "schema": {
+                            "$ref": "#/definitions/unprocessable_entity"
+                        }
+                    },
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourceResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "$ref": "../examples/studyhubResourcePostResponse.json"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/studyhub_resources/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "The studyhub resource to fetch, patch or delete",
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "operationId": "readStudyhubResource",
+                "description": {
+                    "$ref": "../descriptions/readStudyhubResource.md"
+                },
+                "tags": [
+                    "read",
+                    "studyhubResources"
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/forbidden"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/not_found"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourceResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "$ref": "../examples/studyhubResourceGetResponse.json"
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "patchStudyhubResource",
+                "security": [{ "OAuth2": ["write"] }, { "apiToken": [] }, { "basicAuth": [] }],
+                "description": {
+                    "$ref": "../descriptions/patchStudyhubResource.md"
+                },
+                "tags": [
+                    "update",
+                    "studyhubResources"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "studyhubResource",
+                        "description": "The studyhub resource to update (PATCH).",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourcePatch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/forbidden"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/not_found"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity",
+                        "schema": {
+                            "$ref": "#/definitions/unprocessable_entity"
+                        }
+                    },
+                    "200": {
+                        "description": "updated",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourceResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "$ref": "../examples/studyhubResourcePatchResponse.json"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "operationId": "putStudyhubResource",
+                "security": [{ "OAuth2": ["write"] }, { "apiToken": [] }, { "basicAuth": [] }],
+                "description": {
+                    "$ref": "../descriptions/putStudyhubResource.md"
+                },
+                "tags": [
+                    "update",
+                    "studyhubResources"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "studyhubResource",
+                        "description": "The studyhub resource to update (PUT).",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourcePut"
+                        }
+                    }
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/forbidden"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/not_found"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity",
+                        "schema": {
+                            "$ref": "#/definitions/unprocessable_entity"
+                        }
+                    },
+                    "200": {
+                        "description": "updated",
+                        "schema": {
+                            "$ref": "#/definitions/studyhubResourceResponse"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "$ref": "../examples/studyhubResourcePutResponse.json"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "deleteStudyhubResource",
+                "security": [{ "OAuth2": ["write"] }, { "apiToken": [] }, { "basicAuth": [] }],
+                "description": {
+                    "$ref": "../descriptions/deleteStudyhubResource.md"
+                },
+                "tags": [
+                    "delete",
+                    "studyhubResources"
+                ],
+                "responses": {
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/forbidden"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/not_found"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ok"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "studyhubResourceObject": {
+            "type": "object",
+            "minLength": 1,
+            "properties": {
+                "study": { 
+                    "$ref": "#/definitions/studyhubResourceObjectStudy"
+                },
+                "titles": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": { 
+                        "$ref": "#/definitions/studyhubResourceObjectTitles"
+                    }  
+                },
+                "acronyms": {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": true,
+                    "items": { 
+                        "$ref": "#/definitions/studyhubResourceObjectAcronyms"
+                    }    
+                },
+                "contacts": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": { 
+                        "$ref": "#/definitions/studyhubResourceObjectContacts"
+                    }    
+                },
+                "descriptions":{
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": { 
+                        "$ref": "#/definitions/studyhubResourceObjectDescriptions"
+                    }  
+                },
+                "related_ids": {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": true,
+                    "items": { 
+                        "$ref": "#/definitions/studyhubResourceObjectIDs"
+                    }  
+                },
+                "resource_language":{"type": "string"},
+                "resource_web_mica":{"type": "string"},
+                "resource_web_page":{"type": "string"},
+                "resource_web_seek":{"type": "string"},
+                "resource_web_studyhub":{"type": "string"},
+                "resource_use_rights":{"type": "string"},
+                "resource_type_general":{"type": "string"}
+            },
+            "required": [
+                "titles",
+                "contacts",
+                "descriptions",
+                "resource_web_mica",
+                "resource_web_page",
+                "resource_web_seek",
+                "resource_web_studyhub",
+                "resource_use_rights",
+                "resource_type_general"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceObjectStudy": {
+            "type": "object",
+            "properties": {
+                "study_type": {"type": "string"},
+                "study_phase": {"type": "string"},
+                "study_region": {"type": "string"},
+                "study_status": {"type": "string"},
+                "study_age_max": {"type": "string"},
+                "study_age_min": {"type": "string"},
+                "study_country": {"type": "string"},
+                "study_sampling": {"type": "string"},
+                "study_conditions": {"type": "string"},
+                "study_datasource": {"type": "string"},
+                "study_hypothesis": {"type": "string"},
+                "study_population": {"type": "string"},
+                "study_start_date": {"type": "string"},
+                "study_end_date": {"type": "string"},
+                "study_eligibility": {"type": "string"},
+                "study_analysis_unit": {"type": "string"},
+                "study_interventions": {"type": "string"},
+                "study_design_comment": {"type": "string"},
+                "study_primary_design": {"type": "string"},
+                "study_primary_outcomes": {"type": "string"},
+                "study_secondary_outcomes": {"type": "string"},
+                "study_target_sample_size": {"type": "string"},
+                "study_obtained_sample_size": {"type": "string"},
+                "study_data_accessibility": {"type": "string"}
+            },
+            "required": [
+                "study_type",
+                "study_status",
+                "study_primary_design",
+                "study_country",
+                "study_population",
+                "study_eligibility",
+                "study_interventions",
+                "study_primary_outcomes"            
+            ]        
+        },
+        "studyhubResourceObjectTitles": {
+            "type": "array",
+            "$ref": "#/definitions/studyhubResourceObjectTitle"
+        },
+        "studyhubResourceObjectTitle": {
+            "type": "object",
+            "properties": {
+               "title": {"type":"string"},
+               "title_type": {"type":"string"},
+               "title_language": {"type":"string"}
+            },
+            "required": [ "title", "title_type" ]  
+        },
+        "studyhubResourceObjectAcronyms": {
+            "type": "array",
+            "$ref": "#/definitions/studyhubResourceObjectAcronym"
+        },
+        "studyhubResourceObjectAcronym": {
+            "type": "object",
+            "properties": {
+                "acronym": {"type":"string"},
+                "acronym_type": {"type":"string"}
+            },
+            "required": [ ]  
+        },
+        "studyhubResourceObjectContacts": {
+            "type": "array",
+            "$ref": "#/definitions/studyhubResourceObjectContact"
+        },
+        "studyhubResourceObjectContact": {
+            "type": "object",
+            "properties": {
+                "role_type": {"type":"string"},
+                "role_title": {"type":"string"},
+                "role_name": {"type":"string"},
+                "role_email": {"type":"string"},
+                "role_phone": {"type":"string"},
+                "role_address": {"type":"string"},
+                "role_specific_type": {"type":"string"},
+                "role_specific_number": {"type":"string"},
+                "role_web_page": {"type":"string"}
+            },
+            "required": [ "role_type", "role_name" ]  
+        },
+        "studyhubResourceObjectDescriptions": {
+            "type": "array",
+            "$ref": "#/definitions/studyhubResourceObjectDescription"
+        },
+        "studyhubResourceObjectDescription": {
+            "type": "object",
+            "properties": {
+                "description_text": {"type":"string"},
+                "description_type": {"type":"string"},
+                "description_language": {"type":"string"}
+            },
+            "required": [  "description_text", "description_type", "description_language" ]  
+        },
+        "studyhubResourceObjectIDs": {
+            "id_id": {"type":"string"},
+            "$ref": "#/definitions/studyhubResourceObjectID"
+        },
+        "studyhubResourceObjectID": {
+            "type": "object",
+            "properties": {
+                "id_id": {"type":"string"},
+                "id_type": {"type":"string"},
+                "id_relation_type": {"type":"string"}
+            },
+            "required": []  
+        },
+        "studyhubResourcePatch": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/studyhubResourceItemPatch"
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false,
+            "example": {
+                "$ref": "../examples/studyhubResourcePatch.json"
+            }
+        },
+        "studyhubResourcePost": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/studyhubResourceItem"
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false,
+            "example": {
+                "$ref": "../examples/studyhubResourcePost.json"
+            }
+        },
+        "studyhubResourcePut": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/studyhubResourceItemPut"
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false,
+            "example": {
+                "$ref": "../examples/studyhubResourcePut.json"
+            }
+        },
+        "studyhubResourceReference": {
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/nonEmptyString"
+                },
+                "type": {
+                    "$ref": "#/definitions/studyhubResourceType"
+                }
+            },
+            "required": [
+                "id",
+                "type"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceReferences": {
+            "type": "array",
+            "minItems": 0,
+            "uniqueItems": true,
+            "items": {
+                "$ref": "#/definitions/studyhubResourceReference"
+            }
+        },
+        "studyhubResourceReferencesList": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/studyhubResourceReferences"
+                }
+            },
+            "required": [
+                "data"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourcesRelationships": {
+            "properties": {
+                "parents": {
+                    "$ref": "#/definitions/studyhubResourceReferencesList"
+                },
+                "children": {
+                    "$ref": "#/definitions/studyhubResourceReferencesList"
+                },
+                "study": {
+                    "$ref": "#/definitions/studySingletonReference"
+                },
+                "assays": {
+                    "$ref": "#/definitions/assayReferencesList"
+                },
+                "documents": {
+                    "$ref": "#/definitions/documentReferencesList"
+                }
+            }
+        },
+        "studyhubResourceRelationships": {
+            "properties": {
+                "investigation": {
+                    "$ref": "#/definitions/investigationSingletonReference"
+                },
+                "parents": {
+                    "$ref": "#/definitions/studyhubResourceReferencesList"
+                },
+                "children": {
+                    "$ref": "#/definitions/studyhubResourceReferencesList"
+                }
+            },
+            "required": [ "investigation" ]
+
+        },
+        "studyhubResourcesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/studyhubResourcesItems"
+                },
+                "jsonapi": {
+                    "$ref": "#/definitions/JsonApiVersion"
+                },
+                "links": {
+                    "$ref": "#/definitions/indexLinks"
+                },
+                "meta": {
+                    "$ref": "#/definitions/metaType"
+                }
+            },
+            "required": [
+                "data",
+                "jsonapi",
+                "links"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/studyhubResourcesItem"
+                },
+                "jsonapi": {
+                    "$ref": "#/definitions/JsonApiVersion"
+                },
+                "links": {
+                    "$ref": "#/definitions/indexLinks"
+                },
+                "meta": {
+                    "$ref": "#/definitions/metaType"
+                }
+            },
+            "required": [
+                "data",
+                "jsonapi"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourcesItems": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {              
+                "$ref": "#/definitions/studyhubResourcesItem"
+            }
+        },
+        "studyhubResourcesItem": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "$ref": "#/definitions/studyhubResourceType"
+                },
+                "attributes": {
+                    "properties": {
+                        "resource_type": {
+                            "$ref": "#/definitions/studyhubResourceTypes"
+                        },
+                        "resource_json": { 
+                            "$ref": "#/definitions/studyhubResourceObject"
+                        },
+                        "nfdi_person_in_charge": {
+                            "type": "string"
+                        },
+                        "contact_stage": {
+                            "type": "string"
+                        },
+                        "data_source": {
+                            "type": "string"
+                        },
+                        "comment": {
+                            "type": "string"
+                        },
+                        "exclusion_mica_reason": {
+                            "type": "string"
+                        },
+                        "exclusion_seek_reason": {
+                            "type": "string"
+                        },
+                        "exclusion_studyhub_reason": {
+                            "type": "string"
+                        },
+                        "inclusion_mica": {
+                            "type": "boolean"
+                        },
+                        "inclusion_seek": {
+                            "type": "boolean"
+                        },
+                        "inclusion_studyhub": {
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "resource_type",
+                        "resource_json",
+                        "nfdi_person_in_charge",
+                        "contact_stage",
+                        "data_source",
+                        "exclusion_mica_reason",
+                        "exclusion_seek_reason",
+                        "exclusion_studyhub_reason",
+                        "inclusion_mica",
+                        "inclusion_seek",
+                        "inclusion_studyhub"
+                    ],
+                    "additionalProperties": false
+                },
+                "relationships": {
+                    "$ref": "#/definitions/studyhubResourcesRelationships"
+                }
+            },
+            "required": [
+                "id",
+                "type",
+                "attributes",
+                "meta",
+                "links",
+                "relationships"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceItem": {
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/studyhubResourceType"
+                },
+                "attributes": {
+                    "properties": {
+                        "resource_type": {
+                            "$ref": "#/definitions/studyhubResourceTypes"
+                        },
+                        "resource_json": { 
+                            "$ref": "#/definitions/studyhubResourceObject"
+                        },
+                        "nfdi_person_in_charge": {
+                            "type": "string"
+                        },
+                        "contact_stage": {
+                            "type": "string"
+                        },
+                        "data_source": {
+                            "type": "string"
+                        },
+                        "comment": {
+                            "type": "string"
+                        },
+                        "exclusion_mica_reason": {
+                            "type": "string"
+                        },
+                        "exclusion_seek_reason": {
+                            "type": "string"
+                        },
+                        "exclusion_studyhub_reason": {
+                            "type": "string"
+                        },
+                        "inclusion_mica": {
+                            "type": "boolean"
+                        },
+                        "inclusion_seek": {
+                            "type": "boolean"
+                        },
+                        "inclusion_studyhub": {
+                            "type": "boolean"
+                        },
+                        "policy": {
+                            "$ref": "#/definitions/policy"
+                        }
+                    },
+                    "required": [
+                        "resource_type",
+                        "resource_json",
+                        "nfdi_person_in_charge",
+                        "contact_stage",
+                        "data_source",
+                        "exclusion_mica_reason",
+                        "exclusion_seek_reason",
+                        "exclusion_studyhub_reason",
+                        "inclusion_mica",
+                        "inclusion_seek",
+                        "inclusion_studyhub",
+                        "policy"
+                    ],
+                    "additionalProperties": false                  
+                },                 
+                "relationships": {
+                    "$ref": "#/definitions/studyhubResourceRelationships"
+                }
+            },
+            "required": [
+                "type",
+                "attributes",
+                "relationships"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceItemPut": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "$ref": "#/definitions/studyhubResourceType"
+                },
+                "attributes": {
+                    "properties": {
+                        "resource_type": {
+                            "$ref": "#/definitions/studyhubResourceTypes"
+                        },
+                        "resource_json": { 
+                            "$ref": "#/definitions/studyhubResourceObject"
+                        },
+                        "nfdi_person_in_charge": {
+                            "type": "string"
+                        },
+                        "contact_stage": {
+                            "type": "string"
+                        },
+                        "data_source": {
+                            "type": "string"
+                        },
+                        "comment": {
+                            "type": "string"
+                        },
+                        "exclusion_mica_reason": {
+                            "type": "string"
+                        },
+                        "exclusion_seek_reason": {
+                            "type": "string"
+                        },
+                        "exclusion_studyhub_reason": {
+                            "type": "string"
+                        },
+                        "inclusion_mica": {
+                            "type": "boolean"
+                        },
+                        "inclusion_seek": {
+                            "type": "boolean"
+                        },
+                        "inclusion_studyhub": {
+                            "type": "boolean"
+                        },
+                        "policy": {
+                            "$ref": "#/definitions/policy"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "resource_type",
+                        "resource_json",
+                        "nfdi_person_in_charge",
+                        "contact_stage",
+                        "data_source",
+                        "exclusion_mica_reason",
+                        "exclusion_seek_reason",
+                        "exclusion_studyhub_reason",
+                        "inclusion_mica",
+                        "inclusion_seek",
+                        "inclusion_studyhub",
+                        "policy"
+                    ],
+                    "additionalProperties": false                  
+                },                 
+                "relationships": {
+                    "$ref": "#/definitions/studyhubResourceRelationships"
+                }
+            },
+            "required": [
+                "id",
+                "type",
+                "attributes",
+                "relationships"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceItemPatch": {
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "$ref": "#/definitions/studyhubResourceType"
+                },
+                "attributes": {
+                    "properties": {
+                        "policy": {
+                            "$ref": "#/definitions/policy"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "resource_type",
+                        "policy"
+                    ],
+                    "additionalProperties": false                  
+                }                
+            },
+            "required": [
+                "id",
+                "type",
+                "attributes"
+            ],
+            "additionalProperties": false
+        },
+        "studyhubResourceTypes": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [ "study", "document", "instrument" ]
+        },
+        "studyhubResourceType": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [ "studyhub_resources" ]
+        },
         "error": {
             "type": "object",
             "properties": {
@@ -4734,6 +5658,7 @@
                 "sample_types",
                 "sops",
                 "studies",
+                "studyhub_resources",
                 "workflows"
             ]
         },
@@ -6370,6 +7295,9 @@
                                 },
                                 "study": {
                                     "$ref": "#/definitions/studySingletonReference"
+                                },
+                                "studyhubResource": {
+                                    "$ref": "#/definitions/studyhubResourceReferencesList"
                                 },
                                 "data_files": {
                                     "$ref": "#/definitions/dataFileReferencesList"

@@ -1,0 +1,144 @@
+{
+    "data": [
+        {
+        "id": "1",
+        "type": "studyhub_resources",
+        "attributes": {
+            "resource_type": "study",
+            "nfdi_person_in_charge": "M.L.",
+            "contact_stage": "44",
+            "data_source": "Preprint",
+            "comment": null,
+            "exclusion_mica_reason": "Not applicable",
+            "exclusion_seek_reason": "Not applicable",
+            "exclusion_studyhub_reason": "Not applicable",
+            "inclusion_studyhub": true,
+            "inclusion_seek": true,
+            "inclusion_mica": true,
+            "resource_json": {
+                "study": {
+                    "study_type": "Cohort",
+                    "study_phase": null,
+                    "study_region": null,
+                    "study_status": "Recruiting",
+                    "study_age_max": 69,
+                    "study_age_min": 20,
+                    "study_country": "Germany",
+                    "study_sampling": null,
+                    "study_conditions": "Investigation of causes underlying major chronic diseases, i.e..",
+                    "study_datasource": "Blood; Urine; Questionnaires; Other",
+                    "study_hypothesis": null,
+                    "study_population": "General population",
+                    "study_start_date": "2014-10-01",
+                    "study_end_date": null,
+                    "study_eligibility": "German residents in the age range of 20-69 years",
+                    "study_analysis_unit": "Individual",
+                    "study_interventions": "Other: Therapeutic plasma exchange",
+                    "study_design_comment": null,
+                    "study_primary_design": "Interventional",
+                    "study_primary_outcomes": null,
+                    "study_secondary_outcomes": null,
+                    "study_target_sample_size": 200000,
+                    "study_obtained_sample_size": null,
+                    "study_data_accessibility": null
+                },
+                "titles": [
+                    {
+                        "title": "Die XYZ Studie",
+                        "title_type": "Original",
+                        "title_language": "DE"
+                    }
+                ],
+                "acronyms": [
+                    {
+                        "acronym": "XYZ",
+                        "acronym_type": "Original"
+                    }
+                ],
+                "contacts": [
+                    {
+                        "role_type": "Contact person",
+                        "role_title": "title",
+                        "role_name": "Name of the contact person",
+                        "role_email": "email-address",
+                        "role_phone": "+49 (0)123 456789",
+                        "role_address": "",
+                        "role_specific_type": null,
+                        "role_specific_number": null,
+                        "role_web_page": ""
+                    }
+                ],
+                "descriptions": [
+                    {
+                        "description_text": "The German National Cohort has been inviting men and women aged between 20 and 69 ..",
+                        "description_type": "offical",
+                        "description_language": "EN"
+                    },
+                    {
+                        "description_text": "Die XYZ Studie ist die bundesweite Studie mit Ziel, ..",
+                        "description_type": "created",
+                        "description_language": "DE"
+                    }
+                ],
+                "related_ids": [
+                    {
+                        "id_id": "ISRCTN1234567",
+                        "id_type": "WHO",
+                        "relation_type": null,
+                        "id_date": "2021-04-27"
+                    }
+                ],
+                "resource_type_general": "Other",
+                "resource_language": "DE",
+                "resource_use_rights": "DE",
+                "resource_web_page": "https://xyz.de/",
+                "resource_web_studyhub": "http://covid19.studyhub.nfdi4health.de/resource/10011",
+                "resource_web_seek": "https://seek.studyhub.nfdi4health.de/documents/1",
+                "resource_web_mica": "https://studycataloguebrowser.ship-med.uni-greifswald.de/study/xyz-1"
+            }
+        },
+        "relationships": {
+            "study": {
+                "data": {
+                    "id": "1392",
+                    "type": "studies"
+                }
+            },
+            "assays": {
+                "data": null
+            },
+            "children": {
+                "data": [
+                    {
+                        "id": "2",
+                        "type": "studyhub_resources"
+                    },
+                    {
+                        "id": "3",
+                        "type": "studyhub_resources"
+                    }
+                ]
+            },
+            "parents": {
+                "data": []
+            },
+            "documents": {
+                "data": []
+            }
+        },
+        "links": {
+            "self": "/studyhub_resources/1"
+        },
+        "meta": {
+            "created": "2021-04-27T14:38:32.768Z",
+            "modified": "2021-04-27T14:38:33.012Z",
+            "api_version": "0.1",
+            "uuid": "956368a0-2c56-0136-ec2f-08002734982f",
+            "base_url": "https://seek.covid19.studyhub.nfdi4health.de/"
+        }
+    }
+],
+    "jsonapi": {
+        "version": "1.0"
+    }
+}
