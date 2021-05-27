@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_31_132840) do
+qActiveRecord::Schema.define(version: 2021_05_25_132421) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1843,8 +1843,15 @@ ActiveRecord::Schema.define(version: 2021_03_31_132840) do
     t.index ["parent_id"], name: "index_studyhub_resource_relationships_on_parent_id"
   end
 
+  create_table "studyhub_resource_types",  force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.string "key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "studyhub_resources",  force: :cascade do |t|
-    t.string "resource_type"
     t.json "resource_json"
     t.string "nfdi_person_in_charge"
     t.string "contact_stage"
@@ -1860,6 +1867,7 @@ ActiveRecord::Schema.define(version: 2021_03_31_132840) do
     t.datetime "updated_at", null: false
     t.bigint "assay_id"
     t.bigint "study_id"
+    t.integer "`resource_type_id`"
     t.index ["assay_id"], name: "index_studyhub_resources_on_assay_id"
     t.index ["study_id"], name: "index_studyhub_resources_on_study_id"
   end
