@@ -1,7 +1,7 @@
 require 'json'
 
 max_studyhub_study_json_text = '{
-  "resource_type": "study",
+  "studyhub_resource_type": "study",
   "resource_type_general": "Other",
   "resource_language": "DE",
   "resource_web_page": "https://nako.de/",
@@ -83,7 +83,7 @@ max_studyhub_study_json_text = '{
 
 
 min_studyhub_study_json_text = '{
-  "resource_type": "study",
+  "studyhub_resource_type": "study",
   "study": {
   },
   "descriptions": [
@@ -110,11 +110,11 @@ max_studyhub_study_json = JSON.parse(max_studyhub_study_json_text)
 # StudyhubResource
 Factory.define(:studyhub_study, class: StudyhubResource) do |f|
   f.sequence(:id) { |n| n }
-  f.resource_type 'study'
+  f.studyhub_resource_type 'study'
 end
 
 Factory.define(:min_studyhub_study, class: StudyhubResource) do |f|
-  f.resource_type 'study'
+  f.studyhub_resource_type 'study'
   f.resource_json min_studyhub_study_json
   f.nfdi_person_in_charge nil
   f.contact_stage '3'
@@ -129,7 +129,7 @@ Factory.define(:min_studyhub_study, class: StudyhubResource) do |f|
 end
 
 Factory.define(:max_studyhub_study, class: StudyhubResource) do |f|
-  f.resource_type 'study'
+  f.studyhub_resource_type 'study'
   f.resource_json max_studyhub_study_json
   f.nfdi_person_in_charge nil
   f.contact_stage '9'
@@ -146,5 +146,5 @@ end
 
 Factory.define(:studyhub_assay, class: StudyhubResource) do |f|
   f.sequence(:id) { |n| n }
-  f.resource_type 'assay'
+  f.studyhub_resource_type 'instrument'
 end
