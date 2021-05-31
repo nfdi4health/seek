@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-qActiveRecord::Schema.define(version: 2021_05_25_132421) do
+ActiveRecord::Schema.define(version: 2021_05_25_132421) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1867,7 +1867,7 @@ qActiveRecord::Schema.define(version: 2021_05_25_132421) do
     t.datetime "updated_at", null: false
     t.bigint "assay_id"
     t.bigint "study_id"
-    t.integer "`resource_type_id`"
+    t.integer "studyhub_resource_type_id"
     t.index ["assay_id"], name: "index_studyhub_resources_on_assay_id"
     t.index ["study_id"], name: "index_studyhub_resources_on_study_id"
   end

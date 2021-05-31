@@ -1,6 +1,11 @@
 class StudyhubResourceSerializer < SkeletonSerializer
+
+  attribute :studyhub_resource_type do
+      object.studyhub_resource_type.try(:key)
+  end
+
   attributes \
-    :resource_type, :nfdi_person_in_charge, :contact_stage, :data_source, \
+  :nfdi_person_in_charge, :contact_stage, :data_source, \
   :comment, :exclusion_mica_reason, :exclusion_seek_reason, :exclusion_studyhub_reason, \
   :inclusion_studyhub, :inclusion_seek, :inclusion_mica, :resource_json
 

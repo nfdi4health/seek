@@ -2,6 +2,7 @@ class StudyhubResource < ApplicationRecord
 
   belongs_to :assay, optional: true, dependent: :destroy
   belongs_to :study, optional: true, dependent: :destroy
+  belongs_to :studyhub_resource_type, inverse_of: :studyhub_resources
 
   has_many :children_relationships, class_name: 'StudyhubResourceRelationship',
                                     foreign_key: 'parent_id',
@@ -16,24 +17,11 @@ class StudyhubResource < ApplicationRecord
   has_many :parents, through: :parents_relationships
   has_many :documents, through: :assay
 
-
-  validates :resource_type, presence: { message:'Studyhub Resource Type is blank or invalid' }
-  validate :resource_type_not_changed, on: :update
-
-  #todo: add more validations later
+  validate :studyhub_resource_type_id_not_changed, on: :update
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
-  attr_readonly :resource_type
+  attr_readonly :studyhub_resource_type_id
 
-  STUDY = 'study'.freeze
-  SUBSTUDY = 'substudy'.freeze
-  DOCUMENT = 'document'.freeze
-  INSTRUMENT = 'instrument'.freeze
-
-  scope :studyhub_study, -> { where(resource_type: StudyhubResource::STUDY) }
-  scope :studyhub_substudy, -> { where(resource_type: StudyhubResource::SUBSTUDY) }
-  scope :studyhub_document, -> { where(resource_type: StudyhubResource::DOCUMENT) }
-  scope :studyhub_instrument, -> { where(resource_type: StudyhubResource::INSTRUMENT) }
 
   def title
     if resource_json.nil?
@@ -43,9 +31,10 @@ class StudyhubResource < ApplicationRecord
     end
   end
 
-  def resource_type_not_changed
-    if resource_type_changed? && self.persisted?
-      errors.add(:resource_type, "Change of resource type is not allowed!")
+  #@todo: check this validation, it is not working now
+  def studyhub_resource_type_id_not_changed
+    if studyhub_resource_type_id_changed? && self.persisted?
+      errors.add(:base, "Change of studyhub resource type is not allowed!")
     end
   end
 
@@ -71,6 +60,22 @@ class StudyhubResource < ApplicationRecord
 
   def is_child?(parent)
     parents.include?(parent)
+  end
+
+  def is_study?
+    self.studyhub_resource_type.key == 'study'
+  end
+
+  def is_substudy?
+    self.studyhub_resource_type.key == 'substudy'
+  end
+
+  def is_document?
+    self.studyhub_resource_type.key == 'document'
+  end
+
+  def is_instrument?
+    self.studyhub_resource_type.key == 'instrument'
   end
 
 end

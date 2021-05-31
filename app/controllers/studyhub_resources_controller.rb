@@ -7,9 +7,12 @@ class StudyhubResourcesController < ApplicationController
   api_actions :index, :show, :create, :update, :destroy
 
   def index
-
+    #http://localhost:3003/studyhub_resources.json?type=study
     resources_expr = "StudyhubResource.all"
-    resources_expr << ".where(resource_type: params[:type])" if params[:type].present?
+    if params[:type].present?
+      type_id = StudyhubResourceType.find_by(key: params[:type]).id
+      resources_expr << ".where(studyhub_resource_type_id: type_id)"
+    end
     resources_expr << ".where({updated_at: params[:after].to_time..Time.now})" if params[:after].present?
     resources_expr << ".where({updated_at: Time.at(0)..params[:before].to_time})" if params[:before].present?
 
@@ -40,33 +43,41 @@ class StudyhubResourcesController < ApplicationController
 
   def create
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
-    resource_type = @studyhub_resource.resource_type
-    seek_type = map_to_seek_type(resource_type)
 
-    item = nil
+    resource_type = @studyhub_resource.studyhub_resource_type
 
-    case seek_type
-    when 'Study'
-      Rails.logger.info('creating a SEEK Study')
-      item = @studyhub_resource.build_study(study_params)
-    when 'Assay'
-      Rails.logger.info('creating a SEEK Assay')
-      item = @studyhub_resource.build_assay(assay_params)
-    end
+    if resource_type.nil?
+      render json: { error: 'Studyhub API Error',
+                     message: 'Studyhub resource type is blank or invalid.' }, status: :bad_request
 
-    update_sharing_policies item
+    else
+      seek_type = map_to_seek_type(resource_type)
 
-    #todo only save @studyhub_resource when item(study/assay) is created successfully
-    if item.valid?
-      if @studyhub_resource.save
-        update_parent_child_relationships(relationship_params)
-        render json: @studyhub_resource, status: :created, location: @studyhub_resource
+      item = nil
+
+      case seek_type
+      when 'Study'
+        Rails.logger.info('creating a SEEK Study')
+        item = @studyhub_resource.build_study(study_params)
+      when 'Assay'
+        Rails.logger.info('creating a SEEK Assay')
+        item = @studyhub_resource.build_assay(assay_params)
+      end
+
+      update_sharing_policies item
+
+      #todo only save @studyhub_resource when item(study/assay) is created successfully
+      if item.valid?
+        if @studyhub_resource.save
+          update_parent_child_relationships(relationship_params)
+          render json: @studyhub_resource, status: :created, location: @studyhub_resource
+        else
+          render json: @studyhub_resource.errors, status: :unprocessable_entity
+        end
       else
+        @studyhub_resource.errors.add(:base, item.errors.full_messages)
         render json: @studyhub_resource.errors, status: :unprocessable_entity
       end
-    else
-      @studyhub_resource.errors.add(:base, item.errors.full_messages)
-      render json: @studyhub_resource.errors, status: :unprocessable_entity
     end
   end
 
@@ -141,7 +152,11 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def studyhub_resource_params
-    params.require(:studyhub_resource).permit(:resource_type, :comment, { resource_json: {} }, \
+
+    rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
+    params[:studyhub_resource][:studyhub_resource_type_id] = rt.id unless rt.nil?
+
+      params.require(:studyhub_resource).permit(:studyhub_resource_type_id, :comment, { resource_json: {} }, \
                                               :nfdi_person_in_charge, :contact_stage, :data_source, \
                                               :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
                                               :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
@@ -157,9 +172,12 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def map_to_seek_type(resource_type)
-    if [StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? resource_type.downcase
+    case resource_type.key
+    when 'study'
       'Study'
-    elsif [StudyhubResource::DOCUMENT, StudyhubResource::INSTRUMENT].include? resource_type.downcase
+    when 'substudy'
+      'Study'
+    else
       'Assay'
     end
   end
@@ -181,8 +199,7 @@ class StudyhubResourcesController < ApplicationController
 
         # TODO: when parents are other types, such as "instrument", "document"
         # TODO: if parent doesnt exist, still need to sort out the relationship
-        study_id = if !parent.nil? && ([StudyhubResource::STUDY,
-                                        StudyhubResource::SUBSTUDY].include? parent.resource_type)
+        study_id = if !parent.nil? && (parent.is_study? || parent.is_substudy?)
                      parent.study.id
                    else
                      other_studyhub_resource_id
@@ -196,7 +213,7 @@ class StudyhubResourcesController < ApplicationController
       unless relationship_params['child_ids'].blank?
         relationship_params['child_ids'].each do |child_id|
           child = StudyhubResource.find(child_id)
-          unless child.nil?
+          unless (child.nil? || child.assay.nil?)
             assay_ids << child.assay.id
           end
         end
@@ -214,7 +231,7 @@ class StudyhubResourcesController < ApplicationController
 
     metadata = {
       "resource_web_studyhub": resource_json['resource_web_studyhub'],
-      "resource_type": resource_type.capitalize,
+      "resource_type": @studyhub_resource.studyhub_resource_type.title,
       "resource_web_page": resource_json['resource_web_page'],
       "resource_web_mica": resource_json['resource_web_mica'],
       "acronym": resource_json['acronyms'].first['acronym']
@@ -248,23 +265,6 @@ class StudyhubResourcesController < ApplicationController
 
     [cmt, metadata]
   end
-
-  #@todo check the validation of parent and child relationship and add constraints
-  # def is_parent_valid?(parent)
-  #   child_type = @studyhub_resource.resource_type.downcase
-  #   parent_type = parent.resource_type.downcase
-  #
-  #   pp "child_type:"+child_type
-  #   pp "parent_type:"+parent_type
-  #     if parent_type == StudyhubResource::STUDY && child_type == StudyhubResource::SUBSTUDY
-  #       true
-  #     elsif ([StudyhubResource::STUDY, StudyhubResource::SUBSTUDY].include? parent_type) && ([StudyhubResource::INSTRUMENT, StudyhubResource::DOCUMENT].include? child_type)
-  #       true
-  #     else
-  #       @studyhub_resource.errors.add(:base, "Wrong parent and child relationship.")
-  #       false
-  #     end
-  # end
 
 
   def find_and_authorize_studyhub_resource
