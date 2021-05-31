@@ -1,0 +1,21 @@
+study_resource_type:
+  id: 1
+  title: Studyhub Study
+  key: study
+
+substudy_resource_type:
+  id: 2
+  title: Studyhub Substudy
+  key: substudy
+
+document_resource_type:
+  id: 3
+  title: Studyhub Document
+  key: document
+
+instrument_resource_type:
+  id: 4
+  title: Studyhub Instrument
+  key: instrument
+
+
