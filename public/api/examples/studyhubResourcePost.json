@@ -2,7 +2,7 @@
     "data": {
         "type": "studyhub_resources",
         "attributes": {
-            "resource_type": "study",
+            "studyhub_resource_type": "study",
             "nfdi_person_in_charge": "M.L.",
             "contact_stage": "44",
             "data_source": "Preprint",
@@ -99,8 +99,8 @@
                 "permissions": [
                     {
                         "resource": {
-                            "id": "1",
-                            "type": "investigations"
+                            "id": "2",
+                            "type": "projects"
                         },
                         "access": "manage"
                     }
