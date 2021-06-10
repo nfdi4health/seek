@@ -1,18 +1,18 @@
-We have <%= @studyhub_resources.size %> Studyhub Resource
+We have <%= @studyhub_resources.size %> <%= t('studyhub_resources.studyhub_resource') %>>
 
 <br>
 
 <% @studyhub_resources.each_with_index do |x,index| %>
   <br>
 
- <h4><%= index+1 %> <%= x.resource_type %></h4>
+ <h4><%= index+1 %> <%= x.studyhub_resource_type.title %></h4>
   <%= persistent_resource_id(x) %>
   <%= studyhub_resource_in_seek_id_json(x) %>
   <br>
   <p><b>Title: </b><%= x.title %></p>
 
   <h4>It's associated item</h4>
-  <% if x.resource_type == StudyhubResource::STUDY || x.resource_type == StudyhubResource::SUBSTUDY %>
+  <% if x.is_study? || x.is_substudy? %>
     <%= persistent_resource_id(x.study) %>
     <%= studyhub_resource_in_seek_id_json(x.study) %>
 

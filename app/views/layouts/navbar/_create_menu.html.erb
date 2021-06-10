@@ -30,6 +30,9 @@
         <% end %>
 
         <li role="presentation" class="dropdown-header"><%= t("menu.assets") -%></li>
+      <% if Seek::Config.nfdi_studyhub_enabled %>
+            <li><%= link_to t("studyhub_resources.studyhub_resource"), new_studyhub_resource_path %></li>
+         <% end %>
         <li><%= link_to t("data_file"), new_data_file_path %></li>
         <% if Seek::Config.models_enabled %>
             <li><%= link_to t("model"), new_model_path %></li>

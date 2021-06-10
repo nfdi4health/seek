@@ -1,0 +1,64 @@
+<%
+  panel_title = "Please select a #{ t('studyhub_resources.studyhub_resource')} Type:"
+  @studyhub_resource_type = nil
+%>
+
+
+<div class="row">
+  <div style="margin:auto;width:70%;">
+    <h1>New <%= t('studyhub_resources.studyhub_resource') %></h1>
+    <%= form_with url: studyhub_resources_path, method: :post do |form| %>
+    <%#= form_with model: StudyhubResource.new(inclusion_studyhub: true), url: studyhub_resources_path, method: :post do |form| %>
+
+      <%= panel(panel_title, :id => 'new_studyhub_resource') do %>
+
+
+
+<span id="studyhub_resource_type_selection">
+        <%= collection_select :studyhub_resource, :studyhub_resource_type, StudyhubResourceType.all, :key, :title,
+                              { :include_blank => "Please select a type:" },
+                              { :class => 'form-control' } -%>
+      </span>
+
+
+      <% end -%>
+
+
+      <span id="studyhub_resource_attributes_container">
+
+  <div id="type_study_form" style="display:none;">
+    <%= render partial: 'type_study_form', locals: { :f => form } %>
+  </div>
+
+  <div id="type_assay_form" style="display:none;">
+    <%= render partial: 'type_assay_form', locals: { :f => form } %>
+  </div>
+
+</span>
+
+
+
+      <%= submit_tag('Submit', class: 'btn btn-primary', id: 'submit-button', disabled: false ) %>
+      </div>
+      </div>
+
+    <% end %>
+
+
+    <script type="text/javascript">
+        $j(document).ready(function () {
+            $j('#studyhub_resource_studyhub_resource_type').change(function () {
+                resource_type = $j(this).val();
+                if (resource_type == 'study' || resource_type == 'substudy') {
+                    $j('#type_assay_form').hide();
+                    $j('#type_study_form').show();
+                } else {
+                    $j('#type_study_form').hide();
+                    $j('#type_assay_form').show();
+                }
+            });
+        });
+    </script>
+
+
+

@@ -60,3 +60,4 @@
 //= require_tree ./templates
 //= require simplemde.min
 //= require admin
+//= require studyhub_resources

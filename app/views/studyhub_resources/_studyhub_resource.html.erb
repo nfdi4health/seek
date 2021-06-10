@@ -1,0 +1,8 @@
+<%= panel("General Resource Information:") do %>
+
+  <%
+    cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource General",supported_type:@studyhub_resource.class.name).first
+  %>
+  <%= render partial: 'custom_metadata/custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: @studyhub_resource } %>
+<% end %>
+

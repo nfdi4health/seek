@@ -159,7 +159,8 @@ you can choose to have a %{project} linked to a site managed %{programme} instea
   Alternatively, if you are unable to use the %{issue_tracker_link}, or the issue is of a private nature, then you can use the %{feedback_link}.
   <p>'
 
-  studyhub_resource:
+  studyhub_resources:
+    studyhub_resource: 'Studyhub Resource'
     id: 'Resource ID'
     study: 'Study'
     substudy: 'Substudy'

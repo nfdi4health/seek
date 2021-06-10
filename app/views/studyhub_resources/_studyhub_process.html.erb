@@ -1,0 +1,75 @@
+<%= panel("Process Information:") do %>
+
+  <%# @studyhub_resource.inclusion_studyhub = true %>
+
+  <%= fields_for(@studyhub_resource) do  |f| %>
+
+  <div class="form-group">
+    <label class="required">Nfdi Person in Charge</label>
+    <%= f.text_field :nfdi_person_in_charge,:class=>"form-control", value:"Nfdi Person in Charge" %>
+  </div>
+
+
+  <div class="form-group">
+    <label class="">Comment</label>
+    <%= f.text_field :comment,:class=>"form-control", value:"Comment" %>
+  </div>
+
+
+  <div class="form-group">
+    <label class="required">Contact Stage</label>
+    <%# @todo change text field to select %>
+    <%= f.text_field :contact_stage,:class=>"form-control", value:"finished"%>
+    <%# contact_stage = { "1"=> "not finished", "2"=> "finished" } %>
+  </div>
+
+
+  <div class="form-group">
+    <label class="required">Data Source</label>
+    <%= f.text_field :data_source,:class=>"form-control",value:"Data Source" %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Inclusion Studyhub</label>
+    <%= f.radio_button :inclusion_studyhub, false %>
+    <%= f.label :inclusion_studyhub, "False" %>
+    <%= f.radio_button :inclusion_studyhub, true  %>
+    <%= f.label :inclusion_studyhub, "True"  %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Exclusion Studyhub Reason</label>
+    <%= f.text_field :exclusion_studyhub_reason,:class=>"form-control",value:"Exclusion Studyhub Reason" %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Inclusion SEEK</label>
+    <%= f.radio_button :inclusion_seek, false %>
+    <%#= f.radio_button :inclusion_seek, false, { :checked => "checked"}%>
+    <%= f.label :inclusion_seek, "False" %>
+    <%= f.radio_button :inclusion_seek, true %>
+    <%= f.label :inclusion_seek, "True" %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Exclusion Seek Reason</label>
+    <%= f.text_field :exclusion_seek_reason,:class=>"form-control",value:"Exclusion Seek Reason"%>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Inclusion Mica</label>
+    <%= f.radio_button :inclusion_mica, false %>
+    <%= f.label :inclusion_mica, "False" %>
+    <%= f.radio_button :inclusion_mica, true %>
+    <%= f.label :inclusion_mica, "True" %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Exclusion Mica Reason</label>
+    <%= f.text_field :exclusion_mica_reason,:class=>"form-control",value:"Exclusion Mica Reason" %>
+  </div>
+
+  <% end %>
+
+<% end %>
+

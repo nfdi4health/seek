@@ -110,9 +110,13 @@ class StudyhubResourcesController < ApplicationController
 
   def study_params
     assay_ids = get_assay_ids(relationship_params) if relationship_params.key?('child_ids')
-    investigation_id =  params[:studyhub_resource][:investigation_id] || (@studyhub_resource.study.investigation.id unless @studyhub_resource.study.nil?)
+    # investigation_id =  params[:studyhub_resource][:investigation_id] || (@studyhub_resource.study.investigation.id unless @studyhub_resource.study.nil?)
+
+    investigation_id =1 # hu_test
     resource_json = studyhub_resource_params['resource_json']
-    title = resource_json['titles'].first['title']
+
+
+    title =  params[:studyhub_resource] || resource_json['titles'].first['title'] # hu_test
     description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
 
     cmt, metadata = extract_custom_metadata('study')
@@ -121,9 +125,10 @@ class StudyhubResourcesController < ApplicationController
       title: title,
       description: description,
       investigation_id: investigation_id,
-      custom_metadata_attributes: {
-        custom_metadata_type_id: cmt.id, data: metadata
-      }
+      # hu_test
+      # custom_metadata_attributes: {
+      #   custom_metadata_type_id: cmt.id, data: metadata
+      # }
     }
     params_hash['assay_ids'] = assay_ids unless assay_ids.nil?
     params_hash
@@ -153,14 +158,74 @@ class StudyhubResourcesController < ApplicationController
 
   def studyhub_resource_params
 
+    params[:studyhub_resource][:resource_json] = {}
+
+    # parse titles
+
+    resource_titles = []
+
+    params[:studyhub_resource][:resource_title].keys.each do |key|
+      entry = {}
+
+      entry["title"] = params[:studyhub_resource][:resource_title][key]
+      entry["title_language"] = params[:studyhub_resource][:resource_language][key]
+      resource_titles << entry unless entry["title"].blank?
+    end
+
+    params[:studyhub_resource][:resource_json][:resource_titles] = resource_titles
+
+
+    # parse descriptions
+    #
+    resource_descriptions = []
+
+    params[:studyhub_resource][:description_text].keys.each do |key|
+      entry = {}
+
+      entry["description_text"] = params[:studyhub_resource][:description_text][key]
+      entry["description_language"] = params[:studyhub_resource][:description_language][key]
+      resource_descriptions << entry unless entry["description_text"].blank?
+    end
+
+    params[:studyhub_resource][:resource_json][:resource_descriptions] = resource_descriptions
+
+
+    # parse resource information and study design
+    unless params[:studyhub_resource][:custom_metadata_attributes].nil?
+
+      resource_attributes = %w[resource_type_general resource_language resource_use_rights resource_web_page resource_web_studyhub resource_web_seek resource_web_mica acronym]
+      study_design_attributes = %w[study_primary_design study_type_interventional study_type_non_interventional study_type_description
+                                 study_primary_purpose study_conditions study_conditions_code study_keywords study_centers study_subject study_region study_target_sample_size
+                                 study_obtained_sample_size study_age_min study_age_max study_sex study_inclusion_criteria study_exclusion_criteria study_population study_sampling
+                                 study_hypothesis study_design_comment study_IPD_sharing_plan_generally study_IPD_sharing_plan_description stuy_IPD_sharing_plan_time_frame stuy_IPD_sharing_plan_access_criteria
+                                 stuy_IPD_sharing_plan_url study_start_date study_end_date study_status study_country study_eligibility]
+
+      resource = {}
+      study_design = {}
+
+
+      params[:studyhub_resource][:custom_metadata_attributes][:data].keys.each do |key|
+        if resource_attributes.include? key
+
+          resource[key] = params[:studyhub_resource][:custom_metadata_attributes][:data][key]
+
+          elsif study_design_attributes.include? key
+            study_design[key] = params[:studyhub_resource][:custom_metadata_attributes][:data][key]
+
+        end
+      end
+      params[:studyhub_resource][:resource_json][:resource] = resource
+      params[:studyhub_resource][:resource_json][:study_design] = study_design
+    end
+
     rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
     params[:studyhub_resource][:studyhub_resource_type_id] = rt.id unless rt.nil?
 
-      params.require(:studyhub_resource).permit(:studyhub_resource_type_id, :comment, { resource_json: {} }, \
-                                              :nfdi_person_in_charge, :contact_stage, :data_source, \
-                                              :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
-                                              :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
-                                              :inclusion_mica)
+    params.require(:studyhub_resource).permit(:studyhub_resource_type_id, :comment, { resource_json: {} }, \
+                                            :nfdi_person_in_charge, :contact_stage, :data_source, \
+                                            :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
+                                            :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
+                                            :inclusion_mica)
   end
 
   def relationship_params
@@ -210,15 +275,15 @@ class StudyhubResourcesController < ApplicationController
 
   def get_assay_ids(relationship_params)
     assay_ids = []
-      unless relationship_params['child_ids'].blank?
-        relationship_params['child_ids'].each do |child_id|
-          child = StudyhubResource.find(child_id)
-          unless (child.nil? || child.assay.nil?)
-            assay_ids << child.assay.id
-          end
+    unless relationship_params['child_ids'].blank?
+      relationship_params['child_ids'].each do |child_id|
+        child = StudyhubResource.find(child_id)
+        unless (child.nil? || child.assay.nil?)
+          assay_ids << child.assay.id
         end
       end
-      assay_ids
+    end
+    assay_ids
   end
 
   def extract_custom_metadata(resource_type)
@@ -233,8 +298,8 @@ class StudyhubResourcesController < ApplicationController
       "resource_web_studyhub": resource_json['resource_web_studyhub'],
       "resource_type": @studyhub_resource.studyhub_resource_type.title,
       "resource_web_page": resource_json['resource_web_page'],
-      "resource_web_mica": resource_json['resource_web_mica'],
-      "acronym": resource_json['acronyms'].first['acronym']
+      "resource_web_mica": resource_json['resource_web_mica']
+      # "acronym": resource_json['acronyms'].first['acronym']
     }
 
     if resource_json.key? 'study'

@@ -1,0 +1,66 @@
+
+
+
+  <div id="resource_titles">
+
+    <table class="table" id="resource-title-table">
+      <thead>
+      <tr>
+        <th width="19em"><label class="required">Resource language</label></th>
+        <th><label class="required">Resource title</label></th>
+        <th width="19em"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <%# @studyhub_resource.sample_attributes.each_with_index do |sample_attribute, index| %>
+      <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+      <%# end %>
+
+        <tr id="title-row">
+          <td colspan="6">
+            <%= button_link_to('Add more titles', 'add', '#', :id => 'add-title-row') %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+    <table id="new-title-row" style="display: none">
+      <tbody>
+      <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f} %>
+      </tbody>
+    </table>
+
+  </div>
+
+
+
+<script>
+    //used to hold the element Id that needs updating after creating a new CV
+    $j(document).ready(function () {
+        $j('#add-title-row').click(function () {
+            var newRow = $j('#new-title-row tbody').clone().html();
+            var index = 0;
+            $j('#resource-title-table tr.resource-title').each(function () {
+                var newIndex = parseInt($j(this).data('index'));
+                if (newIndex > index) {
+                    index = newIndex;
+                }
+            });
+
+            index++;
+
+            newRow = newRow.replace(/row-template/g, index);
+
+            $j('#resource-title-table #title-row').before($j(newRow));
+
+            return false;
+        });
+
+        $j('#resource-title-table').on('change', '.destroy-row', SR.removetitleRow);
+        // $j('#resource-title-table').on('change', '.destroy-row', function(){ SR.removeRow('title') });
+
+    });
+</script>
+

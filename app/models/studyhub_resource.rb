@@ -17,6 +17,8 @@ class StudyhubResource < ApplicationRecord
   has_many :parents, through: :parents_relationships
   has_many :documents, through: :assay
 
+  has_extended_custom_metadata
+
   validate :studyhub_resource_type_id_not_changed, on: :update
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
@@ -25,9 +27,9 @@ class StudyhubResource < ApplicationRecord
 
   def title
     if resource_json.nil?
-      'No title.'
+      ''
     else
-      "#{resource_json['titles'].first['title']}"
+      "#{resource_json['resource_titles'].first['title']}"
     end
   end
 

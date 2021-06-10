@@ -107,12 +107,12 @@ max_studyhub_study_json = JSON.parse(max_studyhub_study_json_text)
 
 ## Studyhub Resource Type
 
-Factory.define(:studyhub_resource_study, class: StudyhubResourceType ) do |f|
+Factory.define(:studyhub_resource_type_study, class: StudyhubResourceType ) do |f|
   f.title 'Studyhub Study'
   f.key 'study'
 end
 
-Factory.define(:studyhub_resource_document, class: StudyhubResourceType ) do |f|
+Factory.define(:studyhub_resource_type_document, class: StudyhubResourceType ) do |f|
   f.title 'Studyhub Document'
   f.key 'document'
 end
@@ -122,12 +122,12 @@ end
 
 Factory.define(:studyhub_study, class: StudyhubResource) do |f|
   f.sequence(:id) { |n| n }
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_study) }
+  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
 end
 
 
 Factory.define(:min_studyhub_study, class: StudyhubResource) do |f|
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_study) }
+  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
   f.resource_json min_studyhub_study_json
   f.nfdi_person_in_charge nil
   f.contact_stage '3'
@@ -142,7 +142,7 @@ Factory.define(:min_studyhub_study, class: StudyhubResource) do |f|
 end
 
 Factory.define(:max_studyhub_study, class: StudyhubResource) do |f|
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_study) }
+  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
   f.resource_json max_studyhub_study_json
   f.nfdi_person_in_charge nil
   f.contact_stage '9'
@@ -159,6 +159,6 @@ end
 
 Factory.define(:studyhub_assay, class: StudyhubResource) do |f|
   f.sequence(:id) { |n| n }
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('document') || Factory(:studyhub_resource_document) }
+  f.studyhub_resource_type { StudyhubResourceType.find_by_key('document') || Factory(:studyhub_resource_type_document) }
 
 end
