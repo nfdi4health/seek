@@ -8,7 +8,11 @@ var SR = {
     removedescriptionRow: function () {
         var row = $j(this).parents('.resource-description');
         row.remove();
-    }
+    },
 
+    removeIDRow: function () {
+        var row = $j(this).parents('.id-id');
+        row.remove();
+    }
 
 };

@@ -48,6 +48,19 @@ disable_authorization_checks do
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[EN DE FR ES])
   )
 
+  # id_type
+  id_type_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first_or_create!(
+  sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[arXiv bibcode DOI EAN13 EISSN ISBN ISSN ISTC LISSN LSID PMID PURL URL URN w3id ORCID ISNI ROR GRID DRKS ISRCTN EudraCT NCT(clinicaltrials.gov) Other])
+
+  )
+
+  # id_relation_type
+  id_relation_types_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Relation Type').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[IsCitedBy Cites IsSupplementTo IsSupplementedBy IsContinuedBy Continues
+IsDescribedBy Describes HasMetadata IsMetadataFor HasVersion IsVersionOf IsNewVersionOf IsPreviousVersionOf IsPartOf HasPart IsReferencedBy References IsDocumentedBy Documents
+IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedBy Reviews IsDerivedFrom IsSourceOf IsRequiredBy Requires IsObsoletedBy Obsoletes])
+  )
+
   #study_primary_design
   study_primary_design_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Design').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[non-interventional interventional])

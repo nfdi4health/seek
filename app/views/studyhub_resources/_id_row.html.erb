@@ -1,0 +1,60 @@
+<%
+  id_types = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first.sample_controlled_vocab_terms
+  id_relation_types = SampleControlledVocab.where(title: 'NFDI4Health ID Relation Type').first.sample_controlled_vocab_terms
+%>
+<% id_row ||= nil %>
+<% index ||= 'row-template' %>
+
+<% field_name_prefix = "resource_ids[id_id][#{index}]" %>
+<% allow_row_removal = (index == 0 ? false : true ) %>
+
+<tr class="id-id" data-index="<%= index-%>">
+
+  <td>
+    <div class="form-group">
+      <%= f.collection_select "studyhub_resource[id_type][#{index}]", id_types.map(&:label), :to_s, :to_s,
+                              { :include_blank => false }, :class => "form-control" %>
+    </div>
+  </td>
+
+  <td>
+    <div class="form-group">
+      <%= f.text_field "studyhub_resource[id_id][#{index}]", :class => "form-control" %>
+    </div>
+  </td>
+
+  <td>
+    <div class="form-group">
+      <%= f.text_field "studyhub_resource[id_date][#{index}]", data: { calendar: true }, :class => "calendar form-control" %>
+    </div>
+  </td>
+
+
+  <td>
+    <div class="form-group">
+      <%= f.collection_select "studyhub_resource[id_relation_type][#{index}]", id_relation_types.map(&:label), :to_s, :to_s,
+                              { :include_blank => false }, :class => "form-control" %>
+    </div>
+  </td>
+
+<td></td>
+<td></td>
+
+  <td>
+    <% if allow_row_removal %>
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-danger">
+          Remove
+          <%= check_box_tag "#{field_name_prefix}[_destroy]", '1', false,
+                            class: 'destroy-row', autocomplete: 'off',id:"#{field_name_prefix}-checkbox[_destroy]" %>
+        </label>
+      </div>
+    <% end %>
+
+  </td>
+
+
+  <% if id_row %>
+    <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
+  <% end %>
+</tr>
