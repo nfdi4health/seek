@@ -61,6 +61,23 @@ IsDescribedBy Describes HasMetadata IsMetadataFor HasVersion IsVersionOf IsNewVe
 IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedBy Reviews IsDerivedFrom IsSourceOf IsRequiredBy Requires IsObsoletedBy Obsoletes])
   )
 
+  # role_type
+  role_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Contributor ContactPerson DataCollector DataCurator DataManager Distributor Editor
+HostingInstitution Producer ProjectLeader ProjectManager ProjectMember RegistrationAgency RegistrationAuthority RelatedPerson Researcher ResearchGroup RightsHolder Supervisor WorkPackageLeader
+Sponsor Sponsor-Investigator Funder Publisher Other])
+  )
+
+
+  # role_specific_type
+  role_specific_type_sponsor_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Sponsor').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[primary secondary])
+  )
+
+  role_specific_type_funder_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Funder').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[public private])
+  )
+
   #study_primary_design
   study_primary_design_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Design').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[non-interventional interventional])

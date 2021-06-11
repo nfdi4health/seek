@@ -176,35 +176,65 @@ class StudyhubResourcesController < ApplicationController
 
 
     # parse descriptions
+
+    # resource_descriptions = []
     #
-    resource_descriptions = []
-
-    params[:studyhub_resource][:description_text].keys.each do |key|
-      entry = {}
-
-      entry["description_text"] = params[:studyhub_resource][:description_text][key]
-      entry["description_language"] = params[:studyhub_resource][:description_language][key]
-      resource_descriptions << entry unless entry["description_text"].blank?
-    end
-
-    params[:studyhub_resource][:resource_json][:resource_descriptions] = resource_descriptions
+    # params[:studyhub_resource][:description_text].keys.each do |key|
+    #   entry = {}
+    #
+    #   entry["description_text"] = params[:studyhub_resource][:description_text][key]
+    #   entry["description_language"] = params[:studyhub_resource][:description_language][key]
+    #   resource_descriptions << entry unless entry["description_text"].blank?
+    # end
+    #
+    # params[:studyhub_resource][:resource_json][:resource_descriptions] = resource_descriptions
 
 
     # parse IDs
     #
     ids = []
 
-    params[:studyhub_resource][:id_type].keys.each do |key|
-      entry = {}
+    # params[:studyhub_resource][:id_type].keys.each do |key|
+    #   entry = {}
+    #
+    #   entry["id_type"] = params[:studyhub_resource][:id_type][key]
+    #   entry["id_id"] = params[:studyhub_resource][:id_id][key]
+    #   entry["id_date"] = params[:studyhub_resource][:id_date][key]
+    #   entry["id_relation_type"] = params[:studyhub_resource][:id_relation_type][key]
+    #   ids << entry unless entry["id_id"].blank?
+    # end
+    #
+    # params[:studyhub_resource][:resource_json][:ids] = ids
 
-      entry["id_type"] = params[:studyhub_resource][:id_type][key]
-      entry["id_id"] = params[:studyhub_resource][:id_id][key]
-      entry["id_date"] = params[:studyhub_resource][:id_date][key]
-      entry["id_relation_type"] = params[:studyhub_resource][:id_relation_type][key]
-      ids << entry unless entry["id_id"].blank?
+
+
+   'studyhub_resource_type"=>"study", "role_type"=>{"0"=>"Contributor", "row-template"=>"Contributor"}, "role_name"=>{"0"=>"Xiaoming Hu", "row-template"=>""},
+"role_email"=>{"0"=>"xm.johann@gmail.com", "row-template"=>""}, "role_phone"=>{"0"=>"015150733586", "row-template"=>""},
+"role_affiliation_name"=>{"0"=>"Home", "row-template"=>""}, "role_affiliation_city"=>{"0"=>"Sandhausen", "row-template"=>""},
+"role_affiliation_zip"=>{"0"=>"69207", "row-template"=>""}, "role_affiliation_country"=>{"0"=>"Germany", "row-template"=>""},
+ "role_affiliation_url"=>{"0"=>"www.h-its.org", "row-template"=>""},'
+
+    # parse roles
+
+    roles = []
+
+    params[:studyhub_resource][:role_name].keys.each do |key|
+      entry = {}
+        entry["role_type"] = params[:studyhub_resource][:role_type][key]
+        entry["role_specific_type_sponsor"] = params[:studyhub_resource][:role_specific_type_sponsor][key] unless params[:studyhub_resource][:role_specific_type_sponsor][key].blank?
+        entry["role_specific_type_funder"] = params[:studyhub_resource][:role_specific_type_funder][key] unless params[:studyhub_resource][:role_specific_type_funder][key].blank?
+        entry["role_name"] = params[:studyhub_resource][:role_name][key]
+        entry["role_email"] = params[:studyhub_resource][:role_email][key] unless params[:studyhub_resource][:role_email][key].blank?
+        entry["role_phone"] = params[:studyhub_resource][:role_phone][key] unless params[:studyhub_resource][:role_phone][key].blank?
+        entry["role_affiliation_name"] = params[:studyhub_resource][:role_affiliation_name][key] unless params[:studyhub_resource][:role_affiliation_name][key].blank?
+        entry["role_affiliation_city"] = params[:studyhub_resource][:role_affiliation_city][key] unless params[:studyhub_resource][:role_affiliation_city][key].blank?
+        entry["role_affiliation_zip"] = params[:studyhub_resource][:role_affiliation_zip][key] unless params[:studyhub_resource][:role_affiliation_zip][key].blank?
+        entry["role_affiliation_country"] = params[:studyhub_resource][:role_affiliation_country][key] unless params[:studyhub_resource][:role_affiliation_country][key].blank?
+        entry["role_affiliation_url"] = params[:studyhub_resource][:role_affiliation_url][key] unless params[:studyhub_resource][:role_affiliation_url][key].blank?
+        roles << entry unless entry["role_name"].blank?
     end
 
-    params[:studyhub_resource][:resource_json][:ids] = ids
+    params[:studyhub_resource][:resource_json][:roles] = roles
 
 
     # parse resource information and study design

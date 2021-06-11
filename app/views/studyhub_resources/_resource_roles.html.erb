@@ -1,0 +1,56 @@
+<div id="resource_roles">
+
+    <div class="table" id="resource-role-table">
+
+      <%# @studyhub_resource.sample_attributes.each_with_index do |sample_attribute, index| %>
+      <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+      <%# end %>
+
+        <div id="role-row">
+          <div colspan="6">
+            <%= button_link_to('Add more roles', 'add', '#', :id => 'add-role-row') %>
+          </div>
+        </div>
+
+    </div>
+
+
+
+
+    <div id="new-role-row" style="display: none">
+
+      <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f} %>
+
+    </div>
+
+  </div>
+
+
+
+<script>
+    //used to hold the element Id that needs updating after creating a new CV
+    $j(document).ready(function () {
+        $j('#add-role-row').click(function () {
+            var newRow = $j('#new-role-row').clone().html();
+            var index = 0;
+            $j('#resource-role-table div.resource-role').each(function () {
+                var newIndex = parseInt($j(this).data('index'));
+                if (newIndex > index) {
+                    index = newIndex;
+                }
+            });
+
+            index++;
+
+            newRow = newRow.replace(/row-template/g, index);
+
+            $j('#resource-role-table #role-row').before($j(newRow));
+
+            return false;
+        });
+
+        $j('#resource-role-table').on('change', '.destroy-row', SR.removeRoleRow);
+
+    });
+</script>
+

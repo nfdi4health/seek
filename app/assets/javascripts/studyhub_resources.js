@@ -13,6 +13,11 @@ var SR = {
     removeIDRow: function () {
         var row = $j(this).parents('.id-id');
         row.remove();
+    },
+
+    removeRoleRow: function () {
+        var row = $j(this).parents('.resource-role');
+        row.remove();
     }
 
 };

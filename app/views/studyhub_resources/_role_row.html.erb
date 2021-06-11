@@ -1,0 +1,92 @@
+<%
+  role_types = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first.sample_controlled_vocab_terms
+  role_specific_type_sponsors = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Sponsor').first.sample_controlled_vocab_terms
+  role_specific_type_funders = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Funder').first.sample_controlled_vocab_terms
+
+
+%>
+<% role_row ||= nil %>
+<% index ||= 'row-template' %>
+
+<% field_name_prefix = "resource_roles[role][#{index}]" %>
+<% allow_row_removal = (index == 0 ? false : true ) %>
+
+<div class="resource-role" data-index="<%= index-%>">
+  <div class="form-group">
+    <label class="required">Role Type</label>
+    <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
+                            { :include_blank => false }, :class => "form-control" %>
+  </div>
+
+  <div class="form-group" style="display: none">
+    <label>Role Type Sponsor</label>
+    <%= f.collection_select "studyhub_resource[role_specific_type_sponsor][#{index}]", role_specific_type_sponsors.map(&:label), :to_s, :to_s,
+                            { :include_blank => true }, :class => "form-control" %>
+  </div>
+
+  <div class="form-group" style="display: none">
+    <label>Role Type Funder</label>
+    <%= f.collection_select "studyhub_resource[role_specific_type_funder][#{index}]", role_specific_type_funders.map(&:label), :to_s, :to_s,
+                            { :include_blank => true }, :class => "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Name</label>
+    <%= f.text_field "studyhub_resource[role_name][#{index}]", :class => "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <label>Email</label>
+    <%= f.text_field "studyhub_resource[role_email][#{index}]", :class => "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <label>Phone</label>
+    <%= f.text_field "studyhub_resource[role_phone][#{index}]", :class => "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <label>Affiliation Name</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_name][#{index}]", :class => "form-control" %>
+  </div>
+
+
+  <div class="form-group">
+    <label>City</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_city][#{index}]", :class => "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <label>Zip</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_zip][#{index}]", :class => "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <label>Country</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_country][#{index}]", :class => "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <label>URL</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_url][#{index}]", :class => "form-control" %>
+  </div>
+
+
+  <div class="form-group">
+    <% if allow_row_removal %>
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-danger">
+          Remove
+          <%= check_box_tag "#{field_name_prefix}[_destroy]", '1', false,
+                            class: 'destroy-row', autocomplete: 'off',id:"#{field_name_prefix}-checkbox[_destroy]" %>
+        </label>
+      </div>
+    <% end %>
+
+  </div>
+
+
+  <% if role_row %>
+    <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
+  <% end %>
+</div>
