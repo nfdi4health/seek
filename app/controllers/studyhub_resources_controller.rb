@@ -161,9 +161,7 @@ class StudyhubResourcesController < ApplicationController
     params[:studyhub_resource][:resource_json] = {}
 
     # parse titles
-
     resource_titles = []
-
     params[:studyhub_resource][:resource_title].keys.each do |key|
       entry = {}
 
@@ -176,41 +174,35 @@ class StudyhubResourcesController < ApplicationController
 
 
     # parse descriptions
+    resource_descriptions = []
+    params[:studyhub_resource][:description_text].keys.each do |key|
+      entry = {}
 
-    # resource_descriptions = []
-    #
-    # params[:studyhub_resource][:description_text].keys.each do |key|
-    #   entry = {}
-    #
-    #   entry["description_text"] = params[:studyhub_resource][:description_text][key]
-    #   entry["description_language"] = params[:studyhub_resource][:description_language][key]
-    #   resource_descriptions << entry unless entry["description_text"].blank?
-    # end
-    #
-    # params[:studyhub_resource][:resource_json][:resource_descriptions] = resource_descriptions
+      entry["description_text"] = params[:studyhub_resource][:description_text][key]
+      entry["description_language"] = params[:studyhub_resource][:description_language][key]
+      resource_descriptions << entry unless entry["description_text"].blank?
+    end
+
+    params[:studyhub_resource][:resource_json][:resource_descriptions] = resource_descriptions
 
 
     # parse IDs
-    #
     ids = []
+    params[:studyhub_resource][:id_type].keys.each do |key|
+      entry = {}
 
-    # params[:studyhub_resource][:id_type].keys.each do |key|
-    #   entry = {}
-    #
-    #   entry["id_type"] = params[:studyhub_resource][:id_type][key]
-    #   entry["id_id"] = params[:studyhub_resource][:id_id][key]
-    #   entry["id_date"] = params[:studyhub_resource][:id_date][key]
-    #   entry["id_relation_type"] = params[:studyhub_resource][:id_relation_type][key]
-    #   ids << entry unless entry["id_id"].blank?
-    # end
-    #
-    # params[:studyhub_resource][:resource_json][:ids] = ids
+      entry["id_type"] = params[:studyhub_resource][:id_type][key]
+      entry["id_id"] = params[:studyhub_resource][:id_id][key]
+      entry["id_date"] = params[:studyhub_resource][:id_date][key]
+      entry["id_relation_type"] = params[:studyhub_resource][:id_relation_type][key]
+      ids << entry unless entry["id_id"].blank?
+    end
+
+    params[:studyhub_resource][:resource_json][:ids] = ids
 
 
     # parse roles
-
     roles = []
-
     params[:studyhub_resource][:role_name].keys.each do |key|
       entry = {}
       entry["role_type"] = params[:studyhub_resource][:role_type][key]

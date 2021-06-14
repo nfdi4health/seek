@@ -1,3 +1,4 @@
+<div id="resource_studyhub_study_design">
 <%= panel("Study Design:") do %>
 
   <%
@@ -5,4 +6,14 @@
   %>
   <%= render partial: 'custom_metadata/custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: @studyhub_resource } %>
 <% end %>
+</div>
 
+
+<script>
+    $j(document).ready(function () {
+
+        SR.intialStudyPrimaryDesignVisibility();
+        $j('#resource_studyhub_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]', SR.setStudyPrimaryDesignVisibility);
+
+    });
+</script>

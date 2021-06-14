@@ -20,7 +20,32 @@ var SR = {
         row.remove();
     },
 
-    setSpecificRoleTypeVisible: function () {
+    intialStudyPrimaryDesignVisibility: function () {
+
+        study_type_interventional = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+        study_type_interventional = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+
+    },
+
+    setStudyPrimaryDesignVisibility: function () {
+
+        design = $j(this).val();
+        switch (design){
+            case 'interventional':
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+                break;
+            case 'non-interventional':
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().show();
+                break;
+            default:
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+        }
+    },
+
+    setSpecificRoleTypeVisibility: function () {
 
         role_type = $j(this).val();
         switch (role_type){
