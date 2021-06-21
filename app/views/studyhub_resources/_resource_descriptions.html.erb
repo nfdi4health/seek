@@ -9,9 +9,15 @@
       </tr>
       </thead>
       <tbody>
-      <%# @studyhub_resource.sample_attributes.each_with_index do |sample_attribute, index| %>
-      <%= render :partial => 'description_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
-      <%# end %>
+
+
+      <% if @studyhub_resource.new_record? %>
+        <%= render :partial => 'description_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+      <% else %>
+        <% @studyhub_resource.resource_json['resource_descriptions'].each_with_index do |description, index| %>
+          <%= render :partial => 'description_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
+        <% end %>
+      <% end %>
 
         <tr id="description-row">
           <td colspan="6">
@@ -51,6 +57,9 @@
             newRow = newRow.replace(/row-template/g, index);
 
             $j('#resource-description-table #description-row').before($j(newRow));
+            $j('select[name="studyhub_resource[description_language]['+index+']"]').val("EN");
+            $j('textarea[name="studyhub_resource[description_text]['+index+']"]').val("");
+
 
             return false;
         });

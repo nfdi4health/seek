@@ -1,9 +1,22 @@
+<%
+
+  sharing_enable = true if sharing_enable.nil?
+  # sharing_enable = sharing_enable && @studyhub_resource.study.can_manage?
+
+%>
+
 <%= error_messages_for :studyhub_resource %>
 
 
 <%= render partial: 'studyhub_basic', locals: { :f => f } %>
-<%= render partial: 'studyhub_resource', locals: { :f => f } %>
-<%= render partial: 'studyhub_study_design', locals: { :f => f } %>
+<%= render partial: 'studyhub_resource_input', locals: { :f => f } %>
+<%= render partial: 'studyhub_study_design_input', locals: { :f => f } %>
 <%= render partial: 'studyhub_process', locals: { :f => f } %>
 
+<% if show_form_manage_specific_attributes? && @studyhub_resource.can_manage? %>
+  <%= render :partial => "projects/project_selector", :locals => {:resource => @studyhub_resource} -%>
+<% end %>
 
+<% if sharing_enable %>
+  <%= render :partial => "sharing/form" -%>
+<% end -%>

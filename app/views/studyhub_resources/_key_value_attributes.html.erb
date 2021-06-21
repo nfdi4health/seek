@@ -1,0 +1,9 @@
+ <% resource.keys.each do |key| %>
+
+    <% hidden_class = resource[key].blank?? "item-hidden" : nil %>
+    <p class=<%=hidden_class %>>
+      <label><%= key.humanize(keep_id_suffix: true) %>: </label>
+      <%= resource[key] %>
+    </p>
+  <% end %>
+

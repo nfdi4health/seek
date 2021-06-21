@@ -430,7 +430,10 @@ SEEK::Application.routes.draw do
   #
     ### STUDYHUB RESOURCES ###
 
-   resources :studyhub_resources
+  resources :studyhub_resources, concerns: [:asset]
+
+
+  
 
   ### ASSAY AND TECHNOLOGY TYPES ###
 

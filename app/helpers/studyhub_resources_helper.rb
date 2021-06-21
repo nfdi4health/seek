@@ -25,6 +25,118 @@ module StudyhubResourcesHelper
     end
   end
 
+  def studyhub_resource_descriptions (descriptions)
+    html = ''
+    if descriptions.any?
+
+      html += '<div class="table-responsive">'
+      html += '<table class="table table-striped table-hover steps">
+      <thead>
+      <tr>
+        <th class="col-md-1">Description language</th>
+        <th>Description Text</th>
+      </tr>
+      </thead>
+      <tbody>'
+      descriptions.each do |d|
+        html += '<tr>'
+        html+='<td class="description_language">'+d["description_language"]+'</td>'
+        html+='<td class="description_text">'+d["description_text"]+'</td>'
+      end
+      html += '</tbody></table></div>'
+    end
+    html.html_safe
+  end
+
+
+  def studyhub_resource_titles (titles)
+    html = ''
+    if titles.any?
+      html += '<div class="table-responsive">'
+      html += '<table class="table table-striped table-hover steps">
+      <thead>
+      <tr>
+        <th class="col-md-1">title_language</th>
+        <th>title</th>
+      </tr>
+      </thead>
+      <tbody>'
+      titles.each do |d|
+        html += '<tr>'
+        html+='<td class="title_language">'+d["title_language"]+'</td>'
+        html+='<td class="title">'+d["title"]+'</td>'
+      end
+      html += '</tbody></table></div>'
+    end
+    html.html_safe
+  end
+
+
+  def studyhub_resource_ids (ids)
+    html = ''
+    if ids.any?
+      html += '<div class="table-responsive">'
+      html += '<table class="table table-striped table-hover steps">
+      <thead>
+      <tr>
+        <th class="col-md-1">ID</th>
+        <th class="col-md-2">ID date</th>
+        <th class="col-md-3">ID type´</th>
+        <th>Relation type</th>
+      </tr>
+      </thead>
+      <tbody>'
+      ids.each do |d|
+        html += '<tr>'
+        html+='<td class="id_id">'+d["id_id"]+'</td>'
+        html+='<td class="id_date">'+d["id_date"]+'</td>'
+        html+='<td class="id_type">'+d["id_type"]+'</td>'
+        html+='<td class="id_relation_type">'+d["id_relation_type"]+'</td>'
+      end
+      html += '</tbody></table></div>'
+    end
+    html.html_safe
+  end
+
+
+
+  def studyhub_resource_roles (roles)
+    html = ''
+    if roles.any?
+      html += '<div class="table-responsive">'
+      html += '<table class="table table-striped table-hover steps">
+      <thead>
+      <tr>
+        <th class="col-md-2">Name</th>
+        <th class="col-md-2">Role Type</th>
+        <th class="col-md-3">Email</th>
+        <th class="col-md-2">Phone</th>
+        <th class="col-md-3">Affiliation</th>
+      </tr>
+      </thead>
+      <tbody>'
+      roles.each do |d|
+        html += '<tr>'
+        html+='<td class="role_name">'+d["role_name"]+'</td>'
+        html+='<td class="role_type">'+d["role_type"]
+        html+=':'+d["role_specific_type_funder"] unless d["role_specific_type_funder"].blank?
+        html+=' ('+d["role_specific_type_sponsor"]+')' unless d["role_specific_type_sponsor"].blank?
+        html+='</td>'
+        html+='<td class="role_email">'+d["role_email"]+'</td>'
+        html+='<td class="role_phone">'+d["role_phone"]+'</td>'
+
+        html+='<td class="role_affiliation">'+d["role_affiliation_name"]
+        html+=','+d["role_affiliation_city"] unless d["role_affiliation_city"].blank?
+        html+=','+d["role_affiliation_zip"] unless d["role_affiliation_zip"].blank?
+        html+=','+d["role_affiliation_country"] unless d["role_affiliation_country"].blank?
+        html+='<br>'+d["role_affiliation_url"] unless d["role_affiliation_url"].blank?
+        html+='</td>'
+      end
+      html += '</tbody></table></div>'
+    end
+    html.html_safe
+  end
+
   def studyhub_custom_metadata_form_field_for_attribute(attribute, resource)
 
     base_type = attribute.sample_attribute_type.base_type

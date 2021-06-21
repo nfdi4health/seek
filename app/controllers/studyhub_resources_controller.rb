@@ -2,41 +2,52 @@ class StudyhubResourcesController < ApplicationController
 
   include Seek::AssetsCommon
   include Seek::DestroyHandling
+  include Seek::IndexPager
 
-  before_action :find_and_authorize_studyhub_resource, only: %i[edit update destroy manage show]
+  # before_action :find_and_authorize_studyhub_resource, only: %i[edit update destroy manage show]
+
+  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show new_object_based_on_existing_one]
+
+  before_action :find_assets, only: [:index]
   api_actions :index, :show, :create, :update, :destroy
 
-  def index
-    #http://localhost:3003/studyhub_resources.json?type=study
-    resources_expr = "StudyhubResource.all"
-    if params[:type].present?
-      type_id = StudyhubResourceType.find_by(key: params[:type]).id
-      resources_expr << ".where(studyhub_resource_type_id: type_id)"
-    end
-    resources_expr << ".where({updated_at: params[:after].to_time..Time.now})" if params[:after].present?
-    resources_expr << ".where({updated_at: Time.at(0)..params[:before].to_time})" if params[:before].present?
 
-    if params[:limit].present?
-      resources_expr << ".limit params[:limit]"
-      @studyhub_resources = eval resources_expr
-    elsif params[:all].present?
-      @studyhub_resources = eval resources_expr
-    else
-      @studyhub_resources = eval resources_expr + '.limit 10'
-    end
 
-    respond_to do |format|
-      format.html
-      format.xml
-      format.json { render json: @studyhub_resources }
-    end
-  end
+  # def index
+  #   #http://localhost:3003/studyhub_resources.json?type=study
+  #   resources_expr = "StudyhubResource.all"
+  #   if params[:type].present?
+  #     type_id = StudyhubResourceType.find_by(key: params[:type]).id
+  #     resources_expr << ".where(studyhub_resource_type_id: type_id)"
+  #   end
+  #   resources_expr << ".where({updated_at: params[:after].to_time..Time.now})" if params[:after].present?
+  #   resources_expr << ".where({updated_at: Time.at(0)..params[:before].to_time})" if params[:before].present?
+  #
+  #   if params[:limit].present?
+  #     resources_expr << ".limit params[:limit]"
+  #     @studyhub_resources = eval resources_expr
+  #   elsif params[:all].present?
+  #     @studyhub_resources = eval resources_expr
+  #   else
+  #     @studyhub_resources = eval resources_expr + '.limit 10'
+  #   end
+  #
+  #   respond_to do |format|
+  #     format.html
+  #     format.xml
+  #     format.json { render json: @studyhub_resources }
+  #   end
+  # end
+
+  # def new
+  #   item = StudyhubResource.new(studyhub_resource_params)
+  #   Rails.logger.info("+++++++++++StudyhubResourcesController new++++++++++++++")
+  # end
 
   def show
     @studyhub_resource = StudyhubResource.find(params[:id])
     respond_to do |format|
       format.html
-      format.xml
       format.json { render json: @studyhub_resource }
     end
   end
@@ -51,175 +62,154 @@ class StudyhubResourcesController < ApplicationController
                      message: 'Studyhub resource type is blank or invalid.' }, status: :bad_request
 
     else
-      seek_type = map_to_seek_type(resource_type)
+       # seek_type = map_to_seek_type(resource_type)
 
-      item = nil
+      # item = nil
+      #
+      # case seek_type
+      # when 'Study'
+      #   Rails.logger.info('creating a SEEK Study')
+      #   item = @studyhub_resource.build_study(study_params)
+      # when 'Assay'
+      #   Rails.logger.info('creating a SEEK Assay')
+      #   item = @studyhub_resource.build_assay(assay_params)
+      # end
 
-      case seek_type
-      when 'Study'
-        Rails.logger.info('creating a SEEK Study')
-        item = @studyhub_resource.build_study(study_params)
-      when 'Assay'
-        Rails.logger.info('creating a SEEK Assay')
-        item = @studyhub_resource.build_assay(assay_params)
-      end
+       # update_sharing_policies item
 
-      update_sharing_policies item
+      update_sharing_policies @studyhub_resource
+
 
       #todo only save @studyhub_resource when item(study/assay) is created successfully
-      if item.valid?
-        if @studyhub_resource.save
-          update_parent_child_relationships(relationship_params)
-          render json: @studyhub_resource, status: :created, location: @studyhub_resource
-        else
-          render json: @studyhub_resource.errors, status: :unprocessable_entity
-        end
+      #if item.valid?
+      if @studyhub_resource.save
+        update_parent_child_relationships(relationship_params)
+        render json: @studyhub_resource, status: :created, location: @studyhub_resource
       else
-        @studyhub_resource.errors.add(:base, item.errors.full_messages)
         render json: @studyhub_resource.errors, status: :unprocessable_entity
       end
+      # else
+      #   @studyhub_resource.errors.add(:base, item.errors.full_messages)
+      #   render json: @studyhub_resource.errors, status: :unprocessable_entity
+      # end
     end
   end
 
-  # PATCH/PUT /studyhub_resources/1
+  def edit
+    @studyhub_resource = StudyhubResource.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.xml
+    end
+  end
+
+  # PUT /studyhub_resources/1
   def update
-    @studyhub_resource.update_attributes(studyhub_resource_params)
+
+    update_sharing_policies @studyhub_resource
+    update_relationships(@studyhub_resource,params)
     update_parent_child_relationships(relationship_params)
 
-    unless @studyhub_resource.study.nil?
-      update_sharing_policies @studyhub_resource.study
-      @studyhub_resource.study.update_attributes(study_params)
-    end
+    # unless @studyhub_resource.study.nil?
+    #   update_sharing_policies @studyhub_resource.study
+    #   @studyhub_resource.study.update_attributes(study_params)
+    # end
+    #
+    # unless @studyhub_resource.assay.nil?
+    #   update_sharing_policies @studyhub_resource.assay
+    #   @studyhub_resource.assay.update_attributes(assay_params)
+    # end
 
-    unless @studyhub_resource.assay.nil?
-      update_sharing_policies @studyhub_resource.assay
-      @studyhub_resource.assay.update_attributes(assay_params)
-    end
-
+    # respond_to do |format|
+    #   if @studyhub_resource.save
+    #     @studyhub_resource.reload
+    #     format.json { render json: @studyhub_resource, status: 200 }
+    #   else
+    #     format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
+    #   end
+    # end
+    #
     respond_to do |format|
-      if @studyhub_resource.save
-        @studyhub_resource.reload
+      if  @studyhub_resource.update_attributes(studyhub_resource_params)
+        flash[:notice] = "#{t('studyhub_resource')} metadata was successfully updated."
+        format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
         format.json { render json: @studyhub_resource, status: 200 }
       else
-        format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
+        format.html { render action: 'edit' }
+        format.json { render json: json_api_errors(@workflow), status: :unprocessable_entity }
       end
     end
   end
+
+
 
   private
 
-  def study_params
-    assay_ids = get_assay_ids(relationship_params) if relationship_params.key?('child_ids')
-    # investigation_id =  params[:studyhub_resource][:investigation_id] || (@studyhub_resource.study.investigation.id unless @studyhub_resource.study.nil?)
+  # def study_params
+  #   assay_ids = get_assay_ids(relationship_params) if relationship_params.key?('child_ids')
+  #   # investigation_id =  params[:studyhub_resource][:investigation_id] || (@studyhub_resource.study.investigation.id unless @studyhub_resource.study.nil?)
+  #
+  #   investigation_id =1 # hu_test
+  #   resource_json = studyhub_resource_params['resource_json']
+  #
+  #
+  #   title =  params[:studyhub_resource] || resource_json['titles'].first['title'] # hu_test
+  #   description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
+  #
+  #   cmt, metadata = extract_custom_metadata('study')
+  #
+  #   params_hash = {
+  #     title: title,
+  #     description: description,
+  #     investigation_id: investigation_id,
+  #     # hu_test
+  #     # custom_metadata_attributes: {
+  #     #   custom_metadata_type_id: cmt.id, data: metadata
+  #     # }
+  #   }
+  #   params_hash['assay_ids'] = assay_ids unless assay_ids.nil?
+  #   params_hash
+  # end
 
-    investigation_id =1 # hu_test
-    resource_json = studyhub_resource_params['resource_json']
-
-
-    title =  params[:studyhub_resource] || resource_json['titles'].first['title'] # hu_test
-    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
-
-    cmt, metadata = extract_custom_metadata('study')
-
-    params_hash = {
-      title: title,
-      description: description,
-      investigation_id: investigation_id,
-      # hu_test
-      # custom_metadata_attributes: {
-      #   custom_metadata_type_id: cmt.id, data: metadata
-      # }
-    }
-    params_hash['assay_ids'] = assay_ids unless assay_ids.nil?
-    params_hash
-  end
-
-  def assay_params
-
-    study_id = get_study_id(relationship_params)
-    resource_json = studyhub_resource_params['resource_json']
-    title = resource_json['titles'].first['title']
-    description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
-
-    cmt, metadata = extract_custom_metadata('assay')
-
-    {
-      # currently the assay class is set as modelling type by default
-      assay_class_id: AssayClass.for_type('modelling').id,
-      title: title,
-      description: description,
-      study_id: study_id,
-      custom_metadata_attributes: {
-        custom_metadata_type_id: cmt.id, data: metadata
-      },
-      document_ids: seek_relationship_params['document_ids']
-    }
-  end
+  # def assay_params
+  #
+  #   study_id = get_study_id(relationship_params)
+  #   resource_json = studyhub_resource_params['resource_json']
+  #   title = resource_json['titles'].first['title']
+  #   description = resource_json['descriptions'].first['description_text'] unless resource_json['descriptions'].blank?
+  #
+  #   cmt, metadata = extract_custom_metadata('assay')
+  #
+  #   {
+  #     # currently the assay class is set as modelling type by default
+  #     assay_class_id: AssayClass.for_type('modelling').id,
+  #     title: title,
+  #     description: description,
+  #     study_id: study_id,
+  #     custom_metadata_attributes: {
+  #       custom_metadata_type_id: cmt.id, data: metadata
+  #     },
+  #     document_ids: seek_relationship_params['document_ids']
+  #   }
+  # end
 
   def studyhub_resource_params
 
     params[:studyhub_resource][:resource_json] = {}
-
+    sr = params[:studyhub_resource]
     # parse titles
-    resource_titles = []
-    params[:studyhub_resource][:resource_title].keys.each do |key|
-      entry = {}
-
-      entry["title"] = params[:studyhub_resource][:resource_title][key]
-      entry["title_language"] = params[:studyhub_resource][:resource_language][key]
-      resource_titles << entry unless entry["title"].blank?
-    end
-
-    params[:studyhub_resource][:resource_json][:resource_titles] = resource_titles
-
+    sr[:resource_json][:resource_titles] = parse_resource_titles(sr)
 
     # parse descriptions
-    resource_descriptions = []
-    params[:studyhub_resource][:description_text].keys.each do |key|
-      entry = {}
-
-      entry["description_text"] = params[:studyhub_resource][:description_text][key]
-      entry["description_language"] = params[:studyhub_resource][:description_language][key]
-      resource_descriptions << entry unless entry["description_text"].blank?
-    end
-
-    params[:studyhub_resource][:resource_json][:resource_descriptions] = resource_descriptions
+    sr[:resource_json][:resource_descriptions] = parse_resource_descriptions(sr)
 
 
     # parse IDs
-    ids = []
-    params[:studyhub_resource][:id_type].keys.each do |key|
-      entry = {}
-
-      entry["id_type"] = params[:studyhub_resource][:id_type][key]
-      entry["id_id"] = params[:studyhub_resource][:id_id][key]
-      entry["id_date"] = params[:studyhub_resource][:id_date][key]
-      entry["id_relation_type"] = params[:studyhub_resource][:id_relation_type][key]
-      ids << entry unless entry["id_id"].blank?
-    end
-
-    params[:studyhub_resource][:resource_json][:ids] = ids
+    sr[:resource_json][:ids] = parse_ids(sr)
 
 
     # parse roles
-    roles = []
-    params[:studyhub_resource][:role_name].keys.each do |key|
-      entry = {}
-      entry["role_type"] = params[:studyhub_resource][:role_type][key]
-      entry["role_specific_type_sponsor"] = params[:studyhub_resource][:role_specific_type_sponsor][key] unless params[:studyhub_resource][:role_specific_type_sponsor][key].blank?
-      entry["role_specific_type_funder"] = params[:studyhub_resource][:role_specific_type_funder][key] unless params[:studyhub_resource][:role_specific_type_funder][key].blank?
-      entry["role_name"] = params[:studyhub_resource][:role_name][key]
-      entry["role_email"] = params[:studyhub_resource][:role_email][key] unless params[:studyhub_resource][:role_email][key].blank?
-      entry["role_phone"] = params[:studyhub_resource][:role_phone][key] unless params[:studyhub_resource][:role_phone][key].blank?
-      entry["role_affiliation_name"] = params[:studyhub_resource][:role_affiliation_name][key] unless params[:studyhub_resource][:role_affiliation_name][key].blank?
-      entry["role_affiliation_city"] = params[:studyhub_resource][:role_affiliation_city][key] unless params[:studyhub_resource][:role_affiliation_city][key].blank?
-      entry["role_affiliation_zip"] = params[:studyhub_resource][:role_affiliation_zip][key] unless params[:studyhub_resource][:role_affiliation_zip][key].blank?
-      entry["role_affiliation_country"] = params[:studyhub_resource][:role_affiliation_country][key] unless params[:studyhub_resource][:role_affiliation_country][key].blank?
-      entry["role_affiliation_url"] = params[:studyhub_resource][:role_affiliation_url][key] unless params[:studyhub_resource][:role_affiliation_url][key].blank?
-      roles << entry unless entry["role_name"].blank?
-    end
-
-    params[:studyhub_resource][:resource_json][:roles] = roles
+    sr[:resource_json][:roles] = parse_roles(sr)
 
 
     # parse resource information and study design
@@ -254,10 +244,75 @@ class StudyhubResourcesController < ApplicationController
     params[:studyhub_resource][:studyhub_resource_type_id] = rt.id unless rt.nil?
 
     params.require(:studyhub_resource).permit(:studyhub_resource_type_id, :comment, { resource_json: {} }, \
-                                            :nfdi_person_in_charge, :contact_stage, :data_source, \
+                                            :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, \
                                             :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
                                             :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
                                             :inclusion_mica)
+  end
+
+  def parse_roles(params)
+    roles = []
+    params[:role_name].keys.each do |key|
+      next if key == 'row-template'
+
+      entry = {}
+      entry['role_type'] = params[:role_type][key]
+      entry['role_specific_type_sponsor'] = params[:role_specific_type_sponsor][key]
+      entry['role_specific_type_funder'] = params[:role_specific_type_funder][key]
+      entry['role_name'] = params[:role_name][key]
+      entry['role_email'] = params[:role_email][key] unless params[:role_email][key].blank?
+      entry['role_phone'] = params[:role_phone][key] unless params[:role_phone][key].blank?
+      entry['role_affiliation_name'] = params[:role_affiliation_name][key]
+      entry['role_affiliation_city'] = params[:role_affiliation_city][key]
+      entry['role_affiliation_zip'] = params[:role_affiliation_zip][key]
+      entry['role_affiliation_country'] = params[:role_affiliation_country][key]
+      entry['role_affiliation_url'] = params[:role_affiliation_url][key]
+      roles << entry unless entry['role_name'].blank?
+
+    end
+    roles
+  end
+
+  def parse_ids(params)
+    ids = []
+    params[:id_type].keys.each do |key|
+      entry = {}
+      next if key == 'row-template'
+
+      entry['id_type'] = params[:id_type][key]
+      entry['id_id'] = params[:id_id][key]
+      entry['id_date'] = params[:id_date][key]
+      entry['id_relation_type'] = params[:id_relation_type][key]
+      ids << entry unless entry['id_id'].blank?
+    end
+    ids
+  end
+
+  def parse_resource_descriptions(params)
+    resource_descriptions = []
+    params[:description_text].keys.each do |key|
+      next if key == 'row-template'
+
+      entry = {}
+      entry['description_text'] = params[:description_text][key]
+      entry['description_language'] = params[:description_language][key]
+      resource_descriptions << entry unless entry['description_text'].blank?
+    end
+    resource_descriptions
+  end
+
+  def parse_resource_titles(params)
+    resource_titles = []
+    params[:resource_title].keys.each do |key|
+      next if key == 'row-template'
+
+      entry = {}
+      entry['title'] = params[:resource_title][key]
+      entry['title_language'] = params[:resource_language][key]
+      resource_titles << entry unless entry['title'].blank?
+
+    end
+    resource_titles
   end
 
   def relationship_params
@@ -292,15 +347,15 @@ class StudyhubResourcesController < ApplicationController
       study_id = other_studyhub_resource_id
     else
 
-        parent = StudyhubResource.find(relationship_params['parent_ids'].first)
+      parent = StudyhubResource.find(relationship_params['parent_ids'].first)
 
         # TODO: when parents are other types, such as "instrument", "document"
         # TODO: if parent doesnt exist, still need to sort out the relationship
-        study_id = if !parent.nil? && (parent.is_study? || parent.is_substudy?)
-                     parent.study.id
-                   else
-                     other_studyhub_resource_id
-                   end
+      study_id = if !parent.nil? && (parent.is_study? || parent.is_substudy?)
+                   parent.study.id
+                 else
+                   other_studyhub_resource_id
+                 end
     end
     study_id
   end
@@ -372,13 +427,14 @@ class StudyhubResourcesController < ApplicationController
     @seek_item ||= @studyhub_resource.assay
 
     return if privilege.nil?
+
     unless is_auth?(@seek_item, privilege)
       respond_to do |format|
         flash[:error] = 'You are not authorized to perform this action'
         format.html { redirect_to @studyhub_resource }
         format.json do
           render json: { "title": 'Forbidden',
-                         "detail": "You are not authorized to perform this action." },
+                         "detail": 'You are not authorized to perform this action.' },
                  status: :forbidden
         end
       end

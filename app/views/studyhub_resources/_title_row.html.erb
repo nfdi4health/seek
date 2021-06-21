@@ -1,8 +1,18 @@
 <%
   resource_languages = SampleControlledVocab.where(title: 'NFDI4Health Resource Language').first.sample_controlled_vocab_terms
+  title_row ||= nil
+  index ||= 'row-template'
+  row_num = index.to_i
 %>
-<% title_row ||= nil %>
-<% index ||= 'row-template' %>
+
+<%
+  titles = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['resource_titles']
+  title_language = studyhub_resource.new_record?? nil : titles[row_num]["title_language"]
+  title = studyhub_resource.new_record?? nil : titles[row_num]["title"]
+%>
+
+
+
 
 <% field_name_prefix = "resource_titles[title][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
@@ -12,13 +22,13 @@
   <td>
     <div class="form-group">
       <%= f.collection_select "studyhub_resource[resource_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
-                              { :include_blank => false }, :class => "form-control" %>
+                              { :include_blank => false, :selected => title_language }, :class => "form-control"  %>
     </div>
   </td>
 
   <td>
     <div class="form-group">
-      <%= f.text_field "studyhub_resource[resource_title][#{index}]", :class => "form-control" %>
+      <%= f.text_field "studyhub_resource[resource_title][#{index}]", :class => "form-control", :value => title %>
     </div>
   </td>
 

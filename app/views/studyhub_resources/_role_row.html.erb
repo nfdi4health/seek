@@ -5,6 +5,26 @@
 %>
 <% role_row ||= nil %>
 <% index ||= 'row-template' %>
+<% row_num = index.to_i %>
+
+<%
+  roles = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['roles']
+
+  role_name = studyhub_resource.new_record?? nil : roles[row_num]["role_name"]
+  role_type = studyhub_resource.new_record?? nil : roles[row_num]["role_type"]
+  role_email = studyhub_resource.new_record?? nil : roles[row_num]["role_email"]
+  role_phone = studyhub_resource.new_record?? nil : roles[row_num]["role_phone"]
+
+  role_affiliation_url = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_url"]
+  role_affiliation_zip = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_zip"]
+  role_affiliation_city = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_city"]
+  role_affiliation_name = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_name"]
+  role_affiliation_country = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_country"]
+  role_specific_type_funder = studyhub_resource.new_record?? nil : roles[row_num]["role_specific_type_funder"]
+  role_specific_type_sponsor = studyhub_resource.new_record?? nil : roles[row_num]["role_specific_type_sponsor"]
+%>
+
+
 
 <% field_name_prefix = "resource_roles[role][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
@@ -13,62 +33,62 @@
   <div class="form-group">
     <label class="required">Role Type</label>
     <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
-                            { :include_blank => false }, :class => "form-control role_type" %>
+                            { :include_blank => false, :selected => role_type }, :class => "form-control role_type" %>
   </div>
 
 
 
-  <div class="form-group role_specific_type_sponsor" style="display: none">
+  <div class="form-group role_specific_type_sponsor <%= (roles.blank? || roles[row_num]["role_specific_type_sponsor"].blank?) ? 'item-hidden': ''  %>" >
     <label>Role Type Sponsor</label>
     <%= f.collection_select "studyhub_resource[role_specific_type_sponsor][#{index}]", role_specific_type_sponsors.map(&:label), :to_s, :to_s,
-                            { :include_blank => true }, :class => "form-control" %>
+                            { :include_blank => true, :selected => role_specific_type_sponsor }, :class => "form-control" %>
   </div>
 
-  <div class="form-group role_specific_type_funder" style="display: none">
+  <div class="form-group role_specific_type_funder <%= (roles.blank? || roles[row_num]["role_specific_type_funder"].blank?) ? 'item-hidden': ''%>">
     <label>Role Type Funder</label>
     <%= f.collection_select "studyhub_resource[role_specific_type_funder][#{index}]", role_specific_type_funders.map(&:label), :to_s, :to_s,
-                            { :include_blank => true }, :class => "form-control" %>
+                            { :include_blank => true, :selected => role_specific_type_funder }, :class => "form-control" %>
   </div>
 
   <div class="form-group">
     <label class="required">Name</label>
-    <%= f.text_field "studyhub_resource[role_name][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_name][#{index}]", :class => "form-control",:value =>role_name %>
   </div>
 
   <div class="form-group">
     <label>Email</label>
-    <%= f.text_field "studyhub_resource[role_email][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_email][#{index}]", :class => "form-control",:value => role_email %>
   </div>
 
   <div class="form-group">
     <label>Phone</label>
-    <%= f.text_field "studyhub_resource[role_phone][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_phone][#{index}]", :class => "form-control",:value => role_phone %>
   </div>
 
   <div class="form-group">
     <label>Affiliation Name</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_name][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_affiliation_name][#{index}]", :class => "form-control",:value => role_affiliation_name %>
   </div>
 
 
   <div class="form-group">
     <label>City</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_city][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_affiliation_city][#{index}]", :class => "form-control",:value => role_affiliation_city %>
   </div>
 
   <div class="form-group">
     <label>Zip</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_zip][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_affiliation_zip][#{index}]", :class => "form-control",:value => role_affiliation_zip %>
   </div>
 
   <div class="form-group">
     <label>Country</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_country][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_affiliation_country][#{index}]", :class => "form-control",:value => role_affiliation_country %>
   </div>
 
   <div class="form-group">
     <label>URL</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_url][#{index}]", :class => "form-control" %>
+    <%= f.text_field "studyhub_resource[role_affiliation_url][#{index}]", :class => "form-control",:value => role_affiliation_url %>
   </div>
 
 

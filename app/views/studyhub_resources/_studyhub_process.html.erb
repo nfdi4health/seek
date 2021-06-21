@@ -6,27 +6,28 @@
 
   <div class="form-group">
     <label class="required">Nfdi Person in Charge</label>
-    <%= f.text_field :nfdi_person_in_charge,:class=>"form-control", value:"Nfdi Person in Charge" %>
+    <%#= f.text_field :nfdi_person_in_charge,:class=>"form-control", value:"Nfdi Person in Charge" %>
+    <%= f.text_field :nfdi_person_in_charge,:class=>"form-control" %>
   </div>
 
 
   <div class="form-group">
     <label class="">Comment</label>
-    <%= f.text_field :comment,:class=>"form-control", value:"Comment" %>
+    <%= f.text_field :comment,:class=>"form-control" %>
   </div>
 
 
   <div class="form-group">
     <label class="required">Contact Stage</label>
     <%# @todo change text field to select %>
-    <%= f.text_field :contact_stage,:class=>"form-control", value:"finished"%>
+    <%= f.text_field :contact_stage,:class=>"form-control"%>
     <%# contact_stage = { "1"=> "not finished", "2"=> "finished" } %>
   </div>
 
 
   <div class="form-group">
     <label class="required">Data Source</label>
-    <%= f.text_field :data_source,:class=>"form-control",value:"Data Source" %>
+    <%= f.text_field :data_source,:class=>"form-control" %>
   </div>
 
   <div class="form-group">
@@ -39,13 +40,13 @@
 
   <div class="form-group">
     <label class="required">Exclusion Studyhub Reason</label>
-    <%= f.text_field :exclusion_studyhub_reason,:class=>"form-control",value:"Exclusion Studyhub Reason" %>
+    <%= f.text_field :exclusion_studyhub_reason,:class=>"form-control"%>
   </div>
 
   <div class="form-group">
     <label class="required">Inclusion SEEK</label>
     <%= f.radio_button :inclusion_seek, false %>
-    <%#= f.radio_button :inclusion_seek, false, { :checked => "checked"}%>
+    <%#= f.radio_button :inclusion_seek, false, {:checked => "checked"}%>
     <%= f.label :inclusion_seek, "False" %>
     <%= f.radio_button :inclusion_seek, true %>
     <%= f.label :inclusion_seek, "True" %>
@@ -53,7 +54,7 @@
 
   <div class="form-group">
     <label class="required">Exclusion Seek Reason</label>
-    <%= f.text_field :exclusion_seek_reason,:class=>"form-control",value:"Exclusion Seek Reason"%>
+    <%= f.text_field :exclusion_seek_reason,:class=>"form-control" %>
   </div>
 
   <div class="form-group">
@@ -66,7 +67,7 @@
 
   <div class="form-group">
     <label class="required">Exclusion Mica Reason</label>
-    <%= f.text_field :exclusion_mica_reason,:class=>"form-control",value:"Exclusion Mica Reason" %>
+    <%= f.text_field :exclusion_mica_reason,:class=>"form-control" %>
   </div>
 
   <% end %>

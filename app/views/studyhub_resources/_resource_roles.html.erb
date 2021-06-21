@@ -2,9 +2,17 @@
 
     <div class="table" id="resource-role-table">
 
-      <%# @studyhub_resource.sample_attributes.each_with_index do |sample_attribute, index| %>
-      <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
-      <%# end %>
+
+      <% if @studyhub_resource.new_record? %>
+        <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+      <% else %>
+        <% @studyhub_resource.resource_json['roles'].each_with_index do |role, index| %>
+          <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
+
+    <% end %>
+      <% end %>
+
+
 
         <div id="role-row">
           <div colspan="6">
@@ -30,6 +38,7 @@
 <script>
     //used to hold the element Id that needs updating after creating a new CV
     $j(document).ready(function () {
+
         $j('#add-role-row').click(function () {
             var newRow = $j('#new-role-row').clone().html();
             var index = 0;
@@ -45,6 +54,15 @@
             newRow = newRow.replace(/row-template/g, index);
 
             $j('#resource-role-table #role-row').before($j(newRow));
+            $j('select[name="studyhub_resource[role_type]['+index+']"]').val("Contributor");
+            $j('input[name="studyhub_resource[role_name]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[role_email]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[role_phone]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[role_affiliation_url]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[role_affiliation_zip]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[role_affiliation_name]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[role_affiliation_city]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[role_affiliation_country]['+index+']"]').val("");
 
             return false;
         });

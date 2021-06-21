@@ -11,9 +11,14 @@
       </tr>
       </thead>
       <tbody>
-      <%# @studyhub_resource.sample_attributes.each_with_index do |sample_attribute, index| %>
-      <%= render :partial => 'id_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
-      <%# end %>
+
+      <% if @studyhub_resource.new_record? %>
+        <%= render :partial => 'id_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+      <% else %>
+        <% @studyhub_resource.resource_json['ids'].each_with_index do |id, index| %>
+          <%= render :partial => 'id_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
+      <% end %>
+      <% end %>
 
         <tr id="id-row">
           <td colspan="6">
@@ -41,7 +46,7 @@
         $j('#add-id-row').click(function () {
             var newRow = $j('#new-id-row tbody').clone().html();
             var index = 0;
-            $j('#id-id-table tr.id-title').each(function () {
+            $j('#id-id-table tr.id-id').each(function () {
                 var newIndex = parseInt($j(this).data('index'));
                 if (newIndex > index) {
                     index = newIndex;
@@ -49,10 +54,14 @@
             });
 
             index++;
-
+            console.log(index);
             newRow = newRow.replace(/row-template/g, index);
 
             $j('#id-id-table #id-row').before($j(newRow));
+            $j('select[name="studyhub_resource[id_type]['+index+']"]').val("arXiv");
+            $j('input[name="studyhub_resource[id_id]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[id_date]['+index+']"]').val("");
+            $j('select[name="studyhub_resource[id_relation_type]['+index+']"]').val("IsCitedBy");
 
             return false;
         });

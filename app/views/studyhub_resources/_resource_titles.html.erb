@@ -9,11 +9,14 @@
       </tr>
       </thead>
       <tbody>
-      <%# @studyhub_resource.sample_attributes.each_with_index do |sample_attribute, index| %>
-      <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
-      <%# end %>
-
-        <tr id="title-row">
+      <% if @studyhub_resource.new_record? %>
+        <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+      <% else %>
+        <% @studyhub_resource.resource_json['resource_titles'].each_with_index do |title, index| %>
+          <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
+        <% end %>
+      <% end %>
+      <tr id="title-row">
           <td colspan="6">
             <%= button_link_to('Add more titles', 'add', '#', :id => 'add-title-row') %>
           </td>
@@ -25,7 +28,7 @@
 
     <table id="new-title-row" style="display: none">
       <tbody>
-      <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f} %>
+      <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f } %>
       </tbody>
     </table>
 
@@ -34,7 +37,7 @@
 
 
 <script>
-    //used to hold the element Id that needs updating after creating a new CV
+    //used to hold the element Id that needs updating after csreating a new CV
     $j(document).ready(function () {
         $j('#add-title-row').click(function () {
             var newRow = $j('#new-title-row tbody').clone().html();
@@ -51,6 +54,10 @@
             newRow = newRow.replace(/row-template/g, index);
 
             $j('#resource-title-table #title-row').before($j(newRow));
+            $j('select[name="studyhub_resource[resource_language]['+index+']"]').val("EN");
+            $j('input[name="studyhub_resource[resource_title]['+index+']"]').val("");
+
+
 
             return false;
         });

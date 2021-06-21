@@ -18,6 +18,8 @@ class StudyhubResource < ApplicationRecord
   has_many :documents, through: :assay
 
   has_extended_custom_metadata
+  acts_as_authorized
+  acts_as_asset
 
   validate :studyhub_resource_type_id_not_changed, on: :update
 
@@ -30,6 +32,14 @@ class StudyhubResource < ApplicationRecord
       ''
     else
       "#{resource_json['resource_titles'].first['title']}"
+    end
+  end
+
+  def description
+    if resource_json.nil?
+      ''
+    else
+      "#{resource_json['resource_descriptions'].first['description_text']}"
     end
   end
 

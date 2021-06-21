@@ -211,6 +211,9 @@ snakemake_workflow: 'avatars/workflow_types/avatar-snakemake.png'
 collection: 'avatars/avatar-collection.png'
 collection_avatar: 'avatars/avatar-collection.png'
 
+studyhub_resource: 'avatars/avatar-study.png'
+studyhub_resource_avatar: 'avatars/avatar-study.png'
+
 # roles
 project_administrator: 'roles/role-project-admin.png'
 programme_administrator: 'roles/role-programme-admin.png'

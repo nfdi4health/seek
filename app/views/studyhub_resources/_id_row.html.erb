@@ -4,6 +4,16 @@
 %>
 <% id_row ||= nil %>
 <% index ||= 'row-template' %>
+<% row_num = index.to_i %>
+
+<%
+  ids = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['ids']
+  id_id = studyhub_resource.new_record?? nil : ids[row_num]["id_id"]
+  id_date = studyhub_resource.new_record?? nil : ids[row_num]["id_date"]
+  id_type = studyhub_resource.new_record?? nil : ids[row_num]["id_type"]
+  id_relation_type = studyhub_resource.new_record?? nil : ids[row_num]["id_relation_type"]
+
+%>s
 
 <% field_name_prefix = "resource_ids[id_id][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
@@ -13,19 +23,19 @@
   <td>
     <div class="form-group">
       <%= f.collection_select "studyhub_resource[id_type][#{index}]", id_types.map(&:label), :to_s, :to_s,
-                              { :include_blank => false }, :class => "form-control" %>
+                              { :include_blank => false, :selected => id_type }, :class => "form-control" %>
     </div>
   </td>
 
   <td>
     <div class="form-group">
-      <%= f.text_field "studyhub_resource[id_id][#{index}]", :class => "form-control" %>
+      <%= f.text_field "studyhub_resource[id_id][#{index}]", :class => "form-control",:value => id_id %>
     </div>
   </td>
 
   <td>
     <div class="form-group">
-      <%= f.text_field "studyhub_resource[id_date][#{index}]", data: { calendar: true }, :class => "calendar form-control" %>
+      <%= f.text_field "studyhub_resource[id_date][#{index}]", data: { calendar: true }, :class => "calendar form-control", :value => id_date %>
     </div>
   </td>
 
@@ -33,7 +43,7 @@
   <td>
     <div class="form-group">
       <%= f.collection_select "studyhub_resource[id_relation_type][#{index}]", id_relation_types.map(&:label), :to_s, :to_s,
-                              { :include_blank => false }, :class => "form-control" %>
+                              { :include_blank => false, :selected => id_relation_type }, :class => "form-control" %>
     </div>
   </td>
 

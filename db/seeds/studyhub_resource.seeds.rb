@@ -7,7 +7,7 @@ int_type = SampleAttributeType.find_or_initialize_by(title: 'Integer')
 int_type.update_attributes(base_type: Seek::Samples::BaseType::INTEGER, placeholder: '1')
 
 float_type = SampleAttributeType.find_or_initialize_by(title: 'Real number')
-float_type.update_attributes(base_type: Seek::Samples::BaseType::FLOAT, placeholder: '3.6')
+float_type.update_attributes(base_type: Seek::Samples::BaseType::FLOAT, placeholder: '0.5')
 
 date_type = SampleAttributeType.find_or_initialize_by(title: 'Date')
 date_type.update_attributes(base_type: Seek::Samples::BaseType::DATE, placeholder: 'January 1, 2015')
@@ -42,6 +42,13 @@ disable_authorization_checks do
   resource_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Type').first_or_create!(
     sample_controlled_vocab_terms_attributes: resource_type_attributes
   )
+
+  #resource_type_general
+  resource_type_general_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Type General').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Audiovisual Collection DataPaper Dataset Event Image InteractiveResource
+Model PhysicalObject Service Software Sound Text Workflow Other])
+  )
+
 
   # resource_language
   resource_language_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Language').first_or_create!(
@@ -160,7 +167,7 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
     custom_metadata_attributes: [
 
       CustomMetadataAttribute.where(title: 'resource_type_general').create!(
-        title: 'resource_type_general', required: true, sample_attribute_type: string_type
+        title: 'resource_type_general', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_general_cv
       ),
 
       CustomMetadataAttribute.where(title: 'resource_language').create!(
