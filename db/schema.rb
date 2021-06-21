@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_132421) do
+ActiveRecord::Schema.define(version: 2021_06_15_124439) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1372,6 +1372,13 @@ ActiveRecord::Schema.define(version: 2021_05_25_132421) do
     t.integer "strain_id"
   end
 
+  create_table "projects_studyhub_resources",  force: :cascade do |t|
+    t.bigint "studyhub_resource_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_projects_studyhub_resources_on_project_id"
+    t.index ["studyhub_resource_id"], name: "index_projects_studyhub_resources_on_studyhub_resource_id"
+  end
+
   create_table "projects_workflow_versions", id: false,  force: :cascade do |t|
     t.integer "project_id"
     t.integer "version_id"
@@ -1833,6 +1840,18 @@ ActiveRecord::Schema.define(version: 2021_05_25_132421) do
     t.index ["user_id", "can_view"], name: "index_study_auth_lookup_on_user_id_and_can_view"
   end
 
+  create_table "studyhub_resource_auth_lookup",  force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "asset_id"
+    t.integer "can_view", limit: 1
+    t.integer "can_manage", limit: 1
+    t.integer "can_edit", limit: 1
+    t.integer "can_download", limit: 1
+    t.integer "can_delete", limit: 1
+    t.index ["asset_id"], name: "index_studyhub_resource_auth_lookup_on_asset_id"
+    t.index ["user_id"], name: "index_studyhub_resource_auth_lookup_on_user_id"
+  end
+
   create_table "studyhub_resource_relationships",  force: :cascade do |t|
     t.integer "parent_id"
     t.integer "child_id"
@@ -1868,6 +1887,10 @@ ActiveRecord::Schema.define(version: 2021_05_25_132421) do
     t.bigint "assay_id"
     t.bigint "study_id"
     t.integer "studyhub_resource_type_id"
+    t.integer "contributor_id"
+    t.integer "policy_id"
+    t.string "uuid"
+    t.string "first_letter", limit: 1
     t.index ["assay_id"], name: "index_studyhub_resources_on_assay_id"
     t.index ["study_id"], name: "index_studyhub_resources_on_study_id"
   end
