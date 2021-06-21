@@ -1,0 +1,23 @@
+<%
+  label = 'Extended Metadata'
+%>
+<% if resource.respond_to?(:custom_metadata) && resource.custom_metadata %>
+
+  <div id="custom-metadata" class="panel panel-default">
+    <div class="panel-heading"><%= label %> (<%= resource.custom_metadata.custom_metadata_type.title %>)</div>
+    <div class="panel-body">
+
+      <% resource.custom_metadata.custom_metadata_attributes.each do |attribute| %>
+        <% custom_metadata_hidden_class = resource.custom_metadata.get_attribute_value(attribute).nil?? "item-hidden" : nil %>
+        <p class=<%=custom_metadata_hidden_class %>>
+          <label><%= attribute.title.humanize(keep_id_suffix: true)%>:</label>
+          <%= display_attribute(resource.custom_metadata, attribute, link: true) %>
+        </p>
+      <% end %>
+
+    </div>
+  </div>
+
+  <% else %>
+
+<% end %>

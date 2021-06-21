@@ -1,0 +1,8 @@
+<% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
+
+  <%= attribute.inspect %>
+  <div class="form-group">
+    <label><%= attribute.title.humanize %></label><%= required_span if attribute.required? %>
+    <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
+  </div>
+<% end %>
