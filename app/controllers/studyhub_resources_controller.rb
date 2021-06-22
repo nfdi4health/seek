@@ -11,39 +11,6 @@ class StudyhubResourcesController < ApplicationController
   before_action :find_assets, only: [:index]
   api_actions :index, :show, :create, :update, :destroy
 
-
-
-  # def index
-  #   #http://localhost:3003/studyhub_resources.json?type=study
-  #   resources_expr = "StudyhubResource.all"
-  #   if params[:type].present?
-  #     type_id = StudyhubResourceType.find_by(key: params[:type]).id
-  #     resources_expr << ".where(studyhub_resource_type_id: type_id)"
-  #   end
-  #   resources_expr << ".where({updated_at: params[:after].to_time..Time.now})" if params[:after].present?
-  #   resources_expr << ".where({updated_at: Time.at(0)..params[:before].to_time})" if params[:before].present?
-  #
-  #   if params[:limit].present?
-  #     resources_expr << ".limit params[:limit]"
-  #     @studyhub_resources = eval resources_expr
-  #   elsif params[:all].present?
-  #     @studyhub_resources = eval resources_expr
-  #   else
-  #     @studyhub_resources = eval resources_expr + '.limit 10'
-  #   end
-  #
-  #   respond_to do |format|
-  #     format.html
-  #     format.xml
-  #     format.json { render json: @studyhub_resources }
-  #   end
-  # end
-
-  # def new
-  #   item = StudyhubResource.new(studyhub_resource_params)
-  #   Rails.logger.info("+++++++++++StudyhubResourcesController new++++++++++++++")
-  # end
-
   def show
     @studyhub_resource = StudyhubResource.find(params[:id])
     respond_to do |format|
@@ -53,15 +20,17 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def create
+
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
 
-    resource_type = @studyhub_resource.studyhub_resource_type
-
-    if resource_type.nil?
-      render json: { error: 'Studyhub API Error',
-                     message: 'Studyhub resource type is blank or invalid.' }, status: :bad_request
-
-    else
+    #todo(hu) remove studyhub_resource_type, and redo when the request is from API
+    # resource_type = @studyhub_resource.studyhub_resource_type
+    #
+    # if resource_type.nil?
+    #   render json: { error: 'Studyhub API Error',
+    #                  message: 'Studyhub resource type is blank or invalid.' }, status: :bad_request
+    #
+    # else
        # seek_type = map_to_seek_type(resource_type)
 
       # item = nil
@@ -74,25 +43,35 @@ class StudyhubResourcesController < ApplicationController
       #   Rails.logger.info('creating a SEEK Assay')
       #   item = @studyhub_resource.build_assay(assay_params)
       # end
+      # update_sharing_policies item
+    
+    
+      #todo(hu) next time when add relationship
+      #update_parent_child_relationships(relationship_params)
 
-       # update_sharing_policies item
+    update_sharing_policies @studyhub_resource
 
-      update_sharing_policies @studyhub_resource
-
-
-      #todo only save @studyhub_resource when item(study/assay) is created successfully
+      #todo(hu) only save @studyhub_resource when item(study/assay) is created successfully
       #if item.valid?
-      if @studyhub_resource.save
-        update_parent_child_relationships(relationship_params)
-        render json: @studyhub_resource, status: :created, location: @studyhub_resource
-      else
-        render json: @studyhub_resource.errors, status: :unprocessable_entity
+    if @studyhub_resource.save
+
+
+      respond_to do |format|
+        flash[:notice] = "The #{t('studyhub_resource')} was successfully created.<br/>".html_safe
+        format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
+        format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
       end
+    else
+      respond_to do |format|
+        format.html { render action: 'new', status: :unprocessable_entity }
+        format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
+      end
+    end
       # else
       #   @studyhub_resource.errors.add(:base, item.errors.full_messages)
       #   render json: @studyhub_resource.errors, status: :unprocessable_entity
       # end
-    end
+    
   end
 
   def edit
