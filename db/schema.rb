@@ -1841,15 +1841,15 @@ ActiveRecord::Schema.define(version: 2021_06_15_124439) do
   end
 
   create_table "studyhub_resource_auth_lookup",  force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "asset_id"
-    t.integer "can_view", limit: 1
-    t.integer "can_manage", limit: 1
-    t.integer "can_edit", limit: 1
-    t.integer "can_download", limit: 1
-    t.integer "can_delete", limit: 1
-    t.index ["asset_id"], name: "index_studyhub_resource_auth_lookup_on_asset_id"
-    t.index ["user_id"], name: "index_studyhub_resource_auth_lookup_on_user_id"
+    t.integer "user_id"
+    t.integer "asset_id"
+    t.boolean "can_view", default: false
+    t.boolean "can_manage", default: false
+    t.boolean "can_edit", default: false
+    t.boolean "can_download", default: false
+    t.boolean "can_delete", default: false
+    t.index ["user_id", "asset_id", "can_view"], name: "index_studyhub_resource_user_id_asset_id_can_view"
+    t.index ["user_id", "can_view"], name: "index_studyhub_resource_auth_lookup_on_user_id_and_can_view"
   end
 
   create_table "studyhub_resource_relationships",  force: :cascade do |t|
@@ -1865,6 +1865,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_124439) do
   create_table "studyhub_resource_types",  force: :cascade do |t|
     t.string "title"
     t.string "description"
+
     t.string "key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
