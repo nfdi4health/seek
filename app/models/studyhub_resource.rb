@@ -18,7 +18,6 @@ class StudyhubResource < ApplicationRecord
   has_many :documents, through: :assay
 
   has_extended_custom_metadata
-  acts_as_authorized
   acts_as_asset
 
   validate :studyhub_resource_type_id_not_changed, on: :update
