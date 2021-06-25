@@ -34,8 +34,6 @@ def create_sample_controlled_vocab_terms_attributes(array)
   attributes
 end
 
-pp resource_type_attributes
-
 disable_authorization_checks do
 
   #resource_type
@@ -150,6 +148,16 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
       ])
   )
 
+  #study_datasource
+  study_datasource_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Datasource').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
+      ["Blood", "Buccal cells", "Cord blood", "DNA","Faeces", "Hair","Immortalized Cell Lines",
+       "Isolated Pathogen", "Nail", "Plasma", "RNA", "Saliva", "Serum", "Tissue (Frozen)", "Tissue (FFPE)",
+       "Urine", "Other Biological samples","Administrative databases", "Cognitive measurements", "Genealogical records",
+       "Imaging data", "Medical records", "Registries", "Survey data", "Physiological/Biochemical measurements",
+       "Genomics", "Metabolomics", "Transcriptomics", "Proteomics", "Other Omics Technology", "Other"])
+  )
+
   #study_IPD_sharing_plan_generally
   study_IPD_sharing_plan_generally_cv = SampleControlledVocab.where(title: 'NFDI4Health Study IPD Sharing Plan Generally').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["Yes: There is a plan to make IPD and related data dictionaries available.",
@@ -171,7 +179,7 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
       ),
 
       CustomMetadataAttribute.where(title: 'resource_language').create!(
-        title: 'resource_language', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv
+        title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights').create!(
@@ -214,7 +222,7 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
       ),
 
       CustomMetadataAttribute.where(title: 'study_type_non_interventional').create!(
-        title: 'study_type_non_interventional', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv
+        title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv
       ),
 
       CustomMetadataAttribute.where(title: 'study_type_description').create!(
@@ -251,20 +259,17 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
         title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv
       ),
 
-      CustomMetadataAttribute.where(title: 'study_country').create!(
-        title: 'study_country', required: true, sample_attribute_type: string_type
-      ),
 
       CustomMetadataAttribute.where(title: 'study_region').create!(
-        title: 'study_region', required: true, sample_attribute_type: string_type
+        title: 'study_region', required: false, sample_attribute_type: string_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_target_sample_size').create!(
-        title: 'study_target_sample_size', required: true, sample_attribute_type: int_type
+        title: 'study_target_sample_size', required: false, sample_attribute_type: int_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_obtained_sample_size').create!(
-        title: 'study_obtained_sample_size', required: true, sample_attribute_type: int_type
+        title: 'study_obtained_sample_size', required: false, sample_attribute_type: int_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_min').create!(
@@ -276,15 +281,15 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
       ),
 
       CustomMetadataAttribute.where(title: 'study_sex').create!(
-        title: 'study_sex', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_sex_cv
+        title: 'study_sex', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sex_cv
       ),
 
       CustomMetadataAttribute.where(title: 'study_inclusion_criteria').create!(
-        title: 'study_inclusion_criteria', required: true, sample_attribute_type: string_type
+        title: 'study_inclusion_criteria', required: false, sample_attribute_type: string_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_exclusion_criteria').create!(
-        title: 'study_exclusion_criteria', required: true, sample_attribute_type: string_type
+        title: 'study_exclusion_criteria', required: false, sample_attribute_type: string_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_population').create!(
@@ -301,6 +306,10 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
 
       CustomMetadataAttribute.where(title: 'study_end_date').create!(
         title: 'study_end_date', required: false, sample_attribute_type: date_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_datasource').create!(
+        title: 'study_datasource', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_datasource_cv
       ),
 
       CustomMetadataAttribute.where(title: 'study_hypothesis').create!(
@@ -385,9 +394,6 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
         title: 'study_status', required: false, sample_attribute_type: string_type
       ),
 
-      CustomMetadataAttribute.where(title: 'study_country').create!(
-        title: 'study_country', required: false, sample_attribute_type: string_type
-      ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility').create!(
         title: 'study_eligibility', required: false, sample_attribute_type: string_type
