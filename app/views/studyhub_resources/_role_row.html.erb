@@ -10,20 +10,23 @@
 <%
   roles = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['roles']
 
-  role_name = studyhub_resource.new_record?? nil : roles[row_num]["role_name"]
-  role_type = studyhub_resource.new_record?? nil : roles[row_num]["role_type"]
-  role_email = studyhub_resource.new_record?? nil : roles[row_num]["role_email"]
-  role_phone = studyhub_resource.new_record?? nil : roles[row_num]["role_phone"]
+  unless studyhub_resource.new_record? || roles[row_num].blank?
 
-  role_affiliation_url = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_url"]
-  role_affiliation_zip = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_zip"]
-  role_affiliation_city = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_city"]
-  role_affiliation_name = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_name"]
-  role_affiliation_country = studyhub_resource.new_record?? nil : roles[row_num]["role_affiliation_country"]
-  role_specific_type_funder = studyhub_resource.new_record?? nil : roles[row_num]["role_specific_type_funder"]
-  role_specific_type_sponsor = studyhub_resource.new_record?? nil : roles[row_num]["role_specific_type_sponsor"]
+    role_name = roles[row_num]["role_name"]
+    role_type =  roles[row_num]["role_type"]
+    role_email = roles[row_num]["role_email"]
+    role_phone = roles[row_num]["role_phone"]
+
+    role_affiliation_url = roles[row_num]["role_affiliation_url"]
+    role_affiliation_zip = roles[row_num]["role_affiliation_zip"]
+    role_affiliation_city =  roles[row_num]["role_affiliation_city"]
+    role_affiliation_name = roles[row_num]["role_affiliation_name"]
+    role_affiliation_country =  roles[row_num]["role_affiliation_country"]
+    role_specific_type_funder = roles[row_num]["role_specific_type_funder"]
+    role_specific_type_sponsor = roles[row_num]["role_specific_type_sponsor"]
+  end
+
 %>
-
 
 
 <% field_name_prefix = "resource_roles[role][#{index}]" %>

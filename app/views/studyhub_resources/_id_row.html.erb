@@ -8,12 +8,14 @@
 
 <%
   ids = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['ids']
-  id_id = studyhub_resource.new_record?? nil : ids[row_num]["id_id"]
-  id_date = studyhub_resource.new_record?? nil : ids[row_num]["id_date"]
-  id_type = studyhub_resource.new_record?? nil : ids[row_num]["id_type"]
-  id_relation_type = studyhub_resource.new_record?? nil : ids[row_num]["id_relation_type"]
+  unless studyhub_resource.new_record? || ids[row_num].blank?
+    id_id = ids[row_num]["id_id"]
+    id_date = ids[row_num]["id_date"]
+    id_type = ids[row_num]["id_type"]
+    id_relation_type = ids[row_num]["id_relation_type"]
+  end
 
-%>s
+%>
 
 <% field_name_prefix = "resource_ids[id_id][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>

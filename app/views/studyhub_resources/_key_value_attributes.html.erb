@@ -1,9 +1,17 @@
- <% resource.keys.each do |key| %>
+<% resource.keys.each do |key| %>
 
-    <% hidden_class = resource[key].blank?? "item-hidden" : nil %>
-    <p class=<%=hidden_class %>>
+
+  <% multselect_attributes = %w[study_datasource study_country] %>
+
+  <% hidden_class = resource[key].blank? ? "item-hidden" : nil %>
+  <p class=<%= hidden_class %>>
+    <% if multselect_attributes.include? key %>
+      <label><%= key.humanize(keep_id_suffix: true) %>: </label>
+      <%= resource[key].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ') %>
+    <% else %>
       <label><%= key.humanize(keep_id_suffix: true) %>: </label>
       <%= resource[key] %>
-    </p>
-  <% end %>
+    <% end %>
+  </p>
+<% end %>
 

@@ -63,7 +63,7 @@ module StudyhubResourcesHelper
       <tbody>'
       titles.each do |d|
         html += '<tr>'
-        html+='<td class="title_language">'+d["title_language"]+'</td>'
+        html+='<td class="resource_language">'+d["resource_language"]+'</td>'
         html+='<td class="title">'+d["title"]+'</td>'
       end
       html += '</tbody></table></div>'

@@ -1,6 +1,13 @@
 <% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
+
+<% multselect_attributes = %w[study_datasource study_country] %>
+
+  <% if multselect_attributes.include? attribute.title  %>
+    <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
+  <% else %>
   <div class="form-group">
     <label><%= attribute.title.humanize %></label><%= required_span if attribute.required? %>
     <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
   </div>
+  <% end %>
 <% end %>

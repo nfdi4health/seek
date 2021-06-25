@@ -191,33 +191,8 @@ class StudyhubResourcesController < ApplicationController
     sr[:resource_json][:roles] = parse_roles(sr)
 
 
+    params[:studyhub_resource][:resource_json][:resource], params[:studyhub_resource][:resource_json][:study_design] = parse_custom_metadata_attributes(sr)
     # parse resource information and study design
-    unless params[:studyhub_resource][:custom_metadata_attributes].nil?
-
-      resource_attributes = %w[resource_type_general resource_language resource_use_rights resource_web_page resource_web_studyhub resource_web_seek resource_web_mica acronym]
-      study_design_attributes = %w[study_primary_design study_type_interventional study_type_non_interventional study_type_description
-                                 study_primary_purpose study_conditions study_conditions_code study_keywords study_centers study_subject study_region study_target_sample_size
-                                 study_obtained_sample_size study_age_min study_age_max study_sex study_inclusion_criteria study_exclusion_criteria study_population study_sampling
-                                 study_hypothesis study_design_comment study_IPD_sharing_plan_generally study_IPD_sharing_plan_description stuy_IPD_sharing_plan_time_frame stuy_IPD_sharing_plan_access_criteria
-                                 stuy_IPD_sharing_plan_url study_start_date study_end_date study_status study_country study_eligibility]
-
-      resource = {}
-      study_design = {}
-
-
-      params[:studyhub_resource][:custom_metadata_attributes][:data].keys.each do |key|
-        if resource_attributes.include? key
-
-          resource[key] = params[:studyhub_resource][:custom_metadata_attributes][:data][key]
-
-          elsif study_design_attributes.include? key
-            study_design[key] = params[:studyhub_resource][:custom_metadata_attributes][:data][key]
-
-        end
-      end
-      params[:studyhub_resource][:resource_json][:resource] = resource
-      params[:studyhub_resource][:resource_json][:study_design] = study_design
-    end
 
     rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
     params[:studyhub_resource][:studyhub_resource_type_id] = rt.id unless rt.nil?
@@ -227,6 +202,43 @@ class StudyhubResourcesController < ApplicationController
                                             :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
                                             :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
                                             :inclusion_mica)
+  end
+
+  def parse_custom_metadata_attributes(params)
+    unless params[:custom_metadata_attributes].nil?
+
+
+      resource_attributes = %w[resource_type_general resource_language resource_use_rights resource_web_page resource_web_studyhub resource_web_seek resource_web_mica acronym]
+      study_design_attributes = %w[study_primary_design study_type_interventional study_type_non_interventional study_type_description
+                                 study_primary_purpose study_conditions study_conditions_code study_keywords study_centers study_subject study_region study_target_sample_size
+                                 study_obtained_sample_size study_age_min study_age_max study_sex study_inclusion_criteria study_exclusion_criteria study_population study_sampling
+                                 study_hypothesis study_design_comment study_IPD_sharing_plan_generally study_IPD_sharing_plan_description
+                                 stuy_IPD_sharing_plan_time_frame stuy_IPD_sharing_plan_access_criteria
+                                 stuy_IPD_sharing_plan_url study_start_date study_end_date study_datasource study_status study_country study_eligibility]
+
+      resource = {}
+      study_design = {}
+
+      params[:custom_metadata_attributes][:data].keys.each do |key|
+        if resource_attributes.include? key
+          resource[key] = params[:custom_metadata_attributes][:data][key]
+        elsif study_design_attributes.include? key
+
+          study_design[key] = case key
+          when "study_datasource"
+            params[:custom_metadata_attributes][:data][key].drop(1)
+                              when "study_country"
+                                params[:custom_metadata_attributes][:data][key].drop(1)
+          else
+            params[:custom_metadata_attributes][:data][key]
+                              end
+
+        end
+      end
+      params[:resource_json][:resource] = resource
+      params[:resource_json][:study_design] = study_design
+    end
+    return resource, study_design
   end
 
   def parse_roles(params)
@@ -239,8 +251,8 @@ class StudyhubResourcesController < ApplicationController
       entry['role_specific_type_sponsor'] = params[:role_specific_type_sponsor][key]
       entry['role_specific_type_funder'] = params[:role_specific_type_funder][key]
       entry['role_name'] = params[:role_name][key]
-      entry['role_email'] = params[:role_email][key] unless params[:role_email][key].blank?
-      entry['role_phone'] = params[:role_phone][key] unless params[:role_phone][key].blank?
+      entry['role_email'] = params[:role_email][key] #unless params[:role_email][key].blank?
+      entry['role_phone'] = params[:role_phone][key] #unless params[:role_phone][key].blank?
       entry['role_affiliation_name'] = params[:role_affiliation_name][key]
       entry['role_affiliation_city'] = params[:role_affiliation_city][key]
       entry['role_affiliation_zip'] = params[:role_affiliation_zip][key]
@@ -287,7 +299,7 @@ class StudyhubResourcesController < ApplicationController
 
       entry = {}
       entry['title'] = params[:resource_title][key]
-      entry['title_language'] = params[:resource_language][key]
+      entry['resource_language'] = params[:resource_language][key]
       resource_titles << entry unless entry['title'].blank?
 
     end
