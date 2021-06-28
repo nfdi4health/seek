@@ -37,7 +37,9 @@
 
   <td>
     <div class="form-group">
-      <%= f.text_field "studyhub_resource[id_date][#{index}]", data: { calendar: true }, :class => "calendar form-control", :value => id_date %>
+      <div style="position:relative">
+      <%= f.text_field "studyhub_resource[id_date][#{index}]", data: { calendar: true }, :class =>"calendar form-control", :value => id_date %>
+      </div>
     </div>
   </td>
 
@@ -65,8 +67,19 @@
 
   </td>
 
-
   <% if id_row %>
     <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
   <% end %>
 </tr>
+
+<script>
+    $j(document).ready(function () {
+        $j('[data-calendar]').click(function () {
+                var showTime = $j(this).data('calendar') === 'mixed';
+                $j(this).datetimepicker({
+                    format: showTime ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD',
+                    sideBySide: showTime
+                });
+        });
+    });
+</script>
