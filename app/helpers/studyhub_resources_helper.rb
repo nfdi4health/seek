@@ -119,8 +119,6 @@ module StudyhubResourcesHelper
         html += '<tr>'
         html+='<td class="role_name">'+d["role_name"]+'</td>'
         html+='<td class="role_type">'+d["role_type"]
-        html+=':'+d["role_specific_type_funder"] unless d["role_specific_type_funder"].blank?
-        html+=' ('+d["role_specific_type_sponsor"]+')' unless d["role_specific_type_sponsor"].blank?
         html+='</td>'
         html+='<td class="role_email">'+d["role_email"]+'</td>'
         html+='<td class="role_phone">'+d["role_phone"]+'</td>'

@@ -15,12 +15,14 @@ class StudyhubResource < ApplicationRecord
                                    dependent: :destroy
 
   has_many :parents, through: :parents_relationships
-  has_many :documents, through: :assay
+  # has_and_belongs_to_many :documents, -> { distinct }
+
+
 
   has_extended_custom_metadata
   acts_as_asset
 
-  validate :studyhub_resource_type_id_not_changed, on: :update
+  #validate :studyhub_resource_type_id_not_changed, on: :update
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
@@ -73,20 +75,10 @@ class StudyhubResource < ApplicationRecord
     parents.include?(parent)
   end
 
-  def is_study?
-    self.studyhub_resource_type.key == 'study'
+  # if the resource type is study or substudy
+  def is_studytype?
+    self.studyhub_resource_type.is_study? || self.studyhub_resource_type.is_substudy?
   end
 
-  def is_substudy?
-    self.studyhub_resource_type.key == 'substudy'
-  end
-
-  def is_document?
-    self.studyhub_resource_type.key == 'document'
-  end
-
-  def is_instrument?
-    self.studyhub_resource_type.key == 'instrument'
-  end
 
 end

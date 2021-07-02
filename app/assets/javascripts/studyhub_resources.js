@@ -20,10 +20,51 @@ var SR = {
         row.remove();
     },
 
+
+    addCalendar: function () {
+        var showTime = $j(this).data('calendar') === 'mixed';
+        $j(this).datetimepicker({
+            format: showTime ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD',
+            sideBySide: showTime
+        });
+    },
+
+
+    intialResourceUseRightVisibility: function () {
+
+
+         $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_description]"]').parent().hide();
+         $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_1]"]').parent().hide();
+         $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_2]"]').parent().hide();
+         $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_3]"]').parent().hide();
+
+    },
+
+    setResourceUseRightVisibility: function () {
+
+        check_license = $j(this).val();
+
+
+            if (! (check_license == "N/A")) {
+
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_description]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_1]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_2]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_3]"]').parent().show();
+
+            }else{
+
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_description]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_1]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_2]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_3]"]').parent().hide();
+            }
+    },
+
     intialStudyPrimaryDesignVisibility: function () {
 
-        study_type_interventional = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
-        study_type_interventional = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
 
     },
 
@@ -42,24 +83,6 @@ var SR = {
             default:
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
-        }
-    },
-
-    setSpecificRoleTypeVisibility: function () {
-
-        role_type = $j(this).val();
-        switch (role_type){
-            case 'Sponsor':
-                $j(this).parents('.resource-role').find('.role_specific_type_sponsor').show();
-                $j(this).parents('.resource-role').find('.role_specific_type_funder').hide();
-                break;
-            case 'Funder':
-                $j(this).parents('.resource-role').find('.role_specific_type_funder').show();
-                $j(this).parents('.resource-role').find('.role_specific_type_sponsor').hide();
-                break;
-            default:
-                $j(this).parents('.resource-role').find('.role_specific_type_funder').hide();
-                $j(this).parents('.resource-role').find('.role_specific_type_sponsor').hide();
         }
     }
 

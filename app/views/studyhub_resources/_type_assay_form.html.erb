@@ -1,3 +1,14 @@
+<%
+
+  sharing_enable = true if sharing_enable.nil?
+  # sharing_enable = sharing_enable && @studyhub_resource.study.can_manage?
+
+%>
+
 <%= error_messages_for :studyhub_resource %>
 
+
+<%#= render partial: 'studyhub_basic', locals: { :f => f } %>
+<%= render partial: 'studyhub_resource_input', locals: { :f => f } %>
+<%= render partial: 'studyhub_study_design_input', locals: { :f => f } %>
 <%= render partial: 'studyhub_process', locals: { :f => f } %>

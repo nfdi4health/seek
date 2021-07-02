@@ -85,6 +85,7 @@ class StudyhubResourcesController < ApplicationController
   # PUT /studyhub_resources/1
   def update
 
+    @studyhub_resource.update_attributes(studyhub_resource_params)
     update_sharing_policies @studyhub_resource
     update_relationships(@studyhub_resource,params)
     update_parent_child_relationships(relationship_params)
@@ -109,13 +110,16 @@ class StudyhubResourcesController < ApplicationController
     # end
     #
     respond_to do |format|
-      if  @studyhub_resource.update_attributes(studyhub_resource_params)
+
+      if @studyhub_resource.save!
+
         flash[:notice] = "#{t('studyhub_resource')} metadata was successfully updated."
+
         format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
         format.json { render json: @studyhub_resource, status: 200 }
       else
         format.html { render action: 'edit' }
-        format.json { render json: json_api_errors(@workflow), status: :unprocessable_entity }
+        format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
       end
     end
   end
@@ -174,9 +178,14 @@ class StudyhubResourcesController < ApplicationController
 
   def studyhub_resource_params
 
+    rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
+    params[:studyhub_resource][:studyhub_resource_type_id] = rt.id unless rt.nil?
+
     params[:studyhub_resource][:resource_json] = {}
     sr = params[:studyhub_resource]
     # parse titles
+    #
+
     sr[:resource_json][:resource_titles] = parse_resource_titles(sr)
 
     # parse descriptions
@@ -194,8 +203,10 @@ class StudyhubResourcesController < ApplicationController
     params[:studyhub_resource][:resource_json][:resource], params[:studyhub_resource][:resource_json][:study_design] = parse_custom_metadata_attributes(sr)
     # parse resource information and study design
 
-    rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
-    params[:studyhub_resource][:studyhub_resource_type_id] = rt.id unless rt.nil?
+
+    unless rt.is_study? || rt.is_substudy?
+      params[:studyhub_resource][:resource_json] = params[:studyhub_resource][:resource_json].except(:study_design)
+    end
 
     params.require(:studyhub_resource).permit(:studyhub_resource_type_id, :comment, { resource_json: {} }, \
                                             :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, \
@@ -204,25 +215,25 @@ class StudyhubResourcesController < ApplicationController
                                             :inclusion_mica)
   end
 
+
+  def  get_custom_metadata_attributes(title)
+    CustomMetadataType.where(title:title).first.custom_metadata_attributes.map(&:title)
+  end
+
   def parse_custom_metadata_attributes(params)
+
+    cm_resource_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource General")
+    cm_study_design_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign")
+
     unless params[:custom_metadata_attributes].nil?
-
-
-      resource_attributes = %w[resource_type_general resource_language resource_use_rights resource_web_page resource_web_studyhub resource_web_seek resource_web_mica acronym]
-      study_design_attributes = %w[study_primary_design study_type_interventional study_type_non_interventional study_type_description
-                                 study_primary_purpose study_conditions study_conditions_code study_keywords study_centers study_subject study_region study_target_sample_size
-                                 study_obtained_sample_size study_age_min study_age_max study_sex study_inclusion_criteria study_exclusion_criteria study_population study_sampling
-                                 study_hypothesis study_design_comment study_IPD_sharing_plan_generally study_IPD_sharing_plan_description
-                                 stuy_IPD_sharing_plan_time_frame stuy_IPD_sharing_plan_access_criteria
-                                 stuy_IPD_sharing_plan_url study_start_date study_end_date study_datasource study_status study_country study_eligibility]
 
       resource = {}
       study_design = {}
 
       params[:custom_metadata_attributes][:data].keys.each do |key|
-        if resource_attributes.include? key
+        if cm_resource_attributes.include? key
           resource[key] = params[:custom_metadata_attributes][:data][key]
-        elsif study_design_attributes.include? key
+        elsif cm_study_design_attributes.include? key
 
           study_design[key] = case key
           when "study_datasource"
@@ -248,8 +259,6 @@ class StudyhubResourcesController < ApplicationController
 
       entry = {}
       entry['role_type'] = params[:role_type][key]
-      entry['role_specific_type_sponsor'] = params[:role_specific_type_sponsor][key]
-      entry['role_specific_type_funder'] = params[:role_specific_type_funder][key]
       entry['role_name'] = params[:role_name][key]
       entry['role_email'] = params[:role_email][key] #unless params[:role_email][key].blank?
       entry['role_phone'] = params[:role_phone][key] #unless params[:role_phone][key].blank?
@@ -278,6 +287,7 @@ class StudyhubResourcesController < ApplicationController
     end
     ids
   end
+
 
   def parse_resource_descriptions(params)
     resource_descriptions = []

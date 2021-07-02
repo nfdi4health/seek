@@ -13,10 +13,3 @@
 <%= render partial: 'studyhub_study_design_input', locals: { :f => f } %>
 <%= render partial: 'studyhub_process', locals: { :f => f } %>
 
-<% if show_form_manage_specific_attributes? && @studyhub_resource.can_manage? %>
-  <%= render :partial => "projects/project_selector", :locals => {:resource => @studyhub_resource} -%>
-<% end %>
-
-<% if sharing_enable %>
-  <%= render :partial => "sharing/form" -%>
-<% end -%>

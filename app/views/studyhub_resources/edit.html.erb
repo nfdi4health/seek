@@ -1,19 +1,42 @@
+<% filtered_resource_type = @studyhub_resource.is_studytype? ?
+                              StudyhubResourceType.all.select { |x| (x.is_study? || x.is_substudy?) } : StudyhubResourceType.all.reject { |x|  (x.is_study? || x.is_substudy?) } %>
+<%  %>
 <div class="row">
   <div style="margin:auto;width:70%;">
     <h1>Edit <%= t('studyhub_resources.studyhub_resource') %></h1>
-    <%= form_with url: studyhub_resource_path, method: :put do |form| %>
-      <span id="studyhub_resource_attributes_container">
-        <% if ( @studyhub_resource.is_study? || @studyhub_resource.is_substudy? ) %>
-     <div id="type_study_form">
-    <%= render partial: 'type_study_form', locals: { :f => form } %>
-  </div>
 
-      <% else %>
-  <div id="type_assay_form">
-    <%= render partial: 'type_assay_form', locals: { :f => form } %>
-  </div>
-      <% end %>
-</span>
+    <%= form_with url: studyhub_resource_path, method: :put do |f| %>
+
+      <div id="studyhub_resource_type_selection" >
+        <div class="form-group">
+          <label class="">Resource Type</label>
+          <%= collection_select :studyhub_resource, :studyhub_resource_type, filtered_resource_type, :key, :title,
+                                { :selected => @studyhub_resource.studyhub_resource_type },
+                                { :class => 'form-control' } -%>
+        </div>
+      </div>
+
+
+
+
+
+
+      <div id="studyhub_resource_attributes_container">
+        <%= render partial: 'studyhub_basic', locals: { :f => f } %>
+        <%= render partial: 'studyhub_resource_input', locals: { :f => f } %>
+        <%= render partial: 'studyhub_study_design_input', locals: { :f => f } if @studyhub_resource.is_studytype? %>
+        <%= render partial: 'studyhub_process', locals: { :f => f } %>
+
+        <% if @studyhub_resource.can_manage? %>
+          <%= render :partial => "projects/project_selector", :locals => {:resource => @studyhub_resource} -%>
+        <% end %>
+
+
+        <%= render :partial => "sharing/form" -%>
+
+
+
+      </div>
 
 
       <%= submit_tag('Submit', class: 'btn btn-primary', id: 'submit-button', disabled: false ) %>

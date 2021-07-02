@@ -1,7 +1,6 @@
 <%
   role_types = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first.sample_controlled_vocab_terms
-  role_specific_type_sponsors = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Sponsor').first.sample_controlled_vocab_terms
-  role_specific_type_funders = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Funder').first.sample_controlled_vocab_terms
+
 %>
 <% role_row ||= nil %>
 <% index ||= 'row-template' %>
@@ -22,8 +21,7 @@
     role_affiliation_city =  roles[row_num]["role_affiliation_city"]
     role_affiliation_name = roles[row_num]["role_affiliation_name"]
     role_affiliation_country =  roles[row_num]["role_affiliation_country"]
-    role_specific_type_funder = roles[row_num]["role_specific_type_funder"]
-    role_specific_type_sponsor = roles[row_num]["role_specific_type_sponsor"]
+
   end
 
 %>
@@ -37,20 +35,6 @@
     <label class="required">Role Type</label>
     <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
                             { :include_blank => false, :selected => role_type }, :class => "form-control role_type" %>
-  </div>
-
-
-
-  <div class="form-group role_specific_type_sponsor <%= (roles.blank? || roles[row_num]["role_specific_type_sponsor"].blank?) ? 'item-hidden': ''  %>" >
-    <label>Role Type Sponsor</label>
-    <%= f.collection_select "studyhub_resource[role_specific_type_sponsor][#{index}]", role_specific_type_sponsors.map(&:label), :to_s, :to_s,
-                            { :include_blank => true, :selected => role_specific_type_sponsor }, :class => "form-control" %>
-  </div>
-
-  <div class="form-group role_specific_type_funder <%= (roles.blank? || roles[row_num]["role_specific_type_funder"].blank?) ? 'item-hidden': ''%>">
-    <label>Role Type Funder</label>
-    <%= f.collection_select "studyhub_resource[role_specific_type_funder][#{index}]", role_specific_type_funders.map(&:label), :to_s, :to_s,
-                            { :include_blank => true, :selected => role_specific_type_funder }, :class => "form-control" %>
   </div>
 
   <div class="form-group">

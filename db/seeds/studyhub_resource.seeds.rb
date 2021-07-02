@@ -53,10 +53,27 @@ Model PhysicalObject Service Software Sound Text Workflow Other])
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[EN DE FR ES])
   )
 
+  #resource_use_rights_label
+  resource_use_rights_label_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Label').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["CC0",
+                                                                                               "CC BY 4.0", "CC BY-NC 4.0", "CC BY-ND 4.0", "CC BY-SA 4.0", "CC BY-NC-SA 4.0", "CC BY-NC-ND 4.0", "All rights reserved", "Other", "N/A", "Unknown"])
+  )
+
+  #resource_use_rights_authors_confirmation_cv
+  resource_use_rights_authors_confirmation_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Author Confirmation').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["Yes", "No" ]))
+
   # id_type
   id_type_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first_or_create!(
-  sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[arXiv bibcode DOI EAN13 EISSN ISBN ISSN ISTC LISSN LSID PMID PURL URL URN w3id ORCID ISNI ROR GRID DRKS ISRCTN EudraCT NCT(clinicaltrials.gov) Other])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[arXiv bibcode DOI EAN13 EISSN ISBN ISSN ISTC LISSN LSID NFDI4Health PMID PURL URL URN w3id ORCID ISNI ROR GRID DRKS ISRCTN EudraCT NCT(clinicaltrials.gov) Other])
 
+  )
+
+  # id_resource_type_general
+  id_resource_type_general_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Resource Type General').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Audiovisual Book BookChapter Collection
+ComputationalNotebook ConferencePaper ConferenceProceeding DataPaper Dataset Dissertation Event Image InteractiveResource Journal JournalArticle Model
+OutputManagementPlan PeerReview PhysicalObject Preprint ReportService Software Sound Standard Text Workflow Other])
   )
 
   # id_relation_type
@@ -68,20 +85,21 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
 
   # role_type
   role_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Contributor ContactPerson DataCollector DataCurator DataManager Distributor Editor
-HostingInstitution Producer ProjectLeader ProjectManager ProjectMember RegistrationAgency RegistrationAuthority RelatedPerson Researcher ResearchGroup RightsHolder Supervisor WorkPackageLeader
-Sponsor Sponsor-Investigator Funder Publisher Other])
-  )
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["Author","Principal Investigator", "Contributor", "ContactPerson", "DataCollector", "DataCurator",
+                                                                                               "DataManager", "Distributor","Editor", "HostingInstitution", "Producer", "ProjectLeader/Principal Investigator", "ProjectManager",
+                                                                                               "ProjectMember", "RegistrationAgency", "RegistrationAuthority", "RelatedPerson", "Researcher", "ResearchGroup", "RightsHolder",
+                                                                                               "Supervisor", "WorkPackageLeader", "Primary sponsor", "Secondary Sponsor", "Sponsor-Investigator", "Sponsor", "Funder",
+                                                                                               "Public funder","Private funder", "Publisher", "Other"]))
 
 
-  # role_specific_type
-  role_specific_type_sponsor_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Sponsor').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[primary secondary])
-  )
-
-  role_specific_type_funder_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Funder').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[public private])
-  )
+  # # role_specific_type
+  # role_specific_type_sponsor_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Sponsor').first_or_create!(
+  #   sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[primary secondary])
+  # )
+  #
+  # role_specific_type_funder_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Specific Type Funder').first_or_create!(
+  #   sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[public private])
+  # )
 
   #study_primary_design
   study_primary_design_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Design').first_or_create!(
@@ -96,15 +114,15 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
   #study_type_non_interventional
   study_type_non_interventional_cv = SampleControlledVocab.where(title: 'NFDI4Health Non-interventional Study Type').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Case-Control', 'Case-Only','Case-Crossover','Cohort',' Birth cohort','Cross-section',
-                                               'Cross-section ad-hoc follow-up', 'Ecologic or Community Studies',
-                                               'Family-Based','Longitudinal', 'Panel', 'Quality control', 'Time series','Trend',
-                                               'Twin-study','Other'])
+                                                                                               'Cross-section ad-hoc follow-up', 'Ecologic or Community Studies',
+                                                                                               'Family-Based','Longitudinal', 'Panel', 'Quality control', 'Time series','Trend',
+                                                                                               'Twin-study','Other'])
   )
 
   #study_primary_purpose
   study_primary_purpose_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Purpose').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Treatment', 'Prevention','Prognostic', 'Diagnostic', 'Supportive Care', 'Screening', 'Health Services Research',
-                                               'Basic Science/Physiological study', 'Device Feasibility', 'Pharmacogenetics', 'Pharmacogenomics', 'Health Economics','Other'])
+                                                                                               'Basic Science/Physiological study', 'Device Feasibility', 'Pharmacogenetics', 'Pharmacogenomics', 'Health Economics','Other'])
   )
 
 
@@ -140,10 +158,10 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
   study_sampling_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Sampling').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
       [
-        "TotalUniverseCompleteEnumeration", "Probability", "Probability.SimpleRandom, Probability.SystematicRandom", 
-        "Probability.Stratified, Probability.Stratified.Proportional", "Probability.Stratified.Disproportional", 
+        "TotalUniverseCompleteEnumeration", "Probability", "Probability.SimpleRandom, Probability.SystematicRandom",
+        "Probability.Stratified, Probability.Stratified.Proportional", "Probability.Stratified.Disproportional",
         "Probability.Cluster", "Probability.Cluster.SimpleRandom", "Probability.Cluster.StratifiedRandom", "Probability.Multistage",
-        "Nonprobability", "Nonprobability.Availability", "Nonprobability.Purposive", "Nonprobability.Quota", "Nonprobability.RespondentAssisted", 
+        "Nonprobability", "Nonprobability.Availability", "Nonprobability.Purposive", "Nonprobability.Quota", "Nonprobability.RespondentAssisted",
         "MixedProbabilityNonprobability", "Other"
       ])
   )
@@ -161,7 +179,7 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
   #study_IPD_sharing_plan_generally
   study_IPD_sharing_plan_generally_cv = SampleControlledVocab.where(title: 'NFDI4Health Study IPD Sharing Plan Generally').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["Yes: There is a plan to make IPD and related data dictionaries available.",
-"No: There is not a plan to make IPD available.","Undecided: It is not yet known if there will be a plan to make IPD available."])
+                                                                                               "No: There is not a plan to make IPD available.","Undecided: It is not yet known if there will be a plan to make IPD available."])
   )
 
 
@@ -182,24 +200,37 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
         title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv
       ),
 
-      CustomMetadataAttribute.where(title: 'resource_use_rights').create!(
-        title: 'resource_use_rights', required: true, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'resource_version').create!(
+        title: 'resource_version', required: false, sample_attribute_type: string_type
+      ),
+
+
+      CustomMetadataAttribute.where(title: 'resource_format').create!(
+        title: 'resource_format', required: false, sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'resource_use_rights_label').create!(
+        title: 'resource_use_rights_label', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_label_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'resource_use_rights_description').create!(
+        title: 'resource_use_rights_description', required: false, sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_1').create!(
+        title: 'resource_use_rights_authors_confirmation_1', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_2').create!(
+        title: 'resource_use_rights_authors_confirmation_2', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_3').create!(
+        title: 'resource_use_rights_authors_confirmation_3', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv
       ),
 
       CustomMetadataAttribute.where(title: 'resource_web_page').create!(
         title: 'resource_web_page', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'resource_web_studyhub').create!(
-        title: 'resource_web_studyhub', required: true, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'resource_web_seek').create!(
-        title: 'resource_web_seek', required: true, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'resource_web_mica').create!(
-        title: 'resource_web_mica', required: true, sample_attribute_type: string_type
       ),
 
       CustomMetadataAttribute.where(title: 'acronym').create!(
@@ -243,7 +274,7 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
 
       CustomMetadataAttribute.where(title: 'study_keywords').create!(
         title: 'study_keywords', required: false, sample_attribute_type: string_type
-      ),
+    ),
 
 
       CustomMetadataAttribute.where(title: 'study_centers').create!(
@@ -328,103 +359,19 @@ Sponsor Sponsor-Investigator Funder Publisher Other])
         title: 'study_IPD_sharing_plan_description', required: false, sample_attribute_type: string_type
       ),
 
-      CustomMetadataAttribute.where(title: 'stuy_IPD_sharing_plan_time_frame').create!(
-        title: 'stuy_IPD_sharing_plan_time_frame', required: false, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_time_frame').create!(
+        title: 'study_IPD_sharing_plan_time_frame', required: false, sample_attribute_type: string_type
       ),
 
-      CustomMetadataAttribute.where(title: 'stuy_IPD_sharing_plan_access_criteria').create!(
-        title: 'stuy_IPD_sharing_plan_access_criteria', required: false, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_access_criteria').create!(
+        title: 'study_IPD_sharing_plan_access_criteria', required: false, sample_attribute_type: string_type
       ),
 
-      CustomMetadataAttribute.where(title: 'stuy_IPD_sharing_plan_url').create!(
-        title: 'stuy_IPD_sharing_plan_url', required: false, sample_attribute_type: string_type
-      ),
-
-
-
-
-
-
-
-
-      CustomMetadataAttribute.where(title: 'study_eligibility').create!(
-        title: 'study_eligibility', required: false, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_url').create!(
+        title: 'study_IPD_sharing_plan_url', required: false, sample_attribute_type: string_type
       )
 
     ]
   )
 
-  # NFDI4Health Studyhub Study Metadata (resource_type: study and substudy)
-  CustomMetadataType.where(title: 'NFDI4Health Study', supported_type: 'Study').first_or_create!(
-    title: 'NFDI4Health Study', supported_type: 'Study',
-    custom_metadata_attributes: [
-
-      CustomMetadataAttribute.where(title: 'resource_web_studyhub').create!(
-        title: 'resource_web_studyhub', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'resource_web_page').create!(
-        title: 'resource_web_page', required: false, sample_attribute_type: string_type
-      ),
-      CustomMetadataAttribute.where(title: 'resource_type').create!(
-        title: 'resource_type', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'resource_web_mica').create!(
-        title: 'resource_web_mica', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'acronym').create!(
-        title: 'acronym', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_type').create!(
-        title: 'study_type', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_start_date').create!(
-        title: 'study_start_date', required: false, sample_attribute_type: date_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_end_date').create!(
-        title: 'study_end_date', required: false, sample_attribute_type: date_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_status').create!(
-        title: 'study_status', required: false, sample_attribute_type: string_type
-      ),
-
-
-      CustomMetadataAttribute.where(title: 'study_eligibility').create!(
-        title: 'study_eligibility', required: false, sample_attribute_type: string_type
-      )
-
-    ]
-  )
-
-  # NFDI4Health Studyhub Resource Metadata (resource_type: except study and substudy)
-  CustomMetadataType.where(title: 'NFDI4Health Assay', supported_type: 'Assay').first_or_create!(
-    title: 'NFDI4Health Assay', supported_type: 'Assay',
-    custom_metadata_attributes: [
-
-      CustomMetadataAttribute.where(title: 'resource_web_studyhub').create!(
-        title: 'resource_web_studyhub', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'resource_web_page').create!(
-        title: 'resource_web_page', required: false, sample_attribute_type: string_type
-      ),
-      CustomMetadataAttribute.where(title: 'resource_type').create!(
-        title: 'resource_type', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'resource_web_mica').create!(
-        title: 'resource_web_mica', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'acronym').create!(
-        title: 'acronym', required: false, sample_attribute_type: string_type
-      )
-    ]
-  )
 end

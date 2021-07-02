@@ -1,10 +1,20 @@
 <% resource = @studyhub_resource.new_record? ? @studyhub_resource : @studyhub_resource.resource_json["resource"] %>
 
-<%= folding_panel("General Resource Information:",true) do %>
+<div id="general_resource_information">
+<%= folding_panel("General Resource Information:",false ) do %>
 
   <%
     cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource General",supported_type:@studyhub_resource.class.name).first
   %>
   <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource } %>
 <% end %>
+</div>
 
+<script>
+    $j(document).ready(function () {
+
+        SR.intialResourceUseRightVisibility();
+        $j('#general_resource_information').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_label]"]', SR.setResourceUseRightVisibility);
+
+    });
+</script>
