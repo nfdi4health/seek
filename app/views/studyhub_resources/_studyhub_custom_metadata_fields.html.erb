@@ -1,6 +1,6 @@
 <% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
 
-<% multselect_attributes = %w[study_datasource study_country] %>
+<% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information] %>
 
   <% if multselect_attributes.include? attribute.title  %>
     <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>

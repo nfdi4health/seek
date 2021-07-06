@@ -55,13 +55,13 @@ Model PhysicalObject Service Software Sound Text Workflow Other])
 
   #resource_use_rights_label
   resource_use_rights_label_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Label').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["CC0",
-                                                                                               "CC BY 4.0", "CC BY-NC 4.0", "CC BY-ND 4.0", "CC BY-SA 4.0", "CC BY-NC-SA 4.0", "CC BY-NC-ND 4.0", "All rights reserved", "Other", "N/A", "Unknown"])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['CC0',
+                                                                                               'CC BY 4.0', 'CC BY-NC 4.0', 'CC BY-ND 4.0', 'CC BY-SA 4.0', 'CC BY-NC-SA 4.0', 'CC BY-NC-ND 4.0', 'All rights reserved', 'Other', 'N/A', 'Unknown'])
   )
 
   #resource_use_rights_authors_confirmation_cv
   resource_use_rights_authors_confirmation_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Author Confirmation').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["Yes", "No" ]))
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No' ]))
 
   # id_type
   id_type_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first_or_create!(
@@ -85,11 +85,11 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
 
   # role_type
   role_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["Author","Principal Investigator", "Contributor", "ContactPerson", "DataCollector", "DataCurator",
-                                                                                               "DataManager", "Distributor","Editor", "HostingInstitution", "Producer", "ProjectLeader/Principal Investigator", "ProjectManager",
-                                                                                               "ProjectMember", "RegistrationAgency", "RegistrationAuthority", "RelatedPerson", "Researcher", "ResearchGroup", "RightsHolder",
-                                                                                               "Supervisor", "WorkPackageLeader", "Primary sponsor", "Secondary Sponsor", "Sponsor-Investigator", "Sponsor", "Funder",
-                                                                                               "Public funder","Private funder", "Publisher", "Other"]))
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Author','Principal Investigator', 'Contributor', 'ContactPerson', 'DataCollector', 'DataCurator',
+                                                                                               'DataManager', 'Distributor','Editor', 'HostingInstitution', 'Producer', 'ProjectLeader/Principal Investigator', 'ProjectManager',
+                                                                                               'ProjectMember', 'RegistrationAgency', 'RegistrationAuthority', 'RelatedPerson', 'Researcher', 'ResearchGroup', 'RightsHolder',
+                                                                                               'Supervisor', 'WorkPackageLeader', 'Primary sponsor', 'Secondary Sponsor', 'Sponsor-Investigator', 'Sponsor', 'Funder',
+                                                                                               'Public funder','Private funder', 'Publisher', 'Other']))
 
 
   # # role_specific_type
@@ -144,8 +144,8 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
   #study_status
   study_status_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ["Not yet recruiting", "Recruiting", "Enrolling by invitation", "Active,not recruiting",
-       "Completed","Suspended", "Terminated", "Withdrawn"])
+      ['Not yet recruiting', 'Recruiting', 'Enrolling by invitation', 'Active,not recruiting',
+       'Completed','Suspended', 'Terminated', 'Withdrawn'])
   )
 
   #study_sex
@@ -158,32 +158,37 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
   study_sampling_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Sampling').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
       [
-        "TotalUniverseCompleteEnumeration", "Probability", "Probability.SimpleRandom, Probability.SystematicRandom",
-        "Probability.Stratified, Probability.Stratified.Proportional", "Probability.Stratified.Disproportional",
-        "Probability.Cluster", "Probability.Cluster.SimpleRandom", "Probability.Cluster.StratifiedRandom", "Probability.Multistage",
-        "Nonprobability", "Nonprobability.Availability", "Nonprobability.Purposive", "Nonprobability.Quota", "Nonprobability.RespondentAssisted",
-        "MixedProbabilityNonprobability", "Other"
+        'TotalUniverseCompleteEnumeration', 'Probability', 'Probability.SimpleRandom, Probability.SystematicRandom',
+        'Probability.Stratified, Probability.Stratified.Proportional', 'Probability.Stratified.Disproportional',
+        'Probability.Cluster', 'Probability.Cluster.SimpleRandom', 'Probability.Cluster.StratifiedRandom', 'Probability.Multistage',
+        'Nonprobability', 'Nonprobability.Availability', 'Nonprobability.Purposive', 'Nonprobability.Quota', 'Nonprobability.RespondentAssisted',
+        'MixedProbabilityNonprobability', 'Other'
       ])
   )
 
   #study_datasource
   study_datasource_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Datasource').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ["Blood", "Buccal cells", "Cord blood", "DNA","Faeces", "Hair","Immortalized Cell Lines",
-       "Isolated Pathogen", "Nail", "Plasma", "RNA", "Saliva", "Serum", "Tissue (Frozen)", "Tissue (FFPE)",
-       "Urine", "Other Biological samples","Administrative databases", "Cognitive measurements", "Genealogical records",
-       "Imaging data", "Medical records", "Registries", "Survey data", "Physiological/Biochemical measurements",
-       "Genomics", "Metabolomics", "Transcriptomics", "Proteomics", "Other Omics Technology", "Other"])
+      ['Blood', 'Buccal cells', 'Cord blood', 'DNA','Faeces', 'Hair','Immortalized Cell Lines',
+       'Isolated Pathogen', 'Nail', 'Plasma', 'RNA', 'Saliva', 'Serum', 'Tissue (Frozen)', 'Tissue (FFPE)',
+       'Urine', 'Other Biological samples','Administrative databases', 'Cognitive measurements', 'Genealogical records',
+       'Imaging data', 'Medical records', 'Registries', 'Survey data', 'Physiological/Biochemical measurements',
+       'Genomics', 'Metabolomics', 'Transcriptomics', 'Proteomics', 'Other Omics Technology', 'Other'])
   )
 
-  #study_IPD_sharing_plan_generally
-  study_IPD_sharing_plan_generally_cv = SampleControlledVocab.where(title: 'NFDI4Health Study IPD Sharing Plan Generally').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(["Yes: There is a plan to make IPD and related data dictionaries available.",
-                                                                                               "No: There is not a plan to make IPD available.","Undecided: It is not yet known if there will be a plan to make IPD available."])
+  #study_data_sharing_plan_generally
+  study_data_sharing_plan_generally_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Data Sharing Plan Generally').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes: There is a plan to make data and related data dictionaries available.',
+                                                                                               'No: There is not a plan to make data available.',' Undecided: It is not yet known if there will be a plan to make data available.'])
   )
 
 
-
+  #study_data_sharing_plan_supporting_information
+  study_data_sharing_plan_supporting_information_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Data Sharing Plan Supporting Information').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Study Protocol', 'Statistical Analysis Plan (SAP)',
+                                                                                               'Informed Consent Form (ICF)', 'Clinical Study Report (CSR)',
+                                                                                               'Analytic Code', 'Other'])
+  )
 
 
   # NFDI4Health Studyhub Resource General
@@ -351,24 +356,29 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
         title: 'study_design_comment', required: false, sample_attribute_type: string_type
       ),
 
-      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_generally').create!(
-        title: 'study_IPD_sharing_plan_generally', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_IPD_sharing_plan_generally_cv
+      CustomMetadataAttribute.where(title: 'study_data_sharing_plan_generally').create!(
+        title: 'study_data_sharing_plan_generally', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_generally_cv
       ),
 
-      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_description').create!(
-        title: 'study_IPD_sharing_plan_description', required: false, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'study_data_sharing_plan_description').create!(
+        title: 'study_data_sharing_plan_description', required: false, sample_attribute_type: string_type
       ),
 
-      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_time_frame').create!(
-        title: 'study_IPD_sharing_plan_time_frame', required: false, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'study_data_sharing_plan_supporting_information').create!(
+        title: 'study_data_sharing_plan_supporting_information', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_supporting_information_cv
       ),
 
-      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_access_criteria').create!(
-        title: 'study_IPD_sharing_plan_access_criteria', required: false, sample_attribute_type: string_type
+
+      CustomMetadataAttribute.where(title: 'study_data_sharing_plan_time_frame').create!(
+        title: 'study_data_sharing_plan_time_frame', required: false, sample_attribute_type: string_type
       ),
 
-      CustomMetadataAttribute.where(title: 'study_IPD_sharing_plan_url').create!(
-        title: 'study_IPD_sharing_plan_url', required: false, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'study_data_sharing_plan_access_criteria').create!(
+        title: 'study_data_sharing_plan_access_criteria', required: false, sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_data_sharing_plan_url').create!(
+        title: 'study_data_sharing_plan_url', required: false, sample_attribute_type: string_type
       )
 
     ]

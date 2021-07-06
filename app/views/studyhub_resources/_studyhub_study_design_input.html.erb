@@ -15,7 +15,10 @@
     $j(document).ready(function () {
 
         SR.intialStudyPrimaryDesignVisibility();
+        SR.intialStudyDataSharingPlanVisibility();
+
         $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]', SR.setStudyPrimaryDesignVisibility);
+        $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_generally]"]', SR.setStudyDataSharingPlanVisibility);
 
     });
 </script>

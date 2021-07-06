@@ -224,6 +224,7 @@ class StudyhubResourcesController < ApplicationController
 
     cm_resource_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource General")
     cm_study_design_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign")
+    multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information]
 
     unless params[:custom_metadata_attributes].nil?
 
@@ -234,22 +235,30 @@ class StudyhubResourcesController < ApplicationController
         if cm_resource_attributes.include? key
           resource[key] = params[:custom_metadata_attributes][:data][key]
         elsif cm_study_design_attributes.include? key
-
-          study_design[key] = case key
-          when "study_datasource"
-            params[:custom_metadata_attributes][:data][key].drop(1)
-                              when "study_country"
-                                params[:custom_metadata_attributes][:data][key].drop(1)
+          if multselect_attributes.include? key
+            study_design[key] = params[:custom_metadata_attributes][:data][key].drop(1)
           else
-            params[:custom_metadata_attributes][:data][key]
-                              end
-
+            study_design[key] = params[:custom_metadata_attributes][:data][key]
+          end
         end
       end
+
+      study_design = set_study_data_sharing_plan(study_design)
+
       params[:resource_json][:resource] = resource
       params[:resource_json][:study_design] = study_design
     end
     return resource, study_design
+  end
+
+  def set_study_data_sharing_plan(study_design)
+    unless study_design["study_data_sharing_plan_generally"].start_with?("Yes")
+      study_design["study_data_sharing_plan_supporting_information"] = []
+      study_design["study_data_sharing_plan_time_frame"] = ""
+      study_design["study_data_sharing_plan_access_criteria"] = ""
+      study_design["study_data_sharing_plan_url"] = ""
+    end
+    study_design
   end
 
   def parse_roles(params)

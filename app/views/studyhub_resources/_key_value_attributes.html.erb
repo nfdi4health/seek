@@ -1,12 +1,14 @@
 <% resource.keys.each do |key| %>
 
-  <% multselect_attributes = %w[study_datasource study_country] %>
+  <% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information] %>
 
   <% hidden_class = resource[key].blank? ? "item-hidden" : nil %>
   <p class=<%= hidden_class %>>
     <% if multselect_attributes.include? key %>
       <label><%= key.humanize(keep_id_suffix: true) %>: </label>
-      <%= resource[key].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ') %>
+      <% unless resource[key].blank? %>
+            <%= resource[key].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ')  %>
+      <% end %>
     <% else %>
       <label><%= key.humanize(keep_id_suffix: true) %>: </label>
       <%= resource[key] %>
