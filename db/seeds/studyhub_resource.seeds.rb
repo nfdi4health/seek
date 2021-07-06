@@ -43,10 +43,10 @@ disable_authorization_checks do
 
   #resource_type_general
   resource_type_general_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Type General').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Audiovisual Collection DataPaper Dataset Event Image InteractiveResource
-Model PhysicalObject Service Software Sound Text Workflow Other])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Audiovisual Book Collection
+    ComputationalNotebook ConferencePaper ConferenceProceeding Dissertation DataPaper Dataset Event Image InteractiveResource JournalArticle
+  ModelOutputsManagementPlan PeerReview Preprint PhysicalObject Report Service Software Sound Standard Text Workflow Other])
   )
-
 
   # resource_language
   resource_language_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Language').first_or_create!(
