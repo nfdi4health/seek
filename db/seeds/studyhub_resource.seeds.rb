@@ -148,10 +148,10 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
        'Completed','Suspended', 'Terminated', 'Withdrawn'])
   )
 
-  #study_sex
-  study_sex_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Sex').first_or_create!(
+  #study_gender
+  study_gender_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Gender').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      %w[Male Female All])
+      %w[Male Female Diverse])
   )
 
   #study_sampling
@@ -312,12 +312,20 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
         title: 'study_age_min', required: false, sample_attribute_type: float_type
       ),
 
+      CustomMetadataAttribute.where(title: 'study_age_min_description').create!(
+        title: 'study_age_min_description', required: false, sample_attribute_type: string_type
+      ),
+
       CustomMetadataAttribute.where(title: 'study_age_max').create!(
         title: 'study_age_max', required: false, sample_attribute_type: float_type
       ),
 
-      CustomMetadataAttribute.where(title: 'study_sex').create!(
-        title: 'study_sex', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sex_cv
+      CustomMetadataAttribute.where(title: 'study_age_max_description').create!(
+        title: 'study_age_max_description', required: false, sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_gender').create!(
+        title: 'study_gender', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_gender_cv
       ),
 
       CustomMetadataAttribute.where(title: 'study_inclusion_criteria').create!(
