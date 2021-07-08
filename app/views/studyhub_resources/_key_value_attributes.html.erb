@@ -1,6 +1,6 @@
 <% resource.keys.each do |key| %>
 
-  <% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender] %>
+  <% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles] %>
 
   <% hidden_class = resource[key].blank? ? "item-hidden" : nil %>
   <p class=<%= hidden_class %>>

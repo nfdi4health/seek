@@ -89,8 +89,42 @@ var SR = {
 
     intialStudyPrimaryDesignVisibility: function () {
 
+        //interventional study design
         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_phase]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').parent().hide();
+
+        //study_masking_roles (multiselect)
+        $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_masking_description]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_allocation]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_control]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_off_label_use]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_description]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_title]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_description]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_time_frame]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_title]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_description]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_time_frame]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_title]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_description]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_time_frame]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_type]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_name]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_description]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_arm_group_label]"]').parent().hide();
+
+
+        //non interventional study design
         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_time_perspective]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_target_follow-up_duration]"]').parent().hide();
 
     },
 
@@ -99,16 +133,125 @@ var SR = {
         design = $j(this).val();
         switch (design){
             case 'interventional':
+
+                //show interventional
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().show();
+
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_phase]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').parent().show();
+
+                //study_masking_roles (multiselect)
+                $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_masking_description]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_allocation]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_control]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_off_label_use]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_description]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_title]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_description]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_time_frame]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_title]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_description]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_time_frame]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_title]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_description]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_time_frame]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_type]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_name]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_description]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_arm_group_label]"]').parent().show();
+
+
+                //hide non interventional
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_time_perspective]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_target_follow-up_duration]"]').parent().hide();
+
                 break;
+
+
             case 'non-interventional':
+
+                //hide interventional
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_phase]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').parent().hide();
+                $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_masking_description]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_allocation]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_control]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_off_label_use]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_title]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_time_frame]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_title]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_time_frame]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_title]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_time_frame]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_type]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_name]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_arm_group_label]"]').parent().hide();
+
+
+
+                //show non interventional
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_time_perspective]"]').parent().show();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_target_follow-up_duration]"]').parent().show();
                 break;
+
             default:
+
+                //interventional study design
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_phase]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').parent().hide();
+
+                //study_masking_roles (multiselect)
+                $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_masking_description]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_allocation]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_control]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_off_label_use]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_title]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_primary_outcome_time_frame]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_title]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_secondary_outcome_time_frame]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_title]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_other_prespecified_outcome_measures_time_frame]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_type]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_name]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_description]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_intervention_arm_group_label]"]').parent().hide();
+
+
+                //non interventional study design
                 $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_time_perspective]"]').parent().hide();
+                $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_target_follow-up_duration]"]').parent().hide();
         }
     }
 
