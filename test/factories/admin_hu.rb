@@ -40,8 +40,7 @@ Factory.define(:hu, class: Person) do |f|
   f.phone "+49 (0)6221–533–218"
   f.skype_name "xiaoming.hu"
   f.association :user, factory: :activated_user_hu
-  f.group_memberships { [Factory.build(:sdbv_group_membership)] }
-  #f.group_memberships { [Factory.build(:mcm_group_membership)] }
+  f.group_memberships { [Factory.build(:nfdi_group_membership)] }
 end
 
 Factory.define(:ina, class: Person) do |f|
@@ -51,6 +50,5 @@ Factory.define(:ina, class: Person) do |f|
   f.web_page "https://www.h-its.org/de/"
   f.email "ina.poehner@h-its.org"
   f.association :user, factory: :activated_user_ina
-  #f.group_memberships { [Factory.build(:mcm_group_membership)] }
 end
 

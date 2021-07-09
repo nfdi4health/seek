@@ -72,9 +72,21 @@ Factory.define(:sdbv, class: Project) do |f|
   f.web_page "https://www.h-its.org/research/sdbv/"
 end
 
+Factory.define(:nfdi, class: Project) do |f|
+  f.title "Covid19 NFDI4Health Studyhub"
+  f.description "The Study Hub NFDI4Health COVID-19 is an inventory of German COVID-19 studies covering structured health data from administrative databases, clinical trials incl. vaccination studies, primary care, epidemiological studies, and public health surveillance. The aim is to enable findability of studies and access to structured health data to improve the management of public health data on the COVID-19 pandemic. Unlike other initiatives, the Study Hub NFDI4Health COVID-19 will focus not only on clinical research but also on studies relating to the consequences of the pandemic for public health, such as utilisation of healthcare services, quality of life and the effects of social isolation. Furthermore, the hub provides access to the instruments like (sample) questionnaires and more information down to the variable level. Underlying the hub there is a metadata model embedded in a publication policy (Link policy when online)."
+  f.web_page "https://covid19.studyhub.nfdi4health.de/"
+end
+
 # WorkGroup
 Factory.define(:sdbv_work_group, class: WorkGroup) do |f|
   f.association :project, factory: :sdbv
+  f.association :institution, factory: :hits
+end
+
+# WorkGroup
+Factory.define(:nfdi_work_group, class: WorkGroup) do |f|
+  f.association :project, factory: :nfdi
   f.association :institution, factory: :hits
 end
 
@@ -82,6 +94,11 @@ end
 # GroupMembership
 Factory.define(:sdbv_group_membership, class: GroupMembership) do |f|
   f.association :work_group, factory: :sdbv_work_group
+end
+
+# GroupMembership
+Factory.define(:nfdi_group_membership, class: GroupMembership) do |f|
+  f.association :work_group, factory: :nfdi_work_group
 end
 
 
