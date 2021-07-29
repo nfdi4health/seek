@@ -8,18 +8,13 @@
   <div style="margin:auto;width:70%;">
     <h1>New <%= t('studyhub_resources.studyhub_resource') %></h1>
     <%= form_with url: studyhub_resources_path, method: :post do |f| %>
-    <%#= form_for @studyhub_resource do |f| %>
+
 
       <%= panel(panel_title, :id => 'new_studyhub_resource') do %>
-
-
-
-<span id="studyhub_resource_type_selection">
-        <%= collection_select :studyhub_resource, :studyhub_resource_type, StudyhubResourceType.all, :key, :title,
-                              { :include_blank => "Please select a type:" },
-                              { :class => 'form-control' } -%>
-</span>
-
+        <span id="studyhub_resource_type_selection">
+          <%= select_tag "studyhub_resource[studyhub_resource_type]", grouped_options_for_select(grouped_options_for_studyhub_resource_type),
+                 { :prompt => "Please select a type:", :class => "form-control" } %>
+        </span>
       <% end -%>
 
       <div id="studyhub_resource_attributes_container" style="display: none">
@@ -28,45 +23,38 @@
         <%= render partial: 'studyhub_resource_input', locals: { :f => f } %>
         <%= render partial: 'studyhub_study_design_input', locals: { :f => f } %>
         <%= render partial: 'studyhub_process', locals: { :f => f } %>
-        <%#= f.fancy_multiselect :documents, other_projects_checkbox: true %>
 
         <% if @studyhub_resource.can_manage? %>
           <% # for now set up a default project for nfdi, and can be configure with Seek::Config.nfdi_default_project_id in rails c %>
           <% @studyhub_resource.projects << Project.find(Seek::Config.nfdi_default_project_id) %>
-            <%= render :partial => "projects/project_selector", :locals => {:resource => @studyhub_resource} -%>
+          <%= render :partial => "projects/project_selector", :locals => { :resource => @studyhub_resource } -%>
         <% end %>
-
 
         <%= render :partial => "sharing/form" -%>
 
-        <%= submit_tag('Save', class: 'btn btn-primary', id: 'submit-button', disabled: false ) %>
+        <%= submit_tag('Save', class: 'btn btn-primary', id: 'submit-button', disabled: false) %>
         <%#= submit_tag('Publish', class: 'btn btn-primary', id: 'submit-button', disabled: true ) %>
 
+      </div>
+    <% end %>
+  </div>
 </div>
 
+<script type="text/javascript">
+    $j(document).ready(function () {
+        $j('select[name="studyhub_resource[studyhub_resource_type]"]').change(function () {
+            resource_type = $j(this).val();
+            if (resource_type == 'study' || resource_type == 'substudy') {
+                $j('#studyhub_resource_attributes_container').show();
+                $j('#studyhub_resource_study_design').show();
+            } else {
 
-      </div>
-      </div>
-
-    <% end %>
-
-
-    <script type="text/javascript">
-        $j(document).ready(function () {
-            $j('#studyhub_resource_studyhub_resource_type').change(function () {
-                resource_type = $j(this).val();
-                if (resource_type == 'study' || resource_type == 'substudy') {
-                    $j('#studyhub_resource_attributes_container').show();
-                    $j('#studyhub_resource_study_design').show();
-                } else {
-
-                    $j('#studyhub_resource_attributes_container').show();
-                    $j('#studyhub_resource_study_design').hide();
-                }
-            });
+                $j('#studyhub_resource_attributes_container').show();
+                $j('#studyhub_resource_study_design').hide();
+            }
         });
-
-    </script>
+    });
+</script>
 
 
 

@@ -169,4 +169,19 @@ module StudyhubResourcesHelper
     end
   end
 
+  def grouped_options_for_studyhub_resource_type
+    study = []
+    non_study = []
+
+    StudyhubResourceType.all.select(&:is_studytype?).each do |x|
+      study << [x.title, x.key]
+    end
+
+    StudyhubResourceType.all.reject(&:is_studytype?).each do |x|
+      non_study << [x.title, x.key]
+    end
+
+    { 'Study Type' => study,'Non Study Type' => non_study }
+  end
+
 end
