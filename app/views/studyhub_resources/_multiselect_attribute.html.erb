@@ -4,7 +4,7 @@
   resource ||= nil
   title = attribute.title
 
-  if @studyhub_resource.new_record? || resource[title].blank?
+  if @studyhub_resource.resource_json.nil? || resource.nil? || resource[title].blank?
     selected = []
   else
     selected = resource[title].map {|s| SampleControlledVocabTerm.find(s)}

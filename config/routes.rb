@@ -430,10 +430,15 @@ SEEK::Application.routes.draw do
   #
     ### STUDYHUB RESOURCES ###
 
-  resources :studyhub_resources, concerns: [:asset]
+  resources :studyhub_resources, concerns: [:asset] do
+    member do
+      get :associate_documents
+      patch :associate_existing_documents
+      post :associate_new_document
+      patch :manage_update
+    end
+  end
 
-
-  
 
   ### ASSAY AND TECHNOLOGY TYPES ###
 

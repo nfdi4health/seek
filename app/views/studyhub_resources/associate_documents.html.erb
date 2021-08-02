@@ -1,0 +1,44 @@
+<%
+  @studyhub_resource_type = nil
+  cancel_path ||= studyhub_resource_path
+%>
+
+<div class="row">
+  <div style="margin:auto;width:70%;">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist" id="assoicate_document_tabs">
+      <li role="presentation" class="active"><a href="#new_document " aria-controls="Create" role="tab" data-toggle="tab">New document</a></li>
+      <li role="presentation"><a href="#assoicate_document" aria-controls="Register" role="tab" data-toggle="tab">Existing document</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="new_document">
+        <h1>New <%= t('document') %></h1>
+
+        <%= form_tag({:action => :associate_new_document}, :multipart => true) do -%>
+        <%#= form_with model: @studyhub_resource, url: associate_new_document_studyhub_resource_path, method: "post" do |f| %>
+          <div class="asset_form">
+            <%= error_messages_for :studyhub_resource -%>
+            <%= render :partial=>"assets/upload_box",:locals=>{:resource=> @document} -%>
+            <%= hidden_field_tag(:studyhub_resource, @studyhub_resource.id) %>
+            <div>
+              <%= create_button class: 'btn btn-primary'-%>
+              or <%= cancel_button(cancel_path) -%>
+            </div>
+
+          </div>
+
+      <% end -%>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="assoicate_document">
+        <h1>Associated with existing documents</h1>
+        <%= form_with model: @studyhub_resource, url: associate_existing_documents_studyhub_resource_path do |f| %>
+          <%= f.fancy_multiselect :documents, other_projects_checkbox: false %>
+          <%= submit_tag "Submit",data: { disable_with: 'Submit' }, :class => 'btn btn-primary' -%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

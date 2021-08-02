@@ -1,7 +1,7 @@
-<% resource = @studyhub_resource.new_record? ? @studyhub_resource : @studyhub_resource.resource_json["resource"] %>
+<% resource = @studyhub_resource.resource_json.nil? ? @studyhub_resource : @studyhub_resource.resource_json["resource"] %>
 
 <div id="general_resource_information">
-<%= folding_panel("General Resource Information:",true ) do %>
+<%= folding_panel("General Resource Information:",folded ) do %>
 
   <%
     cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource General",supported_type:@studyhub_resource.class.name).first
@@ -11,6 +11,8 @@
 </div>
 
 <script>
+
+    // todo: when edit model it has problem...
     $j(document).ready(function () {
 
         SR.intialResourceUseRightVisibility();

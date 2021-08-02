@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_124439) do
+ActiveRecord::Schema.define(version: 2021_07_19_075247) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -558,6 +558,13 @@ ActiveRecord::Schema.define(version: 2021_06_15_124439) do
     t.integer "project_id"
     t.index ["document_id", "project_id"], name: "index_documents_projects_on_document_id_and_project_id"
     t.index ["project_id"], name: "index_documents_projects_on_project_id"
+  end
+
+  create_table "documents_studyhub_resources",  force: :cascade do |t|
+    t.bigint "document_id"
+    t.bigint "studyhub_resource_id"
+    t.index ["document_id"], name: "index_documents_studyhub_resources_on_document_id"
+    t.index ["studyhub_resource_id"], name: "index_documents_studyhub_resources_on_studyhub_resource_id"
   end
 
   create_table "event_auth_lookup",  force: :cascade do |t|
@@ -1865,7 +1872,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_124439) do
   create_table "studyhub_resource_types",  force: :cascade do |t|
     t.string "title"
     t.string "description"
-
     t.string "key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

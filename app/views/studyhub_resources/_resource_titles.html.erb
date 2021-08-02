@@ -9,7 +9,7 @@
       </tr>
       </thead>
       <tbody>
-      <% if @studyhub_resource.new_record? %>
+      <% if @studyhub_resource.resource_json.nil? %>
         <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
       <% else %>
         <% @studyhub_resource.resource_json['resource_titles'].each_with_index do |title, index| %>

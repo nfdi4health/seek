@@ -7,12 +7,13 @@
 <% row_num = index.to_i %>
 
 <%
-  ids = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['ids']
-  unless studyhub_resource.new_record? || ids[row_num].blank?
-    id_id = ids[row_num]["id_id"]
-    id_date = ids[row_num]["id_date"]
-    id_type = ids[row_num]["id_type"]
-    id_relation_type = ids[row_num]["id_relation_type"]
+
+  unless studyhub_resource.resource_json.nil?
+    ids = studyhub_resource.resource_json['ids']
+    id_id = ids[row_num]["id_id"] unless ids.empty?
+    id_date = ids[row_num]["id_date"] unless ids.empty?
+    id_type = ids[row_num]["id_type"] unless ids.empty?
+    id_relation_type = ids[row_num]["id_relation_type"] unless ids.empty?
   end
 
 %>

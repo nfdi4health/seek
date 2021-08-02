@@ -1,0 +1,10 @@
+<div id="studyhub_resource_attributes_container">
+  <%= render partial: 'studyhub_basic', locals: { :f => f, :folded => folded } %>
+  <%= render partial: 'studyhub_resource_input', locals: { :f => f, :folded => folded } %>
+  <% if @studyhub_resource.new_record? %>
+     <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :folded => folded } %>
+  <% elsif @studyhub_resource.is_studytype?%>
+    <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :folded => folded }  %>
+  <% end -%>
+  <%= render partial: 'studyhub_process', locals: { :f => f, :folded => folded } %>
+</div>

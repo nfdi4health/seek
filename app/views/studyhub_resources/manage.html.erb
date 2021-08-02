@@ -1,0 +1,25 @@
+<%
+  sharing_enable = true if sharing_enable.nil?
+  sharing_enable = sharing_enable && @studyhub_resource.can_manage?
+  show_projects = true if show_projects.nil?
+%>
+<h1>Manage <%= text_for_resource(@studyhub_resource) %> : <%= link_to(h(@studyhub_resource.title), @studyhub_resource) -%></h1>
+
+
+<%= form_for @studyhub_resource, url: {action: :manage_update} do |f| %>
+  <%= f.error_messages -%>
+
+  <% if show_projects %>
+    <%= render :partial => 'projects/project_selector', :locals => {:resource => @studyhub_resource, :allow_nil => false} %>
+  <% end %>
+
+  <% if sharing_enable %>
+    <%= render :partial => "sharing/form" -%>
+  <% end -%>
+
+  <%= form_submit_buttons(@studyhub_resource, validate:false) %>
+
+<% end -%>
+
+
+

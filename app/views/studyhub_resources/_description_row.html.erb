@@ -6,10 +6,13 @@
 %>
 
 <%
-     descriptions = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['resource_descriptions']
-     description_text = studyhub_resource.new_record?? nil : descriptions[row_num]["description_text"]
-     description_language = studyhub_resource.new_record?? nil : descriptions[row_num]["description_language"] %>
-<%  %>
+
+  unless studyhub_resource.resource_json.nil?
+    descriptions = studyhub_resource.resource_json['resource_descriptions']
+    description_text = descriptions[row_num]["description_text"] unless descriptions.empty?
+    description_language = descriptions[row_num]["description_language"] unless descriptions.empty?
+  end
+%>
 
 <% field_name_prefix = "resource_descriptions[description][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>

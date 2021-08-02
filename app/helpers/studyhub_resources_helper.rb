@@ -56,8 +56,8 @@ module StudyhubResourcesHelper
       html += '<table class="table table-striped table-hover steps">
       <thead>
       <tr>
-        <th class="col-md-1">title_language</th>
-        <th>title</th>
+        <th class="col-md-1">Title Language</th>
+        <th>Title</th>
       </tr>
       </thead>
       <tbody>'
@@ -80,8 +80,8 @@ module StudyhubResourcesHelper
       <thead>
       <tr>
         <th class="col-md-1">ID</th>
-        <th class="col-md-2">ID date</th>
-        <th class="col-md-3">ID type´</th>
+        <th class="col-md-2">ID Date</th>
+        <th class="col-md-3">ID Type</th>
         <th>Relation type</th>
       </tr>
       </thead>
@@ -141,7 +141,7 @@ module StudyhubResourcesHelper
     clz = "custom_metadata_attribute_#{base_type.downcase}"
     element_name = "studyhub_resource[custom_metadata_attributes][data][#{attribute.title}]"
 
-    value = resource[attribute.title]
+    value = resource[attribute.title] unless resource.nil?
 
     placeholder = "e.g. #{attribute.sample_attribute_type.placeholder}" unless attribute.sample_attribute_type.placeholder.blank?
 

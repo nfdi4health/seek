@@ -10,5 +10,8 @@ class StudyhubResourceType < ApplicationRecord
     self.key == 'substudy'
   end
 
+  def is_studytype?
+    self.key == 'study' || self.key == 'substudy'
+  end
 
 end

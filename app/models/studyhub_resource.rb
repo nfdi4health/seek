@@ -15,33 +15,42 @@ class StudyhubResource < ApplicationRecord
                                    dependent: :destroy
 
   has_many :parents, through: :parents_relationships
-  # has_and_belongs_to_many :documents, -> { distinct }
-
-
+  has_and_belongs_to_many :documents, -> { distinct }
 
   has_extended_custom_metadata
   acts_as_asset
 
-  #validate :studyhub_resource_type_id_not_changed, on: :update
+  validate :studyhub_resource_type_id_not_changed, on: :update
+  validate :check_title_presence, on:  [:create, :update]
+  validate :check_description_presence, on:  [:create, :update]
+
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
 
 
   def title
-    if resource_json.nil?
-      ''
+    if resource_json.nil? || resource_json['resource_titles'].blank?
+      'Studyhub Resources'
     else
       "#{resource_json['resource_titles'].first['title']}"
     end
   end
 
   def description
-    if resource_json.nil?
-      ''
+    if resource_json.nil? || resource_json['resource_descriptions'].blank?
+      'Studyhub Resources'
     else
       "#{resource_json['resource_descriptions'].first['description_text']}"
     end
+  end
+
+  def check_title_presence
+    errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if resource_json['resource_titles'].empty?
+  end
+
+  def check_description_presence
+    errors.add(:base, "Please add at least one description for the #{studyhub_resource_type_title}.") if resource_json['resource_descriptions'].empty?
   end
 
   #@todo: check this validation, it is not working now
@@ -50,6 +59,11 @@ class StudyhubResource < ApplicationRecord
       errors.add(:base, "Change of studyhub resource type is not allowed!")
     end
   end
+
+  def studyhub_resource_type_title
+    StudyhubResourceType.find(studyhub_resource_type_id).title
+  end
+
 
   def add_child(child)
     children_relationships.create(child_id: child.id)
