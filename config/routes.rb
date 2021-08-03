@@ -433,6 +433,7 @@ SEEK::Application.routes.draw do
   resources :studyhub_resources, concerns: [:asset] do
     member do
       get :associate_documents
+      get :nonstudy_metadate_saved
       patch :associate_existing_documents
       post :associate_new_document
       patch :manage_update

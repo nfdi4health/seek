@@ -1,4 +1,7 @@
 <div id="studyhub_resource_attributes_container">
+  <div id ="step_one">
+    <h3>Step 1: Fill out metadata</h3>
+  </div>
   <%= render partial: 'studyhub_basic', locals: { :f => f, :folded => folded } %>
   <%= render partial: 'studyhub_resource_input', locals: { :f => f, :folded => folded } %>
   <% if @studyhub_resource.new_record? %>

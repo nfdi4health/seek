@@ -16,15 +16,6 @@
     <%= studyhub_resource_ids @studyhub_resource.resource_json['ids'] -%>
     <%= studyhub_resource_roles @studyhub_resource.resource_json['roles'] -%>
 
-
-    <div class="row">
-      <div class="col-md-6">
-
-      </div>
-    </div>
-
-
-
     <%= panel("General Resource Information:") do %>
       <%= render partial: 'studyhub_resources/studyhub_resource_value', locals: { resource: @studyhub_resource.resource_json['resource'] } %>
     <% end %>
@@ -34,9 +25,6 @@
       <%= render partial: 'studyhub_resources/studyhub_study_design_value', locals: { resource: @studyhub_resource.resource_json['study_design'] } %>
     <% end %>
     <% end %>
-
-
-
   </div>
 
   <div class="col-md-3 col-sm-4">

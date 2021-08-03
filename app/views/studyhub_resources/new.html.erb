@@ -47,8 +47,8 @@
         if (<%=  @studyhub_resource.is_studytype? %>){
             $j('#studyhub_resource_container').show();
             $j('#studyhub_resource_study_design').show();
+            $j('#step_one').hide();
         } else {
-
             $j('#studyhub_resource_container').show();
             $j('#studyhub_resource_study_design').hide();
         }
@@ -59,10 +59,12 @@
             if (resource_type == 'study' || resource_type == 'substudy') {
                 $j('#studyhub_resource_container').show();
                 $j('#studyhub_resource_study_design').show();
+                $j('#step_one').hide();
             } else {
 
                 $j('#studyhub_resource_container').show();
                 $j('#studyhub_resource_study_design').hide();
+                $j('#step_one').show();
             }
         });
     });

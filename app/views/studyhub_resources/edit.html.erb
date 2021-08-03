@@ -22,7 +22,20 @@
       <%= submit_tag('Submit', class: 'btn btn-primary', id: 'submit-button', disabled: false ) %>
       </div>
       </div>
-
     <% end %>
+
+
+    <script type="text/javascript">
+        $j(document).ready(function () {
+            <% unless @studyhub_resource.resource_json.nil? %>
+            if (<%=  @studyhub_resource.is_studytype? %>){
+                $j('#step_one').hide();
+            }
+            <% end %>
+        });
+    </script>
+
+
+
 
 

@@ -72,34 +72,27 @@ class StudyhubResourcesController < ApplicationController
   def create
 
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
-
     update_sharing_policies @studyhub_resource
 
-    if @studyhub_resource.save
-      flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully created.<br/>".html_safe
-      if @studyhub_resource.is_studytype?
-        respond_to do |format|
-          format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
-          format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
+
+
+    respond_to do |format|
+      if @studyhub_resource.save
+        flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully created.<br/>".html_safe
+
+        if @studyhub_resource.is_studytype?
+            format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
+        else
+            format.html { redirect_to nonstudy_metadate_saved_studyhub_resource_path(@studyhub_resource)}
         end
+        format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
       else
-        respond_to do |format|
-          flash[:notice] += "You can now associsate documents with this " + @studyhub_resource.studyhub_resource_type.title + ".".html_safe
-          format.html { redirect_to associate_documents_studyhub_resource_path(@studyhub_resource)}
-          format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
-        end
-      end
-    else
-      pp @studyhub_resource.errors.messages
-      flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
-      respond_to do |format|
-        format.html { render action: 'new' }
-        format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
+        pp @studyhub_resource.errors.messages
+        flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
+          format.html { render action: 'new' }
+          format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
       end
     end
-
-
-
 
     #todo(hu) only save @studyhub_resource when item(study/assay) is created successfully
     #if item.valid?
@@ -129,13 +122,19 @@ class StudyhubResourcesController < ApplicationController
     #todo(hu) next time when add relationship
     #update_parent_child_relationships(relationship_params)
 
-
-
-
   end
 
 
   def edit
+    @studyhub_resource = StudyhubResource.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.xml
+    end
+  end
+
+
+  def nonstudy_metadate_saved
     @studyhub_resource = StudyhubResource.find(params[:id])
     respond_to do |format|
       format.html
@@ -173,9 +172,14 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
 
       if @studyhub_resource.save
-        flash[:notice] = "#{t('studyhub_resource')} metadata was successfully updated."
-        format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
+        flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully updated.<br/>".html_safe
+        if @studyhub_resource.is_studytype?
+          format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
+        else
+          format.html { render action: 'nonstudy_metadate_saved' }
+        end
         format.json { render json: @studyhub_resource, status: 200 }
+
       else
         pp @studyhub_resource.errors.messages
         flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
