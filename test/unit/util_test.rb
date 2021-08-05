@@ -1,3 +1,4 @@
+
 require 'test_helper'
 
 class UtilTest < ActiveSupport::TestCase
@@ -18,7 +19,7 @@ class UtilTest < ActiveSupport::TestCase
   end
 
   test 'authorized types' do
-    expected = [Assay, Collection, DataFile, Document, Event, Investigation, Model, Node, Presentation, Publication, Sample, Sop, Strain, Study, Workflow].map(&:name).sort
+    expected = [Assay, Collection, DataFile, Document, Event, Investigation, Model, Node, Presentation, Publication, Sample, Sop, Strain, Study, Workflow, StudyhubResource].map(&:name).sort
     actual = Seek::Util.authorized_types.map(&:name).sort
     assert_equal expected, actual
   end
