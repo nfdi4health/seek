@@ -1,17 +1,22 @@
 <%= folding_panel("Basic Information:", folded ) do %>
 
   <div class="help-block">
+  <div class="alert alert-info">
 
-    <div>Please provide some basic details about the <%= t('studyhub_resources.studyhub_resource') %> that will be created.
-      You need to create at least one title and one description for the resource.
-      <b>The first one you add will be by default
-        the main title and description</b>.
-      You will be able to update and add additional
-      information once it has been created.</div>
-    <br>
-    <div class="alert-danger">
-      Before you can save the studyhub resource, you need to provide at least one title and one description.
+    <div>Please provide some basic details about the <%= t('studyhub_resources.studyhub_resource').downcase %> that will be created.
+      You need to enter at least one title before you can <b>save</b> it.
+      <b>The first title and description will be by default the main title and description</b> of the resource.
+      You will be able to edit the resource once it has been created.
     </div>
+  </div>
+
+  <div class="alert alert-danger">
+
+    <div>
+      The fields marked with<label class="save-required"></label> are required before you can save the resource. <br>
+      The fields marked with<label class="submit-required"></label> are required before you can submit the resource.
+    </div>
+  </div>
   </div>
 
   <div id="resource_basic_information">

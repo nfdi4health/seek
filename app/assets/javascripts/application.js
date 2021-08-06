@@ -61,3 +61,4 @@
 //= require simplemde.min
 //= require admin
 //= require studyhub_resources
+//= require studyhub_resources_tooltips
