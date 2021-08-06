@@ -22,7 +22,7 @@ class StudyhubResource < ApplicationRecord
 
   validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
-  validate :check_description_presence, on:  [:create, :update]
+  # validate :check_description_presence, on:  [:create, :update]
 
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
