@@ -10,22 +10,12 @@
     </div>
   </div>
 
-  <div class="alert alert-danger">
-
-    <div>
-      The fields marked with<label class="save-required"></label> are required before you can save the resource. <br>
-      The fields marked with<label class="submit-required"></label> are required before you can submit the resource.
-    </div>
-  </div>
   </div>
 
   <div id="resource_basic_information">
-
     <%= render :partial => 'resource_titles', :locals=> { :f => f} %>
     <%= render :partial => 'resource_descriptions', :locals=> { :f => f} %>
-    <%= render :partial => 'resource_ids', :locals=> { :f => f} %>
-    <%= render :partial => 'resource_roles', :locals=> { :f => f} %>
-
+    <%= render :partial => 'studyhub_resource_input', locals: { :f => f } %>
   </div>
 
 <% end %>

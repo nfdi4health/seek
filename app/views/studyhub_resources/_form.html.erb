@@ -1,9 +1,17 @@
+<div class="alert alert-danger">
+  <div>
+    The fields marked with<label class="save-required"></label> are required before you can save the resource. <br>
+    The fields marked with<label class="submit-required"></label> are required before you can submit the resource.
+  </div>
+</div>
+
 <div id="studyhub_resource_attributes_container">
   <div id ="step_one">
     <h3>Step 1: Fill out metadata</h3>
   </div>
   <%= render partial: 'studyhub_basic', locals: { :f => f, :folded => folded } %>
-  <%= render partial: 'studyhub_resource_input', locals: { :f => f, :folded => folded } %>
+  <%= render :partial => 'resource_ids', :locals=> { :f => f} %>
+  <%= render :partial => 'resource_roles', :locals=> { :f => f} %>
   <% if @studyhub_resource.new_record? %>
      <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :folded => folded } %>
   <% elsif @studyhub_resource.is_studytype?%>
