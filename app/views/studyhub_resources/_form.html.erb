@@ -10,8 +10,8 @@
     <h3>Step 1: Fill out metadata</h3>
   </div>
   <%= render partial: 'studyhub_basic', locals: { :f => f, :folded => folded } %>
-  <%= render :partial => 'resource_ids', :locals=> { :f => f} %>
-  <%= render :partial => 'resource_roles', :locals=> { :f => f} %>
+  <%= render :partial => 'resource_ids', :locals=> { :f => f,:folded => folded} %>
+  <%= render :partial => 'resource_roles', :locals=> { :f => f,:folded => folded} %>
   <% if @studyhub_resource.new_record? %>
      <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :folded => folded } %>
   <% elsif @studyhub_resource.is_studytype?%>

@@ -1,5 +1,14 @@
-<div id="id_ids">
+<%= folding_panel("Associated Resources:", folded ) do %>
 
+  <div class="help-block">
+    <div class="alert alert-info">
+      <div>
+        Some help texts from Aliakesandra.
+      </div>
+    </div>
+  </div>
+
+  <div id="id_ids">
     <table class="table" id="id-id-table">
       <thead>
       <tr>
@@ -17,28 +26,25 @@
       <% else %>
         <% @studyhub_resource.resource_json['ids'].each_with_index do |id, index| %>
           <%= render :partial => 'id_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
-      <% end %>
+        <% end %>
       <% end %>
 
-        <tr id="id-row">
-          <td colspan="6">
-            <%= button_link_to('Add more IDs', 'add', '#', :id => 'add-id-row') %>
-          </td>
-        </tr>
+      <tr id="id-row">
+        <td colspan="6">
+          <%= button_link_to('Add more IDs', 'add', '#', :id => 'add-id-row') %>
+        </td>
+      </tr>
       </tbody>
     </table>
-
-
 
     <table id="new-id-row" style="display: none">
       <tbody>
       <%= render :partial => 'id_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f} %>
       </tbody>
     </table>
-
   </div>
 
-
+<% end %>
 
 <script>
     //used to hold the element Id that needs updating after creating a new CV
