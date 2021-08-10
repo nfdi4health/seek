@@ -201,4 +201,28 @@ module StudyhubResourcesHelper
     { 'Study Type' => study,'Non Study Type' => non_study }
   end
 
+  def controlled_vocab_form_field(attribute, element_name, value)
+    if attribute.sample_controlled_vocab.sample_controlled_vocab_terms.count < Seek::Config.cv_dropdown_limit
+
+      options = options_from_collection_for_select(
+        attribute.sample_controlled_vocab.sample_controlled_vocab_terms,
+        :label, :label,
+        value
+      )
+      select_tag element_name,
+                 options,
+                 include_blank: !attribute.required?,
+                 class: "form-control",
+                 include_blank: "Please select..."
+    else
+      scv_id = attribute.sample_controlled_vocab.id
+      existing_objects = []
+      existing_objects << Struct.new(:id, :name).new(value, value) if value
+      objects_input(element_name, existing_objects,
+                    typeahead: { query_url: typeahead_sample_controlled_vocabs_path + "?query=%QUERY&scv_id=#{scv_id}",
+                                 handlebars_template: 'typeahead/controlled_vocab_term' },
+                    limit: 1)
+    end
+  end
+
 end
