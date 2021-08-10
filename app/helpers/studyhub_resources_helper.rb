@@ -6,7 +6,7 @@ module StudyhubResourcesHelper
 
     #todo change hardcoded url
     #url = URI.join("http://covid19.studyhub.nfdi4health.de/resource/", resource.id.to_s).to_s
-    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s+".json"
+    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + ".json"
     content_tag :p, class: :id do
       content_tag(:strong) do
         t(label) + ':'
@@ -17,7 +17,7 @@ module StudyhubResourcesHelper
   def studyhub_resource_in_seek_id_json(resource)
 
     label = "studyhub_resources.id"
-    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s+".json"
+    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + ".json"
     content_tag :p, class: :id do
       content_tag(:strong) do
          t(label) + ':'
@@ -40,10 +40,27 @@ module StudyhubResourcesHelper
       <tbody>'
       descriptions.each do |d|
         html += '<tr>'
-        html+='<td class="description_language">'+d["description_language"]+'</td>'
-        html+='<td class="description_text">'+d["description_text"]+'</td>'
+        html += '<td class="description_language">' + d["description_language"] + '</td>'
+        html += '<td class="description_text">' + d["description_text"] + '</td>'
       end
       html += '</tbody></table></div>'
+    end
+    html.html_safe
+  end
+
+  def studyhub_resource_associated_resource(types)
+    html = ''
+    types.each do |type|
+      resource = StudyhubResource.find(type["id_id"])
+      html += "<div class='nfdi_id_type'>"
+      html += resource.studyhub_resource_type.title
+      html += " "
+      html += list_item_title(resource, {:include_avatar => false})
+      html += " "
+      html += type["id_relation_type"]
+      html += " "
+      html += (link_to "this resource", show_resource_path(@studyhub_resource) ).to_s
+      html += "</div>"
     end
     html.html_safe
   end
@@ -63,8 +80,8 @@ module StudyhubResourcesHelper
       <tbody>'
       titles.each do |d|
         html += '<tr>'
-        html+='<td class="resource_language">'+d["resource_language"]+'</td>'
-        html+='<td class="title">'+d["title"]+'</td>'
+        html += '<td class="resource_language">' + d["resource_language"] + '</td>'
+        html += '<td class="title">' + d["title"] + '</td>'
       end
       html += '</tbody></table></div>'
     end
@@ -88,10 +105,10 @@ module StudyhubResourcesHelper
       <tbody>'
       ids.each do |d|
         html += '<tr>'
-        html+='<td class="id_id">'+d["id_id"]+'</td>'
-        html+='<td class="id_date">'+d["id_date"]+'</td>'
-        html+='<td class="id_type">'+d["id_type"]+'</td>'
-        html+='<td class="id_relation_type">'+d["id_relation_type"]+'</td>'
+        html += '<td class="id_id">' + d["id_id"] + '</td>'
+        html += '<td class="id_date">' + d["id_date"] + '</td>'
+        html += '<td class="id_type">' + d["id_type"] + '</td>'
+        html += '<td class="id_relation_type">' + d["id_relation_type"] + '</td>'
       end
       html += '</tbody></table></div>'
     end
@@ -117,18 +134,18 @@ module StudyhubResourcesHelper
       <tbody>'
       roles.each do |d|
         html += '<tr>'
-        html+='<td class="role_name">'+d["role_name"]+'</td>'
-        html+='<td class="role_type">'+d["role_type"]
-        html+='</td>'
-        html+='<td class="role_email">'+d["role_email"]+'</td>'
-        html+='<td class="role_phone">'+d["role_phone"]+'</td>'
+        html += '<td class="role_name">' + d["role_name"] + '</td>'
+        html += '<td class="role_type">' + d["role_type"]
+        html += '</td>'
+        html += '<td class="role_email">' + d["role_email"] + '</td>'
+        html += '<td class="role_phone">' + d["role_phone"] + '</td>'
 
-        html+='<td class="role_affiliation">'+d["role_affiliation_name"]
-        html+=','+d["role_affiliation_city"] unless d["role_affiliation_city"].blank?
-        html+=','+d["role_affiliation_zip"] unless d["role_affiliation_zip"].blank?
-        html+=','+d["role_affiliation_country"] unless d["role_affiliation_country"].blank?
-        html+='<br>'+d["role_affiliation_url"] unless d["role_affiliation_url"].blank?
-        html+='</td>'
+        html += '<td class="role_affiliation">' + d["role_affiliation_name"]
+        html += ',' + d["role_affiliation_city"] unless d["role_affiliation_city"].blank?
+        html += ',' + d["role_affiliation_zip"] unless d["role_affiliation_zip"].blank?
+        html += ',' + d["role_affiliation_country"] unless d["role_affiliation_country"].blank?
+        html += '<br>' + d["role_affiliation_url"] unless d["role_affiliation_url"].blank?
+        html += '</td>'
       end
       html += '</tbody></table></div>'
     end

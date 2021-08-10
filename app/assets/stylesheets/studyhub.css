@@ -112,3 +112,6 @@ a {
     background-color: #266698
 }
 
+.nfdi_id_type:before {
+    content:"• ";
+}

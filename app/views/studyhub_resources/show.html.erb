@@ -1,10 +1,12 @@
+<% nfdi_types =  @studyhub_resource.resource_json["ids"].select{|x| x["id_type"] == "NFDI4Health"} %>
+<% other_types =  @studyhub_resource.resource_json["ids"].reject{|x| x["id_type"] == "NFDI4Health"} %>
+
 <%= render :partial => "general/item_title",:locals => {:item=>@studyhub_resource, :buttons_partial => 'studyhub_resources/buttons'} %>
 
 <div class="row">
   <div class="col-md-9 col-sm-8 box_about_actor">
     <%= persistent_resource_id(@studyhub_resource) %>
     <%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @studyhub_resource}%>
-
 
     <p>
       <label>Resource Type:</label>
@@ -13,7 +15,21 @@
 
     <%= studyhub_resource_titles @studyhub_resource.resource_json['resource_titles'] -%>
     <%= studyhub_resource_descriptions @studyhub_resource.resource_json['resource_descriptions'] -%>
-    <%= studyhub_resource_ids @studyhub_resource.resource_json['ids'] -%>
+
+    <% unless nfdi_types.empty? %>
+    <p>
+      <label>Associated studyhub <%="resource".pluralize(nfdi_types.size) %>:</label>
+        <%= studyhub_resource_associated_resource nfdi_types -%>
+    </p>
+    <% end %>
+
+    <% unless other_types.empty? %>
+      <p>
+        <label>Associated other <%="resource".pluralize(other_types.size) %>:</label>
+        <%= studyhub_resource_ids other_types -%>
+      </p>
+    <% end %>
+
     <%= studyhub_resource_roles @studyhub_resource.resource_json['roles'] -%>
 
     <%= panel("General Resource Information:") do %>
