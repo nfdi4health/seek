@@ -211,7 +211,6 @@ module StudyhubResourcesHelper
       )
       select_tag element_name,
                  options,
-                 include_blank: !attribute.required?,
                  class: "form-control",
                  include_blank: "Please select..."
     else
