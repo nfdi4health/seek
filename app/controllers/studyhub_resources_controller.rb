@@ -282,7 +282,7 @@ class StudyhubResourcesController < ApplicationController
     sr = params[:studyhub_resource]
     # parse titles
     #
-
+    sr[:title] = sr[:resource_title].values[0]
     sr[:resource_json][:resource_titles] = parse_resource_titles(sr)
 
     # parse descriptions
@@ -305,7 +305,7 @@ class StudyhubResourcesController < ApplicationController
       params[:studyhub_resource][:resource_json] = params[:studyhub_resource][:resource_json].except(:study_design)
     end
 
-    params.require(:studyhub_resource).permit(:studyhub_resource_type_id, :comment, { resource_json: {} }, \
+    params.require(:studyhub_resource).permit(:title,:studyhub_resource_type_id, :comment, { resource_json: {} }, \
                                             :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, { document_ids: [] },\
                                             :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
                                             :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \

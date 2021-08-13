@@ -28,14 +28,13 @@ class StudyhubResource < ApplicationRecord
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
 
-
-  def title
-    if resource_json.nil? || resource_json['resource_titles'].blank?
-      'Studyhub Resources'
-    else
-      "#{resource_json['resource_titles'].first['title']}"
-    end
-  end
+  # def title
+  #   if resource_json.nil? || resource_json['resource_titles'].blank?
+  #     'Studyhub Resources'
+  #   else
+  #     "#{resource_json['resource_titles'].first['title']}"
+  #   end
+  # end
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
@@ -46,7 +45,7 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_title_presence
-    errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if resource_json['resource_titles'].empty?
+    errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if title.empty?
   end
 
   def check_description_presence
