@@ -101,64 +101,69 @@ min_studyhub_study_json_text = '{
 }'
 
 
-
 min_studyhub_study_json = JSON.parse(min_studyhub_study_json_text)
 max_studyhub_study_json = JSON.parse(max_studyhub_study_json_text)
 
-## Studyhub Resource Type
 
+
+## Studyhub Resource Type
 Factory.define(:studyhub_resource_type_study, class: StudyhubResourceType ) do |f|
-  f.title 'Studyhub Study'
+  f.title 'Study'
   f.key 'study'
 end
 
-Factory.define(:studyhub_resource_type_document, class: StudyhubResourceType ) do |f|
-  f.title 'Studyhub Document'
-  f.key 'document'
+Factory.define(:studyhub_resource_type_dataset, class: StudyhubResourceType ) do |f|
+  f.title 'Dataset'
+  f.key 'dataset'
 end
 
 
 ## StudyhubResource
 
-Factory.define(:studyhub_study, class: StudyhubResource) do |f|
-  f.sequence(:id) { |n| n }
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
+Factory.define(:studyhub_resource, class: StudyhubResource ) do |f|
+  f.title 'Studyhub Resource'
+  f.studyhub_resource_type factory: :studyhub_resource_type_study
 end
 
-
-Factory.define(:min_studyhub_study, class: StudyhubResource) do |f|
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
-  f.resource_json min_studyhub_study_json
-  f.nfdi_person_in_charge nil
-  f.contact_stage '3'
-  f.data_source nil
-  f.comment nil
-  f.exclusion_mica_reason nil
-  f.exclusion_seek_reason nil
-  f.exclusion_studyhub_reason nil
-  f.inclusion_studyhub 1
-  f.inclusion_seek 1
-  f.inclusion_mica 1
-end
-
-Factory.define(:max_studyhub_study, class: StudyhubResource) do |f|
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
-  f.resource_json max_studyhub_study_json
-  f.nfdi_person_in_charge nil
-  f.contact_stage '9'
-  f.data_source 'RatSWD'
-  f.comment nil
-  f.exclusion_mica_reason 'Not applicable'
-  f.exclusion_seek_reason nil
-  f.exclusion_studyhub_reason nil
-  f.inclusion_studyhub 1
-  f.inclusion_seek 1
-  f.inclusion_mica 1
-end
-
-
-Factory.define(:studyhub_assay, class: StudyhubResource) do |f|
-  f.sequence(:id) { |n| n }
-  f.studyhub_resource_type { StudyhubResourceType.find_by_key('document') || Factory(:studyhub_resource_type_document) }
-
-end
+# Factory.define(:studyhub_study, class: StudyhubResource) do |f|
+#   f.sequence(:id) { |n| n }
+#   f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
+# end
+#
+#
+# Factory.define(:min_studyhub_study, class: StudyhubResource) do |f|
+#   f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
+#   f.resource_json min_studyhub_study_json
+#   f.nfdi_person_in_charge nil
+#   f.contact_stage '3'
+#   f.data_source nil
+#   f.comment nil
+#   f.exclusion_mica_reason nil
+#   f.exclusion_seek_reason nil
+#   f.exclusion_studyhub_reason nil
+#   f.inclusion_studyhub 1
+#   f.inclusion_seek 1
+#   f.inclusion_mica 1
+# end
+#
+# Factory.define(:max_studyhub_study, class: StudyhubResource) do |f|
+#   f.studyhub_resource_type { StudyhubResourceType.find_by_key('study') || Factory(:studyhub_resource_type_study) }
+#   f.resource_json max_studyhub_study_json
+#   f.nfdi_person_in_charge nil
+#   f.contact_stage '9'
+#   f.data_source 'RatSWD'
+#   f.comment nil
+#   f.exclusion_mica_reason 'Not applicable'
+#   f.exclusion_seek_reason nil
+#   f.exclusion_studyhub_reason nil
+#   f.inclusion_studyhub 1
+#   f.inclusion_seek 1
+#   f.inclusion_mica 1
+# end
+#
+#
+# Factory.define(:studyhub_assay, class: StudyhubResource) do |f|
+#   f.sequence(:id) { |n| n }
+#   f.studyhub_resource_type { StudyhubResourceType.find_by_key('document') || Factory(:studyhub_resource_type_document) }
+#
+# end
