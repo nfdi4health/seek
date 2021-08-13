@@ -333,7 +333,7 @@ class StudyhubResourcesController < ApplicationController
           resource[key] = params[:custom_metadata_attributes][:data][key]
         elsif cm_study_design_attributes.include? key
           study_design[key] = if multselect_attributes.include? key
-            params[:custom_metadata_attributes][:data][key].drop(1)
+            params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
           else
             params[:custom_metadata_attributes][:data][key]
                               end
