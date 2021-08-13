@@ -1,13 +1,19 @@
 <% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
 
-<% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles] %>
+  <% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles] %>
 
-  <% if multselect_attributes.include? attribute.title  %>
-    <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
-  <% else %>
   <div class="form-group">
-    <label><%= attribute.title.humanize %></label><%= required_span if attribute.required? %>
-    <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
+    <% if multselect_attributes.include? attribute.title  %>
+      <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
+    <% else %>
+
+      <label><%= attribute.title.humanize %></label><%= required_span if attribute.required? %>
+      <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
+
+    <% end %>
+    <% unless attribute.description.nil? %>
+      <%= custom_metadata_attribute_description(attribute.description) %>
+    <% end %>
   </div>
-  <% end %>
+
 <% end %>
