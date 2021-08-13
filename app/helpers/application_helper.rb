@@ -432,6 +432,11 @@ module ApplicationHelper
     instance_variable_get("@#{c.singularize}")
   end
 
+  # returns the current version of the resource for the controller, e.g @display_data_file for data_files
+  def versioned_resource_for_controller(c = controller_name)
+    instance_variable_get("@display_#{c.singularize}")
+  end
+
   def cancel_button(path, html_options = {})
     html_options[:class] ||= ''
     html_options[:class] << ' btn btn-default'
@@ -493,6 +498,19 @@ module ApplicationHelper
     return false if ['request_join','request_create'].include?(action_name)
 
     return Seek::Config.programmes_enabled && Programme.site_managed_programme
+  end
+
+  def render_menu_group(title, options)
+    return unless options.any? { |opt_title, url, enabled| enabled }
+    html = content_tag(:li, title, role: 'presentation', class: 'dropdown-header')
+    options.each do |opt_title, url, enabled|
+      next unless enabled
+      html += content_tag(:li) do
+        link_to(opt_title, url)
+      end
+    end
+
+    html
   end
 
   PAGE_TITLES = { 'home' => 'Home', 'projects' => I18n.t('project').pluralize, 'institutions' => I18n.t('institution').pluralize,

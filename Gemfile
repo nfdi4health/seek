@@ -21,8 +21,7 @@ gem 'rmagick', '2.15.2'
 gem 'rest-client', '~>2.0'
 gem 'factory_girl', '2.6.4'
 gem 'bio', '~> 1.5.1'
-gem 'sunspot_rails', '~>2.2.7'
-gem 'sunspot_solr', '~>2.2.0'
+gem 'sunspot_rails'
 gem 'progress_bar'
 gem 'savon', '1.1.0'
 gem 'dynamic_form'
@@ -133,7 +132,7 @@ gem 'request_store'
 
 gem 'bundler', '>= 1.8.4'
 
-gem 'ro-crate-ruby', git: 'https://github.com/ResearchObject/ro-crate-ruby.git', ref: '70804d34264481e70d0fe83ecc6ad76eda164e74'
+gem 'ro-crate', '~> 0.4.9'
 
 gem 'git'
 gem 'redcarpet'

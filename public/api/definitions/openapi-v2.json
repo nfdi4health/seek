@@ -10151,6 +10151,9 @@
                                 },
                                 "programmes": {
                                     "$ref": "#/definitions/programmeReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -10436,6 +10439,9 @@
                                 },
                                 "events": {
                                     "$ref": "#/definitions/eventReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -10732,17 +10738,13 @@
                                 },
                                 "other_creators": {
                                     "$ref": "#/definitions/nullableOtherCreatorsString"
-                                },
-                                "person_responsible_id": {
-                                    "$ref": "#/definitions/nullableNonEmptyString"
-                                },
+                                },                                
                                 "policy": {
                                     "$ref": "#/definitions/policy"
                                 }
                             },
                             "required": [
-                                "title",
-                                "person_responsible_id"
+                                "title"                                
                             ],
                             "additionalProperties": false
                         },
@@ -10848,10 +10850,7 @@
                                 },
                                 "other_creators": {
                                     "$ref": "#/definitions/nullableOtherCreatorsString"
-                                },
-                                "person_responsible_id": {
-                                    "$ref": "#/definitions/nullableNonEmptyString"
-                                },
+                                },                                
                                 "policy": {
                                     "$ref": "#/definitions/policy"
                                 }
@@ -10922,10 +10921,7 @@
                                 },
                                 "other_creators": {
                                     "$ref": "#/definitions/nullableOtherCreatorsString"
-                                },
-                                "person_responsible_id": {
-                                    "$ref": "#/definitions/nullableNonEmptyString"
-                                },
+                                },                                
                                 "policy": {
                                     "$ref": "#/definitions/policy"
                                 }
