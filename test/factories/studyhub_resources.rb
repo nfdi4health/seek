@@ -123,6 +123,7 @@ end
 Factory.define(:studyhub_resource, class: StudyhubResource ) do |f|
   f.title 'Studyhub Resource'
   f.studyhub_resource_type factory: :studyhub_resource_type_study
+  f.with_project_contributor
 end
 
 # Factory.define(:studyhub_study, class: StudyhubResource) do |f|
