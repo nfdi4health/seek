@@ -20,7 +20,7 @@ module StudyhubResourcesHelper
     url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + ".json"
     content_tag :p, class: :id do
       content_tag(:strong) do
-         t(label) + ':'
+        t(label) + ':'
       end + ' ' + link_to(url, url)
     end
   end
@@ -89,26 +89,57 @@ module StudyhubResourcesHelper
   end
 
 
-  def studyhub_resource_ids (ids)
+
+  def studyhub_resource_nfdi_ids (ids)
     html = ''
     if ids.any?
       html += '<div class="table-responsive">'
       html += '<table class="table table-striped table-hover steps">
       <thead>
       <tr>
-        <th class="col-md-1">ID</th>
-        <th class="col-md-2">ID Date</th>
-        <th class="col-md-3">ID Type</th>
-        <th>Relation type</th>
+         <th class="col-md-2">Resource type</th>
+          <th class="col-md-2">ID</th>
+           <th>Title</th>
       </tr>
       </thead>
       <tbody>'
       ids.each do |d|
         html += '<tr>'
+        html += '<td class="id_resource_type">' + StudyhubResource.find(d["id_id"]).studyhub_resource_type.title + '</td>'
+        html += '<td class="id_id">' + 'NFDI4Health-'+d["id_id"] + '</td>'
+        # html += '<td class="id_title">' + StudyhubResource.find(d["id_id"]).title + '</td>'
+        html += '<td class="id_title">' + (link_to StudyhubResource.find(d["id_id"]).title, show_resource_path(StudyhubResource.find(d["id_id"])) ).to_s + '</td>'
+        html += '</tr>'
+      end
+      html += '</tbody></table></div>'
+    end
+    html.html_safe
+  end
+
+
+  def studyhub_resource_other_ids (ids)
+    html = ''
+    if ids.any?
+      html += '<div class="table-responsive">'
+      html += '<table class="table table-striped table-hover steps">
+      <thead>
+      <tr>
+<th class="col-md-2">Relation type</th>
+<th>Resource type</th>
+<th class="col-md-2">ID Type</th>
+   <th class="col-md-3">ID</th>
+        <th>ID Date</th>
+      </tr>
+      </thead>
+      <tbody>'
+      ids.each do |d|
+        html += '<tr>'
+        html += '<td class="id_relation_type">' + (d["id_relation_type"].nil? ? "" : d["id_relation_type"].underscore.humanize ) + '</td>'
+        html += '<td class="id_resource_type">' + 'd["id_relation_type"]' + '</td>'
+        html += '<td class="id_type">' + d["id_type"] + '</td>'
         html += '<td class="id_id">' + d["id_id"] + '</td>'
         html += '<td class="id_date">' + d["id_date"] + '</td>'
-        html += '<td class="id_type">' + d["id_type"] + '</td>'
-        html += '<td class="id_relation_type">' + d["id_relation_type"] + '</td>'
+        html += '</tr>'
       end
       html += '</tbody></table></div>'
     end

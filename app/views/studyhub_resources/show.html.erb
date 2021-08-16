@@ -1,4 +1,7 @@
-<% nfdi_types =  @studyhub_resource.resource_json["ids"].select{|x| x["id_type"] == "NFDI4Health"} %>
+<% nfdi_type =  @studyhub_resource.resource_json["ids"].select{|x| x["id_type"] == "NFDI4Health"}%>
+<% nfdi_subresources =  nfdi_type.select{|x| x["id_relation_type"] == "IsPartOf"}%>
+<% nfdi_superresources =  nfdi_type.select{|x| x["id_relation_type"] == "HasPart"}%>
+
 <% other_types =  @studyhub_resource.resource_json["ids"].reject{|x| x["id_type"] == "NFDI4Health"} %>
 
 <%= render :partial => "general/item_title",:locals => {:item=>@studyhub_resource, :buttons_partial => 'studyhub_resources/buttons'} %>
@@ -16,17 +19,24 @@
     <%= studyhub_resource_titles @studyhub_resource.resource_json['resource_titles'] -%>
     <%= studyhub_resource_descriptions @studyhub_resource.resource_json['resource_descriptions'] -%>
 
-    <% unless nfdi_types.empty? %>
+    <% unless nfdi_subresources.empty? %>
     <p>
-      <label>Associated studyhub <%="resource".pluralize(nfdi_types.size) %>:</label>
-        <%= studyhub_resource_associated_resource nfdi_types -%>
+      <label>Related <%="subresource".pluralize(nfdi_subresources.size) %>:</label>
+        <%= studyhub_resource_nfdi_ids nfdi_subresources -%>
     </p>
+    <% end %>
+
+    <% unless nfdi_superresources.empty? %>
+      <p>
+        <label>Related <%="superresource".pluralize(nfdi_superresources.size) %>:</label>
+        <%= studyhub_resource_nfdi_ids nfdi_superresources -%>
+      </p>
     <% end %>
 
     <% unless other_types.empty? %>
       <p>
-        <label>Associated other <%="resource".pluralize(other_types.size) %>:</label>
-        <%= studyhub_resource_ids other_types -%>
+        <label>Other related <%="resource".pluralize(other_types.size) %>:</label>
+        <%= studyhub_resource_other_ids other_types -%>
       </p>
     <% end %>
 
