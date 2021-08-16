@@ -2,7 +2,7 @@ module Seek
   module RelatedItems
     extend ActiveSupport::Concern
 
-    RELATABLE_TYPES = ['Person', 'Programme', 'Project', 'Institution', 'Investigation', 'Study', 'Assay', 'DataFile',
+    RELATABLE_TYPES = ['Person', 'Programme', 'Project', 'Institution', 'Investigation', 'StudyhubResource', 'Study', 'Assay', 'DataFile',
                        'Document', 'Model', 'Sop', 'Publication', 'Presentation', 'Event', 'Organism', 'Strain', 'Sample',
                        'Workflow', 'Node', 'Collection', 'HumanDisease'].freeze
 
