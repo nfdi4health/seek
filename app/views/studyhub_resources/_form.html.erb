@@ -9,12 +9,12 @@
   <div id ="step_one">
     <h3>Step 1: Fill out metadata</h3>
   </div>
-  <%= render partial: 'studyhub_basic', locals: { :f => f, :folded => folded } %>
-  <%= render :partial => 'resource_ids', :locals=> { :f => f,:folded => folded} %>
-  <%= render :partial => 'resource_roles', :locals=> { :f => f,:folded => folded} %>
+  <%= render partial: 'studyhub_basic', locals: { :f => f, :collapsed => collapsed } %>
+  <%= render :partial => 'resource_ids', :locals=> { :f => f,:collapsed => collapsed} %>
+  <%= render :partial => 'resource_roles', :locals=> { :f => f,:collapsed => collapsed} %>
   <% if @studyhub_resource.new_record? %>
-     <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :folded => folded } %>
+     <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :collapsed => collapsed } %>
   <% elsif @studyhub_resource.is_studytype?%>
-    <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :folded => folded }  %>
+    <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :collapsed => collapsed }  %>
   <% end -%>
 </div>

@@ -2,7 +2,7 @@
   panel_title = "Please select a #{ t('studyhub_resources.studyhub_resource')} Type:"
   @studyhub_resource_type = nil
   selected_type = @studyhub_resource.studyhub_resource_type.nil? ? nil : @studyhub_resource.studyhub_resource_type.key
-  folded = @studyhub_resource.resource_json.nil?
+  collapsed = @studyhub_resource.resource_json.nil?
 %>
 
 <div class="row">
@@ -23,7 +23,7 @@
       <div id="studyhub_resource_container" style="display: none">
 
 
-        <%= render :partial=> "form", :locals => {:f => f, :folded => folded } %>
+        <%= render :partial=> "form", :locals => {:f => f, :collapsed => collapsed } %>
 
         <% if @studyhub_resource.can_manage? %>
           <% # for now set up a default project for nfdi, and can be configure with Seek::Config.nfdi_default_project_id in rails c %>

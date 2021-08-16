@@ -299,136 +299,13 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
   )
 
   # NFDI4Health Studyhub Resource StudyDesign
-  CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource StudyDesign', supported_type: 'StudyhubResource').first_or_create!(
-    title: 'NFDI4Health Studyhub Resource StudyDesign', supported_type: 'StudyhubResource',
+  CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource StudyDesign General', supported_type: 'StudyhubResource').first_or_create!(
+    title: 'NFDI4Health Studyhub Resource StudyDesign General', supported_type: 'StudyhubResource',
     custom_metadata_attributes: [
 
       CustomMetadataAttribute.where(title: 'study_primary_design').create!(
         title: 'study_primary_design', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_design_cv
       ),
-
-
-      #************************ non interventional study design  *******************
-
-      CustomMetadataAttribute.where(title: 'study_type_non_interventional').create!(
-        title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv
-      ),
-
-
-      CustomMetadataAttribute.where(title: 'study_time_perspective').create!(
-        title: 'study_time_perspective', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_time_perspective_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_target_follow-up_duration').create!(
-        title: 'study_target_follow-up_duration', required: false, sample_attribute_type: float_type
-      ),
-
-
-      #************************ interventional study design ***********************
-
-      CustomMetadataAttribute.where(title: 'study_type_interventional').create!(
-        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv
-      ),
-
-
-      CustomMetadataAttribute.where(title: 'study_phase').create!(
-        title: 'study_phase', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_phase_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_masking').create!(
-        title: 'study_masking', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_masking_roles').create!(
-        title: 'study_masking_roles', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_roles_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_masking_description').create!(
-        title: 'study_masking_description', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_allocation').create!(
-        title: 'study_allocation', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_allocation_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_control').create!(
-        title: 'study_control', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_control_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_off_label_use').create!(
-        title: 'study_off_label_use', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_off_label_use_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_arm_group_label').create!(
-        title: 'study_arm_group_label', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_arm_group_type').create!(
-        title: 'study_arm_group_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_arm_group_type_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_arm_group_description').create!(
-        title: 'study_arm_group_description', required: false, sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_primary_outcome_title').create!(
-        title: 'study_primary_outcome_title', required: true , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_primary_outcome_description').create!(
-        title: 'study_primary_outcome_description', required: false , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_primary_outcome_time_frame').create!(
-        title: 'study_primary_outcome_time_frame', required: false , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_secondary_outcome_title').create!(
-        title: 'study_secondary_outcome_title', required: false , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_secondary_outcome_description').create!(
-        title: 'study_secondary_outcome_description', required: false , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_secondary_outcome_time_frame').create!(
-        title: 'study_secondary_outcome_time_frame', required: false , sample_attribute_type: string_type
-      ),
-
-
-      CustomMetadataAttribute.where(title: 'study_other_prespecified_outcome_measures_title').create!(
-        title: 'study_other_prespecified_outcome_measures_title', required: false , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_other_prespecified_outcome_measures_description').create!(
-        title: 'study_other_prespecified_outcome_measures_description', required: false , sample_attribute_type: string_type
-      ),
-
-
-      CustomMetadataAttribute.where(title: 'study_other_prespecified_outcome_measures_time_frame').create!(
-        title: 'study_other_prespecified_outcome_measures_time_frame', required: false , sample_attribute_type: string_type
-      ),
-
-
-      CustomMetadataAttribute.where(title: 'study_intervention_type').create!(
-        title: 'study_intervention_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_intervention_type_cv
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_intervention_name').create!(
-        title: 'study_intervention_name', required: false , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_intervention_description').create!(
-        title: 'study_intervention_description', required: false , sample_attribute_type: string_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_intervention_arm_group_label').create!(
-        title: 'study_intervention_arm_group_label', required: false , sample_attribute_type: string_type
-      ),
-
-
-      #************************ other study design attributes ***********************
-
 
       CustomMetadataAttribute.where(title: 'study_type_description').create!(
         title: 'study_type_description', required: false, sample_attribute_type: string_type
@@ -560,5 +437,140 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
 
     ]
   )
+
+
+  # NFDI4Health Studyhub Resource StudyDesign Non Interventional Study
+  CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource StudyDesign Non Interventional Study', supported_type: 'StudyhubResource').first_or_create!(
+    title: 'NFDI4Health Studyhub Resource StudyDesign Non Interventional Study', supported_type: 'StudyhubResource',
+    custom_metadata_attributes: [
+
+      #************************ non interventional study design  *******************
+
+      CustomMetadataAttribute.where(title: 'study_type_non_interventional').create!(
+        title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv
+      ),
+
+
+      CustomMetadataAttribute.where(title: 'study_time_perspective').create!(
+        title: 'study_time_perspective', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_time_perspective_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_target_follow-up_duration').create!(
+        title: 'study_target_follow-up_duration', required: false, sample_attribute_type: float_type
+      )
+
+    ]
+  )
+
+
+  # NFDI4Health Studyhub Resource StudyDesign Interventional Study
+  CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource StudyDesign Interventional Study', supported_type: 'StudyhubResource').first_or_create!(
+    title: 'NFDI4Health Studyhub Resource StudyDesign Interventional Study', supported_type: 'StudyhubResource',
+    custom_metadata_attributes: [
+
+      #************************ interventional study design ***********************
+
+      CustomMetadataAttribute.where(title: 'study_type_interventional').create!(
+        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv
+      ),
+
+
+      CustomMetadataAttribute.where(title: 'study_phase').create!(
+        title: 'study_phase', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_phase_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_masking').create!(
+        title: 'study_masking', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_masking_roles').create!(
+        title: 'study_masking_roles', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_roles_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_masking_description').create!(
+        title: 'study_masking_description', required: false, sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_allocation').create!(
+        title: 'study_allocation', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_allocation_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_control').create!(
+        title: 'study_control', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_control_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_off_label_use').create!(
+        title: 'study_off_label_use', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_off_label_use_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_arm_group_label').create!(
+        title: 'study_arm_group_label', required: false, sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_arm_group_type').create!(
+        title: 'study_arm_group_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_arm_group_type_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_arm_group_description').create!(
+        title: 'study_arm_group_description', required: false, sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_primary_outcome_title').create!(
+        title: 'study_primary_outcome_title', required: true , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_primary_outcome_description').create!(
+        title: 'study_primary_outcome_description', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_primary_outcome_time_frame').create!(
+        title: 'study_primary_outcome_time_frame', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_secondary_outcome_title').create!(
+        title: 'study_secondary_outcome_title', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_secondary_outcome_description').create!(
+        title: 'study_secondary_outcome_description', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_secondary_outcome_time_frame').create!(
+        title: 'study_secondary_outcome_time_frame', required: false , sample_attribute_type: string_type
+      ),
+
+
+      CustomMetadataAttribute.where(title: 'study_other_prespecified_outcome_measures_title').create!(
+        title: 'study_other_prespecified_outcome_measures_title', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_other_prespecified_outcome_measures_description').create!(
+        title: 'study_other_prespecified_outcome_measures_description', required: false , sample_attribute_type: string_type
+      ),
+
+
+      CustomMetadataAttribute.where(title: 'study_other_prespecified_outcome_measures_time_frame').create!(
+        title: 'study_other_prespecified_outcome_measures_time_frame', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_intervention_type').create!(
+        title: 'study_intervention_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_intervention_type_cv
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_intervention_name').create!(
+        title: 'study_intervention_name', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_intervention_description').create!(
+        title: 'study_intervention_description', required: false , sample_attribute_type: string_type
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_intervention_arm_group_label').create!(
+        title: 'study_intervention_arm_group_label', required: false , sample_attribute_type: string_type
+      )
+    ]
+  )
+
+
 
 end

@@ -28,14 +28,6 @@ class StudyhubResource < ApplicationRecord
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
 
-  # def title
-  #   if resource_json.nil? || resource_json['resource_titles'].blank?
-  #     'Studyhub Resources'
-  #   else
-  #     "#{resource_json['resource_titles'].first['title']}"
-  #   end
-  # end
-
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
       'Studyhub Resources'

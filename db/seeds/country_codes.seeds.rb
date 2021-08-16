@@ -275,7 +275,7 @@ after :studyhub_resource do
       sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(country_code_array)
     )
 
-    cmt = CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource StudyDesign', supported_type: 'StudyhubResource').first
+    cmt = CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource StudyDesign General', supported_type: 'StudyhubResource').first
     cmt.custom_metadata_attributes.push(CustomMetadataAttribute.where(title: 'study_country').create!(
       title: 'study_country', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_country_cv))
 

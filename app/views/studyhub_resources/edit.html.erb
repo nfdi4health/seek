@@ -1,4 +1,4 @@
-<% folded = @studyhub_resource.resource_json.nil? %>
+<% collapsed = @studyhub_resource.resource_json.nil? %>
 <%# filtered_resource_type = @studyhub_resource.is_studytype? ?
                               StudyhubResourceType.all.select(&:is_studytype?) : StudyhubResourceType.all.reject(&:is_studytype?)  %>
 <%#  title = @studyhub_resource.is_studytype? ? "Study Type" : "Non Study Type"%>
@@ -18,7 +18,7 @@
 <!--      </div>-->
 
       <%= hidden_field_tag 'studyhub_resource[studyhub_resource_type]', @studyhub_resource.studyhub_resource_type.key %>
-      <%= render :partial=> "form", :locals => { :f => f,:folded => folded } %>
+      <%= render :partial=> "form", :locals => { :f => f,:collapsed => collapsed } %>
       <%= submit_tag('Submit', class: 'btn btn-primary', id: 'submit-button', disabled: false ) %>
       </div>
       </div>

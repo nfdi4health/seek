@@ -1,13 +1,29 @@
 <% resource = @studyhub_resource.resource_json.nil? ? @studyhub_resource : @studyhub_resource.resource_json["study_design"] %>
 
 <div id="studyhub_resource_study_design">
-<%= folding_panel("Study Design:", folded) do %>
+  <%= folding_panel("Study Design General:", collapsed, :body_options => {:id => 'study_design_general'},
+                    :help_text => "Here is help text.") do %>
 
-  <%
-    cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign",supported_type:@studyhub_resource.class.name).first
-  %>
+  <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign General",supported_type:@studyhub_resource.class.name).first %>
   <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource } %>
 <% end %>
+
+    <%= folding_panel("Non Interventional Study:", collapsed, :body_options => {:id => 'study_design_non_interventional'},
+                      :help_text => "Here is help text.") do %>
+
+    <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign Non Interventional Study",supported_type:@studyhub_resource.class.name).first %>
+    <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource } %>
+  <% end %>
+
+
+  <%= folding_panel("Interventional Study:", collapsed, :body_options => {:id => 'study_design_interventional'},
+                    :help_text => "Here is help text.") do %>
+
+    <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign Interventional Study",supported_type:@studyhub_resource.class.name).first %>
+    <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource } %>
+  <% end %>
+
+
 </div>
 
 

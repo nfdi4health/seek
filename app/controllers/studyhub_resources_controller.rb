@@ -20,13 +20,11 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def associate_documents
-    pp "*****************associate_documents*******************"
     @studyhub_resource = StudyhubResource.find(params[:id])
     @document = Document.new
   end
 
   def associate_existing_documents
-    pp "*****************associate_existing_documents*******************"
     @studyhub_resource = StudyhubResource.find(params[:id])
     @studyhub_resource.update(studyhub_resource_documents_params)
 
@@ -87,7 +85,6 @@ class StudyhubResourcesController < ApplicationController
         end
         format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
       else
-        pp @studyhub_resource.errors.messages
         flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
           format.html { render action: 'new' }
           format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
@@ -181,7 +178,6 @@ class StudyhubResourcesController < ApplicationController
         format.json { render json: @studyhub_resource, status: 200 }
 
       else
-        pp @studyhub_resource.errors.messages
         flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
         format.html { render action: 'edit' }
         format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
@@ -280,8 +276,8 @@ class StudyhubResourcesController < ApplicationController
 
     params[:studyhub_resource][:resource_json] = {}
     sr = params[:studyhub_resource]
+
     # parse titles
-    #
     sr[:title] = sr[:resource_title].values[0]
     sr[:resource_json][:resource_titles] = parse_resource_titles(sr)
 
@@ -320,7 +316,8 @@ class StudyhubResourcesController < ApplicationController
   def parse_custom_metadata_attributes(params)
 
     cm_resource_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource General")
-    cm_study_design_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign")
+    cm_study_design_attributes = get_study_design_attributes(params)
+
     multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles]
 
     unless params[:custom_metadata_attributes].nil?
@@ -349,6 +346,21 @@ class StudyhubResourcesController < ApplicationController
 
     end
     return resource, study_design
+  end
+
+  def get_study_design_attributes(params)
+
+    cm_study_design_general_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign General")
+    cm_study_design_non_interventional_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign Non Interventional Study")
+    cm_study_design_interventional_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign Interventional Study")
+
+    cm_study_design_attributes = cm_study_design_general_attributes
+    if params[:custom_metadata_attributes][:data]["study_primary_design"] == "interventional"
+      cm_study_design_attributes += cm_study_design_interventional_attributes
+    elsif params[:custom_metadata_attributes][:data]["study_primary_design"] == "non-interventional"
+      cm_study_design_attributes += cm_study_design_non_interventional_attributes
+    end
+    cm_study_design_attributes
   end
 
   def set_study_data_sharing_plan(study_design)
