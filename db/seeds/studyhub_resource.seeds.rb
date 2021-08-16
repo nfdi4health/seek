@@ -18,6 +18,8 @@ string_type.update_attributes(base_type: Seek::Samples::BaseType::STRING)
 cv_type = SampleAttributeType.find_or_initialize_by(title: 'Controlled Vocabulary')
 cv_type.update_attributes(base_type: Seek::Samples::BaseType::CV)
 
+text_type = SampleAttributeType.find_or_initialize_by(title: 'Text')
+text_type.update_attributes(base_type: Seek::Samples::BaseType::TEXT, placeholder: '1')
 
 
 # Studyhub resource type controlled vocabs
@@ -308,7 +310,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_type_description').create!(
-        title: 'study_type_description', required: false, sample_attribute_type: string_type
+        title: 'study_type_description', required: false, sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_primary_purpose').create!(
@@ -359,7 +361,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_min_description').create!(
-        title: 'study_age_min_description', required: false, sample_attribute_type: string_type
+        title: 'study_age_min_description', required: false, sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_max').create!(
@@ -367,7 +369,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_max_description').create!(
-        title: 'study_age_max_description', required: false, sample_attribute_type: string_type
+        title: 'study_age_max_description', required: false, sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_gender').create!(
@@ -383,7 +385,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_population').create!(
-        title: 'study_population', required: true, sample_attribute_type: string_type
+        title: 'study_population', required: true, sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_sampling').create!(
@@ -403,7 +405,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_hypothesis').create!(
-        title: 'study_hypothesis', required: false , sample_attribute_type: string_type
+        title: 'study_hypothesis', required: false , sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_design_comment').create!(
@@ -415,7 +417,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_description').create!(
-        title: 'study_data_sharing_plan_description', required: false, sample_attribute_type: string_type
+        title: 'study_data_sharing_plan_description', required: false, sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_supporting_information').create!(
@@ -488,7 +490,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_masking_description').create!(
-        title: 'study_masking_description', required: false, sample_attribute_type: string_type
+        title: 'study_masking_description', required: false, sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_allocation').create!(
@@ -512,7 +514,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_arm_group_description').create!(
-        title: 'study_arm_group_description', required: false, sample_attribute_type: string_type
+        title: 'study_arm_group_description', required: false, sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_primary_outcome_title').create!(
@@ -520,7 +522,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_primary_outcome_description').create!(
-        title: 'study_primary_outcome_description', required: false , sample_attribute_type: string_type
+        title: 'study_primary_outcome_description', required: false , sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_primary_outcome_time_frame').create!(
@@ -532,7 +534,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_secondary_outcome_description').create!(
-        title: 'study_secondary_outcome_description', required: false , sample_attribute_type: string_type
+        title: 'study_secondary_outcome_description', required: false , sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_secondary_outcome_time_frame').create!(
@@ -545,7 +547,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_other_prespecified_outcome_measures_description').create!(
-        title: 'study_other_prespecified_outcome_measures_description', required: false , sample_attribute_type: string_type
+        title: 'study_other_prespecified_outcome_measures_description', required: false , sample_attribute_type: text_type
       ),
 
 
@@ -562,7 +564,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
       ),
 
       CustomMetadataAttribute.where(title: 'study_intervention_description').create!(
-        title: 'study_intervention_description', required: false , sample_attribute_type: string_type
+        title: 'study_intervention_description', required: false , sample_attribute_type: text_type
       ),
 
       CustomMetadataAttribute.where(title: 'study_intervention_arm_group_label').create!(
