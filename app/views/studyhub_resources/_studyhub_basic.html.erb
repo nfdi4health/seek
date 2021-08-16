@@ -1,14 +1,6 @@
-<%= folding_panel("Basic Information:", collapsed ) do %>
-
-  <div class="help-block">
-  <div class="alert alert-info">
-    <div>Please provide some basic details about the <%= t('studyhub_resources.studyhub_resource').downcase %> that will be created.
-      You need to enter at least one title before you can <b>save</b> it.
-      <b>The first title and description will be by default the main title and description</b> of the resource.
-      You will be able to edit the resource once it has been created.
-    </div>
-  </div>
-  </div>
+<% help_text = "Please provide some basic details about the #{t('studyhub_resources.studyhub_resource').downcase} that will be created." %>
+  <%= folding_panel("Basic Information:", collapsed, :body_options => {:id => 'basic_info'},
+                    :help_text => help_text) do %>
 
   <div id="resource_basic_information">
     <%= render :partial => 'resource_titles', :locals=> { :f => f} %>
