@@ -32,7 +32,7 @@ data_dictionary_resource_type:
 informed_consentForm_resource_type:
   id: 7
   title: Informed Consent Form
-  key: informed_consentForm
+  key: informed_consent_form
 
 patient_information_sheet_resource_type:
   id: 8
