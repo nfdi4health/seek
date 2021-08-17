@@ -32,7 +32,7 @@ class StudyhubResource < ApplicationRecord
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
       'Studyhub Resources'
     else
-      "#{resource_json['resource_descriptions'].first['description_text']}"
+      "#{resource_json['resource_descriptions'].first['description']}"
     end
   end
 

@@ -25,28 +25,6 @@ module StudyhubResourcesHelper
     end
   end
 
-  def studyhub_resource_descriptions (descriptions)
-    html = ''
-    if descriptions.any?
-
-      html += '<div class="table-responsive">'
-      html += '<table class="table table-striped table-hover steps">
-      <thead>
-      <tr>
-        <th class="col-md-1">Description language</th>
-        <th>Description Text</th>
-      </tr>
-      </thead>
-      <tbody>'
-      descriptions.each do |d|
-        html += '<tr>'
-        html += '<td class="description_language">' + d["description_language"] + '</td>'
-        html += '<td class="description_text">' + d["description_text"] + '</td>'
-      end
-      html += '</tbody></table></div>'
-    end
-    html.html_safe
-  end
 
   def studyhub_resource_associated_resource(types)
     html = ''
@@ -66,28 +44,27 @@ module StudyhubResourcesHelper
   end
 
 
-  def studyhub_resource_titles (titles)
+  def studyhub_resource_items(items,item_type)
     html = ''
-    if titles.any?
+    if items.any?
       html += '<div class="table-responsive">'
       html += '<table class="table table-striped table-hover steps">
       <thead>
       <tr>
-        <th class="col-md-1">Title Language</th>
-        <th>Title</th>
+        <th class="col-md-1">'+item_type.capitalize+' Language</th>
+        <th>'+item_type.capitalize+'</th>
       </tr>
       </thead>
       <tbody>'
-      titles.each do |d|
+      items.each do |d|
         html += '<tr>'
-        html += '<td class="resource_language">' + d["resource_language"] + '</td>'
-        html += '<td class="title">' + d["title"] + '</td>'
+        html += '<td class="'+item_type+'_language">' + d[item_type+"_language"] + '</td>'
+        html += '<td class="'+item_type+'">' + d[item_type] + '</td>'
       end
       html += '</tbody></table></div>'
     end
     html.html_safe
   end
-
 
 
   def studyhub_resource_nfdi_ids (ids)

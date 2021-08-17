@@ -8,7 +8,7 @@
 <%
   unless studyhub_resource.resource_json.nil?
     titles = studyhub_resource.resource_json['resource_titles']
-    title_language = titles[row_num]["resource_language"] unless titles.empty?
+    title_language = titles[row_num]["title_language"] unless titles.empty?
     title = titles[row_num]["title"] unless titles.empty?
   end
 %>
@@ -21,7 +21,7 @@
 
   <td>
     <div class="form-group">
-      <%= f.collection_select "studyhub_resource[resource_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
+      <%= f.collection_select "studyhub_resource[title_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
                               { :include_blank => false, :selected => title_language }, :class => "form-control"  %>
     </div>
   </td>

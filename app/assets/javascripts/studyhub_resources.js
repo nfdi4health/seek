@@ -5,6 +5,11 @@ var SR = {
         row.remove();
     },
 
+    removeacronymRow: function () {
+        var row = $j(this).parents('.resource-acronym');
+        row.remove();
+    },
+
     removedescriptionRow: function () {
         var row = $j(this).parents('.resource-description');
         row.remove();

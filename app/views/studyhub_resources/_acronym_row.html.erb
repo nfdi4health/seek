@@ -1,36 +1,37 @@
 <%
   resource_languages = SampleControlledVocab.where(title: 'NFDI4Health Resource Language').first.sample_controlled_vocab_terms
-  description_row ||= nil
+  acronym_row ||= nil
   index ||= 'row-template'
   row_num = index.to_i
 %>
 
 <%
-
   unless studyhub_resource.resource_json.nil?
-    descriptions = studyhub_resource.resource_json['resource_descriptions']
-    description_text = descriptions[row_num]["description"] unless descriptions.empty?
-    description_language = descriptions[row_num]["description_language"] unless descriptions.empty?
+    acronyms = studyhub_resource.resource_json['resource_acronyms']
+    acronym_language = acronyms[row_num]["acronym_language"] unless acronyms.empty?
+    acronym = acronyms[row_num]["acronym"] unless acronyms.empty?
   end
 %>
 
-<% field_name_prefix = "resource_descriptions[description][#{index}]" %>
+
+<% field_name_prefix = "resource_acronyms[acronym][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
-<tr class="resource-description" data-index="<%= index-%>">
+<tr class="resource-acronym" data-index="<%= index-%>">
 
   <td>
     <div class="form-group">
-      <%= f.collection_select "studyhub_resource[description_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
-                              { :include_blank => false, :selected => description_language }, :class => "form-control" %>
+      <%= f.collection_select "studyhub_resource[acronym_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
+                              { :include_blank => false, :selected => acronym_language }, :class => "form-control"  %>
     </div>
   </td>
 
   <td>
     <div class="form-group">
-      <%= f.text_area "studyhub_resource[description][#{index}]", :rows => 5, :class => "form-control", :value => description_text %>
+      <%= f.text_field "studyhub_resource[resource_acronym][#{index}]", :class => "form-control", :value => acronym %>
     </div>
   </td>
+
 
   <td>
     <% if allow_row_removal %>
@@ -46,7 +47,7 @@
   </td>
 
 
-  <% if description_row %>
+  <% if acronym_row %>
     <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
   <% end %>
 </tr>

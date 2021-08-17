@@ -1,0 +1,68 @@
+<div id="resource_acronyms">
+  <table class="table" id="resource-acronym-table">
+    <thead>
+    <tr>
+      <th width="19em"><label class="save-required">Acronym language</label></th>
+      <th><label class="save-required">Acronym</label></th>
+      <th width="19em"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if @studyhub_resource.resource_json.nil? %>
+      <%= render :partial => 'acronym_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+    <% else %>
+      <% @studyhub_resource.resource_json['resource_acronyms'].each_with_index do |acronym, index| %>
+        <%= render :partial => 'acronym_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
+      <% end %>
+    <% end %>
+    <tr id="acronym-row">
+      <td colspan="6">
+        <%= button_link_to('Add more acronyms', 'add', '#', :id => 'add-acronym-row') %>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+
+  <table id="new-acronym-row" style="display: none">
+    <tbody>
+    <%= render :partial => 'acronym_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f } %>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<script>
+    //used to hold the element Id that needs updating after csreating a new CV
+    $j(document).ready(function () {
+        $j('#add-acronym-row').click(function () {
+            var newRow = $j('#new-acronym-row tbody').clone().html();
+            var index = 0;
+            $j('#resource-acronym-table tr.resource-acronym').each(function () {
+                var newIndex = parseInt($j(this).data('index'));
+                if (newIndex > index) {
+                    index = newIndex;
+                }
+            });
+
+            index++;
+
+            newRow = newRow.replace(/row-template/g, index);
+
+            $j('#resource-acronym-table #acronym-row').before($j(newRow));
+            $j('select[name="studyhub_resource[acronym_language]['+index+']"]').val("EN");
+            $j('input[name="studyhub_resource[acronym]['+index+']"]').val("");
+
+
+
+            return false;
+        });
+
+        $j('#resource-acronym-table').on('change', '.destroy-row', SR.removeacronymRow);
+
+    });
+</script>
+

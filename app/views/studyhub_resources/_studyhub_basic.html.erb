@@ -4,6 +4,7 @@
 
   <div id="resource_basic_information">
     <%= render :partial => 'resource_titles', :locals=> { :f => f} %>
+    <%= render :partial => 'resource_acronyms', :locals=> { :f => f} %>
     <%= render :partial => 'resource_descriptions', :locals=> { :f => f} %>
     <%= render :partial => 'studyhub_resource_input', locals: { :f => f } %>
   </div>

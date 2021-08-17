@@ -16,8 +16,9 @@
       <%= @studyhub_resource.studyhub_resource_type.title %>
     </p>
 
-    <%= studyhub_resource_titles @studyhub_resource.resource_json['resource_titles'] -%>
-    <%= studyhub_resource_descriptions @studyhub_resource.resource_json['resource_descriptions'] -%>
+    <%= studyhub_resource_items @studyhub_resource.resource_json['resource_titles'], "title"  -%>
+    <%= studyhub_resource_items @studyhub_resource.resource_json['resource_acronyms'], "acronym"  -%>
+    <%= studyhub_resource_items @studyhub_resource.resource_json['resource_descriptions'], "description"  -%>
 
     <% unless nfdi_subresources.empty? %>
     <p>
