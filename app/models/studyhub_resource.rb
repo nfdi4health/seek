@@ -23,10 +23,11 @@ class StudyhubResource < ApplicationRecord
   validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
   # validate :check_description_presence, on:  [:create, :update]
-
+  validate :full_validations_before_submit, on:  [:create, :update], if: :submitted?
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
+  attr_accessor :submit_button_clicked
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
@@ -43,6 +44,15 @@ class StudyhubResource < ApplicationRecord
   def check_description_presence
     errors.add(:base, "Please add at least one description for the #{studyhub_resource_type_title}.") if resource_json['resource_descriptions'].empty?
   end
+
+  def full_validations_before_submit
+    errors.add(:base, "Horrible Mistake!")
+  end
+
+
+def submitted?
+  submit_button_clicked
+end
 
   #@todo: check this validation, it is not working now
   def studyhub_resource_type_id_not_changed

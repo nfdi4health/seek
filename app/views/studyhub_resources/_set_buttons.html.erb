@@ -1,0 +1,11 @@
+<%
+  save_button_help_text = "save button help text"
+  submit_button_help_text = "submit button help text"
+  confirm_text = "Are you sure?"
+%>
+
+
+<%= submit_tag('Save',  title: save_button_help_text, class: 'btn btn-primary', name:'save_button', id: 'save-button', disabled: false) %>
+<%= submit_tag('Submit', title: submit_button_help_text, data: { confirm: confirm_text },
+                     class: 'btn btn-primary', name: 'submit_button', id: 'submit-button', disabled: false) %>
+

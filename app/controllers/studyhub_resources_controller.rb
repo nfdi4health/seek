@@ -69,55 +69,55 @@ class StudyhubResourcesController < ApplicationController
 
   def create
 
-    @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
-    update_sharing_policies @studyhub_resource
+      @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
+      update_sharing_policies @studyhub_resource
 
 
 
-    respond_to do |format|
-      if @studyhub_resource.save
-        flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully created.<br/>".html_safe
+      respond_to do |format|
+        if @studyhub_resource.save
+          flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully created.<br/>".html_safe
 
-        if @studyhub_resource.is_studytype?
+          if @studyhub_resource.is_studytype?
             format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
-        else
+          else
             format.html { redirect_to nonstudy_metadate_saved_studyhub_resource_path(@studyhub_resource)}
-        end
-        format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
-      else
-        flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
+          end
+          format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
+        else
+          flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
           format.html { render action: 'new' }
           format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
+        end
       end
-    end
 
-    #todo(hu) only save @studyhub_resource when item(study/assay) is created successfully
-    #if item.valid?
-    #todo(hu) remove studyhub_resource_type, and redo when the request is from API
-    # resource_type = @studyhub_resource.studyhub_resource_type
-    #
-    # if resource_type.nil?
-    #   render json: { error: 'Studyhub API Error',
-    #                  message: 'Studyhub resource type is blank or invalid.' }, status: :bad_request
-    #
-    # else
-    # seek_type = map_to_seek_type(resource_type)
+      #todo(hu) only save @studyhub_resource when item(study/assay) is created successfully
+      #if item.valid?
+      #todo(hu) remove studyhub_resource_type, and redo when the request is from API
+      # resource_type = @studyhub_resource.studyhub_resource_type
+      #
+      # if resource_type.nil?
+      #   render json: { error: 'Studyhub API Error',
+      #                  message: 'Studyhub resource type is blank or invalid.' }, status: :bad_request
+      #
+      # else
+      # seek_type = map_to_seek_type(resource_type)
 
-    # item = nil
-    #
-    # case seek_type
-    # when 'Study'
-    #   Rails.logger.info('creating a SEEK Study')
-    #   item = @studyhub_resource.build_study(study_params)
-    # when 'Assay'
-    #   Rails.logger.info('creating a SEEK Assay')
-    #   item = @studyhub_resource.build_assay(assay_params)
-    # end
-    # update_sharing_policies item
+      # item = nil
+      #
+      # case seek_type
+      # when 'Study'
+      #   Rails.logger.info('creating a SEEK Study')
+      #   item = @studyhub_resource.build_study(study_params)
+      # when 'Assay'
+      #   Rails.logger.info('creating a SEEK Assay')
+      #   item = @studyhub_resource.build_assay(assay_params)
+      # end
+      # update_sharing_policies item
 
 
-    #todo(hu) next time when add relationship
-    #update_parent_child_relationships(relationship_params)
+      #todo(hu) next time when add relationship
+      #update_parent_child_relationships(relationship_params)
 
   end
 
@@ -277,6 +277,11 @@ class StudyhubResourcesController < ApplicationController
     params[:studyhub_resource][:resource_json] = {}
     sr = params[:studyhub_resource]
 
+    #a flag to send a signal to run a full validations.
+    if params[:submit_button]
+      params[:studyhub_resource][:submit_button_clicked] = true
+    end
+
     # parse titles
     sr[:title] = sr[:resource_title].values[0]
     sr[:resource_json][:resource_titles] = parse_resource_titles(sr)
@@ -308,7 +313,7 @@ class StudyhubResourcesController < ApplicationController
                                             :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, { document_ids: [] },\
                                             :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
                                             :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
-                                            :inclusion_mica)
+                                            :inclusion_mica, :submit_button_clicked)
   end
 
 
@@ -333,9 +338,9 @@ class StudyhubResourcesController < ApplicationController
           resource[key] = params[:custom_metadata_attributes][:data][key]
         elsif cm_study_design_attributes.include? key
           study_design[key] = if multselect_attributes.include? key
-            params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
-          else
-            params[:custom_metadata_attributes][:data][key]
+                                params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
+                              else
+                                params[:custom_metadata_attributes][:data][key]
                               end
         end
       end
@@ -343,8 +348,8 @@ class StudyhubResourcesController < ApplicationController
       params[:resource_json][:resource] = resource
 
       if @rt.is_studytype?
-       study_design = set_study_data_sharing_plan(study_design)
-       params[:resource_json][:study_design] = study_design
+        study_design = set_study_data_sharing_plan(study_design)
+        params[:resource_json][:study_design] = study_design
       end
 
     end
@@ -490,8 +495,8 @@ class StudyhubResourcesController < ApplicationController
 
       parent = StudyhubResource.find(relationship_params['parent_ids'].first)
 
-        # TODO: when parents are other types, such as "instrument", "document"
-        # TODO: if parent doesnt exist, still need to sort out the relationship
+      # TODO: when parents are other types, such as "instrument", "document"
+      # TODO: if parent doesnt exist, still need to sort out the relationship
       study_id = if !parent.nil? && (parent.is_study? || parent.is_substudy?)
                    parent.study.id
                  else
@@ -595,7 +600,7 @@ class StudyhubResourcesController < ApplicationController
           @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
         else
           @studyhub_resource.add_parent(parent)
-      end
+        end
       end
     end
 

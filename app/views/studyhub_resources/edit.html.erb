@@ -19,7 +19,8 @@
 
       <%= hidden_field_tag 'studyhub_resource[studyhub_resource_type]', @studyhub_resource.studyhub_resource_type.key %>
       <%= render :partial=> "form", :locals => { :f => f,:collapsed => collapsed } %>
-      <%= submit_tag('Submit', class: 'btn btn-primary', id: 'submit-button', disabled: false ) %>
+      <%= render :partial=> "set_buttons" %>
+
       </div>
       </div>
     <% end %>
