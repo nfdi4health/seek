@@ -1,5 +1,6 @@
+
 <% help_text = "Please provide some basic details about the #{t('studyhub_resources.studyhub_resource').downcase} that will be created." %>
-  <%= folding_panel("Basic Information:", collapsed, :body_options => {:id => 'basic_info'},
+  <%= folding_panel("Basic Information:", false, :body_options => {:id => 'basic_info'},
                     :help_text => help_text) do %>
 
   <div id="resource_basic_information">

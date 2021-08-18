@@ -46,7 +46,18 @@ class StudyhubResource < ApplicationRecord
   end
 
   def full_validations_before_submit
-    errors.add(:base, "Horrible Mistake!")
+    required_fields ={"resource"=> ["resource_type_general","resource_use_rights_label"],
+                      "study_design"=> ["study_primary_design","study_status",
+                                        "study_population","study_data_sharing_plan_generally"] }
+
+    required_fields.each do |type, fields|
+      fields.each do |name|
+        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}") if resource_json[type][name].blank?
+      end
+    end
+
+    errors.add(:base, "Please make sure all required fields are filled in correctly.") unless errors.messages.empty?
+
   end
 
 
