@@ -1,11 +1,17 @@
+<%
+  if @error_keys.include? "description"
+    feedback = @studyhub_resource.errors.messages[:description].first
+    is_error = true
+  end
+%>
 <div id="resource_descriptions">
 
     <table class="table" id="resource-description-table">
       <thead>
-      <tr>
+      <tr class="form-group <%= "has-error text-danger" if is_error %>">
         <th width="19em"><label class="submit-required">Description language</label></th>
-        <th><label class="submit-required">Description Text</label></th>
-        <th width="19em"></th>
+        <th class="col-10"><label class="submit-required">Description Text</label></th>
+        <th><%= feedback if is_error %></th>
       </tr>
       </thead>
       <tbody>

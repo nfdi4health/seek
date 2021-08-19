@@ -1,7 +1,6 @@
-<% error_keys = @studyhub_resource.errors.messages.keys.map {|x| x.to_s} %>
 <% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
  <%
-   if error_keys.include? attribute.title
+   if @error_keys.include? attribute.title
      feedback = @studyhub_resource.errors.messages[attribute.title.to_sym].first
      is_error = true
    end

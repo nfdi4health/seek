@@ -22,7 +22,8 @@ class StudyhubResource < ApplicationRecord
 
   validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
-  # validate :check_description_presence, on:  [:create, :update]
+  validate :check_acronym_presence, on:  [:create, :update], if: :submitted?
+  validate :check_description_presence, on:  [:create, :update], if: :submitted?
   validate :full_validations_before_submit, on:  [:create, :update], if: :submitted?
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
@@ -45,11 +46,15 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_title_presence
-    errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if title.empty?
+    errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if title.blank?
+  end
+
+  def check_acronym_presence
+    errors.add(:acronym, "can't be blank") if resource_json['resource_acronym'].blank?
   end
 
   def check_description_presence
-    errors.add(:base, "Please add at least one description for the #{studyhub_resource_type_title}.") if resource_json['resource_descriptions'].empty?
+    errors.add(:description, "can't be blank") if resource_json['description'].blank?
   end
 
   def full_validations_before_submit

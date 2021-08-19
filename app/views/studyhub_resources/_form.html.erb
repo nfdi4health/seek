@@ -1,3 +1,6 @@
+<% @error_keys = @studyhub_resource.errors.messages.keys.map {|x| x.to_s}%>
+<%#= @studyhub_resource.errors.messages.inspect %>
+
 <div class="alert alert-danger">
   <div>
     The fields marked with<label class="save-required"></label> are required before you can save the resource. <br>

@@ -1,3 +1,10 @@
+<%
+  if @error_keys.include? "title"
+    feedback = @studyhub_resource.errors.messages[:title].first
+    is_error = true
+  end
+%>
+
 <div id="resource_titles">
   <div class="alert alert-info">
     <p>
@@ -8,15 +15,15 @@
   </div>
     <table class="table" id="resource-title-table">
       <thead>
-      <tr>
+      <tr class="form-group <%= "has-error text-danger" if is_error %>">
         <th width="19em"><label class="save-required">Title language</label></th>
-        <th><label class="save-required">Title</label></th>
-        <th width="19em"></th>
+        <th class="col-10"><label class="save-required">Title</label></th>
+        <th><%= feedback if is_error %></th>
       </tr>
       </thead>
       <tbody>
       <% if @studyhub_resource.resource_json.nil? %>
-        <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+        <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0, :is_error=> is_error} %>
       <% else %>
         <% @studyhub_resource.resource_json['resource_titles'].each_with_index do |title, index| %>
           <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>

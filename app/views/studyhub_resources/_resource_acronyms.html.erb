@@ -1,10 +1,17 @@
+<%
+  if @error_keys.include? "acronym"
+    feedback = @studyhub_resource.errors.messages[:acronym].first
+    is_error = true
+  end
+%>
+
 <div id="resource_acronyms">
   <table class="table" id="resource-acronym-table">
     <thead>
-    <tr>
+    <tr class="form-group <%= "has-error text-danger" if is_error %>">
       <th width="19em"><label class="submit-required">Acronym language</label></th>
-      <th><label class="submit-required">Acronym</label></th>
-      <th width="19em"></th>
+      <th class="col-10"><label class="submit-required">Acronym</label></th>
+      <th><%= feedback if is_error %></th>
     </tr>
     </thead>
     <tbody>
