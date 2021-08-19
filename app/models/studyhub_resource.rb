@@ -5,14 +5,14 @@ class StudyhubResource < ApplicationRecord
   belongs_to :studyhub_resource_type, inverse_of: :studyhub_resources
 
   has_many :children_relationships, class_name: 'StudyhubResourceRelationship',
-                                    foreign_key: 'parent_id',
-                                    dependent: :destroy
+           foreign_key: 'parent_id',
+           dependent: :destroy
 
   has_many :children, through: :children_relationships
 
   has_many :parents_relationships, class_name: 'StudyhubResourceRelationship',
-                                   foreign_key: 'child_id',
-                                   dependent: :destroy
+           foreign_key: 'child_id',
+           dependent: :destroy
 
   has_many :parents, through: :parents_relationships
   has_and_belongs_to_many :documents, -> { distinct }
@@ -28,6 +28,13 @@ class StudyhubResource < ApplicationRecord
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
   attr_accessor :submit_button_clicked
+
+  REQUIRED_FIELDS_RESOURCE = ["resource_type_general","resource_use_rights_label"]
+  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ["study_primary_design","study_status", "study_population","study_data_sharing_plan_generally"]
+  REQUIRED_FIELDS_INTERVENTIONAL = ["study_type_interventional","study_primary_outcome_title"]
+  REQUIRED_FIELDS_NON_INTERVENTIONAL =["study_type_non_interventional"]
+  INTERVENTIONAL = "interventional"
+  NON_INTERVENTIONAL = "non-interventional"
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
@@ -46,9 +53,13 @@ class StudyhubResource < ApplicationRecord
   end
 
   def full_validations_before_submit
-    required_fields ={"resource"=> ["resource_type_general","resource_use_rights_label"],
-                      "study_design"=> ["study_primary_design","study_status",
-                                        "study_population","study_data_sharing_plan_generally"] }
+    required_fields ={}
+    required_fields["resource"] = REQUIRED_FIELDS_RESOURCE
+    if is_studytype?
+      required_fields["study_design"] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
+      required_fields["study_design"] += REQUIRED_FIELDS_INTERVENTIONAL if get_study_primary_design_type == INTERVENTIONAL
+      required_fields["study_design"] += REQUIRED_FIELDS_NON_INTERVENTIONAL if get_study_primary_design_type == NON_INTERVENTIONAL
+    end
 
     required_fields.each do |type, fields|
       fields.each do |name|
@@ -61,9 +72,9 @@ class StudyhubResource < ApplicationRecord
   end
 
 
-def submitted?
-  submit_button_clicked
-end
+  def submitted?
+    submit_button_clicked
+  end
 
   #@todo: check this validation, it is not working now
   def studyhub_resource_type_id_not_changed
@@ -104,6 +115,11 @@ end
   # if the resource type is study or substudy
   def is_studytype?
     self.studyhub_resource_type.is_study? || self.studyhub_resource_type.is_substudy?
+  end
+
+  # if the resource type is study or substudy
+  def get_study_primary_design_type
+    resource_json["study_design"]["study_primary_design"]
   end
 
 
