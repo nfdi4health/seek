@@ -50,11 +50,11 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_acronym_presence
-    errors.add(:acronym, "can't be blank") if resource_json['resource_acronym'].blank?
+    errors.add(:acronym, "can't be blank") if resource_json['resource_acronyms'].blank?
   end
 
   def check_description_presence
-    errors.add(:description, "can't be blank") if resource_json['description'].blank?
+    errors.add(:description, "can't be blank") if resource_json['resource_descriptions'].blank?
   end
 
   def full_validations_before_submit
