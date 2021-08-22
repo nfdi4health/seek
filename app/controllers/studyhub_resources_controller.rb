@@ -3,6 +3,7 @@ class StudyhubResourcesController < ApplicationController
   include Seek::AssetsCommon
   include Seek::DestroyHandling
   include Seek::IndexPager
+  include Seek::Publishing::PublishingCommon
 
   # before_action :find_and_authorize_studyhub_resource, only: %i[edit update destroy manage show]
 

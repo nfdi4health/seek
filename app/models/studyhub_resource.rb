@@ -22,13 +22,14 @@ class StudyhubResource < ApplicationRecord
 
   validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
-  validate :check_acronym_presence, on:  [:create, :update], if: :submitted?
-  validate :check_description_presence, on:  [:create, :update], if: :submitted?
-  validate :full_validations_before_submit, on:  [:create, :update], if: :submitted?
+  validate :check_acronym_presence, on:  [:create, :update], if: :request_to_submit?
+  validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
+  # validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
   attr_accessor :submit_button_clicked
+  before_save :update_working_stage, on:  [:create, :update]
 
   REQUIRED_FIELDS_RESOURCE = ["resource_type_general","resource_use_rights_label"]
   REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ["study_primary_design","study_status", "study_population","study_data_sharing_plan_generally"]
@@ -36,6 +37,14 @@ class StudyhubResource < ApplicationRecord
   REQUIRED_FIELDS_NON_INTERVENTIONAL =["study_type_non_interventional"]
   INTERVENTIONAL = "interventional"
   NON_INTERVENTIONAL = "non-interventional"
+
+  # *****************************************************************************
+  #  This section defines constants for "working stages" values
+
+  SAVED = 0
+  SUBMITTED  = 1
+  WAITING_FOR_APPROVEL = 2
+  PUBLISHED = 3
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
@@ -77,8 +86,12 @@ class StudyhubResource < ApplicationRecord
   end
 
 
-  def submitted?
+  def request_to_submit?
     submit_button_clicked
+  end
+
+  def is_submitted?
+    stage == StudyhubResource::SUBMITTED
   end
 
   #@todo: check this validation, it is not working now
@@ -92,6 +105,13 @@ class StudyhubResource < ApplicationRecord
     StudyhubResourceType.find(studyhub_resource_type_id).title
   end
 
+  def update_working_stage
+    if request_to_submit?
+      self.stage = StudyhubResource::SUBMITTED
+    else
+      self.stage = StudyhubResource::SAVED
+    end
+  end
 
   def add_child(child)
     children_relationships.create(child_id: child.id)
