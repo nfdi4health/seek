@@ -24,13 +24,16 @@ class StudyhubResource < ApplicationRecord
   validate :check_title_presence, on:  [:create, :update]
   validate :check_acronym_presence, on:  [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
-  # validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
+  validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
 
   store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
   attr_accessor :submit_button_clicked
   before_save :update_working_stage, on:  [:create, :update]
 
+  # *****************************************************************************
+  #  This section defines constants for "mandatory fields" values
+  #
   REQUIRED_FIELDS_RESOURCE = ["resource_type_general","resource_use_rights_label"]
   REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ["study_primary_design","study_status", "study_population","study_data_sharing_plan_generally"]
   REQUIRED_FIELDS_INTERVENTIONAL = ["study_type_interventional","study_primary_outcome_title"]
