@@ -1,3 +1,5 @@
+<% show_publish_button = item.can_publish? && item.stage == StudyhubResource::SUBMITTED %>
+
 <%= render :partial => "subscriptions/subscribe", :locals => {:object => item} %>
 <% show_publish_button = item.can_publish? && item.is_submitted? %>
 
@@ -22,7 +24,6 @@
   <% if show_publish_button %>
     <li><%= image_tag_for_key('publish', polymorphic_path(item, action: :check_related_items), nil, { method: :post }, "Publish #{t('studyhub_resource')}") -%></li>
   <% end -%>
-
 
   <%= delete_icon item,current_user -%>
 <% end -%>

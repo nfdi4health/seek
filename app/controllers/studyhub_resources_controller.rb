@@ -211,6 +211,20 @@ class StudyhubResourcesController < ApplicationController
   end
 
 
+  def preview_stages
+
+    if params[:id].present?
+      resource = StudyhubResource.find(params[:id])
+    else
+      resource = StudyhubResource.new
+    end
+
+    respond_to do |format|
+      format.html { render partial: 'preview_stages',
+                           locals: {resource: resource}}
+    end
+  end
+
   private
 
   # def study_params

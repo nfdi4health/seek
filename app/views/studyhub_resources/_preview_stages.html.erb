@@ -1,0 +1,23 @@
+<%
+  resource_name = resource.class.name.underscore
+  stage = resource.stage
+%>
+
+<div class="modal fade" id="preview_permissions" tabindex="-1" role="dialog" aria-labelledby="preview_permissions_title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="preview_permissions_title">Preview of your sharing settings</h4>
+      </div>
+      <div class="modal-body">
+        <h3>Public Visibility</h3>
+        <div>Currently the stage is <%= stage %></div>
+      </div>
+      <div class="modal-footer">
+        <input class="btn btn-primary" type=button value='OK' style="width: 5em" onclick="createOrUpdateResource('<%= resource_name -%>')">
+        <input class="btn btn-default" type=button value='Cancel' data-dismiss="modal">
+      </div>
+    </div>
+  </div>
+</div>

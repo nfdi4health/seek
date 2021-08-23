@@ -449,6 +449,11 @@ SEEK::Application.routes.draw do
     ### STUDYHUB RESOURCES ###
 
   resources :studyhub_resources, concerns: [:asset,:publishable] do
+
+  collection do
+      post :preview_stages
+    end
+
     member do
       get :associate_documents
       get :nonstudy_metadate_saved
