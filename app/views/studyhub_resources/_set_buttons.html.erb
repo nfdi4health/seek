@@ -7,7 +7,7 @@
 <%= submit_tag('Save',  title: save_button_help_text, class: 'btn btn-primary', name:'save_button', id: 'save-button',
                disabled: false) %>
 
-<%= submit_tag('Submit new', title: submit_button_help_text, :onclick => "return previewStages();",
+<%= submit_tag('Submit', title: submit_button_help_text, :onclick => "return previewStages();",
                class: 'btn btn-primary', name: 'submit_button', id: 'studyhub_resource_submit_btn', disabled: false) %>
 
 <%= hidden_field_tag "submit_button","submit" %>
@@ -30,8 +30,8 @@
                 success: function (result) {
                     $j('#permissions-preview-wrapper').html(result);
                     $j('#preview_permissions').modal('show');
-               //this is to prevent other modal boxes being closes, if this is the child of another
-          $j('#preview_permissions').on('click', '[data-dismiss="modal"]', function (e) { e.stopPropagation(); });
+                    //this is to prevent other modal boxes being closes, if this is the child of another
+                    $j('#preview_permissions').on('click', '[data-dismiss="modal"]', function (e) { e.stopPropagation(); });
            },
                 error: function () {
                 alert('Sorry, an error has occurred.');
@@ -41,7 +41,6 @@
             }
           });
       return false;
-
    }
 </script>
 
