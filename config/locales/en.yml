@@ -176,3 +176,4 @@ you can choose to have a %{project} linked to a site managed %{programme} instea
     substudy: 'Substudy'
     instrument: 'Instrument'
     document: 'Document'
+    gatekeep: 'data steward'

@@ -10,8 +10,6 @@
 <%= submit_tag('Submit', title: submit_button_help_text, :onclick => "return previewStages();",
                class: 'btn btn-primary', name: 'submit_button', id: 'studyhub_resource_submit_btn', disabled: false) %>
 
-<%= hidden_field_tag "submit_button","submit" %>
-
 <%= image_tag("ajax-loader.gif", :id => 'permissions_spinner', :style => 'display: none') -%>
 <div id="permissions-preview-wrapper"></div>
 
@@ -19,14 +17,12 @@
 
 <script type="text/javascript">
 
-    $j('#save-button').click(SR.removeSubmitButton);
-
     function previewStages() {
             $j('#permissions_spinner').show();
             $j.ajax({
                 type: "POST",
             url: '<%= preview_stages_studyhub_resources_path -%>',
-                data: {},
+                data: {id: <%= @studyhub_resource.id %>},
                 success: function (result) {
                     $j('#permissions-preview-wrapper').html(result);
                     $j('#preview_permissions').modal('show');

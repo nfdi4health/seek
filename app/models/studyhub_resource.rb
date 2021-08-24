@@ -34,12 +34,12 @@ class StudyhubResource < ApplicationRecord
   # *****************************************************************************
   #  This section defines constants for "mandatory fields" values
   #
-  REQUIRED_FIELDS_RESOURCE = ["resource_type_general","resource_use_rights_label"]
-  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ["study_primary_design","study_status", "study_population","study_data_sharing_plan_generally"]
-  REQUIRED_FIELDS_INTERVENTIONAL = ["study_type_interventional","study_primary_outcome_title"]
-  REQUIRED_FIELDS_NON_INTERVENTIONAL =["study_type_non_interventional"]
-  INTERVENTIONAL = "interventional"
-  NON_INTERVENTIONAL = "non-interventional"
+  REQUIRED_FIELDS_RESOURCE = ['resource_type_general','resource_use_rights_label']
+  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally']
+  REQUIRED_FIELDS_INTERVENTIONAL = ['study_type_interventional','study_primary_outcome_title']
+  REQUIRED_FIELDS_NON_INTERVENTIONAL =['study_type_non_interventional']
+  INTERVENTIONAL = 'interventional'
+  NON_INTERVENTIONAL = 'non-interventional'
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values
@@ -71,11 +71,11 @@ class StudyhubResource < ApplicationRecord
 
   def full_validations_before_submit
     required_fields ={}
-    required_fields["resource"] = REQUIRED_FIELDS_RESOURCE
+    required_fields['resource'] = REQUIRED_FIELDS_RESOURCE
     if is_studytype?
-      required_fields["study_design"] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
-      required_fields["study_design"] += REQUIRED_FIELDS_INTERVENTIONAL if get_study_primary_design_type == INTERVENTIONAL
-      required_fields["study_design"] += REQUIRED_FIELDS_NON_INTERVENTIONAL if get_study_primary_design_type == NON_INTERVENTIONAL
+      required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
+      required_fields['study_design'] += REQUIRED_FIELDS_INTERVENTIONAL if get_study_primary_design_type == INTERVENTIONAL
+      required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL if get_study_primary_design_type == NON_INTERVENTIONAL
     end
 
     required_fields.each do |type, fields|
@@ -84,7 +84,7 @@ class StudyhubResource < ApplicationRecord
       end
     end
 
-    errors.add(:base, "Please make sure all required fields are filled in correctly.") unless errors.messages.empty?
+    errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
 
   end
 
@@ -100,7 +100,7 @@ class StudyhubResource < ApplicationRecord
   #@todo: check this validation, it is not working now
   def studyhub_resource_type_id_not_changed
     if studyhub_resource_type_id_changed? && self.persisted?
-      errors.add(:base, "Change of studyhub resource type is not allowed!")
+      errors.add(:base, 'Change of studyhub resource type is not allowed!')
     end
   end
 
@@ -109,11 +109,11 @@ class StudyhubResource < ApplicationRecord
   end
 
   def update_working_stage
-    if request_to_submit?
-      self.stage = StudyhubResource::SUBMITTED
+    self.stage = if request_to_submit?
+      StudyhubResource::SUBMITTED
     else
-      self.stage = StudyhubResource::SAVED
-    end
+      StudyhubResource::SAVED
+                 end
   end
 
   def add_child(child)
@@ -147,8 +147,26 @@ class StudyhubResource < ApplicationRecord
 
   # if the resource type is study or substudy
   def get_study_primary_design_type
-    resource_json["study_design"]["study_primary_design"]
+    resource_json['study_design']['study_primary_design']
   end
+
+  # translates stage codes into human-readable form
+  def self.get_stage_wording(stage)
+
+    case stage
+    when StudyhubResource::SAVED
+      'saved'
+    when StudyhubResource::SUBMITTED
+      'submitted'
+    when StudyhubResource::WAITING_FOR_APPROVEL
+      'waiting for approval'
+    when StudyhubResource::PUBLISHED
+      'published'
+    else
+      'unknown'
+    end
+  end
+
 
 
 end

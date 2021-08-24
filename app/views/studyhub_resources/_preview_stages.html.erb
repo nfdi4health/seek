@@ -1,6 +1,6 @@
 <%
   resource_name = resource.class.name.underscore
-  stage = resource.stage
+  pp resource.inspect
 %>
 
 <div class="modal fade" id="preview_permissions" tabindex="-1" role="dialog" aria-labelledby="preview_permissions_title" aria-hidden="true">
@@ -8,12 +8,28 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="preview_permissions_title">Preview of your sharing settings</h4>
+        <h4 class="modal-title" id="preview_permissions_title">Preview of your working status:
+          currently the <%= resource.reload_studyhub_resource_type.title.downcase  %> is <%= stage_text %>.</h4>
       </div>
-      <div class="modal-body">
-        <h3>Public Visibility</h3>
-        <div>Currently the stage is <%= stage %></div>
+      <div class="modal-body alert alert-info" style="margin: 10px 20px">
+        <div>
+          <% if resource.stage == StudyhubResource::SAVED  || StudyhubResource::SUBMITTED %>
+
+            <div >
+              Please make sure that all required fields are filled in correctly.
+
+              <br><br>After the form is submitted successfully, your data is still private.
+              You can send a publish request (see the screenshot below) to the <%= t('studyhub_resources.gatekeep') %> and after their approval, your data will be public
+              and you will receive a notification email.
+              <br><br>Your data can also be rejected by the <%= t('studyhub_resources.gatekeep') %>.
+              If so, you need to modify your data according to the comment and to submit again.
+
+              <%= image_tag("studyhub/publish_studyhub_resource.png", :id => 'publish_intruction', :style => 'max-width:100%; margin: 10px 0;') -%></div>
+          <% end  %>
+
+        </div>
       </div>
+
       <div class="modal-footer">
         <input class="btn btn-primary" type=button value='OK' style="width: 5em" onclick="createOrUpdateResource('<%= resource_name -%>')">
         <input class="btn btn-default" type=button value='Cancel' data-dismiss="modal">

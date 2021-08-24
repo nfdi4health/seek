@@ -43,8 +43,8 @@ class StudyhubResourcesController < ApplicationController
 
     @studyhub_resource = StudyhubResource.find(params[:id])
     @document = Document.new(
-      title:@studyhub_resource.title,
-      description:@studyhub_resource.description,
+      title: @studyhub_resource.title,
+      description: @studyhub_resource.description,
       project_ids: @studyhub_resource.projects.map(&:id)
       # policy_attributes: valid_sharing
     )
@@ -72,8 +72,6 @@ class StudyhubResourcesController < ApplicationController
 
       @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
       update_sharing_policies @studyhub_resource
-
-
 
       respond_to do |format|
         if @studyhub_resource.save
@@ -213,15 +211,17 @@ class StudyhubResourcesController < ApplicationController
 
   def preview_stages
 
-    if params[:id].present?
-      resource = StudyhubResource.find(params[:id])
+    resource = if params[:id].present?
+      StudyhubResource.find(params[:id])
     else
-      resource = StudyhubResource.new
-    end
+      StudyhubResource.new
+               end
+    stage_text = StudyhubResource.get_stage_wording(resource.stage)
 
     respond_to do |format|
-      format.html { render partial: 'preview_stages',
-                           locals: {resource: resource}}
+      format.html { 
+        render partial: 'preview_stages',
+               locals: {resource: resource, stage_text: stage_text }}
     end
   end
 
@@ -293,7 +293,9 @@ class StudyhubResourcesController < ApplicationController
     sr = params[:studyhub_resource]
 
     #a flag to send a signal to run a full validations.
-    if params[:submit_button]
+    if params[:save_button]
+      params[:studyhub_resource][:submit_button_clicked] = false
+    else
       params[:studyhub_resource][:submit_button_clicked] = true
     end
 
