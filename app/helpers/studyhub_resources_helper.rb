@@ -66,6 +66,12 @@ module StudyhubResourcesHelper
     html.html_safe
   end
 
+  def show_resource_stage(resource)
+    html = '<p class="stage alert alert-info"><strong>Working stage: </strong>'
+    html += StudyhubResource.get_stage_wording(resource.stage)
+    html += '</p>'
+    html.html_safe
+  end
 
   def studyhub_resource_nfdi_ids (ids)
     html = ''
