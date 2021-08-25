@@ -70,7 +70,7 @@ class StudyhubResourcesController < ApplicationController
 
   def create
 
-      @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
+    @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
       update_sharing_policies @studyhub_resource
 
       respond_to do |format|
@@ -212,9 +212,9 @@ class StudyhubResourcesController < ApplicationController
   def preview_stages
 
     resource = if params[:id].present?
-      StudyhubResource.find(params[:id])
-    else
-      StudyhubResource.new
+                 StudyhubResource.find(params[:id])
+               else
+                 StudyhubResource.new
                end
     stage_text = StudyhubResource.get_stage_wording(resource.stage)
 
@@ -293,11 +293,11 @@ class StudyhubResourcesController < ApplicationController
     sr = params[:studyhub_resource]
 
     #a flag to send a signal to run a full validations.
-    if params[:save_button]
-      params[:studyhub_resource][:submit_button_clicked] = false
-    else
-      params[:studyhub_resource][:submit_button_clicked] = true
-    end
+    params[:studyhub_resource][:submit_button_clicked] = if params[:save_button]
+                                                           false
+                                                         else
+                                                           true
+                                                         end
 
     # parse titles
     sr[:title] = sr[:resource_title].values[0]
@@ -400,20 +400,28 @@ class StudyhubResourcesController < ApplicationController
 
   def parse_roles(params)
     roles = []
-    params[:role_name].keys.each do |key|
-      next if key == 'row-template'
+    params[:role_type].keys.each do |key|
 
+      next if key == 'row-template'
       entry = {}
+
       entry['role_type'] = params[:role_type][key]
-      entry['role_name'] = params[:role_name][key]
-      entry['role_email'] = params[:role_email][key] #unless params[:role_email][key].blank?
-      entry['role_phone'] = params[:role_phone][key] #unless params[:role_phone][key].blank?
+      entry['role_name_type'] = params[:role_name_type][key]
+      entry['role_name_organisational'] = params[:role_name_organisational][key]
+      entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
+      entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
+      entry['role_name_personal_title'] = params[:role_name_personal_title][key]
+      entry['role_name_identifier'] = params[:role_name_identifier][key]
+      entry['role_name_identifier_scheme'] = params[:role_name_identifier_scheme][key]
+      entry['role_email'] = params[:role_email][key]
+      entry['role_phone'] = params[:role_phone][key]
       entry['role_affiliation_name'] = params[:role_affiliation_name][key]
-      entry['role_affiliation_city'] = params[:role_affiliation_city][key]
-      entry['role_affiliation_zip'] = params[:role_affiliation_zip][key]
-      entry['role_affiliation_country'] = params[:role_affiliation_country][key]
-      entry['role_affiliation_url'] = params[:role_affiliation_url][key]
-      roles << entry unless entry['role_name'].blank?
+      entry['role_affiliation_address'] = params[:role_affiliation_address][key]
+      entry['role_affiliation_web_page'] = params[:role_affiliation_web_page][key]
+      entry['role_affiliation_identifier'] = params[:role_affiliation_identifier][key]
+      entry['role_affiliation_identifier_scheme'] = params[:role_affiliation_identifier_scheme][key]
+
+      roles << entry unless entry['role_type'].blank?
 
     end
     roles

@@ -140,26 +140,22 @@ module StudyhubResourcesHelper
       <tr>
         <th class="col-md-2">Name</th>
         <th class="col-md-2">Role Type</th>
+        <th class="col-md-2">Role Name Type</th>
         <th class="col-md-3">Email</th>
         <th class="col-md-2">Phone</th>
-        <th class="col-md-3">Affiliation</th>
+        <th class="col-md-3">Affiliation Address</th>
       </tr>
       </thead>
       <tbody>'
       roles.each do |d|
         html += '<tr>'
-        html += '<td class="role_name">' + d["role_name"] + '</td>'
-        html += '<td class="role_type">' + d["role_type"]
-        html += '</td>'
+        html += '<td class="role_name">' + d["role_name_personal_title"] + ' ' + d["role_name_personal_given_name"]+ ' '+ d["role_name_personal_family_name"] +'</td>'
+        html += '<td class="role_type">' + d["role_type"] + '</td>'
+        html += '<td class="role_name_type">' + d["role_name_type"] + '</td>'
         html += '<td class="role_email">' + d["role_email"] + '</td>'
         html += '<td class="role_phone">' + d["role_phone"] + '</td>'
-
-        html += '<td class="role_affiliation">' + d["role_affiliation_name"]
-        html += ',' + d["role_affiliation_city"] unless d["role_affiliation_city"].blank?
-        html += ',' + d["role_affiliation_zip"] unless d["role_affiliation_zip"].blank?
-        html += ',' + d["role_affiliation_country"] unless d["role_affiliation_country"].blank?
-        html += '<br>' + d["role_affiliation_url"] unless d["role_affiliation_url"].blank?
-        html += '</td>'
+        html += '<td class="role_affiliation_address">' + d["role_affiliation_address"] + '</td>'
+        html += '</tr>'
       end
       html += '</tbody></table></div>'
     end

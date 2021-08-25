@@ -87,14 +87,36 @@ IsDescribedBy Describes HasMetadata IsMetadataFor HasVersion IsVersionOf IsNewVe
 IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedBy Reviews IsDerivedFrom IsSourceOf IsRequiredBy Requires IsObsoletedBy Obsoletes])
   )
 
+
+  #************************ role related CV begin *********************************
+
   # role_type
   role_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Author','Principal Investigator', 'Contributor', 'ContactPerson', 'DataCollector', 'DataCurator',
-                                                                                               'DataManager', 'Distributor','Editor', 'HostingInstitution', 'Producer', 'ProjectLeader/Principal Investigator', 'ProjectManager',
-                                                                                               'ProjectMember', 'RegistrationAgency', 'RegistrationAuthority', 'RelatedPerson', 'Researcher', 'ResearchGroup', 'RightsHolder',
-                                                                                               'Supervisor', 'WorkPackageLeader', 'Primary sponsor', 'Secondary Sponsor', 'Sponsor-Investigator', 'Sponsor', 'Funder',
-                                                                                               'Public funder','Private funder', 'Publisher', 'Other']))
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['ContactPerson','Principal Investigator','Creator/Author','Funder(public)','Funder(private)',
+                                                                                               'Sponsor (primary)','Sponsor (secondary)','Sponsor-Investigator', 'Data collector', 'Data curator',
+                                                                                               'Data manager', 'Distributor', 'Editor', 'Hosting institution', 'Producer', 'Project leader','Project manager',
+                                                                                               'Project member', 'Publisher', 'Registration agency', 'Registration authority', 'Related person', 'Researcher',
+                                                                                               'Research group', 'Rights holder', 'Supervisor', 'Work package leader', 'Other']))
 
+
+  # role_name_type
+  role_name_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Name Type').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Personal Organisational]))
+
+  #role_name_personal_title
+  role_name_personal_title_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Name Personal Title').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Mr.','Ms.','Dr.','Prof. Dr.','Other']))
+
+  # role_name_identifier_scheme
+  role_name_identifier_scheme_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Name Identifier Scheme').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[ORCID ROR GRID ISNI]))
+
+
+  # role_affiliation_identifier_scheme
+  role_affiliation_identifier_scheme_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Affiliation Identifier Scheme').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[ROR GRID ISNI]))
+
+  #************************ role related CV end *********************************
 
   #************************ study design related CV begin *********************************
 

@@ -1,4 +1,4 @@
-<%= folding_panel("Resource Roles:", collapsed ) do %>
+<%= folding_panel("Resource Roles:", false ) do %>
 
   <div class="help-block">
     <div class="alert alert-info">
@@ -36,6 +36,7 @@
     $j(document).ready(function () {
 
         $j('#add-role-row').click(function () {
+            alert("add-role-row");
             var newRow = $j('#new-role-row').clone().html();
             var index = 0;
             $j('#resource-role-table div.resource-role').each(function () {
@@ -48,17 +49,22 @@
             index++;
 
             newRow = newRow.replace(/row-template/g, index);
+            console.log("index:"+index);
 
             $j('#resource-role-table #role-row').before($j(newRow));
-            $j('select[name="studyhub_resource[role_type]['+index+']"]').val("Contributor");
-            $j('input[name="studyhub_resource[role_name]['+index+']"]').val("");
-            $j('input[name="studyhub_resource[role_email]['+index+']"]').val("");
-            $j('input[name="studyhub_resource[role_phone]['+index+']"]').val("");
-            $j('input[name="studyhub_resource[role_affiliation_url]['+index+']"]').val("");
-            $j('input[name="studyhub_resource[role_affiliation_zip]['+index+']"]').val("");
-            $j('input[name="studyhub_resource[role_affiliation_name]['+index+']"]').val("");
-            $j('input[name="studyhub_resource[role_affiliation_city]['+index+']"]').val("");
-            $j('input[name="studyhub_resource[role_affiliation_country]['+index+']"]').val("");
+            // $j('select[name="studyhub_resource[role_type]['+index+']"]').val("Contributor");
+            // $j('input[name="studyhub_resource[role_name]['+index+']"]').val("");
+            // $j('input[name="studyhub_resource[role_email]['+index+']"]').val("");
+            // $j('input[name="studyhub_resource[role_phone]['+index+']"]').val("");
+            // $j('input[name="studyhub_resource[role_affiliation_url]['+index+']"]').val("");
+            // $j('input[name="studyhub_resource[role_affiliation_zip]['+index+']"]').val("");
+            // $j('input[name="studyhub_resource[role_affiliation_name]['+index+']"]').val("");
+            // $j('input[name="studyhub_resource[role_affiliation_city]['+index+']"]').val("");
+            // $j('input[name="studyhub_resource[role_affiliation_country]['+index+']"]').val("");
+
+            intialRoleVisibility(index);
+
+            $j('select[name="studyhub_resource[role_name_type]['+index+']"]').on('change', SR.setRoleNameTypeVisibility);
 
             return false;
         });

@@ -1,6 +1,9 @@
 <%
   role_types = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first.sample_controlled_vocab_terms
-
+  role_name_types = SampleControlledVocab.where(title: 'NFDI4Health Role Name Type').first.sample_controlled_vocab_terms
+  role_name_personal_titles = SampleControlledVocab.where(title: 'NFDI4Health Role Name Personal Title').first.sample_controlled_vocab_terms
+  role_name_identifier_schemes = SampleControlledVocab.where(title: 'NFDI4Health Role Name Identifier Scheme').first.sample_controlled_vocab_terms
+  role_affiliation_identifier_schemes = SampleControlledVocab.where(title: 'NFDI4Health Role Affiliation Identifier Scheme').first.sample_controlled_vocab_terms
 %>
 <% role_row ||= nil %>
 <% index ||= 'row-template' %>
@@ -11,36 +14,77 @@
 
   unless studyhub_resource.new_record? || roles[row_num].blank?
 
-    role_name = roles[row_num]["role_name"]
+    role_name_personal_given_name = roles[row_num]["role_name_personal_given_name"]
+    role_name_personal_family_name = roles[row_num]["role_name_personal_family_name"]
     role_type =  roles[row_num]["role_type"]
+    role_name_organisational = roles[row_num]["role_name_organisational"]
+    role_name_personal_title = roles[row_num]["role_name_personal_title"]
+    role_name_identifier = roles[row_num]["role_name_identifier"]
+
+    role_name_type = roles[row_num]["role_name_type"]
+    role_name_identifier_scheme = roles[row_num]["role_name_identifier_scheme"]
+    role_affiliation_identifier = roles[row_num]["role_affiliation_identifier"]
+    role_affiliation_identifier_scheme = roles[row_num]["role_affiliation_identifier_scheme"]
+
+
     role_email = roles[row_num]["role_email"]
     role_phone = roles[row_num]["role_phone"]
 
-    role_affiliation_url = roles[row_num]["role_affiliation_url"]
-    role_affiliation_zip = roles[row_num]["role_affiliation_zip"]
-    role_affiliation_city =  roles[row_num]["role_affiliation_city"]
     role_affiliation_name = roles[row_num]["role_affiliation_name"]
-    role_affiliation_country =  roles[row_num]["role_affiliation_country"]
-
+    role_affiliation_web_page = roles[row_num]["role_affiliation_web_page"]
+    role_affiliation_address = roles[row_num]["role_affiliation_address"]
   end
-
 %>
-
 
 <% field_name_prefix = "resource_roles[role][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
-<div class="resource-role" data-index="<%= index-%>">
+<div id="role-<%= index-%>" class="resource-role" data-index="<%= index-%>">
   <div class="form-group">
     <label class="required">Role Type</label>
     <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
-                            { :include_blank => false, :selected => role_type }, :class => "form-control role_type" %>
+                            { :include_blank => "Please select...", :selected => role_type }, :class => "form-control role_type" %>
   </div>
 
   <div class="form-group">
-    <label class="required">Name</label>
-    <%= f.text_field "studyhub_resource[role_name][#{index}]", :class => "form-control",:value =>role_name %>
+    <label class="required">Role Name Type</label>
+    <%= f.collection_select "studyhub_resource[role_name_type][#{index}]", role_name_types.map(&:label), :to_s, :to_s,
+                            { :include_blank => "Please select...", :selected => role_name_type }, :class => "form-control role_name_types" %>
   </div>
+
+
+  <div class="form-group">
+    <label class="required">Role Name Organisational</label>
+    <%= f.text_field "studyhub_resource[role_name_organisational][#{index}]", :class => "form-control",:value =>role_name_organisational %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Personal Title</label>
+    <%= f.collection_select "studyhub_resource[role_name_personal_title][#{index}]", role_name_personal_titles.map(&:label), :to_s, :to_s,
+                            { :include_blank => "Please select...", :selected => role_name_personal_title }, :class => "form-control role_type" %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Given Name</label>
+    <%= f.text_field "studyhub_resource[role_name_personal_given_name][#{index}]", :class => "form-control",:value =>role_name_personal_given_name %>
+  </div>
+
+  <div class="form-group">
+    <label class="required">Family Name</label>
+    <%= f.text_field "studyhub_resource[role_name_personal_family_name][#{index}]", :class => "form-control",:value =>role_name_personal_family_name %>
+  </div>
+
+  <div class="form-group">
+    <label>Role Name Identifier</label>
+    <%= f.text_field "studyhub_resource[role_name_identifier][#{index}]", :class => "form-control",:value =>role_name_identifier %>
+  </div>
+
+  <div class="form-group">
+    <label>Person Identifier Scheme</label>
+    <%= f.collection_select "studyhub_resource[role_name_identifier_scheme][#{index}]", role_name_identifier_schemes.map(&:label), :to_s, :to_s,
+                            { :include_blank => "Please select...", :selected => role_name_identifier_scheme }, :class => "form-control role_type" %>
+  </div>
+
 
   <div class="form-group">
     <label>Email</label>
@@ -59,25 +103,25 @@
 
 
   <div class="form-group">
-    <label>City</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_city][#{index}]", :class => "form-control",:value => role_affiliation_city %>
+    <label>Affiliation Address</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_address][#{index}]", :class => "form-control",:value => role_affiliation_address %>
   </div>
 
   <div class="form-group">
-    <label>Zip</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_zip][#{index}]", :class => "form-control",:value => role_affiliation_zip %>
+    <label>Affiliation Web page</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_web_page][#{index}]", :class => "form-control",:value => role_affiliation_web_page %>
   </div>
 
   <div class="form-group">
-    <label>Country</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_country][#{index}]", :class => "form-control",:value => role_affiliation_country %>
+    <label>Affiliation Identifier</label>
+    <%= f.text_field "studyhub_resource[role_affiliation_identifier][#{index}]", :class => "form-control",:value => role_affiliation_identifier %>
   </div>
 
   <div class="form-group">
-    <label>URL</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_url][#{index}]", :class => "form-control",:value => role_affiliation_url %>
+    <label class="">Affiliation Identifier Scheme</label>
+    <%= f.collection_select "studyhub_resource[role_affiliation_identifier_scheme][#{index}]", role_affiliation_identifier_schemes.map(&:label), :to_s, :to_s,
+                            { :include_blank => "Please select...", :selected => role_affiliation_identifier_scheme }, :class => "form-control role_type" %>
   </div>
-
 
   <div class="form-group">
     <% if allow_row_removal %>
@@ -95,3 +139,13 @@
     <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
   <% end %>
 </div>
+
+<script>
+    $j(document).ready(function () {
+
+        intialRoleVisibility(<%= row_num %>);
+
+        $j('select[name="studyhub_resource[role_name_type][<%= row_num %>]"]').on('change', SR.setRoleNameTypeVisibility);
+<!--        $j('input[name="studyhub_resource[role_name_identifier][<%#= row_num %>]"]').on('change', SR.setRolePersonIdentifierSchemeAsRequirerd);-->
+    });
+</script>
