@@ -200,4 +200,18 @@ function intialRoleVisibility(index) {
     $j('input[name="studyhub_resource[role_name_personal_given_name]['+index+']"]').parent().hide();
     $j('input[name="studyhub_resource[role_name_personal_family_name]['+index+']"]').parent().hide();
     $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').parent().hide();
+
+    role_name_type = $j('select[name="studyhub_resource[role_name_type]['+index+']"]').val()
+        switch (role_name_type){
+            case 'Personal':
+                $j('input[name="studyhub_resource[role_name_personal_given_name]['+index+']"]').parent().show();
+                $j('input[name="studyhub_resource[role_name_personal_family_name]['+index+']"]').parent().show();
+                $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').parent().show();
+                break;
+            case 'Organisational':
+                $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').parent().show();
+                break;
+            default:
+
+        }
 }

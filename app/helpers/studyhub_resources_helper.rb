@@ -6,7 +6,7 @@ module StudyhubResourcesHelper
 
     #todo change hardcoded url
     #url = URI.join("http://covid19.studyhub.nfdi4health.de/resource/", resource.id.to_s).to_s
-    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + ".json"
+    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + '.json'
     content_tag :p, class: :id do
       content_tag(:strong) do
         t(label) + ':'
@@ -16,8 +16,8 @@ module StudyhubResourcesHelper
 
   def studyhub_resource_in_seek_id_json(resource)
 
-    label = "studyhub_resources.id"
-    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + ".json"
+    label = 'studyhub_resources.id'
+    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + '.json'
     content_tag :p, class: :id do
       content_tag(:strong) do
         t(label) + ':'
@@ -29,16 +29,16 @@ module StudyhubResourcesHelper
   def studyhub_resource_associated_resource(types)
     html = ''
     types.each do |type|
-      resource = StudyhubResource.find(type["id_id"])
+      resource = StudyhubResource.find(type['id_id'])
       html += "<div class='nfdi_id_type'>"
       html += resource.studyhub_resource_type.title
-      html += " "
+      html += ' '
       html += list_item_title(resource, {:include_avatar => false})
-      html += " "
-      html += type["id_relation_type"]
-      html += " "
-      html += (link_to "this resource", show_resource_path(@studyhub_resource) ).to_s
-      html += "</div>"
+      html += ' '
+      html += type['id_relation_type']
+      html += ' '
+      html += (link_to 'this resource', show_resource_path(@studyhub_resource) ).to_s
+      html += '</div>'
     end
     html.html_safe
   end
@@ -58,7 +58,7 @@ module StudyhubResourcesHelper
       <tbody>'
       items.each do |d|
         html += '<tr>'
-        html += '<td class="'+item_type+'_language">' + d[item_type+"_language"] + '</td>'
+        html += '<td class="'+item_type+'_language">' + d[item_type+'_language'] + '</td>'
         html += '<td class="'+item_type+'">' + d[item_type] + '</td>'
       end
       html += '</tbody></table></div>'
@@ -88,10 +88,10 @@ module StudyhubResourcesHelper
       <tbody>'
       ids.each do |d|
         html += '<tr>'
-        html += '<td class="id_resource_type">' + StudyhubResource.find(d["id_id"]).studyhub_resource_type.title + '</td>'
-        html += '<td class="id_id">' + 'NFDI4Health-'+d["id_id"] + '</td>'
+        html += '<td class="id_resource_type">' + StudyhubResource.find(d['id_id']).studyhub_resource_type.title + '</td>'
+        html += '<td class="id_id">' + 'NFDI4Health-'+d['id_id'] + '</td>'
         # html += '<td class="id_title">' + StudyhubResource.find(d["id_id"]).title + '</td>'
-        html += '<td class="id_title">' + (link_to StudyhubResource.find(d["id_id"]).title, show_resource_path(StudyhubResource.find(d["id_id"])) ).to_s + '</td>'
+        html += '<td class="id_title">' + (link_to StudyhubResource.find(d['id_id']).title, show_resource_path(StudyhubResource.find(d['id_id'])) ).to_s + '</td>'
         html += '</tr>'
       end
       html += '</tbody></table></div>'
@@ -117,50 +117,114 @@ module StudyhubResourcesHelper
       <tbody>'
       ids.each do |d|
         html += '<tr>'
-        html += '<td class="id_relation_type">' + (d["id_relation_type"].nil? ? "" : d["id_relation_type"].underscore.humanize ) + '</td>'
+        html += '<td class="id_relation_type">' + (d['id_relation_type'].nil? ? '' : d['id_relation_type'].underscore.humanize ) + '</td>'
         html += '<td class="id_resource_type">' + 'd["id_relation_type"]' + '</td>'
-        html += '<td class="id_type">' + d["id_type"] + '</td>'
-        html += '<td class="id_id">' + d["id_id"] + '</td>'
-        html += '<td class="id_date">' + d["id_date"] + '</td>'
+        html += '<td class="id_type">' + d['id_type'] + '</td>'
+        html += '<td class="id_id">' + d['id_id'] + '</td>'
+        html += '<td class="id_date">' + d['id_date'] + '</td>'
         html += '</tr>'
       end
       html += '</tbody></table></div>'
     end
     html.html_safe
   end
-
-
 
   def studyhub_resource_roles (roles)
     html = ''
     if roles.any?
-      html += '<div class="table-responsive">'
-      html += '<table class="table table-striped table-hover steps">
-      <thead>
-      <tr>
-        <th class="col-md-2">Name</th>
-        <th class="col-md-2">Role Type</th>
-        <th class="col-md-2">Role Name Type</th>
-        <th class="col-md-3">Email</th>
-        <th class="col-md-2">Phone</th>
-        <th class="col-md-3">Affiliation Address</th>
-      </tr>
-      </thead>
-      <tbody>'
       roles.each do |d|
-        html += '<tr>'
-        html += '<td class="role_name">' + d["role_name_personal_title"] + ' ' + d["role_name_personal_given_name"]+ ' '+ d["role_name_personal_family_name"] +'</td>'
-        html += '<td class="role_type">' + d["role_type"] + '</td>'
-        html += '<td class="role_name_type">' + d["role_name_type"] + '</td>'
-        html += '<td class="role_email">' + d["role_email"] + '</td>'
-        html += '<td class="role_phone">' + d["role_phone"] + '</td>'
-        html += '<td class="role_affiliation_address">' + d["role_affiliation_address"] + '</td>'
-        html += '</tr>'
+        html += '<div style="margin-bottom: 40px">'
+
+        case d['role_name_type']
+        when 'Personal'
+          role_name = d['role_name_personal_title'] + ' ' + d['role_name_personal_given_name']+ ' '+ d['role_name_personal_family_name']
+        when 'Organisational'
+          role_name = d['role_name_organisational']
+        end
+
+        html += '<p class="role_type"><strong>Role Type: </strong>'+d['role_type']+'</p>'
+        html += '<p class="role_name_type"><strong>Role Name Type: </strong>'+d['role_name_type']+'</p>'
+        html += '<p class="role_name"><strong>Name: </strong>'+role_name +'</p>'
+
+        html += '<p class="role_email"><strong>Email: </strong>'+d["role_email"] +'</p>' unless d["role_email"].blank?
+        html += '<p class="role_phone"><strong>Phone: </strong>'+d["role_phone"] +'</p>' unless d["role_phone"].blank?
+        html += '<p class="role_name_identifier"><strong>Identifier: </strong>'+d["role_name_identifier"] +'</p>' unless d["role_name_identifier"].blank?
+        html += '<p class="role_name_identifier_scheme"><strong>Identifier Scheme: </strong>'+d["role_name_identifier_scheme"] +'</p>' unless d["role_name_identifier_scheme"].blank?
+
+        html += '<p class="role_affiliation_name"><strong>Affiliation: </strong>'+d["role_affiliation_name"]+'</p>' unless d["role_affiliation_name"].blank?
+        html += '<p class="role_affiliation_address"><strong>Address: </strong>'+d["role_affiliation_address"]+'</p>' unless d["role_affiliation_address"].blank?
+        html += '<p class="role_affiliation_web_page"><strong>Webpage: </strong>'+d["role_affiliation_web_page"]+'</p>' unless d["role_affiliation_web_page"].blank?
+        html += '<p class="role_affiliation_identifier"><strong>Identifier: </strong>'+d["role_affiliation_identifier"]+'</p>' unless d["role_affiliation_identifier"].blank?
+        html += '<p class="role_name_identifier_scheme"><strong>Identifier Scheme: </strong>'+d["role_name_identifier_scheme"]+'</p>' unless d["role_name_identifier_scheme"].blank?
+        html +=  '</p>'
+        html += '</div>'
       end
-      html += '</tbody></table></div>'
     end
     html.html_safe
   end
+
+  # def studyhub_resource_roles_to_remove (roles)
+  #   html = ''
+  #   if roles.any?
+  #     html += '<div class="table-responsive">'
+  #     html += '<table class="table table-striped table-hover steps">
+  #     <thead>
+  #     <tr>
+  #       <th class="col-md-2">Name</th>
+  #       <th class="col-md-2">Role Type</th>
+  #       <th class="col-md-2">Role Name Type</th>
+  #       <th class="col-md-3">Email</th>
+  #       <th class="col-md-2">Phone</th>
+  #       <th class="col-md-2">role_name_identifier</th>
+  #       <th class="col-md-2">role_name_identifier_scheme</th>
+  #     </tr>
+  #     </thead>
+  #     <tbody>'
+  #
+  #     roles.each do |d|
+  #       html += '<tr>'
+  #       html += '<td class="role_name">' + d['role_name_personal_title'] + ' ' + d['role_name_personal_given_name']+ ' '+ d['role_name_personal_family_name'] +'</td>' if d['role_name_type'] == 'Personal'
+  #       html += '<td class="role_name">' + d['role_name_organisational'] +'</td>' if d['role_name_type'] == 'Organisational'
+  #       html += '<td class="role_type">' + d['role_type'] + '</td>'
+  #       html += '<td class="role_name_type">' + d['role_name_type'] + '</td>'
+  #
+  #       html += '<td class="role_email">' + d['role_email'] + '</td>'
+  #       html += '<td class="role_phone">' + d['role_phone'] + '</td>'
+  #
+  #       html += '<td class="role_name_identifier">' + d['role_name_identifier'] + '</td>'
+  #       html += '<td class="role_name_identifier_scheme">' + d['role_name_identifier_scheme'] + '</td>'
+  #       html += '</tr>'
+  #     end
+  #     html += '</tbody></table>'
+  #
+  #
+  #     html += '<div class="table-responsive">'
+  #     html += '<table class="table table-striped table-hover steps">
+  #     <thead>
+  #     <tr>
+  #       <th class="col-md-2">Affiliation Name</th>
+  #       <th class="col-md-2">Identifier</th>
+  #       <th class="col-md-2">Identifier Scheme</th>
+  #       <th class="col-md-3">Webpage</th>
+  #       <th class="col-md-3">Address</th>
+  #     </tr>
+  #     </thead>
+  #     <tbody>'
+  #
+  #     roles.each do |d|
+  #       html += '<tr>'
+  #       html += '<td class="role_affiliation_name">' + d['role_affiliation_name'] +'</td>'
+  #       html += '<td class="role_affiliation_identifier">' + d['role_affiliation_identifier'] + '</td>'
+  #       html += '<td class="role_name_identifier_scheme">' + d['role_name_identifier_scheme'] + '</td>'
+  #       html += '<td class="role_affiliation_web_page">' + d['role_affiliation_web_page'] + '</td>'
+  #       html += '<td class="role_affiliation_address">' + d['role_affiliation_address'] + '</td>'
+  #       html += '</tr>'
+  #     end
+  #     html += '</tbody></table>'
+  #     html += '</div>'
+  #   end
+  #   html.html_safe
+  # end
 
   def studyhub_custom_metadata_form_field_for_attribute(attribute, resource)
 
@@ -221,8 +285,8 @@ module StudyhubResourcesHelper
       )
       select_tag element_name,
                  options,
-                 class: "form-control",
-                 include_blank: "Please select..."
+                 class: 'form-control',
+                 include_blank: 'Please select...'
     else
       scv_id = attribute.sample_controlled_vocab.id
       existing_objects = []

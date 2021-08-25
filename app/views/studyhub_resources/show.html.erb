@@ -41,7 +41,10 @@
       </p>
     <% end %>
 
-    <%= studyhub_resource_roles @studyhub_resource.resource_json['roles'] -%>
+    <%= panel("Roles:") do %>
+      <%= studyhub_resource_roles @studyhub_resource.resource_json['roles'] -%>
+  <% end %>
+
 
     <%= panel("General Resource Information:") do %>
       <%= render partial: 'studyhub_resources/studyhub_resource_value', locals: { resource: @studyhub_resource.resource_json['resource'] } %>

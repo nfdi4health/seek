@@ -84,7 +84,7 @@ class StudyhubResourcesController < ApplicationController
           end
           format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
-          flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
+          flash[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
           format.html { render action: 'new' }
           format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
         end
@@ -177,7 +177,7 @@ class StudyhubResourcesController < ApplicationController
         format.json { render json: @studyhub_resource, status: 200 }
 
       else
-        flash[:error] = @studyhub_resource.errors.messages[:base].join("<br/>").html_safe
+        flash[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
         format.html { render action: 'edit' }
         format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
       end
@@ -340,7 +340,7 @@ class StudyhubResourcesController < ApplicationController
 
   def parse_custom_metadata_attributes(params)
 
-    cm_resource_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource General")
+    cm_resource_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource General')
     cm_study_design_attributes = get_study_design_attributes(params)
 
     multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles]
@@ -375,25 +375,26 @@ class StudyhubResourcesController < ApplicationController
 
   def get_study_design_attributes(params)
 
-    cm_study_design_general_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign General")
-    cm_study_design_non_interventional_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign Non Interventional Study")
-    cm_study_design_interventional_attributes = get_custom_metadata_attributes("NFDI4Health Studyhub Resource StudyDesign Interventional Study")
+    cm_study_design_general_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign General')
+    cm_study_design_non_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Non Interventional Study')
+    cm_study_design_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Interventional Study')
 
     cm_study_design_attributes = cm_study_design_general_attributes
-    if params[:custom_metadata_attributes][:data]["study_primary_design"] == "interventional"
+    case params[:custom_metadata_attributes][:data]['study_primary_design']
+    when 'interventional'
       cm_study_design_attributes += cm_study_design_interventional_attributes
-    elsif params[:custom_metadata_attributes][:data]["study_primary_design"] == "non-interventional"
+    when 'non-interventional'
       cm_study_design_attributes += cm_study_design_non_interventional_attributes
     end
     cm_study_design_attributes
   end
 
   def set_study_data_sharing_plan(study_design)
-    unless study_design["study_data_sharing_plan_generally"].start_with?("Yes")
-      study_design["study_data_sharing_plan_supporting_information"] = []
-      study_design["study_data_sharing_plan_time_frame"] = ""
-      study_design["study_data_sharing_plan_access_criteria"] = ""
-      study_design["study_data_sharing_plan_url"] = ""
+    unless study_design['study_data_sharing_plan_generally'].start_with?('Yes')
+      study_design['study_data_sharing_plan_supporting_information'] = []
+      study_design['study_data_sharing_plan_time_frame'] = ''
+      study_design['study_data_sharing_plan_access_criteria'] = ''
+      study_design['study_data_sharing_plan_url'] = ''
     end
     study_design
   end
@@ -407,10 +408,17 @@ class StudyhubResourcesController < ApplicationController
 
       entry['role_type'] = params[:role_type][key]
       entry['role_name_type'] = params[:role_name_type][key]
-      entry['role_name_organisational'] = params[:role_name_organisational][key]
-      entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
-      entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
-      entry['role_name_personal_title'] = params[:role_name_personal_title][key]
+
+      
+      case entry['role_name_type']
+      when 'Organisational'
+        entry['role_name_organisational'] = params[:role_name_organisational][key]
+      when 'Personal'
+        entry['role_name_personal_title'] = params[:role_name_personal_title][key]
+        entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
+        entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
+      end
+
       entry['role_name_identifier'] = params[:role_name_identifier][key]
       entry['role_name_identifier_scheme'] = params[:role_name_identifier_scheme][key]
       entry['role_email'] = params[:role_email][key]
