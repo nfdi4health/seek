@@ -84,7 +84,7 @@ class StudyhubResourcesController < ApplicationController
           end
           format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
-          flash[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
+          flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
           format.html { render action: 'new' }
           format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
         end
@@ -177,7 +177,7 @@ class StudyhubResourcesController < ApplicationController
         format.json { render json: @studyhub_resource, status: 200 }
 
       else
-        flash[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
+        flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
         format.html { render action: 'edit' }
         format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
       end
@@ -609,7 +609,7 @@ class StudyhubResourcesController < ApplicationController
 
     unless is_auth?(@seek_item, privilege)
       respond_to do |format|
-        flash[:error] = 'You are not authorized to perform this action'
+        flash.now[:error] = 'You are not authorized to perform this action'
         format.html { redirect_to @studyhub_resource }
         format.json do
           render json: { "title": 'Forbidden',

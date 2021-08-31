@@ -1,3 +1,5 @@
+<% role_error = (defined? index).nil? ? {} : process_role_error_messags(index) %>
+
 <%
   role_types = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first.sample_controlled_vocab_terms
   role_name_types = SampleControlledVocab.where(title: 'NFDI4Health Role Name Type').first.sample_controlled_vocab_terms
@@ -10,22 +12,23 @@
 <% row_num = index.to_i %>
 
 <%
-  roles = studyhub_resource.new_record?? nil : studyhub_resource.resource_json['roles']
+  roles = @studyhub_resource.resource_json.nil? ? nil : studyhub_resource.resource_json['roles']
 
-  unless studyhub_resource.new_record? || roles[row_num].blank?
+  unless @studyhub_resource.resource_json.nil? || roles[row_num].blank?
+    role_type =  roles[row_num]["role_type"]
+    role_name_type = roles[row_num]["role_name_type"]
 
+    role_name_personal_title = roles[row_num]["role_name_personal_title"]
     role_name_personal_given_name = roles[row_num]["role_name_personal_given_name"]
     role_name_personal_family_name = roles[row_num]["role_name_personal_family_name"]
-    role_type =  roles[row_num]["role_type"]
-    role_name_organisational = roles[row_num]["role_name_organisational"]
-    role_name_personal_title = roles[row_num]["role_name_personal_title"]
-    role_name_identifier = roles[row_num]["role_name_identifier"]
 
-    role_name_type = roles[row_num]["role_name_type"]
+    role_name_organisational = roles[row_num]["role_name_organisational"]
+
+    role_name_identifier = roles[row_num]["role_name_identifier"]
     role_name_identifier_scheme = roles[row_num]["role_name_identifier_scheme"]
+
     role_affiliation_identifier = roles[row_num]["role_affiliation_identifier"]
     role_affiliation_identifier_scheme = roles[row_num]["role_affiliation_identifier_scheme"]
-
 
     role_email = roles[row_num]["role_email"]
     role_phone = roles[row_num]["role_phone"]
@@ -33,6 +36,7 @@
     role_affiliation_name = roles[row_num]["role_affiliation_name"]
     role_affiliation_web_page = roles[row_num]["role_affiliation_web_page"]
     role_affiliation_address = roles[row_num]["role_affiliation_address"]
+
   end
 %>
 
@@ -40,38 +44,44 @@
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
 <div id="role-<%= index-%>" class="resource-role" data-index="<%= index-%>">
-  <div class="form-group">
-    <label class="required">Role Type</label>
+  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_type" %>">
+  <label class="required">Role Type</label>
     <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
                             { :include_blank => "Please select...", :selected => role_type }, :class => "form-control role_type" %>
+    <small><%= role_error["role_type"] if role_error.include? "role_type" %></small>
   </div>
 
-  <div class="form-group">
+  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_type" %>">
     <label class="required">Role Name Type</label>
     <%= f.collection_select "studyhub_resource[role_name_type][#{index}]", role_name_types.map(&:label), :to_s, :to_s,
                             { :include_blank => "Please select...", :selected => role_name_type }, :class => "form-control role_name_types" %>
+    <small><%= role_error["role_name_type"] if role_error.include? "role_name_type" %></small>
   </div>
 
 
-  <div class="form-group">
+  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_organisational" %>">
     <label class="required">Role Name Organisational</label>
     <%= f.text_field "studyhub_resource[role_name_organisational][#{index}]", :class => "form-control",:value =>role_name_organisational %>
+    <small><%= role_error["role_name_organisational"] if role_error.include? "role_name_organisational" %></small>
   </div>
 
-  <div class="form-group">
+  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_personal_title" %>">
     <label class="required">Personal Title</label>
     <%= f.collection_select "studyhub_resource[role_name_personal_title][#{index}]", role_name_personal_titles.map(&:label), :to_s, :to_s,
                             { :include_blank => "Please select...", :selected => role_name_personal_title }, :class => "form-control role_type" %>
+    <small><%= role_error["role_name_personal_title"] if role_error.include? "role_name_personal_title" %></small>
   </div>
 
-  <div class="form-group">
+  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_personal_given_name" %>">
     <label class="required">Given Name</label>
     <%= f.text_field "studyhub_resource[role_name_personal_given_name][#{index}]", :class => "form-control",:value =>role_name_personal_given_name %>
+    <small><%= role_error["role_name_personal_given_name"] if role_error.include? "role_name_personal_given_name" %></small>
   </div>
 
-  <div class="form-group">
+  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_personal_family_name" %>">
     <label class="required">Family Name</label>
     <%= f.text_field "studyhub_resource[role_name_personal_family_name][#{index}]", :class => "form-control",:value =>role_name_personal_family_name %>
+    <small><%= role_error["role_name_personal_family_name"] if role_error.include? "role_name_personal_family_name" %></small>
   </div>
 
   <div class="form-group">

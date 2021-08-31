@@ -161,68 +161,6 @@ module StudyhubResourcesHelper
     html.html_safe
   end
 
-  # def studyhub_resource_roles_to_remove (roles)
-  #   html = ''
-  #   if roles.any?
-  #     html += '<div class="table-responsive">'
-  #     html += '<table class="table table-striped table-hover steps">
-  #     <thead>
-  #     <tr>
-  #       <th class="col-md-2">Name</th>
-  #       <th class="col-md-2">Role Type</th>
-  #       <th class="col-md-2">Role Name Type</th>
-  #       <th class="col-md-3">Email</th>
-  #       <th class="col-md-2">Phone</th>
-  #       <th class="col-md-2">role_name_identifier</th>
-  #       <th class="col-md-2">role_name_identifier_scheme</th>
-  #     </tr>
-  #     </thead>
-  #     <tbody>'
-  #
-  #     roles.each do |d|
-  #       html += '<tr>'
-  #       html += '<td class="role_name">' + d['role_name_personal_title'] + ' ' + d['role_name_personal_given_name']+ ' '+ d['role_name_personal_family_name'] +'</td>' if d['role_name_type'] == 'Personal'
-  #       html += '<td class="role_name">' + d['role_name_organisational'] +'</td>' if d['role_name_type'] == 'Organisational'
-  #       html += '<td class="role_type">' + d['role_type'] + '</td>'
-  #       html += '<td class="role_name_type">' + d['role_name_type'] + '</td>'
-  #
-  #       html += '<td class="role_email">' + d['role_email'] + '</td>'
-  #       html += '<td class="role_phone">' + d['role_phone'] + '</td>'
-  #
-  #       html += '<td class="role_name_identifier">' + d['role_name_identifier'] + '</td>'
-  #       html += '<td class="role_name_identifier_scheme">' + d['role_name_identifier_scheme'] + '</td>'
-  #       html += '</tr>'
-  #     end
-  #     html += '</tbody></table>'
-  #
-  #
-  #     html += '<div class="table-responsive">'
-  #     html += '<table class="table table-striped table-hover steps">
-  #     <thead>
-  #     <tr>
-  #       <th class="col-md-2">Affiliation Name</th>
-  #       <th class="col-md-2">Identifier</th>
-  #       <th class="col-md-2">Identifier Scheme</th>
-  #       <th class="col-md-3">Webpage</th>
-  #       <th class="col-md-3">Address</th>
-  #     </tr>
-  #     </thead>
-  #     <tbody>'
-  #
-  #     roles.each do |d|
-  #       html += '<tr>'
-  #       html += '<td class="role_affiliation_name">' + d['role_affiliation_name'] +'</td>'
-  #       html += '<td class="role_affiliation_identifier">' + d['role_affiliation_identifier'] + '</td>'
-  #       html += '<td class="role_name_identifier_scheme">' + d['role_name_identifier_scheme'] + '</td>'
-  #       html += '<td class="role_affiliation_web_page">' + d['role_affiliation_web_page'] + '</td>'
-  #       html += '<td class="role_affiliation_address">' + d['role_affiliation_address'] + '</td>'
-  #       html += '</tr>'
-  #     end
-  #     html += '</tbody></table>'
-  #     html += '</div>'
-  #   end
-  #   html.html_safe
-  # end
 
   def studyhub_custom_metadata_form_field_for_attribute(attribute, resource)
 
@@ -294,6 +232,32 @@ module StudyhubResourcesHelper
                                  handlebars_template: 'typeahead/controlled_vocab_term' },
                     limit: 1)
     end
+  end
+
+  def process_role_error_messags(index)
+
+    role = {}
+
+    if (@error_keys.include? "roles[#{index}]['role_name_type']")
+      role["role_name_type"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_type']".to_sym].first
+    end
+
+    if (@error_keys.include? "roles[#{index}]['role_name_personal_title']")
+      role["role_name_personal_title"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_title']".to_sym].first
+    end
+
+    if (@error_keys.include? "roles[#{index}]['role_name_personal_given_name']")
+      role["role_name_personal_given_name"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_given_name']".to_sym].first
+    end
+
+    if (@error_keys.include? "roles[#{index}]['role_name_personal_family_name']")
+      role["role_name_personal_family_name"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_family_name']".to_sym].first
+    end
+
+    if (@error_keys.include? "roles[#{index}]['role_name_organisational']")
+      role["role_name_organisational"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_organisational']".to_sym].first
+    end
+    role
   end
 
 end

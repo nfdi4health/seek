@@ -22,7 +22,7 @@ class StudyhubResource < ApplicationRecord
 
   validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
-  #validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
+  validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_acronym_presence, on:  [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
@@ -63,17 +63,23 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_role_presence
-    ss
-    pp 'check_role_presence'
 
-    [{'role_type'=>'ContactPerson', 'role_name_type'=>'Personal', 'role_name_personal_title'=>'Mr.', 'role_name_personal_given_name'=>'Xiaoming',
-      'role_name_personal_family_name'=>'Hu', 'role_name_identifier'=>'Role Name Identifier', 'role_name_identifier_scheme'=>'ORCID', 'role_email'=>'xm.johann@gmail.com',
-      'role_phone'=>'015150733586', 'role_affiliation_name'=>'Affiliation Name',
-      'role_affiliation_address'=>'Breslauer Straße', 'role_affiliation_web_page'=>'Affiliation Web page',
-      'role_affiliation_identifier'=>'Affiliation Identifier', 'role_affiliation_identifier_scheme'=>'ROR'}]
+    if resource_json['roles'].blank?
+      errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
+    else
+      resource_json['roles'].each_with_index do |role,index|
+        errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
+        errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
+        if role['role_name_type'] == 'Personal'
+          errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")  if role['role_name_personal_title'].blank?
+          errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")  if role['role_name_personal_given_name'].blank?
+          errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")  if role['role_name_personal_family_name'].blank?
+        end
 
-    resource_json['roles'].each do |role|
-      if role['role_name_type'] == 'Personal'
+        if role['role_name_type'] == 'Organisational'
+          errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")  if role['role_name_organisational'].blank?
+        end
+
       end
     end
   end
@@ -122,14 +128,14 @@ class StudyhubResource < ApplicationRecord
   end
 
   def studyhub_resource_type_title
-    StudyhubResourceType.find(studyhub_resource_type_id).title
+    StudyhubResourceType.find(studyhub_resource_type_id).title.downcase
   end
 
   def update_working_stage
     self.stage = if request_to_submit?
-      StudyhubResource::SUBMITTED
-    else
-      StudyhubResource::SAVED
+                   StudyhubResource::SUBMITTED
+                 else
+                   StudyhubResource::SAVED
                  end
   end
 
@@ -183,7 +189,5 @@ class StudyhubResource < ApplicationRecord
       'unknown'
     end
   end
-
-
 
 end
