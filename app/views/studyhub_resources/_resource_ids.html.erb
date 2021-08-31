@@ -27,7 +27,7 @@
       </thead>
       <tbody>
 
-      <%  if @studyhub_resource.resource_json.nil? %>
+      <%  if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['ids'].blank? %>
         <%= render :partial => 'id_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
       <% else %>
         <% @studyhub_resource.resource_json['ids'].each_with_index do |id, index| %>

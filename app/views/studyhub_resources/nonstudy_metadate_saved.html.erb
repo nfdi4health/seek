@@ -1,3 +1,4 @@
+<% r_title = @studyhub_resource.studyhub_resource_type.title.downcase %>
 <div class="row">
 <div style="margin:auto;width:70%;">
 <div class="">
@@ -7,9 +8,9 @@
 <table>
   <tr >
     <td style="padding: 20px 80px 80px 0"><p>
-      Do you want to add a document to this <b><%= @studyhub_resource.studyhub_resource_type.title %></b> ? <br>
+      Do you want to add a document to this <b><%= r_title %></b> ? <br>
       you can create a document by either uploading a file or registering a URL to a remote file or web page.
-      If the document is already registered in SEEK, you are able to directly associate it with this <b><%= @studyhub_resource.studyhub_resource_type.title %></b>
+      If the document is already registered in SEEK, you are able to directly associate it with this <b><%=r_title %></b>.
     </p></td>
 
     <td style="padding-bottom:40px">    <%= button_to('Associate a document', associate_documents_studyhub_resource_path,
@@ -17,10 +18,11 @@
                           data: {}) %></td>
   </tr>
   <tr>
-    <td>  <p>
-      You can also go back to the <b><%= @studyhub_resource.studyhub_resource_type.title %></b> and add a document later.
-
-    </p></td>
+    <td>
+      <p>
+      You can also go back to the <b><%= r_title %></b> and add a document later.
+      </p>
+    </td>
     <td><%= button_to('Go back to resource', studyhub_resource_path, method: :get,
                       class: 'btn', id: 'studyhub_resource',
                       data: {}) %></td>

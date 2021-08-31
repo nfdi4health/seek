@@ -15,7 +15,7 @@
     </tr>
     </thead>
     <tbody>
-    <% if @studyhub_resource.resource_json.nil? %>
+    <% if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['resource_acronyms'].blank? %>
       <%= render :partial => 'acronym_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
     <% else %>
       <% @studyhub_resource.resource_json['resource_acronyms'].each_with_index do |acronym, index| %>

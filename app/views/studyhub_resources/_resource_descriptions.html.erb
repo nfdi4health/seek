@@ -17,7 +17,7 @@
       <tbody>
 
 
-      <% if @studyhub_resource.resource_json.nil? %>
+      <% if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['resource_descriptions'].blank?  %>
         <%= render :partial => 'description_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
       <% else %>
         <% @studyhub_resource.resource_json['resource_descriptions'].each_with_index do |description, index| %>

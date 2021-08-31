@@ -13,7 +13,8 @@
 
   <div id="resource_roles">
     <div class="table" id="resource-role-table">
-      <% if @studyhub_resource.new_record? %>
+
+      <% if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['roles'].blank? %>
         <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
       <% else %>
         <% @studyhub_resource.resource_json['roles'].each_with_index do |role, index| %>
