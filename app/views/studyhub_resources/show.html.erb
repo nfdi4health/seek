@@ -1,6 +1,6 @@
 <% nfdi_type =  @studyhub_resource.resource_json["ids"].select{|x| x["id_type"] == "NFDI4Health"}%>
-<% nfdi_subresources =  nfdi_type.select{|x| x["id_relation_type"] == "IsPartOf"}%>
-<% nfdi_superresources =  nfdi_type.select{|x| x["id_relation_type"] == "HasPart"}%>
+<% nfdi_subresources =  nfdi_type.select{|x| x["id_relation_type"] == "HasPart" && (!StudyhubResource.find(x["id_id"]).is_studytype?) }%>
+<% nfdi_superresources =  nfdi_type.select{|x| x["id_relation_type"] == "HasPart" && StudyhubResource.find(x["id_id"]).is_studytype? }%>
 
 <% other_types =  @studyhub_resource.resource_json["ids"].reject{|x| x["id_type"] == "NFDI4Health"} %>
 

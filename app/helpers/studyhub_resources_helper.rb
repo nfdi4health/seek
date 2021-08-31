@@ -108,7 +108,6 @@ module StudyhubResourcesHelper
       <thead>
       <tr>
 <th class="col-md-2">Relation type</th>
-<th>Resource type</th>
 <th class="col-md-2">ID Type</th>
    <th class="col-md-3">ID</th>
         <th>ID Date</th>
@@ -118,7 +117,6 @@ module StudyhubResourcesHelper
       ids.each do |d|
         html += '<tr>'
         html += '<td class="id_relation_type">' + (d['id_relation_type'].nil? ? '' : d['id_relation_type'].underscore.humanize ) + '</td>'
-        html += '<td class="id_resource_type">' + 'd["id_relation_type"]' + '</td>'
         html += '<td class="id_type">' + d['id_type'] + '</td>'
         html += '<td class="id_id">' + d['id_id'] + '</td>'
         html += '<td class="id_date">' + d['id_date'] + '</td>'
