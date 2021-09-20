@@ -15,53 +15,53 @@ dataset_resource_type:
 
 study_protocol_resource_type:
   id: 4
-  title: Study Protocol
+  title: Study protocol
   key: study_protocol
 
 
 protocol_amendment_resource_type:
   id: 5
-  title: Protocol Amendment
+  title: Protocol amendment
   key: protocol_amendment
 
 data_dictionary_resource_type:
   id: 6
-  title: Data Dictionary
+  title: Data dictionary
   key: data_dictionary
 
 informed_consentForm_resource_type:
   id: 7
-  title: Informed Consent Form
+  title: Informed consent form
   key: informed_consent_form
 
 patient_information_sheet_resource_type:
   id: 8
-  title: Patient Information Sheet
+  title: Patient information sheet
   key: patient_information_sheet
 
 sop_resource_type:
   id: 9
-  title: Manual of Operations (SOPs)
+  title: Manual of operations (SOPs)
   key: sop
 
 sstatistical_analysis_plan_resource_type:
   id: 10
-  title: Statistical Analysis Plan
+  title: Statistical analysis plan
   key: sstatistical_analysis_plan
 
 data_management_plan_resource_type:
   id: 11
-  title: Data Management Plan
+  title: Data management plan
   key: data_management_plan
 
 case_report_form_resource_type:
   id: 12
-  title: Case Report Form
+  title: Case report form
   key: case_report_form
 
 code_book_resource_type:
   id: 13
-  title: Code Book
+  title: Code book
   key: code_book
 
 
@@ -72,33 +72,33 @@ questionnaire_resource_type:
 
 interview_scheme_and_theme_resource_type:
   id: 15
-  title: Interview Scheme and Themes
+  title: Interview scheme and themes
   key: interview_scheme_and_theme
 
 observation_guide_resource_type:
   id: 16
-  title: Observation Guide
+  title: Observation guide
   key: observation_guide
 
 discussion_guide_resource_type:
   id: 17
-  title: Discussion Guide
+  title: Discussion guide
   key: discussion_guide
 
 participant_tasks_resource_type:
   id: 18
-  title: Participant Tasks
+  title: Participant tasks
   key: participant_tasks
 
 
 other_data_collection_instrument_resource_type:
   id: 19
-  title: Other Data Collection Instrument
+  title: Other data collection instrument
   key: other_data_collection_instrument
 
 other_study_document_resource_type:
   id: 20
-  title: Other Study Document
+  title: Other study document
   key: other_study_document
 
 other_resource_type:

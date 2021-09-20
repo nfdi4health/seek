@@ -45,9 +45,9 @@ disable_authorization_checks do
 
   #resource_type_general
   resource_type_general_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Type General').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Audiovisual', 'Book', 'Collection', 'Computational notebook',
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Audiovisual', 'Book','Book chapter', 'Collection', 'Computational notebook',
                                                                                                'Conference paper', 'Conference proceeding', 'Data paper', 'Dataset',
-                                                                                               'Dissertation', 'Event', 'Image', 'Interactive resource', 'Journal article',
+                                                                                               'Dissertation', 'Event', 'Image', 'Interactive resource','Journal','Journal article',
                                                                                                'Model', 'Output management plan', 'Peer review', 'Physical object', 'Preprint',
                                                                                                'Report', 'Service', 'Software', 'Sound', 'Standard', 'Text', 'Workflow', 'Other'])
   )
