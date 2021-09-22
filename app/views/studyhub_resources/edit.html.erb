@@ -4,7 +4,7 @@
 <%#  title = @studyhub_resource.is_studytype? ? "Study Type" : "Non Study Type"%>
 <div class="row">
   <div style="margin:auto;width:70%;">
-    <h1>Edit <%= @studyhub_resource.studyhub_resource_type.title %></h1>
+    <h1>Edit <%= @studyhub_resource.studyhub_resource_type.title %> Metadata</h1>
 
     <%= form_with url: studyhub_resource_path, method: :put do |f| %>
 
@@ -29,7 +29,7 @@
     <script type="text/javascript">
         $j(document).ready(function () {
             <% unless @studyhub_resource.resource_json.nil? %>
-            if (<%=  @studyhub_resource.is_studytype? %>){
+            if (<%=  @studyhub_resource.is_studytype? || !@studyhub_resource.content_blob.nil? %>){
                 $j('#step_one').hide();
             }
             <% end %>

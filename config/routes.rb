@@ -448,17 +448,14 @@ SEEK::Application.routes.draw do
   #
     ### STUDYHUB RESOURCES ###
 
-  resources :studyhub_resources, concerns: [:asset,:publishable] do
-
+  resources :studyhub_resources, concerns: [:has_content_blobs, :asset,:publishable] do
   collection do
       post :preview_stages
     end
 
     member do
-      get :associate_documents
-      get :nonstudy_metadate_saved
-      patch :associate_existing_documents
-      post :associate_new_document
+      get :upload_file
+      post :create_content_blob
       patch :manage_update
     end
   end

@@ -1,5 +1,7 @@
 <% show_publish_button = item.can_publish? && item.stage == StudyhubResource::SUBMITTED %>
 
+<% human_name = text_for_resource(item) %>
+
 <%= render :partial => "subscriptions/subscribe", :locals => {:object => item} %>
 <% show_publish_button = item.can_publish? && item.is_submitted? %>
 
@@ -7,6 +9,20 @@
 <% if logged_in_and_member? %>
     <%= button_link_to("New #{t('studyhub_resource')}", 'new', new_studyhub_resource_path) %>
 <% end %>
+
+
+<% if item.is_downloadable? -%>
+  <% if can_download_asset?(item, params[:code]) -%>
+      <%= download_or_link_button item,
+                                  polymorphic_path(item, action: :download),
+                                  item.single_content_blob.try(:url),
+                                  human_name,
+                                  class: 'btn btn-default', disabled: item.download_disabled? %>
+
+  <% end -%>
+
+<% end -%>
+
 
 <% if item.can_edit? -%>
   <%= add_to_dropdown(item) %>
@@ -16,11 +32,6 @@
   <% if item.can_edit? %>
     <li><%= image_tag_for_key('edit', edit_studyhub_resource_path(item), "Edit #{t('studyhub_resource')}", nil, "Edit #{t('studyhub_resource')}") -%></li>
   <% end %>
-
-  <%# if item.can_manage? -%>
-<!--    <li><%#= image_tag_for_key('manage', manage_studyhub_resource_path(item), "Manage #{t('studyhub_resource')}", nil, "Manage #{t('studyhub_resource')}") -%></li>-->
-  <%# end -%>
-
   <% if show_publish_button %>
     <li><%= image_tag_for_key('publish', polymorphic_path(item, action: :check_related_items), nil, { method: :post }, "Publish #{t('studyhub_resource')}") -%></li>
   <% end -%>

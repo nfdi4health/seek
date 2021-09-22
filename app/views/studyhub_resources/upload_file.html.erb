@@ -1,0 +1,39 @@
+<% r_title = @studyhub_resource.studyhub_resource_type.title.downcase %>
+<div class="row">
+<div style="margin:auto;width:70%;">
+<div class="">
+<div id ="step_two">
+  <h3>Step 2: Upload a file</h3>
+  <div class="asset_form">
+    <%= form_tag({:action => :create_content_blob}, :multipart => true) do -%>
+
+        <%= error_messages_for :studyhub_resource -%>
+
+        <%= render :partial=>"assets/upload_box",:locals=>{:resource=>@studyhub_resource} -%>
+
+        <div>
+          <%= create_button id:"studyhub_resource_submit_btn",
+                            # onclick:"return validateResourceFields('data_file');",
+                            class:'btn btn-primary',
+                            button_text:'Upload',
+                            'data-upload-file-text' => 'Upload' %>
+        </div>
+    <% end -%>
+  </div>
+
+
+    <div style="padding-top: 20px">
+      <p>
+        You can also go back to the  <b><%= r_title %></b> metadata and add a file later.
+      </p>
+    </div>
+    <%= button_to('Go back to resource', studyhub_resource_path, method: :get,
+                  class: 'btn', id: 'studyhub_resource',
+                  data: {}) %>
+  </div>
+
+
+
+</div>
+</div>
+</div>

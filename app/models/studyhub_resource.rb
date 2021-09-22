@@ -15,7 +15,9 @@ class StudyhubResource < ApplicationRecord
            dependent: :destroy
 
   has_many :parents, through: :parents_relationships
-  has_and_belongs_to_many :documents, -> { distinct }
+  # has_one :content_blob, -> (r) { where('content_blobs.asset_version = ?', r.version) }, :as => :asset, :foreign_key => :asset_id
+  has_one :content_blob,:as => :asset, :foreign_key => :asset_id
+
 
   has_extended_custom_metadata
   acts_as_asset
@@ -109,6 +111,12 @@ class StudyhubResource < ApplicationRecord
 
     errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
 
+  end
+
+  def check_content_blob_presence
+    unless is_studytype?
+      errors.add(:base, "Please save the #{studyhub_resource_type_title} at first and then upload a file  ") if content_blob.blank?
+    end
   end
 
 

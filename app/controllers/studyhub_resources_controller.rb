@@ -5,57 +5,91 @@ class StudyhubResourcesController < ApplicationController
   include Seek::IndexPager
   include Seek::Publishing::PublishingCommon
 
-  # before_action :find_and_authorize_studyhub_resource, only: %i[edit update destroy manage show]
-
-  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show new_object_based_on_existing_one]
+  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show new_object_based_on_existing_one download]
 
   before_action :find_assets, only: [:index]
   api_actions :index, :show, :create, :update, :destroy
 
   def show
-    @studyhub_resource = StudyhubResource.find(params[:id])
     respond_to do |format|
       format.html
       format.json { render json: @studyhub_resource }
     end
   end
 
-  def associate_documents
-    @studyhub_resource = StudyhubResource.find(params[:id])
-    @document = Document.new
+  def download
+    @studyhub_resource.just_used
+    download_single(@studyhub_resource.content_blob)
   end
 
-  def associate_existing_documents
-    @studyhub_resource = StudyhubResource.find(params[:id])
-    @studyhub_resource.update(studyhub_resource_documents_params)
+  # def associate_documents
+  #   @studyhub_resource = StudyhubResource.find(params[:id])
+  #   @document = Document.new
+  # end
+  #
+  # def associate_existing_documents
+  #   @studyhub_resource = StudyhubResource.find(params[:id])
+  #   @studyhub_resource.update(studyhub_resource_documents_params)
+  #
+  #   respond_to do | format |
+  #     if  @studyhub_resource.save
+  #       flash.now[:notice] = "The document is associated with #{t('studyhub_resource')} successfully." if flash.now[:notice].nil?
+  #       format.html { redirect_to @studyhub_resource }
+  #       format.json { render json: @studyhub_resource }
+  #     end
+  #   end
+  # end
 
-    respond_to do | format |
-      if  @studyhub_resource.save
-        flash.now[:notice] = "The document is associated with #{t('studyhub_resource')} successfully." if flash.now[:notice].nil?
-        format.html { redirect_to @studyhub_resource }
-        format.json { render json: @studyhub_resource }
-      end
-    end
+
+  # def associate_new_document
+  #
+  #   @studyhub_resource = StudyhubResource.find(params[:id])
+  #   @document = Document.new(
+  #     title: @studyhub_resource.title,
+  #     description: @studyhub_resource.description,
+  #     project_ids: @studyhub_resource.projects.map(&:id)
+  #     # policy_attributes: valid_sharing
+  #   )
+  #
+  #   @document.policy = @studyhub_resource.policy
+  #   @document.policy.permissions = @studyhub_resource.policy.permissions
+  #
+  #   respond_to do |format|
+  #     if handle_upload_data && @document.content_blob.save && @document.save
+  #       @studyhub_resource.documents << @document
+  #       session[:uploaded_content_blob_id] = @document.content_blob.id
+  #       if  @studyhub_resource.save
+  #         flash.now[:notice] = "The document is created and associated with #{t('studyhub_resource')} successfully." if flash.now[:notice].nil?
+  #         format.html { redirect_to @studyhub_resource }
+  #         format.json { render json: @studyhub_resource }
+  #       end
+  #     else
+  #       format.html { render action: :new, status: :unprocessable_entity }
+  #     end
+  #   end
+  #
+  # end
+
+
+
+  def clear_session_info
+    session.delete(:uploaded_content_blob_id)
+    session.delete(:metadata)
+    session.delete(:studyhub_resource_id)
+    session.delete(:revision_comments)
   end
 
 
-  def associate_new_document
-
+  def create_content_blob
+    clear_session_info
     @studyhub_resource = StudyhubResource.find(params[:id])
-    @document = Document.new(
-      title: @studyhub_resource.title,
-      description: @studyhub_resource.description,
-      project_ids: @studyhub_resource.projects.map(&:id)
-      # policy_attributes: valid_sharing
-    )
-
-    @document.policy = @studyhub_resource.policy
-    @document.policy.permissions = @studyhub_resource.policy.permissions
 
     respond_to do |format|
-      if handle_upload_data && @document.content_blob.save && @document.save
-        @studyhub_resource.documents << @document
-        session[:uploaded_content_blob_id] = @document.content_blob.id
+      if handle_upload_data && @studyhub_resource.content_blob.save
+        session[:uploaded_content_blob_id] = @studyhub_resource.content_blob.id
+        session[:studyhub_resource_id] = params[:studyhub_resource_id]
+        session[:revision_comments] = params[:revision_comments]
+
         if  @studyhub_resource.save
           flash.now[:notice] = "The document is created and associated with #{t('studyhub_resource')} successfully." if flash.now[:notice].nil?
           format.html { redirect_to @studyhub_resource }
@@ -80,7 +114,7 @@ class StudyhubResourcesController < ApplicationController
           if @studyhub_resource.is_studytype?
             format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
           else
-            format.html { redirect_to nonstudy_metadate_saved_studyhub_resource_path(@studyhub_resource)}
+            format.html { redirect_to upload_file_studyhub_resource_path(@studyhub_resource)}
           end
           format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
@@ -130,7 +164,8 @@ class StudyhubResourcesController < ApplicationController
   end
 
 
-  def nonstudy_metadate_saved
+
+  def upload_file
     @studyhub_resource = StudyhubResource.find(params[:id])
     respond_to do |format|
       format.html
@@ -168,11 +203,12 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
 
       if @studyhub_resource.save
-        flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully updated.<br/>".html_safe
-        if @studyhub_resource.is_studytype?
+        flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully updated.<br/>".html_safe
+        if @studyhub_resource.is_studytype? || !@studyhub_resource.content_blob.nil?
           format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
         else
-          format.html { render action: 'nonstudy_metadate_saved' }
+          flash[:notice] += "You can now upload a file for it".html_safe
+          format.html { render action: 'upload_file' }
         end
         format.json { render json: @studyhub_resource, status: 200 }
 
@@ -596,30 +632,6 @@ class StudyhubResourcesController < ApplicationController
 
     [cmt, metadata]
   end
-
-
-  def find_and_authorize_studyhub_resource
-    @studyhub_resource = StudyhubResource.find(params[:id])
-    privilege = Seek::Permissions::Translator.translate(action_name)
-
-    @seek_item ||= @studyhub_resource.study
-    @seek_item ||= @studyhub_resource.assay
-
-    return if privilege.nil?
-
-    unless is_auth?(@seek_item, privilege)
-      respond_to do |format|
-        flash.now[:error] = 'You are not authorized to perform this action'
-        format.html { redirect_to @studyhub_resource }
-        format.json do
-          render json: { "title": 'Forbidden',
-                         "detail": 'You are not authorized to perform this action.' },
-                 status: :forbidden
-        end
-      end
-    end
-  end
-
   def update_documents_assoication(resource,params)
     ss
   end
@@ -649,7 +661,4 @@ class StudyhubResourcesController < ApplicationController
       end
     end
   end
-
-
-
 end

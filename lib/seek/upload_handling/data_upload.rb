@@ -58,13 +58,7 @@ module Seek
 
         asset = instance_variable_get("@#{controller_name.downcase.singularize}")
 
-        #hacked way to allow from studyhub_resource controller to upload document type
-        if Seek::Config.nfdi_studyhub_enabled && controller_name =='studyhub_resources'
-          controller_name='documents'
-          asset = instance_variable_get("@document")
-        end
-
-        version = asset.respond_to?(:version) ? asset.version : nil
+       version = asset.respond_to?(:version) ? asset.version : nil
         version += 1 if new_version
 
         unless model_image_present? && params[:content_blobs].blank?

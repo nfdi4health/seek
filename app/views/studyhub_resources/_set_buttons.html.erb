@@ -4,13 +4,22 @@
   Please note, your request will be reviewed by our data quality managers.
   If the data have been entered correctly, your application will be approved and the resource will be published. If some inaccuracies are found, we will notify you of the needed changes.'
 %>
+<%
+   if @studyhub_resource.id.nil?
+     submit_button_disabled = true
+   elsif @studyhub_resource.content_blob.nil?
+       submit_button_disabled = true
+   else
+         submit_button_disabled = false
+   end
+%>
 
 
 <%= submit_tag('Save',  title: save_button_help_text, class: 'btn btn-primary', name:'save_button', id: 'save-button',
                disabled: false) %>
 
 <%= submit_tag('Submit', title: submit_button_help_text, :onclick => "return previewStages();",
-               class: 'btn btn-primary', name: 'submit_button', id: 'studyhub_resource_submit_btn', disabled: false) %>
+               class: 'btn btn-primary', name: 'submit_button', id: 'studyhub_resource_submit_btn', disabled: submit_button_disabled) %>
 
 <%= image_tag("ajax-loader.gif", :id => 'permissions_spinner', :style => 'display: none') -%>
 <div id="permissions-preview-wrapper"></div>
