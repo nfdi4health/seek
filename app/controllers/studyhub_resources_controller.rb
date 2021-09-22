@@ -22,6 +22,24 @@ class StudyhubResourcesController < ApplicationController
     download_single(@studyhub_resource.content_blob)
   end
 
+  def new_resource
+
+    type = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
+    @studyhub_resource=StudyhubResource.new
+    @studyhub_resource.studyhub_resource_type = type
+    respond_to do |format|
+
+      format.html do
+        case type.key
+        when 'study','substudy'
+          render template: 'studyhub_resources/new_study', locals: { sr_type: type }
+        else
+          render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }
+        end
+      end
+    end
+  end
+
   # def associate_documents
   #   @studyhub_resource = StudyhubResource.find(params[:id])
   #   @document = Document.new
@@ -105,6 +123,7 @@ class StudyhubResourcesController < ApplicationController
   def create
 
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
+    type =  @studyhub_resource.studyhub_resource_type
       update_sharing_policies @studyhub_resource
 
       respond_to do |format|
@@ -119,7 +138,14 @@ class StudyhubResourcesController < ApplicationController
           format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
           flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
-          format.html { render action: 'new' }
+          format.html do
+            case type.key
+            when 'study','substudy'
+              render template: 'studyhub_resources/new_study', locals: { sr_type: type }
+            else
+              render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }
+            end
+          end
           format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
         end
       end

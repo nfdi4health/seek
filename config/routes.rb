@@ -451,6 +451,7 @@ SEEK::Application.routes.draw do
   resources :studyhub_resources, concerns: [:has_content_blobs, :asset,:publishable] do
   collection do
       post :preview_stages
+      post :new_resource
     end
 
     member do

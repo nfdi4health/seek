@@ -1,72 +1,22 @@
 <%
   panel_title = "Please select a #{ t('studyhub_resources.studyhub_resource')} Type:"
-  @studyhub_resource_type = nil
-  selected_type = @studyhub_resource.studyhub_resource_type.nil? ? nil : @studyhub_resource.studyhub_resource_type.key
-  collapsed = @studyhub_resource.resource_json.nil?
+  # @studyhub_resource_type = nil
+  # selected_type = @studyhub_resource.studyhub_resource_type.nil? ? nil : @studyhub_resource.studyhub_resource_type.key
 %>
 
 <div class="row">
   <div style="margin:auto;width:70%;">
     <h1>New <%= t('studyhub_resources.studyhub_resource') %></h1>
-    <%= form_with url: studyhub_resources_path, method: :post do |f| %>
-
+    <%= form_tag(new_resource_studyhub_resources_path) do -%>
       <div id="studyhub_resource_type_selection" >
         <div class="form-group">
           <%= panel(panel_title, :id => 'new_studyhub_resource') do %>
-            <%= select_tag "studyhub_resource[studyhub_resource_type]", grouped_options_for_select(grouped_options_for_studyhub_resource_type,
-                                                                                                   selected_key = selected_type),
+            <%= select_tag "studyhub_resource[studyhub_resource_type]", grouped_options_for_select(grouped_options_for_studyhub_resource_type),
                            { :prompt => "Please select a type:", :class => "form-control" } %>
           <% end -%>
         </div>
       </div>
-
-      <div id="studyhub_resource_container" style="display: none">
-
-
-        <%= render :partial=> "form", :locals => {:f => f, :collapsed => collapsed } %>
-
-        <% if @studyhub_resource.can_manage? %>
-          <% # for now set up a default project for nfdi, and can be configure with Seek::Config.nfdi_default_project_id in rails c %>
-          <% @studyhub_resource.projects << Project.find(Seek::Config.nfdi_default_project_id) if @studyhub_resource.projects.size == 0 %>
-          <%= render :partial => "projects/project_selector", :locals => { :resource => @studyhub_resource } -%>
-        <% end %>
-
-        <%= render :partial=> "set_buttons" %>
-
-      </div>
+      <%= submit_tag 'submit', class: 'btn btn-primary', id: 'select_sr_type_button' %>
     <% end %>
   </div>
 </div>
-
-<script type="text/javascript">
-    $j(document).ready(function () {
-
-        <% unless @studyhub_resource.resource_json.nil? %>
-        if (<%=  @studyhub_resource.is_studytype? %>){
-            $j('#studyhub_resource_container').show();
-            $j('#studyhub_resource_study_design').show();
-            $j('#step_one').hide();
-        } else {
-            $j('#studyhub_resource_container').show();
-            $j('#studyhub_resource_study_design').hide();
-        }
-        <% end %>
-
-        $j('select[name="studyhub_resource[studyhub_resource_type]"]').change(function () {
-            resource_type = $j(this).val();
-            if (resource_type == 'study' || resource_type == 'substudy') {
-                $j('#studyhub_resource_container').show();
-                $j('#studyhub_resource_study_design').show();
-                $j('#step_one').hide();
-            } else {
-
-                $j('#studyhub_resource_container').show();
-                $j('#studyhub_resource_study_design').hide();
-                $j('#step_one').show();
-            }
-        });
-    });
-</script>
-
-
-
