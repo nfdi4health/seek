@@ -452,11 +452,11 @@ SEEK::Application.routes.draw do
   collection do
       post :preview_stages
       post :new_resource
+      post :create_content_blob
     end
 
     member do
       get :upload_file
-      post :create_content_blob
       patch :manage_update
     end
   end

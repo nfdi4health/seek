@@ -121,7 +121,7 @@ class StudyhubResource < ApplicationRecord
 
 
   def request_to_submit?
-    submit_button_clicked
+    @submit_button_clicked
   end
 
   def is_submitted?
@@ -183,7 +183,6 @@ class StudyhubResource < ApplicationRecord
 
   # translates stage codes into human-readable form
   def self.get_stage_wording(stage)
-
     case stage
     when StudyhubResource::SAVED
       'saved'

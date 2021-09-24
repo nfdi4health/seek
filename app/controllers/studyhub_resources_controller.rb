@@ -5,9 +5,10 @@ class StudyhubResourcesController < ApplicationController
   include Seek::IndexPager
   include Seek::Publishing::PublishingCommon
 
-  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show new_object_based_on_existing_one download]
+  before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show download create_content_blob]
 
   before_action :find_assets, only: [:index]
+  before_action :login_required, only: [:create, :create_content_blob]
   api_actions :index, :show, :create, :update, :destroy
 
   def show
@@ -34,150 +35,75 @@ class StudyhubResourcesController < ApplicationController
         when 'study','substudy'
           render template: 'studyhub_resources/new_study', locals: { sr_type: type }
         else
-          render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }
+          render template: 'studyhub_resources/upload_file', locals: { sr_type: type }
         end
       end
     end
   end
-
-  # def associate_documents
-  #   @studyhub_resource = StudyhubResource.find(params[:id])
-  #   @document = Document.new
-  # end
-  #
-  # def associate_existing_documents
-  #   @studyhub_resource = StudyhubResource.find(params[:id])
-  #   @studyhub_resource.update(studyhub_resource_documents_params)
-  #
-  #   respond_to do | format |
-  #     if  @studyhub_resource.save
-  #       flash.now[:notice] = "The document is associated with #{t('studyhub_resource')} successfully." if flash.now[:notice].nil?
-  #       format.html { redirect_to @studyhub_resource }
-  #       format.json { render json: @studyhub_resource }
-  #     end
-  #   end
-  # end
-
-
-  # def associate_new_document
-  #
-  #   @studyhub_resource = StudyhubResource.find(params[:id])
-  #   @document = Document.new(
-  #     title: @studyhub_resource.title,
-  #     description: @studyhub_resource.description,
-  #     project_ids: @studyhub_resource.projects.map(&:id)
-  #     # policy_attributes: valid_sharing
-  #   )
-  #
-  #   @document.policy = @studyhub_resource.policy
-  #   @document.policy.permissions = @studyhub_resource.policy.permissions
-  #
-  #   respond_to do |format|
-  #     if handle_upload_data && @document.content_blob.save && @document.save
-  #       @studyhub_resource.documents << @document
-  #       session[:uploaded_content_blob_id] = @document.content_blob.id
-  #       if  @studyhub_resource.save
-  #         flash.now[:notice] = "The document is created and associated with #{t('studyhub_resource')} successfully." if flash.now[:notice].nil?
-  #         format.html { redirect_to @studyhub_resource }
-  #         format.json { render json: @studyhub_resource }
-  #       end
-  #     else
-  #       format.html { render action: :new, status: :unprocessable_entity }
-  #     end
-  #   end
-  #
-  # end
-
-
 
   def clear_session_info
     session.delete(:uploaded_content_blob_id)
-    session.delete(:metadata)
-    session.delete(:studyhub_resource_id)
-    session.delete(:revision_comments)
   end
-
 
   def create_content_blob
     clear_session_info
-    @studyhub_resource = StudyhubResource.find(params[:id])
+    @studyhub_resource = StudyhubResource.new(studyhub_resource_type_params)
 
+    type =  @studyhub_resource.studyhub_resource_type
     respond_to do |format|
       if handle_upload_data && @studyhub_resource.content_blob.save
         session[:uploaded_content_blob_id] = @studyhub_resource.content_blob.id
-        session[:studyhub_resource_id] = params[:studyhub_resource_id]
-        session[:revision_comments] = params[:revision_comments]
-
-        if  @studyhub_resource.save
-          flash.now[:notice] = "The document is created and associated with #{t('studyhub_resource')} successfully." if flash.now[:notice].nil?
-          format.html { redirect_to @studyhub_resource }
-          format.json { render json: @studyhub_resource }
-        end
+        format.html { render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }}
       else
-        format.html { render action: :new, status: :unprocessable_entity }
+        session.delete(:uploaded_content_blob_id)
+        format.html { render template: 'studyhub_resources/upload_file', status: :unprocessable_entity }
       end
     end
-
   end
 
   def create
 
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
     type =  @studyhub_resource.studyhub_resource_type
-      update_sharing_policies @studyhub_resource
+    update_sharing_policies @studyhub_resource
 
+    case type.key
+
+    when 'study','substudy'
       respond_to do |format|
         if @studyhub_resource.save
-          flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully created.<br/>".html_safe
-
-          if @studyhub_resource.is_studytype?
-            format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
-          else
-            format.html { redirect_to upload_file_studyhub_resource_path(@studyhub_resource)}
-          end
-          format.json { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
+          flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully saved.<br/>".html_safe
+          format.html { redirect_to studyhub_resource_path(@studyhub_resource)}
+          format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
           flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
-          format.html do
-            case type.key
-            when 'study','substudy'
-              render template: 'studyhub_resources/new_study', locals: { sr_type: type }
-            else
-              render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }
-            end
-          end
-          format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
+          format.html {render template: 'studyhub_resources/new_study', locals: { sr_type: type },status: :unprocessable_entity}
+          format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
         end
       end
+    else
 
-      #todo(hu) only save @studyhub_resource when item(study/assay) is created successfully
-      #if item.valid?
-      #todo(hu) remove studyhub_resource_type, and redo when the request is from API
-      # resource_type = @studyhub_resource.studyhub_resource_type
-      #
-      # if resource_type.nil?
-      #   render json: { error: 'Studyhub API Error',
-      #                  message: 'Studyhub resource type is blank or invalid.' }, status: :bad_request
-      #
-      # else
-      # seek_type = map_to_seek_type(resource_type)
+      # check the content blob id matches that previously uploaded and recorded on the session
+      uploaded_blob_matches = (params[:content_blob_id].to_s == session[:uploaded_content_blob_id].to_s)
+      @studyhub_resource.errors.add(:base, "The file uploaded doesn't match") unless uploaded_blob_matches
 
-      # item = nil
-      #
-      # case seek_type
-      # when 'Study'
-      #   Rails.logger.info('creating a SEEK Study')
-      #   item = @studyhub_resource.build_study(study_params)
-      # when 'Assay'
-      #   Rails.logger.info('creating a SEEK Assay')
-      #   item = @studyhub_resource.build_assay(assay_params)
-      # end
-      # update_sharing_policies item
+      blob = ContentBlob.find(params[:content_blob_id])
+      @studyhub_resource.content_blob = blob
 
+      respond_to do |format|
+        if uploaded_blob_matches && @studyhub_resource.save && blob.save
+          clear_session_info
 
-      #todo(hu) next time when add relationship
-      #update_parent_child_relationships(relationship_params)
+          flash[:notice] = "#{type.title.downcase} was successfully uploaded and saved." if flash.now[:notice].nil?
+          format.html {redirect_to studyhub_resource_path(@studyhub_resource)}
+          format.json  {render json: @studyhub_resource, status: :created, location: @studyhub_resource}
 
+        else
+          flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
+          format.html { render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }, status: :unprocessable_entity}
+        end
+      end
+    end
   end
 
 
@@ -205,27 +131,7 @@ class StudyhubResourcesController < ApplicationController
     @studyhub_resource.update_attributes(studyhub_resource_params)
     update_sharing_policies @studyhub_resource
     update_relationships(@studyhub_resource,params)
-    update_parent_child_relationships(relationship_params)
 
-    # unless @studyhub_resource.study.nil?
-    #   update_sharing_policies @studyhub_resource.study
-    #   @studyhub_resource.study.update_attributes(study_params)
-    # end
-    #
-    # unless @studyhub_resource.assay.nil?
-    #   update_sharing_policies @studyhub_resource.assay
-    #   @studyhub_resource.assay.update_attributes(assay_params)
-    # end
-
-    # respond_to do |format|
-    #   if @studyhub_resource.save
-    #     @studyhub_resource.reload
-    #     format.json { render json: @studyhub_resource, status: 200 }
-    #   else
-    #     format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
-    #   end
-    # end
-    #
     respond_to do |format|
 
       if @studyhub_resource.save
@@ -281,7 +187,7 @@ class StudyhubResourcesController < ApplicationController
     stage_text = StudyhubResource.get_stage_wording(resource.stage)
 
     respond_to do |format|
-      format.html { 
+      format.html {
         render partial: 'preview_stages',
                locals: {resource: resource, stage_text: stage_text }}
     end
@@ -289,54 +195,6 @@ class StudyhubResourcesController < ApplicationController
 
   private
 
-  # def study_params
-  #   assay_ids = get_assay_ids(relationship_params) if relationship_params.key?('child_ids')
-  #   # investigation_id =  params[:studyhub_resource][:investigation_id] || (@studyhub_resource.study.investigation.id unless @studyhub_resource.study.nil?)
-  #
-  #   investigation_id =1 # hu_test
-  #   resource_json = studyhub_resource_params['resource_json']
-  #
-  #
-  #   title =  params[:studyhub_resource] || resource_json['titles'].first['title'] # hu_test
-  #   description = resource_json['descriptions'].first['description'] unless resource_json['descriptions'].blank?
-  #
-  #   cmt, metadata = extract_custom_metadata('study')
-  #
-  #   params_hash = {
-  #     title: title,
-  #     description: description,
-  #     investigation_id: investigation_id,
-  #     # hu_test
-  #     # custom_metadata_attributes: {
-  #     #   custom_metadata_type_id: cmt.id, data: metadata
-  #     # }
-  #   }
-  #   params_hash['assay_ids'] = assay_ids unless assay_ids.nil?
-  #   params_hash
-  # end
-
-  # def assay_params
-  #
-  #   study_id = get_study_id(relationship_params)
-  #   resource_json = studyhub_resource_params['resource_json']
-  #   title = resource_json['titles'].first['title']
-  #   description = resource_json['descriptions'].first['description'] unless resource_json['descriptions'].blank?
-  #
-  #   cmt, metadata = extract_custom_metadata('assay')
-  #
-  #   {
-  #     # currently the assay class is set as modelling type by default
-  #     assay_class_id: AssayClass.for_type('modelling').id,
-  #     title: title,
-  #     description: description,
-  #     study_id: study_id,
-  #     custom_metadata_attributes: {
-  #       custom_metadata_type_id: cmt.id, data: metadata
-  #     },
-  #     document_ids: seek_relationship_params['document_ids']
-  #   }
-  # end
-  #
   def studyhub_resource_documents_params
     params.require(:studyhub_resource).permit( { document_ids: [] })
   end
@@ -346,23 +204,30 @@ class StudyhubResourcesController < ApplicationController
     params.require(:studyhub_resource).permit( { project_ids: [] })
   end
 
+  def studyhub_resource_type_params
+    @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
+    params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
+    params.require(:studyhub_resource).permit(:studyhub_resource_type_id)
+  end
+
+
   def studyhub_resource_params
 
     @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
     params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
-
-    params[:studyhub_resource][:resource_json] = {}
     sr = params[:studyhub_resource]
+    params[:studyhub_resource][:resource_json] = {}
 
     #a flag to send a signal to run a full validations.
-    params[:studyhub_resource][:submit_button_clicked] = if params[:save_button]
+    params[:studyhub_resource][:submit_button_clicked] = if params[:submit_button].nil?
                                                            false
                                                          else
                                                            true
                                                          end
 
     # parse titles
-    sr[:title] = sr[:resource_title].values[0]
+    sr[:title] = sr[:resource_title].values[0] unless sr[:resource_title].nil?
+
     sr[:resource_json][:resource_titles] = parse_resource_titles(sr)
 
     # parse acronyms
@@ -471,7 +336,7 @@ class StudyhubResourcesController < ApplicationController
       entry['role_type'] = params[:role_type][key]
       entry['role_name_type'] = params[:role_name_type][key]
 
-      
+
       case entry['role_name_type']
       when 'Organisational'
         entry['role_name_organisational'] = params[:role_name_organisational][key]
@@ -556,135 +421,4 @@ class StudyhubResourcesController < ApplicationController
     resource_descriptions
   end
 
-  def relationship_params
-    params.require(:studyhub_resource).permit(parent_ids: [], child_ids: [])
-  end
-
-  def seek_relationship_params
-    params.require(:studyhub_resource).permit(document_ids:[])
-  end
-
-  def map_to_seek_type(resource_type)
-    case resource_type.key
-    when 'study'
-      'Study'
-    when 'substudy'
-      'Study'
-    else
-      'Assay'
-    end
-  end
-
-  #due to the constraints of ISA, a assay can only have one study associated.
-  def get_study_id(relationship_params)
-
-    study_id = nil
-
-    #ToDo assign assay without parent to a default study. remove the hard code.
-    other_studyhub_resource_id = Seek::Config.nfdi_other_studyhub_resource_id
-
-    # if resource has no parents, assign it to "other studies"
-    if relationship_params['parent_ids'].blank?
-      study_id = other_studyhub_resource_id
-    else
-
-      parent = StudyhubResource.find(relationship_params['parent_ids'].first)
-
-      # TODO: when parents are other types, such as "instrument", "document"
-      # TODO: if parent doesnt exist, still need to sort out the relationship
-      study_id = if !parent.nil? && (parent.is_study? || parent.is_substudy?)
-                   parent.study.id
-                 else
-                   other_studyhub_resource_id
-                 end
-    end
-    study_id
-  end
-
-  def get_assay_ids(relationship_params)
-    assay_ids = []
-    unless relationship_params['child_ids'].blank?
-      relationship_params['child_ids'].each do |child_id|
-        child = StudyhubResource.find(child_id)
-        unless (child.nil? || child.assay.nil?)
-          assay_ids << child.assay.id
-        end
-      end
-    end
-    assay_ids
-  end
-
-  def extract_custom_metadata(resource_type)
-    if CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata', supported_type: resource_type).any?
-      cmt = CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource Metadata',
-                                     supported_type: resource_type).first
-    end
-
-    resource_json = @studyhub_resource.resource_json
-
-    metadata = {
-      "resource_web_studyhub": resource_json['resource_web_studyhub'],
-      "resource_type": @studyhub_resource.studyhub_resource_type.title,
-      "resource_web_page": resource_json['resource_web_page'],
-      "resource_web_mica": resource_json['resource_web_mica']
-      # "acronym": resource_json['acronyms'].first['acronym']
-    }
-
-    if resource_json.key? 'study'
-      study_start_date = if resource_json['study']['study_start_date'].nil?
-                           nil
-                         else
-                           Date.strptime(
-                             resource_json['study']['study_start_date'], '%Y-%m-%d'
-                           )
-                         end
-      study_end_date = if resource_json['study']['study_end_date'].nil?
-                         nil
-                       else
-                         Date.strptime(
-                           resource_json['study']['study_end_date'], '%Y-%m-%d'
-                         )
-                       end
-
-      metadata = metadata.merge({
-                                  "study_type": resource_json['study']['study_type'],
-                                  "study_start_date": study_start_date,
-                                  "study_end_date": study_end_date,
-                                  "study_status": resource_json['study']['study_status'],
-                                  "study_country": resource_json['study']['study_country'],
-                                  "study_eligibility": resource_json['study']['study_eligibility']
-                                })
-    end
-
-    [cmt, metadata]
-  end
-  def update_documents_assoication(resource,params)
-    ss
-  end
-
-  def update_parent_child_relationships(params)
-    if params.key?(:parent_ids)
-      @studyhub_resource.parents = []
-      params['parent_ids'].each do |x|
-        parent = StudyhubResource.find(x)
-        if parent.nil?
-          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
-        else
-          @studyhub_resource.add_parent(parent)
-        end
-      end
-    end
-
-    if params.key?(:child_ids)
-      @studyhub_resource.children = []
-      params['child_ids'].each do |x|
-        child = StudyhubResource.find(x)
-        if child.nil?
-          @studyhub_resource.errors.add(:id, "Studyhub Resource id #{x} doesnt exist!")
-        else
-          @studyhub_resource.add_child(child)
-        end
-      end
-    end
-  end
 end
