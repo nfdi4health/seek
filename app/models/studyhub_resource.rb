@@ -15,7 +15,6 @@ class StudyhubResource < ApplicationRecord
            dependent: :destroy
 
   has_many :parents, through: :parents_relationships
-  # has_one :content_blob, -> (r) { where('content_blobs.asset_version = ?', r.version) }, :as => :asset, :foreign_key => :asset_id
   has_one :content_blob,:as => :asset, :foreign_key => :asset_id
 
 
@@ -29,9 +28,8 @@ class StudyhubResource < ApplicationRecord
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
 
-  store_accessor :resource_json, :studySecondaryOutcomes, :studyAnalysisUnit, :acronyms
   attr_readonly :studyhub_resource_type_id
-  attr_accessor :submit_button_clicked
+  attr_accessor :commit_button
   before_save :update_working_stage, on:  [:create, :update]
 
   # *****************************************************************************
@@ -121,7 +119,7 @@ class StudyhubResource < ApplicationRecord
 
 
   def request_to_submit?
-    @submit_button_clicked
+    (commit_button == 'Submit') ? true : false
   end
 
   def is_submitted?

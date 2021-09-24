@@ -218,13 +218,6 @@ class StudyhubResourcesController < ApplicationController
     sr = params[:studyhub_resource]
     params[:studyhub_resource][:resource_json] = {}
 
-    #a flag to send a signal to run a full validations.
-    params[:studyhub_resource][:submit_button_clicked] = if params[:submit_button].nil?
-                                                           false
-                                                         else
-                                                           true
-                                                         end
-
     # parse titles
     sr[:title] = sr[:resource_title].values[0] unless sr[:resource_title].nil?
 
@@ -257,7 +250,7 @@ class StudyhubResourcesController < ApplicationController
                                             :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, { document_ids: [] },\
                                             :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
                                             :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
-                                            :inclusion_mica, :submit_button_clicked)
+                                            :inclusion_mica, :commit_button)
   end
 
 

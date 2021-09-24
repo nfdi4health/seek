@@ -15,11 +15,11 @@
 %>
 
 
-<%= submit_tag('Save',  title: save_button_help_text, class: 'btn btn-primary', name:'save_button', id: 'save-button',
+<%= submit_tag('Save',  title: save_button_help_text, class: 'btn btn-primary', name:'studyhub_resource[commit_button]', id: 'save-button',
                disabled: false) %>
 
 <%= submit_tag('Submit', title: submit_button_help_text,
-               class: 'btn btn-primary', name: 'submit_button', id: 'studyhub_resource_submit_btn', disabled: false
+               class: 'btn btn-primary', name: 'studyhub_resource[commit_button]', id: 'studyhub_resource_submit_btn', disabled: false
                # :onclick => "return previewStages();"
     ) %>
 
