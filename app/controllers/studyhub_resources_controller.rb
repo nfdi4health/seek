@@ -72,7 +72,8 @@ class StudyhubResourcesController < ApplicationController
     when 'study','substudy'
       respond_to do |format|
         if @studyhub_resource.save
-          flash[:notice] = "#{@studyhub_resource.studyhub_resource_type.title} was successfully saved.<br/>".html_safe
+          flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully saved.<br/>".html_safe
+          flash[:notice] += get_submit_notice if request_to_submit?
           format.html { redirect_to studyhub_resource_path(@studyhub_resource)}
           format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
@@ -136,6 +137,8 @@ class StudyhubResourcesController < ApplicationController
 
       if @studyhub_resource.save
         flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully updated.<br/>".html_safe
+        flash[:notice] += get_submit_notice if request_to_submit?
+
         if @studyhub_resource.is_studytype? || !@studyhub_resource.content_blob.nil?
           format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
         else
@@ -194,6 +197,24 @@ class StudyhubResourcesController < ApplicationController
   end
 
   private
+
+
+  def request_to_submit?
+    (params[:studyhub_resource][:commit_button] == 'Submit') ? true : false
+  end
+
+  def get_submit_notice
+    html = "<div class='alert submit-info'>
+              By clicking on the button “Submit”, you confirm the correctness of the data entered and apply for registration of your resource in the NFDI4Health Task Force COVID-19 system.
+              <br/>
+              Please note, after the form is submitted successfully, your data is still private.
+              You can send a request to publish your data. Your request will be reviewed by our "+ t('studyhub_resources.gatekeep')+".
+              If the data have been entered correctly, your application will be approved and the resource will be published.
+              <br/>
+              </div>"
+    html.html_safe
+  end
+
 
   def studyhub_resource_documents_params
     params.require(:studyhub_resource).permit( { document_ids: [] })

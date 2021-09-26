@@ -115,3 +115,9 @@ a {
 .nfdi_id_type:before {
     content:"• ";
 }
+
+.submit-info {
+    color: #6799BE;
+    background-color: #ffffff;
+    margin-top: 20px;
+}
