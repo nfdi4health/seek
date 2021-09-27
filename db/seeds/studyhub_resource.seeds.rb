@@ -1,7 +1,11 @@
 puts 'Seeded Studyhub Resource Types'
 ActiveRecord::FixtureSet.create_fixtures(File.join(Rails.root, 'config/default_data'), 'studyhub_resource_types')
-
 puts 'Seeded NFDI4Health Studyhub Resource Metadata'
+
+
+configpath = File.join(Rails.root, 'config/default_data', 'studyhub_resource_attribute_descriptions.yml')
+attribute_descriptions = YAML::load_file(configpath)
+pp attribute_descriptions.inspect
 
 int_type = SampleAttributeType.find_or_initialize_by(title: 'Integer')
 int_type.update_attributes(base_type: Seek::Samples::BaseType::INTEGER, placeholder: '1')
@@ -27,6 +31,9 @@ resource_type_attributes = []
 StudyhubResourceType.all.each do |type|
   resource_type_attributes << { label: type.title }
 end
+
+
+
 
 def create_sample_controlled_vocab_terms_attributes(array)
   attributes = []
@@ -59,13 +66,25 @@ disable_authorization_checks do
 
   #resource_use_rights_label
   resource_use_rights_label_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Label').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['CC0',
-                                                                                               'CC BY 4.0', 'CC BY-NC 4.0', 'CC BY-ND 4.0', 'CC BY-SA 4.0', 'CC BY-NC-SA 4.0', 'CC BY-NC-ND 4.0', 'All rights reserved', 'Other', 'N/A', 'Unknown'])
-  )
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['CC0 1.0 (Creative Commons Zero v1.0 Universal)',
+                                                                                               'CC BY 4.0 (Creative Commons Attribution 4.0 International)',
+                                                                                               'CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)',
+                                                                                               'CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)',
+                                                                                               'CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)',
+                                                                                               'All rights reserved',
+                                                                                               'Other',
+                                                                                               'Not applicable']))
+
 
   #resource_use_rights_authors_confirmation_cv
   resource_use_rights_authors_confirmation_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Author Confirmation').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No' ]))
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No' ])
+  )
+
+  #resource_use_rights_support_by_licencing_cv
+  resource_use_rights_support_by_licencing_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Support By Licencing').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No' ])
+  )
 
   # id_type
   id_type_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first_or_create!(
@@ -76,15 +95,15 @@ disable_authorization_checks do
   # id_resource_type_general
   id_resource_type_general_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Resource Type General').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Audiovisual Book BookChapter Collection
-ComputationalNotebook ConferencePaper ConferenceProceeding DataPaper Dataset Dissertation Event Image InteractiveResource Journal JournalArticle Model
-OutputManagementPlan PeerReview PhysicalObject Preprint ReportService Software Sound Standard Text Workflow Other])
+                                                                                                 ComputationalNotebook ConferencePaper ConferenceProceeding DataPaper Dataset Dissertation Event Image InteractiveResource Journal JournalArticle Model
+                                                                                                 OutputManagementPlan PeerReview PhysicalObject Preprint ReportService Software Sound Standard Text Workflow Other])
   )
 
   # id_relation_type
   id_relation_types_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Relation Type').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[IsCitedBy Cites IsSupplementTo IsSupplementedBy IsContinuedBy Continues
-IsDescribedBy Describes HasMetadata IsMetadataFor HasVersion IsVersionOf IsNewVersionOf IsPreviousVersionOf IsPartOf HasPart IsReferencedBy References IsDocumentedBy Documents
-IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedBy Reviews IsDerivedFrom IsSourceOf IsRequiredBy Requires IsObsoletedBy Obsoletes])
+                                                                                                 IsDescribedBy Describes HasMetadata IsMetadataFor HasVersion IsVersionOf IsNewVersionOf IsPreviousVersionOf IsPartOf HasPart IsReferencedBy References IsDocumentedBy Documents
+                                                                                                 IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedBy Reviews IsDerivedFrom IsSourceOf IsRequiredBy Requires IsObsoletedBy Obsoletes])
   )
 
 
@@ -220,7 +239,7 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
   #study_phase
   study_phase_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Phase').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[N/A preclinical early-phase-1 phase-1
-    phase-1-phase-2 phase-2 phase-2a phase-2b phase-2-phase-3 phase-3 phase-3a phase-3b phase-4 other])
+                                                                                                 phase-1-phase-2 phase-2 phase-2a phase-2b phase-2-phase-3 phase-3 phase-3a phase-3b phase-4 other])
   )
 
   #study_masking
@@ -278,45 +297,55 @@ IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedB
     custom_metadata_attributes: [
 
       CustomMetadataAttribute.where(title: 'resource_type_general').create!(
-        title: 'resource_type_general', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_general_cv
+        title: 'resource_type_general', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_general_cv, description: attribute_descriptions['resource_type_general']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_language').create!(
-        title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv
+        title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv, description: attribute_descriptions['resource_language']
+      ),
+
+      CustomMetadataAttribute.where(title: 'resource_web_page').create!(
+        title: 'resource_web_page', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_web_page']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_version').create!(
-        title: 'resource_version', required: false, sample_attribute_type: string_type
+        title: 'resource_version', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_version']
       ),
 
 
       CustomMetadataAttribute.where(title: 'resource_format').create!(
-        title: 'resource_format', required: false, sample_attribute_type: string_type
+        title: 'resource_format', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_format']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_label').create!(
-        title: 'resource_use_rights_label', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_label_cv
+        title: 'resource_use_rights_label', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_label_cv, description: attribute_descriptions['resource_use_rights_label']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_description').create!(
-        title: 'resource_use_rights_description', required: false, sample_attribute_type: string_type
+        title: 'resource_use_rights_description', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_use_rights_description']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_1').create!(
-        title: 'resource_use_rights_authors_confirmation_1', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv
+        title: 'resource_use_rights_authors_confirmation_1', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+        description: attribute_descriptions['resource_use_rights_authors_confirmation_1']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_2').create!(
-        title: 'resource_use_rights_authors_confirmation_2', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv
+        title: 'resource_use_rights_authors_confirmation_2', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+        description: attribute_descriptions['resource_use_rights_authors_confirmation_2']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_3').create!(
-        title: 'resource_use_rights_authors_confirmation_3', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv
+        title: 'resource_use_rights_authors_confirmation_3', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+        description: attribute_descriptions['resource_use_rights_authors_confirmation_3']
       ),
 
-      CustomMetadataAttribute.where(title: 'resource_web_page').create!(
-        title: 'resource_web_page', required: false, sample_attribute_type: string_type
+      CustomMetadataAttribute.where(title: 'resource_use_rights_support_by_licencing').create!(
+        title: 'resource_use_rights_support_by_licencing', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_support_by_licencing_cv,
+        description: attribute_descriptions['resource_use_rights_support_by_licencing']
       )
+
+
     ]
   )
 

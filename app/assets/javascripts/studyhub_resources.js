@@ -50,7 +50,7 @@ var SR = {
         check_license = $j(this).val();
 
 
-        if (! (check_license == "N/A")) {
+        if (! (check_license == "Not applicable")) {
 
             $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_description]"]').parent().show();
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation_1]"]').parent().show();
