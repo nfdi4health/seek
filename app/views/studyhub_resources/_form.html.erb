@@ -5,6 +5,7 @@
   <div>
     The fields marked with<label class="save-required"></label> are required before you can save the resource. <br>
     The fields marked with<label class="submit-required"></label> are required before you can submit the resource.<br>
+    You are able to edit the resource once it has been created.
   </div>
 </div>
 
@@ -13,8 +14,8 @@
     <h3>Step 2: Fill out metadata</h3>
   </div>
   <%= render partial: 'studyhub_basic', locals: { :f => f, :collapsed => collapsed } %>
-  <%= render :partial => 'resource_ids', :locals=> { :f => f,:collapsed => collapsed} %>
   <%= render :partial => 'resource_roles', :locals=> { :f => f,:collapsed => collapsed} %>
+  <%= render :partial => 'resource_ids', :locals=> { :f => f,:collapsed => collapsed} %>
   <% if @studyhub_resource.new_record? %>
      <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :collapsed => collapsed } %>
   <% elsif @studyhub_resource.is_studytype?%>
