@@ -8,7 +8,7 @@ class StudyhubResourcesController < ApplicationController
   before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show download create_content_blob]
 
   before_action :find_assets, only: [:index]
-  before_action :login_required, only: [:create, :create_content_blob]
+  before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   api_actions :index, :show, :create, :update, :destroy
 
   def show
