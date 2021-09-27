@@ -215,3 +215,18 @@ function intialRoleVisibility(index) {
 
         }
 }
+
+function toggle(block_id) {
+
+    if($j('#'+block_id).parent().attr("aria-expanded") == 'false') {
+        $j('#'+block_id).parent('.collapse').collapse();
+    }
+
+    $j("html").animate(
+                {
+                    scrollTop: $j('#'+block_id).parent().parent().offset().top
+                },
+                800 //speed
+            );
+}
+

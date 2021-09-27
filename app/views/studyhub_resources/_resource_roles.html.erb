@@ -1,4 +1,6 @@
-<%= folding_panel("Resource Roles:", collapsed ) do %>
+<% help_text = "*******************************************" %>
+  <%= folding_panel("Resource Roles:", collapsed, :body_options => {:id => 'resource_roles'},
+                    :help_text => help_text) do %>
 
   <div class="help-block">
     <div class="alert alert-info">
@@ -33,6 +35,9 @@
       <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f} %>
     </div>
   </div>
+  <% if @studyhub_resource.is_studytype? %>
+    <button type="button" class="btn btn-success float-right" onclick="toggle('study_design_general')">Next</button>
+  <% end %>
 <% end %>
 
 <script>

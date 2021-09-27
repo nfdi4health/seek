@@ -1,4 +1,6 @@
-<%= folding_panel("Associated Resources:", collapsed ) do %>
+<% help_text = "*******************************************" %>
+<%= folding_panel("Associated Resources:", collapsed, :body_options => {:id => 'associated_resources'},
+                  :help_text => help_text) do %>
 
   <div class="help-block">
     <div class="alert alert-info">
@@ -49,6 +51,8 @@
       </tbody>
     </table>
   </div>
+
+  <button type="button" class="btn btn-success float-right" onclick="toggle('resource_roles')">Next</button>
 
 <% end %>
 
