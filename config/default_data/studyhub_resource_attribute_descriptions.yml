@@ -1,11 +1,11 @@
 resource_type_general: A more general term describing the resource type.
 resource_language: Primary language of the resource.
-resource_version: Version of the resource
-resource_web_page: Web page of the resource
-resource_format: Format of the resource
+resource_version: Version of the resource.
+resource_web_page: Web page of the resource.
+resource_format: Format of the resource.
 
 resource_use_rights_label: License defining the rights to re-use the resource.
-resource_use_rights_description: Additional information about the terms and conditions for (re-)use
+resource_use_rights_description: Additional information about the terms and conditions for (re-)use.
 resource_use_rights_authors_confirmation_1: The authors confirm that they have authority to license the document.
 resource_use_rights_authors_confirmation_2: The authors confirm that they have read and understand the terms of the chosen license.
 resource_use_rights_authors_confirmation_3: The authors understand that CC licensing is not revocable.

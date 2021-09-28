@@ -111,7 +111,7 @@ disable_authorization_checks do
 
   # role_type
   role_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['ContactPerson','Principal Investigator','Creator/Author','Funder(public)','Funder(private)',
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Contact person','Principal investigator','Creator/Author','Funder(public)','Funder(private)',
                                                                                                'Sponsor (primary)','Sponsor (secondary)','Sponsor-Investigator', 'Data collector', 'Data curator',
                                                                                                'Data manager', 'Distributor', 'Editor', 'Hosting institution', 'Producer', 'Project leader','Project manager',
                                                                                                'Project member', 'Publisher', 'Registration agency', 'Registration authority', 'Related person', 'Researcher',
