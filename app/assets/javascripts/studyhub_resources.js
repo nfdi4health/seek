@@ -177,13 +177,13 @@ var SR = {
         design = $j(this).val();
 
         switch (design){
-            case 'interventional':
+            case 'Interventional':
 
                 $j('div[id="study_design_interventional"]').parent().parent().show();
                 $j('div[id="study_design_non_interventional"]').parent().parent().hide();
                 break;
 
-            case 'non-interventional':
+            case 'Non-interventional':
 
                 $j('div[id="study_design_non_interventional"]').parent().parent().show();
                 $j('div[id="study_design_interventional"]').parent().parent().hide();

@@ -5,7 +5,6 @@ puts 'Seeded NFDI4Health Studyhub Resource Metadata'
 
 configpath = File.join(Rails.root, 'config/default_data', 'studyhub_resource_attribute_descriptions.yml')
 attribute_descriptions = YAML::load_file(configpath)
-pp attribute_descriptions.inspect
 
 int_type = SampleAttributeType.find_or_initialize_by(title: 'Integer')
 int_type.update_attributes(base_type: Seek::Samples::BaseType::INTEGER, placeholder: '1')
@@ -143,20 +142,20 @@ disable_authorization_checks do
 
   #study_primary_design
   study_primary_design_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Design').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[non-interventional interventional])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Non-interventional Interventional])
   )
 
   #study_type_interventional
   study_type_interventional_cv = SampleControlledVocab.where(title: 'NFDI4Health Interventional Study Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Single Group', 'Parallel','Crossover','Factorial','Sequential','Other'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Single Group', 'Parallel','Crossover','Factorial','Sequential','Other','Unknown'])
   )
 
   #study_type_non_interventional
   study_type_non_interventional_cv = SampleControlledVocab.where(title: 'NFDI4Health Non-interventional Study Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Case-Control', 'Case-Only','Case-Crossover','Cohort',' Birth cohort','Cross-section',
-                                                                                               'Cross-section ad-hoc follow-up', 'Ecologic or Community Studies',
-                                                                                               'Family-Based','Longitudinal', 'Panel', 'Quality control', 'Time series','Trend',
-                                                                                               'Twin-study','Other'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Case-control', 'Case-only','Case-crossover','Ecologic or community studies','Family-based',
+                                                                                               'Twin study', 'Cohort',' Birth cohort','Trend', 'Panel',
+                                                                                               'Longitudinal','Cross-section', 'Cross-section ad-hoc follow-up', 'Time series',
+                                                                                               'Quality control', 'Other','Unknown'])
   )
 
   #study_primary_purpose
@@ -184,8 +183,15 @@ disable_authorization_checks do
   #study_status
   study_status_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ['Not yet recruiting', 'Recruiting', 'Enrolling by invitation', 'Active,not recruiting',
-       'Completed','Suspended', 'Terminated', 'Withdrawn'])
+      ['At the planning stage',
+       'Ongoing (I): Recruitment ongoing, but data collection not yet started',
+       'Ongoing (II): Recruitment and data collection ongoing',
+       'Ongoing (III): Recruitment completed, but data collection ongoing',
+       'Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing',
+       'Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume',
+       'Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resume',
+       'Completed: Recruitment, data collection, and data quality management completed normally',
+       'Other'])
   )
 
   #study_gender
@@ -355,19 +361,19 @@ disable_authorization_checks do
     custom_metadata_attributes: [
 
       CustomMetadataAttribute.where(title: 'study_primary_design').create!(
-        title: 'study_primary_design', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_design_cv
+        title: 'study_primary_design', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_design_cv, description: attribute_descriptions['study_primary_design']
       ),
 
       CustomMetadataAttribute.where(title: 'study_type_description').create!(
-        title: 'study_type_description', required: false, sample_attribute_type: text_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_primary_purpose').create!(
-        title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv
+        title: 'study_type_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_type_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_conditions').create!(
-        title: 'study_conditions', required: false, sample_attribute_type: string_type
+        title: 'study_conditions', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_conditions']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_status').create!(
+        title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv, description: attribute_descriptions['study_status']
       ),
 
       CustomMetadataAttribute.where(title: 'study_conditions_code').create!(
@@ -387,11 +393,6 @@ disable_authorization_checks do
       CustomMetadataAttribute.where(title: 'study_subject').create!(
         title: 'study_subject', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_subject_cv
       ),
-
-      CustomMetadataAttribute.where(title: 'study_status').create!(
-        title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv
-      ),
-
 
       CustomMetadataAttribute.where(title: 'study_region').create!(
         title: 'study_region', required: false, sample_attribute_type: string_type
@@ -498,7 +499,8 @@ disable_authorization_checks do
       #************************ non interventional study design  *******************
 
       CustomMetadataAttribute.where(title: 'study_type_non_interventional').create!(
-        title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv
+        title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv,
+        description: attribute_descriptions['study_type_non_interventional']
       ),
 
 
@@ -522,9 +524,12 @@ disable_authorization_checks do
       #************************ interventional study design ***********************
 
       CustomMetadataAttribute.where(title: 'study_type_interventional').create!(
-        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv
+        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv, description: attribute_descriptions['study_type_interventional']
       ),
 
+      CustomMetadataAttribute.where(title: 'study_primary_purpose').create!(
+        title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv
+      ),
 
       CustomMetadataAttribute.where(title: 'study_phase').create!(
         title: 'study_phase', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_phase_cv

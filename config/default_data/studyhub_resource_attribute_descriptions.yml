@@ -10,3 +10,18 @@ resource_use_rights_authors_confirmation_1: The authors confirm that they have a
 resource_use_rights_authors_confirmation_2: The authors confirm that they have read and understand the terms of the chosen license.
 resource_use_rights_authors_confirmation_3: The authors understand that CC licensing is not revocable.
 resource_use_rights_support_by_licencing: The authors confirm that NFDI4Health is allowed to licence the document, i.e. to mark the document with the licence information
+
+study_primary_design: Primary design of the study.
+study_type_description: Additional information on study design.
+study_conditions: Primary disease or health condition(s) studied, or fokus of the study.
+
+
+
+study_status: Overall status for the study.
+
+
+
+
+
+study_type_interventional: Specific type of the study.
+study_type_non_interventional: Specific type of the study.
