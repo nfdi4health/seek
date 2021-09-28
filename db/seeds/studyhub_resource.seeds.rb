@@ -528,7 +528,7 @@ disable_authorization_checks do
       ),
 
       CustomMetadataAttribute.where(title: 'study_primary_purpose').create!(
-        title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv
+        title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv, description: attribute_descriptions['study_primary_purpose']
       ),
 
       CustomMetadataAttribute.where(title: 'study_phase').create!(

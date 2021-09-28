@@ -24,4 +24,6 @@ study_status: Overall status for the study.
 
 
 study_type_interventional: Specific type of the study.
+study_primary_purpose: The main purpose of the intervention(s).
+
 study_type_non_interventional: Specific type of the study.

@@ -39,8 +39,8 @@ class StudyhubResource < ApplicationRecord
   REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally']
   REQUIRED_FIELDS_INTERVENTIONAL = ['study_type_interventional','study_primary_outcome_title']
   REQUIRED_FIELDS_NON_INTERVENTIONAL =['study_type_non_interventional']
-  INTERVENTIONAL = 'interventional'
-  NON_INTERVENTIONAL = 'non-interventional'
+  INTERVENTIONAL = 'Interventional'
+  NON_INTERVENTIONAL = 'Non-interventional'
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values

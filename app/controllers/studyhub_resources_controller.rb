@@ -322,9 +322,9 @@ class StudyhubResourcesController < ApplicationController
 
     cm_study_design_attributes = cm_study_design_general_attributes
     case params[:custom_metadata_attributes][:data]['study_primary_design']
-    when 'interventional'
+    when StudyhubResource::INTERVENTIONAL
       cm_study_design_attributes += cm_study_design_interventional_attributes
-    when 'non-interventional'
+    when StudyhubResource::NON_INTERVENTIONAL
       cm_study_design_attributes += cm_study_design_non_interventional_attributes
     end
     cm_study_design_attributes
