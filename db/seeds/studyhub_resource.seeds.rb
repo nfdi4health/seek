@@ -158,6 +158,34 @@ disable_authorization_checks do
                                                                                                'Unknown'])
   )
 
+  #study_status_enrolling_by_invitation
+  study_status_enrolling_by_invitation_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status Enrolling By Invitation').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No', 'Not applicable'])
+  )
+
+  #study_status_when_intervention
+  study_status_when_intervention_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status When Intervention').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Intervention ongoing', ' Intervention completed', 'follow-up ongoing'])
+  )
+
+  #study_status_halted_stage
+  study_status_halted_stage_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status Halted Stage').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes([
+                                                                                                'At the planning stage',
+                                                                                                'Ongoing (I): Recruitment ongoing, but data collection not yet started',
+                                                                                                'Ongoing (II): Recruitment and data collection ongoing',
+                                                                                                'Ongoing (III): Recruitment completed, but data collection ongoing',
+                                                                                                'Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing'])
+  )
+
+  #study_recruitment_status_register
+  study_recruitment_status_register_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Recruitment Status Register').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Not yet recruiting', 'Recruiting', 'Enrolling by invitation', 'Active, not recruiting', 'Completed',
+                                                                                               'Suspended', 'Terminated', 'Withdrawn', 'Other'])
+  )
+
+
+
   #study_type_interventional
   study_type_interventional_cv = SampleControlledVocab.where(title: 'NFDI4Health Interventional Study Type').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Single Group', 'Parallel','Crossover','Factorial','Sequential','Other','Unknown'])
@@ -396,12 +424,49 @@ disable_authorization_checks do
 
       CustomMetadataAttribute.where(title: 'study_ethics_commitee_approval').create!(
         title: 'study_ethics_commitee_approval', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_ethics_commitee_approval_cv,
-        description: attribute_descriptions['study_conditions_classification_code']
+        description: attribute_descriptions['study_ethics_commitee_approval']
       ),
 
       CustomMetadataAttribute.where(title: 'study_status').create!(
         title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv, description: attribute_descriptions['study_status']
       ),
+
+      CustomMetadataAttribute.where(title: 'study_status_enrolling_by_invitation').create!(
+        title: 'study_status_enrolling_by_invitation', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_enrolling_by_invitation_cv, description: attribute_descriptions['study_status_enrolling_by_invitation']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_status_when_intervention').create!(
+        title: 'study_status_when_intervention', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_when_intervention_cv, description: attribute_descriptions['study_status_when_intervention']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_status_halted_stage').create!(
+        title: 'study_status_halted_stage', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_halted_stage_cv, description: attribute_descriptions['study_status_halted_stage']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_status_halted_reason').create!(
+        title: 'study_status_halted_reason', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_status_halted_reason']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_recruitment_status_register').create!(
+        title: 'study_recruitment_status_register', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_recruitment_status_register_cv, description: attribute_descriptions['study_recruitment_status_register']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_start_date').create!(
+        title: 'study_start_date', required: false, sample_attribute_type: date_type, description: attribute_descriptions['study_start_date']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_end_date').create!(
+        title: 'study_end_date', required: false, sample_attribute_type: date_type, description: attribute_descriptions['study_end_date']
+      ),
+
+
+
+
+
+
+
+
+
 
 
       CustomMetadataAttribute.where(title: 'study_keywords').create!(
@@ -466,13 +531,7 @@ disable_authorization_checks do
         title: 'study_sampling', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sampling_cv
       ),
 
-      CustomMetadataAttribute.where(title: 'study_start_date').create!(
-        title: 'study_start_date', required: false, sample_attribute_type: date_type
-      ),
 
-      CustomMetadataAttribute.where(title: 'study_end_date').create!(
-        title: 'study_end_date', required: false, sample_attribute_type: date_type
-      ),
 
       CustomMetadataAttribute.where(title: 'study_datasource').create!(
         title: 'study_datasource', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_datasource_cv

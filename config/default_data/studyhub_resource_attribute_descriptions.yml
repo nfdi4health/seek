@@ -17,11 +17,20 @@ study_type_description: Additional information on study design.
 
 study_conditions: Primary disease or health condition(s) studied, or fokus of the study.
 study_conditions_classification: Controlled terminology name. It is mandatory if the study conditions are given.
-
-
-study_status: Overall status for the study.
 study_conditions_classification_code: Code of the term in the controlled terminology (IRI).
 study_ethics_commitee_approval: Approval from the ethics commitee.
+
+study_status: Overall status for the study.
+
+study_status_enrolling_by_invitation: Are participants enrolled by invitation?
+study_status_when_intervention: Do participants receive an intervention?
+study_status_halted_stage: At what stage the study was halted?
+study_status_halted_reason: Reason why study was halted.
+study_recruitment_status_register: Overall recruitment status for the study.
+
+study_start_date:  Start date of data collection for the study.
+study_end_date: End date of data collection for the study.
+
 
 
 

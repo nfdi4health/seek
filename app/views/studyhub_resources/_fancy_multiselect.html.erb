@@ -28,7 +28,7 @@
 
 
 <div class="form-group" data-role="seek-fancy-multiselect" name=<%= name %>>
-  <label><%= association_text %></label>
+  <label><%= association_text %></label><%= required_span if required %>
   <div class="row">
     <div class="col-md-12">
       <p class="help-block"><%= intro %></p>

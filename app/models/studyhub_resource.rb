@@ -36,7 +36,7 @@ class StudyhubResource < ApplicationRecord
   #  This section defines constants for "mandatory fields" values
   #
   REQUIRED_FIELDS_RESOURCE = ['resource_type_general','resource_use_rights_label']
-  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally']
+  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally','study_country']
   REQUIRED_FIELDS_INTERVENTIONAL = ['study_type_interventional','study_primary_outcome_title']
   REQUIRED_FIELDS_NON_INTERVENTIONAL =['study_type_non_interventional']
   INTERVENTIONAL = 'Interventional'
@@ -105,11 +105,11 @@ class StudyhubResource < ApplicationRecord
 
     required_fields.each do |type, fields|
       fields.each do |name|
-        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}") if resource_json[type][name].blank?
+        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
       end
     end
 
-    validate_study_design
+    validate_study_design_attributes
 
     errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
 
@@ -201,7 +201,7 @@ class StudyhubResource < ApplicationRecord
 
   private
 
-  def validate_study_design
+  def validate_study_design_attributes
     errors.add(:study_conditions_classification, 'Please enter the study conditions classification.') unless errors.messages.empty? if !resource_json["study_design"]["study_conditions"].blank? && resource_json["study_design"]["study_conditions_classification"].blank?
   end
 
