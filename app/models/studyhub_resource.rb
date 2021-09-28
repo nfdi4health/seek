@@ -109,6 +109,8 @@ class StudyhubResource < ApplicationRecord
       end
     end
 
+    validate_study_design
+
     errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
 
   end
@@ -195,6 +197,12 @@ class StudyhubResource < ApplicationRecord
     else
       'unknown'
     end
+  end
+
+  private
+
+  def validate_study_design
+    errors.add(:study_conditions_classification, 'Please enter the study conditions classification.') unless errors.messages.empty? if !resource_json["study_design"]["study_conditions"].blank? && resource_json["study_design"]["study_conditions_classification"].blank?
   end
 
 end
