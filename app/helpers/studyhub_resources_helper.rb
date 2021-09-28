@@ -257,6 +257,16 @@ module StudyhubResourcesHelper
     if (@error_keys.include? "roles[#{index}]['role_name_organisational']")
       role["role_name_organisational"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_organisational']".to_sym].first
     end
+
+    if (@error_keys.include? "roles[#{index}]['role_name_identifier_scheme']")
+      role["role_name_identifier_scheme"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_identifier_scheme']".to_sym].first
+    end
+
+    if (@error_keys.include? "roles[#{index}]['role_affiliation_identifier_scheme']")
+      role["role_affiliation_identifier_scheme"] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_identifier_scheme']".to_sym].first
+    end
+
+
     role
   end
 

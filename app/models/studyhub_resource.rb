@@ -74,13 +74,15 @@ class StudyhubResource < ApplicationRecord
           errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")  if role['role_name_personal_title'].blank?
           errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")  if role['role_name_personal_given_name'].blank?
           errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")  if role['role_name_personal_family_name'].blank?
+          errors.add("roles[#{index}]['role_name_identifier_scheme']".to_sym, "Please select the identifier scheme.") if  !role['role_name_identifier'].blank? && role['role_name_identifier_scheme'].blank?
         end
 
         if role['role_name_type'] == 'Organisational'
           errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")  if role['role_name_organisational'].blank?
+          errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.")  if !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
         end
-
       end
+      errors.add(:base, "Please add the required fields for resource roles.") if errors.messages.keys.select {|x| x.to_s.include? "roles" }.size  > 0
     end
   end
 
