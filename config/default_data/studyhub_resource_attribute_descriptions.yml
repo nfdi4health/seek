@@ -13,12 +13,15 @@ resource_use_rights_support_by_licencing: The authors confirm that NFDI4Health i
 
 study_primary_design: Primary design of the study.
 study_type_description: Additional information on study design.
-study_conditions: Primary disease or health condition(s) studied, or fokus of the study.
 
+
+study_conditions: Primary disease or health condition(s) studied, or fokus of the study.
+study_conditions_classification: Controlled terminology name. It is mandatory if the study conditions are given.
 
 
 study_status: Overall status for the study.
-
+study_conditions_classification_code: Code of the term in the controlled terminology (IRI).
+study_ethics_commitee_approval: Approval from the ethics commitee.
 
 
 

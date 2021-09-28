@@ -139,10 +139,23 @@ disable_authorization_checks do
   #************************ study design related CV begin *********************************
 
 
-
   #study_primary_design
   study_primary_design_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Design').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Non-interventional Interventional])
+  )
+
+  #study_conditions_classification
+  study_conditions_classification_cv = SampleControlledVocab.where(title: 'NFDI4Health Conditions Classification').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['MeSH', 'ICD-10','MedDRA','SNOMED CT',
+                                                                                               'Other vocabulary','Free text'])
+  )
+
+  #study_ethics_commitee_approval
+  study_ethics_commitee_approval_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Ethics Commitee Approval').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Request for approval not yet submitted', 'Request submitted, approval pending',
+                                                                                               'Request submitted, approval granted','Request submitted, exempt granted',
+                                                                                               'Request submitted, approval denied','Approval not required','Study withdrawn prior to decision on approval',
+                                                                                               'Unknown'])
   )
 
   #study_type_interventional
@@ -372,13 +385,24 @@ disable_authorization_checks do
         title: 'study_conditions', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_conditions']
       ),
 
+      CustomMetadataAttribute.where(title: 'study_conditions_classification').create!(
+        title: 'study_conditions_classification', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_conditions_classification_cv,
+        description: attribute_descriptions['study_conditions_classification']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_conditions_classification_code').create!(
+        title: 'study_conditions_classification_code', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_conditions_classification_code']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_ethics_commitee_approval').create!(
+        title: 'study_ethics_commitee_approval', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_ethics_commitee_approval_cv,
+        description: attribute_descriptions['study_conditions_classification_code']
+      ),
+
       CustomMetadataAttribute.where(title: 'study_status').create!(
         title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv, description: attribute_descriptions['study_status']
       ),
 
-      CustomMetadataAttribute.where(title: 'study_conditions_code').create!(
-        title: 'study_conditions_code', required: false, sample_attribute_type: string_type
-      ),
 
       CustomMetadataAttribute.where(title: 'study_keywords').create!(
         title: 'study_keywords', required: false, sample_attribute_type: string_type
