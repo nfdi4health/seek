@@ -67,6 +67,19 @@ study_data_sharing_plan_url: Web page with additional information on data sharin
 
 study_type_interventional: Specific type of the study.
 study_primary_purpose: The main purpose of the intervention(s).
+study_phase: Numerical phase of the study.
+study_masking: Is masking of intervention(s) assignment implemented?
+study_masking_roles: Party(ies) who are masked.
+study_masking_description: Additional information about masking.
+study_allocation: Type of allocation of individual participants to an arm.
+study_off_label_use: Off-label use of a drug product.
+study_arm_group_label: Name of the arm.
+study_arm_group_type: Role of the arm in the study.
+study_arm_group_description: Additional information on the arm.
+study_intervention_name: Name of the intervention.
+study_intervention_type: Type of the intervention.
+study_intervention_description: Additional information on the intervention.
+study_intervention_arm_group_label: Arm associated with the intervention.
 
 # non_interventional attributes
 
