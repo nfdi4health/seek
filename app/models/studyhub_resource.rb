@@ -35,12 +35,13 @@ class StudyhubResource < ApplicationRecord
   # *****************************************************************************
   #  This section defines constants for "mandatory fields" values
   #
-  REQUIRED_FIELDS_RESOURCE = ['resource_type_general','resource_use_rights_label']
-  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally','study_country','study_subject']
-  REQUIRED_FIELDS_INTERVENTIONAL = ['study_type_interventional','study_primary_outcome_title']
-  REQUIRED_FIELDS_NON_INTERVENTIONAL =['study_type_non_interventional']
-  INTERVENTIONAL = 'Interventional'
-  NON_INTERVENTIONAL = 'Non-interventional'
+  REQUIRED_FIELDS_RESOURCE_BASIC = %w[resource_type_general resource_use_rights_label].freeze
+  REQUIRED_FIELDS_RESOURCE_USE_RIGHTS = %w[resource_use_rights_authors_confirmation_1 resource_use_rights_authors_confirmation_2 resource_use_rights_authors_confirmation_3 resource_use_rights_support_by_licencing].freeze
+  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally','study_country','study_subject'].freeze
+  REQUIRED_FIELDS_INTERVENTIONAL = %w[study_type_interventional study_primary_outcome_title].freeze
+  REQUIRED_FIELDS_NON_INTERVENTIONAL = %w[study_type_non_interventional].freeze
+  INTERVENTIONAL = 'Interventional'.freeze
+  NON_INTERVENTIONAL = 'Non-interventional'.freeze
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values
@@ -52,7 +53,7 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
-  MULTISELECT_ATTRIBUTES = %w[resource_language study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_time_perspective study_biospecimen_retention]
+  MULTISELECT_ATTRIBUTES = %w[resource_language study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_time_perspective study_biospecimen_retention].freeze
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
@@ -99,8 +100,11 @@ class StudyhubResource < ApplicationRecord
   end
 
   def full_validations_before_submit
+
     required_fields ={}
-    required_fields['resource'] = REQUIRED_FIELDS_RESOURCE
+    required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
+    required_fields['resource'] += REQUIRED_FIELDS_RESOURCE_USE_RIGHTS if resource_json['resource']['resource_use_rights_label'].start_with?('CC')
+
     if is_studytype?
       required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
       required_fields['study_design'] += REQUIRED_FIELDS_INTERVENTIONAL if get_study_primary_design_type == INTERVENTIONAL

@@ -376,7 +376,7 @@ disable_authorization_checks do
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_description').create!(
-        title: 'resource_use_rights_description', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_use_rights_description']
+        title: 'resource_use_rights_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['resource_use_rights_description']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_1').create!(
