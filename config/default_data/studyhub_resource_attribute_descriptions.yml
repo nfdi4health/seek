@@ -43,6 +43,29 @@ study_eligibility_age_min_description: Additional information about the minimum 
 study_eligibility_age_max: Maximum age of participants in years.
 study_eligibility_age_max_description: Additional information about the maximum age of participants.
 study_eligibility_gender: Gender of participants.
+study_eligibility_inclusion_criteria: Inclusion criteria for study.
+study_eligibility_exclusion_criteria: Exclusion criteria for study.
+study_population: Description of study population.
+study_target_sample_size: Intended number of study observational units.
+study_obtained_sample_size: Obtained number of study observational units.
+study_age_min_examined: Minimum age of participants in years.
+study_age_min_examined_description: Additional information about the minimum age of participants.
+study_age_max_examined: Maximum age of participants in years.
+study_age_max_examined_description: Additional information about the maximum age of participants.
+study_hypothesis: Hypotheses underlying the study.
+study_outcome_type: Type of the outcome measure.
+study_outcome_title: Name of the outcome measure.
+study_outcome_description: Additional information about the outcome measure.
+study_outcome_time_frame: Time frame of assessment specific to the outcome measure.
+study_design_comment: Additional information on the study design.
+study_data_sharing_plan_generally: Plan to share the data?
+study_data_sharing_plan_description: Additional information on data sharing statement.
+study_data_sharing_plan_supporting_information: Supporting information available in addition to the study data.
+study_data_sharing_plan_time_frame: Data availability time frame.
+study_data_sharing_plan_access_criteria: Criteria for the access to the study data.
+study_data_sharing_plan_url: Web page with additional information on data sharing.
+
+
 
 
 
