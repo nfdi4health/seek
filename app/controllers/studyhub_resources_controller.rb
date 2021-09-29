@@ -290,14 +290,16 @@ class StudyhubResourcesController < ApplicationController
       study_design = {}
 
       params[:custom_metadata_attributes][:data].keys.each do |key|
+        value = if StudyhubResource::MULTISELECT_ATTRIBUTES.include? key
+          params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
+        else
+          params[:custom_metadata_attributes][:data][key]
+                end
+
         if cm_resource_attributes.include? key
-          resource[key] = params[:custom_metadata_attributes][:data][key]
+          resource[key] = value
         elsif cm_study_design_attributes.include? key
-          study_design[key] = if StudyhubResource::MULTISELECT_ATTRIBUTES.include? key
-                                params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
-                              else
-                                params[:custom_metadata_attributes][:data][key]
-                              end
+          study_design[key] = value
         end
       end
 
