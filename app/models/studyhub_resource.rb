@@ -109,6 +109,9 @@ class StudyhubResource < ApplicationRecord
       required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
       required_fields['study_design'] += REQUIRED_FIELDS_INTERVENTIONAL if get_study_primary_design_type == INTERVENTIONAL
       required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL if get_study_primary_design_type == NON_INTERVENTIONAL
+      required_fields['study_design'] += ['study_conditions_classification'] if !resource_json["study_design"]["study_conditions"].blank?
+      required_fields['study_design'] += ['study_arm_group_type'] if !resource_json["study_design"]["study_arm_group_label"].blank?
+
     end
 
     required_fields.each do |type, fields|
@@ -117,7 +120,6 @@ class StudyhubResource < ApplicationRecord
       end
     end
 
-    validate_study_design_attributes
 
     errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
 
@@ -207,14 +209,5 @@ class StudyhubResource < ApplicationRecord
     end
   end
 
-  private
-
-  def validate_study_design_attributes
-
-    errors.add(:study_conditions_classification, 'Please enter the study conditions classification.') if !resource_json["study_design"]["study_conditions"].blank? && resource_json["study_design"]["study_conditions_classification"].blank?
-
-    errors.add(:study_arm_group_type, 'Please enter the study arm group type.') if !resource_json["study_design"]["study_arm_group_label"].blank? && resource_json["study_design"]["study_arm_group_type"].blank?
-
-  end
 
 end
