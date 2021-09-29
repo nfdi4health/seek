@@ -74,7 +74,7 @@ study_masking_description: Additional information about masking.
 study_allocation: Type of allocation of individual participants to an arm.
 study_off_label_use: Off-label use of a drug product.
 study_arm_group_label: Name of the arm.
-study_arm_group_type: Role of the arm in the study.
+study_arm_group_type: Role of the arm in the study. It is mandatory if study arm group label is given.
 study_arm_group_description: Additional information on the arm.
 study_intervention_name: Name of the intervention.
 study_intervention_type: Type of the intervention.

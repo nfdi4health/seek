@@ -206,7 +206,11 @@ class StudyhubResource < ApplicationRecord
   private
 
   def validate_study_design_attributes
-    errors.add(:study_conditions_classification, 'Please enter the study conditions classification.') unless errors.messages.empty? if !resource_json["study_design"]["study_conditions"].blank? && resource_json["study_design"]["study_conditions_classification"].blank?
+
+    errors.add(:study_conditions_classification, 'Please enter the study conditions classification.') if !resource_json["study_design"]["study_conditions"].blank? && resource_json["study_design"]["study_conditions_classification"].blank?
+
+    errors.add(:study_arm_group_type, 'Please enter the study arm group type.') if !resource_json["study_design"]["study_arm_group_label"].blank? && resource_json["study_design"]["study_arm_group_type"].blank?
+
   end
 
 end
