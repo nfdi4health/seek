@@ -43,6 +43,9 @@
         <%# The JavaScript that handles adding items to the list is bound to elemnts with the 'data-association-list-id' property %>
         <div class="form-group">
             <%= select_tag nil, select_options, possibilities_options-%>
+        <% unless description.nil? %>
+          <%= custom_metadata_attribute_description(description) %>
+        <% end %>
         </div>
       </div>
     </div>

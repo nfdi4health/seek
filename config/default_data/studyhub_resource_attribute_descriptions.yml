@@ -30,8 +30,19 @@ study_recruitment_status_register: Overall recruitment status for the study.
 
 study_start_date:  Start date of data collection for the study.
 study_end_date: End date of data collection for the study.
+study_region: Region(s) and/or cities within a country, in which the study takes place.
+study_centers: Is the study conducted at one study or more than one study sites?
+study_centers_number: Number of study sites.
+study_subject: Primary unit of interest in the study.
+study_sampling: Applied sampling method.
+study_data_source: Sources from which the data are generated or extracted.
+study_data_source_description: Additional information on study data sources.
 
-
+study_eligibility_age_min: Minimum age of participants in years.
+study_eligibility_age_min_description: Additional information about the minimum age of participants.
+study_eligibility_age_max: Maximum age of participants in years.
+study_eligibility_age_max_description: Additional information about the maximum age of participants.
+study_eligibility_gender: Gender of participants.
 
 
 

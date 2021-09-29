@@ -1,10 +1,7 @@
 <% resource.keys.each do |key| %>
-
-  <% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles] %>
-
   <% hidden_class = resource[key].blank? ? "item-hidden" : nil %>
   <p class=<%= hidden_class %>>
-    <% if multselect_attributes.include? key %>
+    <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? key %>
       <label><%= key.humanize(keep_id_suffix: true) %>: </label>
       <% unless resource[key].blank? %>
             <%= resource[key].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ')  %>

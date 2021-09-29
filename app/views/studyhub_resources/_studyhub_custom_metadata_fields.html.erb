@@ -5,10 +5,9 @@
      is_error = true
    end
  %>
-  <% multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles] %>
 
   <div class="form-group <%= "has-error text-danger" if is_error %>">
-    <% if multselect_attributes.include? attribute.title  %>
+    <% if StudyhubResource::MULTSELECT_ATTRIBUTES.include? attribute.title  %>
       <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
       <small><%= feedback if is_error %></small>
     <% else %>
@@ -16,9 +15,9 @@
       <label><%= attribute.title.humanize %></label><%= required_span if attribute.required? %>
         <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
         <small><%= feedback if is_error %></small>
-    <% end %>
-    <% unless attribute.description.nil? %>
-      <%= custom_metadata_attribute_description(attribute.description) %>
+        <% unless attribute.description.nil? %>
+        <%= custom_metadata_attribute_description(attribute.description) %>
+      <% end %>
     <% end %>
   </div>
 

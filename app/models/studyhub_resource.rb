@@ -36,7 +36,7 @@ class StudyhubResource < ApplicationRecord
   #  This section defines constants for "mandatory fields" values
   #
   REQUIRED_FIELDS_RESOURCE = ['resource_type_general','resource_use_rights_label']
-  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally','study_country']
+  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status', 'study_population','study_data_sharing_plan_generally','study_country','study_subject']
   REQUIRED_FIELDS_INTERVENTIONAL = ['study_type_interventional','study_primary_outcome_title']
   REQUIRED_FIELDS_NON_INTERVENTIONAL =['study_type_non_interventional']
   INTERVENTIONAL = 'Interventional'
@@ -49,6 +49,10 @@ class StudyhubResource < ApplicationRecord
   SUBMITTED  = 1
   WAITING_FOR_APPROVEL = 2
   PUBLISHED = 3
+
+  # *****************************************************************************
+  #  This section defines constants for multiselect attributes
+  MULTISELECT_ATTRIBUTES = %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles]
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?

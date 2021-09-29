@@ -284,8 +284,6 @@ class StudyhubResourcesController < ApplicationController
     cm_resource_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource General')
     cm_study_design_attributes = get_study_design_attributes(params)
 
-    multselect_attributes = %w[study_datasource study_country study_data_sharing_plan_supporting_information study_gender study_masking_roles]
-
     unless params[:custom_metadata_attributes].nil?
 
       resource = {}
@@ -295,7 +293,7 @@ class StudyhubResourcesController < ApplicationController
         if cm_resource_attributes.include? key
           resource[key] = params[:custom_metadata_attributes][:data][key]
         elsif cm_study_design_attributes.include? key
-          study_design[key] = if multselect_attributes.include? key
+          study_design[key] = if StudyhubResource::MULTISELECT_ATTRIBUTES.include? key
                                 params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
                               else
                                 params[:custom_metadata_attributes][:data][key]

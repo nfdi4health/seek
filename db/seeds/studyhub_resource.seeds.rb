@@ -213,12 +213,12 @@ disable_authorization_checks do
       %w[Monocentric Multicentric])
   )
 
-
   #study_subject
   study_subject_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Subject').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ['Individual', 'Organization', 'Family', 'Household', 'Event/Process', 'Geographic Unit',
-       'Time Unit', 'Text Unit', 'Group', 'Object', 'Pathogens', 'Twins', 'Other'])
+      ['Person',  'Animal', 'Practitioner', 'Device', 'Medication','Substance','Organization','Family',
+       'Household','Event/Process','Geographic unit','Time unit','Text unit','Group','Object','Pathogens','Twins',
+       'Other','Unknown'])
   )
 
   #study_status
@@ -235,32 +235,28 @@ disable_authorization_checks do
        'Other'])
   )
 
-  #study_gender
-  study_gender_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Gender').first_or_create!(
+  #study_eligibility_gender
+  study_eligibility_gender_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Gender').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      %w[Male Female Diverse])
+      ['Male','Female','Diverse','Not applicable'])
   )
 
   #study_sampling
   study_sampling_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Sampling').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      [
-        'TotalUniverseCompleteEnumeration', 'Probability', 'Probability.SimpleRandom, Probability.SystematicRandom',
-        'Probability.Stratified, Probability.Stratified.Proportional', 'Probability.Stratified.Disproportional',
-        'Probability.Cluster', 'Probability.Cluster.SimpleRandom', 'Probability.Cluster.StratifiedRandom', 'Probability.Multistage',
-        'Nonprobability', 'Nonprobability.Availability', 'Nonprobability.Purposive', 'Nonprobability.Quota', 'Nonprobability.RespondentAssisted',
-        'MixedProbabilityNonprobability', 'Other'
-      ])
+      ['Total universe/Complete enumeration', 'Probability', 'Probability (Simple random)', 'Probability (Systematic random)', 'Probability (Stratified)',
+       'Probability (Stratified: Proportional)','Probability (Stratified: Disproportional)','Probability (Cluster)', 'Probability (Cluster: Simple random)',
+       'Probability (Cluster: Stratified random)', 'Probability (Multistage)', 'Non-probability', 'Non-probability (Availability)','Non-probability (Purposive)', 'Non-probability (Quota)',
+       'Non-probability (Respondent-assisted)', 'Mixed probability and non-probability', 'Other', 'Unknown','Not applicable'])
   )
 
-  #study_datasource
-  study_datasource_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Datasource').first_or_create!(
+  #study_data_source
+  study_data_source_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Data Source').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ['Blood', 'Buccal cells', 'Cord blood', 'DNA','Faeces', 'Hair','Immortalized Cell Lines',
-       'Isolated Pathogen', 'Nail', 'Plasma', 'RNA', 'Saliva', 'Serum', 'Tissue (Frozen)', 'Tissue (FFPE)',
-       'Urine', 'Other Biological samples','Administrative databases', 'Cognitive measurements', 'Genealogical records',
-       'Imaging data', 'Medical records', 'Registries', 'Survey data', 'Physiological/Biochemical measurements',
-       'Genomics', 'Metabolomics', 'Transcriptomics', 'Proteomics', 'Other Omics Technology', 'Other'])
+      ['Blood', 'Buccal cells', 'Cord blood', 'DNA','Faeces', 'Hair','Immortalized cell lines', 'Isolated pathogen', 'Nail', 'Plasma', 'RNA', 'Saliva', 'Serum', 'Tissue (Frozen)', 'Tissue (FFPE)',
+       'Urine', 'Other biological samples','Administrative databases', 'Cognitive measurements', 'Genealogical records', 'Imaging data (ultrasound)', 'Imaging data (MRI)', 'Imaging data (MRI, radiography)',
+       'Imaging data (CT)', 'Other imaging data', 'Medical records', 'Registries', 'Interview', 'Questionnaire', 'Physiological/Biochemical measurements', 'Genomics', 'Metabolomics', 'Transcriptomics',
+       'Proteomics', 'Other omics Technology', 'Other'])
   )
 
   #study_data_sharing_plan_generally
@@ -459,9 +455,53 @@ disable_authorization_checks do
         title: 'study_end_date', required: false, sample_attribute_type: date_type, description: attribute_descriptions['study_end_date']
       ),
 
+      CustomMetadataAttribute.where(title: 'study_region').create!(
+        title: 'study_region', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_region']
+      ),
 
+      CustomMetadataAttribute.where(title: 'study_centers').create!(
+        title: 'study_centers', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_centers_cv, description: attribute_descriptions['study_centers']
+      ),
 
+      CustomMetadataAttribute.where(title: 'study_centers_number').create!(
+        title: 'study_centers_number', required: false, sample_attribute_type: int_type, description: attribute_descriptions['study_centers_number']
+      ),
 
+      CustomMetadataAttribute.where(title: 'study_subject').create!(
+        title: 'study_subject', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_subject_cv, description: attribute_descriptions['study_subject']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_sampling').create!(
+        title: 'study_sampling', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sampling_cv, description: attribute_descriptions['study_sampling']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_data_source').create!(
+        title: 'study_data_source', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_source_cv, description: attribute_descriptions['study_data_source']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_data_source_description').create!(
+        title: 'study_data_source_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_data_source_description']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_eligibility_age_min').create!(
+        title: 'study_eligibility_age_min', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_eligibility_age_min']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_eligibility_age_min_description').create!(
+        title: 'study_eligibility_age_min_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_eligibility_age_min_description']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_eligibility_age_max').create!(
+        title: 'study_eligibility_age_max', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_eligibility_age_max']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_eligibility_age_max_description').create!(
+        title: 'study_eligibility_age_max_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_eligibility_age_max_description']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_eligibility_gender').create!(
+        title: 'study_eligibility_gender', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_eligibility_gender_cv, description: attribute_descriptions['study_eligibility_gender']
+      ),
 
 
 
@@ -474,18 +514,13 @@ disable_authorization_checks do
     ),
 
 
-      CustomMetadataAttribute.where(title: 'study_centers').create!(
-        title: 'study_centers', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_centers_cv
-      ),
 
 
-      CustomMetadataAttribute.where(title: 'study_subject').create!(
-        title: 'study_subject', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_subject_cv
-      ),
 
-      CustomMetadataAttribute.where(title: 'study_region').create!(
-        title: 'study_region', required: false, sample_attribute_type: string_type
-      ),
+
+
+
+
 
       CustomMetadataAttribute.where(title: 'study_target_sample_size').create!(
         title: 'study_target_sample_size', required: false, sample_attribute_type: int_type
@@ -495,25 +530,7 @@ disable_authorization_checks do
         title: 'study_obtained_sample_size', required: false, sample_attribute_type: int_type
       ),
 
-      CustomMetadataAttribute.where(title: 'study_age_min').create!(
-        title: 'study_age_min', required: false, sample_attribute_type: float_type
-      ),
 
-      CustomMetadataAttribute.where(title: 'study_age_min_description').create!(
-        title: 'study_age_min_description', required: false, sample_attribute_type: text_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_age_max').create!(
-        title: 'study_age_max', required: false, sample_attribute_type: float_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_age_max_description').create!(
-        title: 'study_age_max_description', required: false, sample_attribute_type: text_type
-      ),
-
-      CustomMetadataAttribute.where(title: 'study_gender').create!(
-        title: 'study_gender', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_gender_cv
-      ),
 
       CustomMetadataAttribute.where(title: 'study_inclusion_criteria').create!(
         title: 'study_inclusion_criteria', required: false, sample_attribute_type: string_type
@@ -527,15 +544,10 @@ disable_authorization_checks do
         title: 'study_population', required: true, sample_attribute_type: text_type
       ),
 
-      CustomMetadataAttribute.where(title: 'study_sampling').create!(
-        title: 'study_sampling', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sampling_cv
-      ),
 
 
 
-      CustomMetadataAttribute.where(title: 'study_datasource').create!(
-        title: 'study_datasource', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_datasource_cv
-      ),
+
 
       CustomMetadataAttribute.where(title: 'study_hypothesis').create!(
         title: 'study_hypothesis', required: false , sample_attribute_type: text_type
