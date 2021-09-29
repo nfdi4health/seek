@@ -1,6 +1,8 @@
 <%
   resource_name = resource.class.name.underscore
   pp resource.inspect
+  pp "******************************"
+  pp resource.stage
 %>
 
 <div class="modal fade" id="preview_permissions" tabindex="-1" role="dialog" aria-labelledby="preview_permissions_title" aria-hidden="true">
@@ -9,7 +11,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <!--        <h4 class="modal-title" id="preview_permissions_title">Preview of your working status:-->
-<!--          currently the <%= resource.reload_studyhub_resource_type.title.downcase  %> is <%= stage_text %>.</h4>-->
+<!--          currently the <%#= resource.reload_studyhub_resource_type.title.downcase  %> is <%#= stage_text %>.</h4>-->
       </div>
       <div class="modal-body alert alert-info" style="margin: 10px 20px">
         <div>

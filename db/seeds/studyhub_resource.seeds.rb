@@ -345,6 +345,15 @@ disable_authorization_checks do
         title: 'resource_type_general', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_general_cv, description: attribute_descriptions['resource_type_general']
       ),
 
+      CustomMetadataAttribute.where(title: 'resource_keywords_label').create!(
+        title: 'resource_keywords_label', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_keywords_label']
+      ),
+
+
+      CustomMetadataAttribute.where(title: 'resource_keywords_label_code').create!(
+        title: 'resource_keywords_label_code', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_keywords_label_code']
+      ),
+
       CustomMetadataAttribute.where(title: 'resource_language').create!(
         title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv, description: attribute_descriptions['resource_language']
       ),

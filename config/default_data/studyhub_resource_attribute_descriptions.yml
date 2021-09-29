@@ -1,6 +1,8 @@
 # resource general
 
 resource_type_general: A more general term describing the resource type.
+resource_keywords_label: Key word describing the resource.
+resource_keywords_label_code: Code of the key word (IRI).
 resource_language: Primary language of the resource.
 resource_version: Version of the resource.
 resource_web_page: Web page of the resource.
