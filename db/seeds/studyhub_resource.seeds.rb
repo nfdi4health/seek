@@ -336,6 +336,12 @@ disable_authorization_checks do
       ['Primary',' Secondary','Other'])
   )
 
+  #study_biospecimen_retention
+  study_biospecimen_retention_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Biospecimen Retention').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
+      ['None retained','Samples with DNA',' Samples without DNA'])
+  )
+
   #************************ study design related CV end ***********************
 
 
@@ -525,9 +531,6 @@ disable_authorization_checks do
         title: 'study_obtained_sample_size', required: false, sample_attribute_type: int_type, description: attribute_descriptions['study_obtained_sample_size']
       ),
 
-
-
-
       CustomMetadataAttribute.where(title: 'study_age_min_examined').create!(
         title: 'study_age_min_examined', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_age_min_examined']
       ),
@@ -614,13 +617,22 @@ disable_authorization_checks do
         description: attribute_descriptions['study_type_non_interventional']
       ),
 
-
       CustomMetadataAttribute.where(title: 'study_time_perspective').create!(
-        title: 'study_time_perspective', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_time_perspective_cv
+        title: 'study_time_perspective', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_time_perspective_cv,
+        description: attribute_descriptions['study_time_perspective']
       ),
 
       CustomMetadataAttribute.where(title: 'study_target_follow-up_duration').create!(
-        title: 'study_target_follow-up_duration', required: false, sample_attribute_type: float_type
+        title: 'study_target_follow-up_duration', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_target_follow-up_duration']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_biospecimen_retention').create!(
+        title: 'study_biospecimen_retention', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_biospecimen_retention_cv,
+        description: attribute_descriptions['study_biospecimen_retention']
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_biospecomen_description').create!(
+        title: 'study_biospecomen_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_biospecomen_description']
       )
 
     ]
@@ -737,7 +749,5 @@ disable_authorization_checks do
       )
     ]
   )
-
-
 
 end

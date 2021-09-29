@@ -52,7 +52,7 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
-  MULTISELECT_ATTRIBUTES = %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles]
+  MULTISELECT_ATTRIBUTES = %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_time_perspective study_biospecimen_retention]
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?

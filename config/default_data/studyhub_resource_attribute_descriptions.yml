@@ -1,3 +1,5 @@
+# resource general
+
 resource_type_general: A more general term describing the resource type.
 resource_language: Primary language of the resource.
 resource_version: Version of the resource.
@@ -11,23 +13,20 @@ resource_use_rights_authors_confirmation_2: The authors confirm that they have r
 resource_use_rights_authors_confirmation_3: The authors understand that CC licensing is not revocable.
 resource_use_rights_support_by_licencing: The authors confirm that NFDI4Health is allowed to licence the document, i.e. to mark the document with the licence information
 
+# study design general
+
 study_primary_design: Primary design of the study.
 study_type_description: Additional information on study design.
-
-
 study_conditions: Primary disease or health condition(s) studied, or fokus of the study.
 study_conditions_classification: Controlled terminology name. It is mandatory if the study conditions are given.
 study_conditions_classification_code: Code of the term in the controlled terminology (IRI).
 study_ethics_commitee_approval: Approval from the ethics commitee.
-
 study_status: Overall status for the study.
-
 study_status_enrolling_by_invitation: Are participants enrolled by invitation?
 study_status_when_intervention: Do participants receive an intervention?
 study_status_halted_stage: At what stage the study was halted?
 study_status_halted_reason: Reason why study was halted.
 study_recruitment_status_register: Overall recruitment status for the study.
-
 study_start_date:  Start date of data collection for the study.
 study_end_date: End date of data collection for the study.
 study_region: Region(s) and/or cities within a country, in which the study takes place.
@@ -37,7 +36,6 @@ study_subject: Primary unit of interest in the study.
 study_sampling: Applied sampling method.
 study_data_source: Sources from which the data are generated or extracted.
 study_data_source_description: Additional information on study data sources.
-
 study_eligibility_age_min: Minimum age of participants in years.
 study_eligibility_age_min_description: Additional information about the minimum age of participants.
 study_eligibility_age_max: Maximum age of participants in years.
@@ -65,11 +63,15 @@ study_data_sharing_plan_time_frame: Data availability time frame.
 study_data_sharing_plan_access_criteria: Criteria for the access to the study data.
 study_data_sharing_plan_url: Web page with additional information on data sharing.
 
-
-
-
+# interventional attributes
 
 study_type_interventional: Specific type of the study.
 study_primary_purpose: The main purpose of the intervention(s).
 
+# non_interventional attributes
+
 study_type_non_interventional: Specific type of the study.
+study_time_perspective: Relationship of observation period to time of enrollment.
+study_target_follow-up_duration: Target follow-up duration.
+study_biospecimen_retention: Which biosamples are retained?
+study_biospecomen_description: Biosamples to be retained.
