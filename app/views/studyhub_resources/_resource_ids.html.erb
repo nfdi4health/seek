@@ -1,4 +1,5 @@
 <% help_text = "Please add help text for this section." %>
+<% inital = @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['ids'].blank? %>
 <%= folding_panel("Associated Resources:", collapsed, :body_options => {:id => 'associated_resources'},
                   :help_text => help_text) do %>
 
@@ -15,7 +16,7 @@
       </div>
     </div>
 
-    <div id="id-ids-alert" class="alert alert-danger hidden">
+    <div id="id-ids-alert" class="alert alert-danger <%= inital ? 'hidden' : ''%>">
       <div>
         <p>If <b>ID</b> is given, you must also enter <b>ID Type</b> and <b>Relation Type</b>.</p>
       </div>
@@ -26,16 +27,16 @@
     <table class="table id-id-table" id="id-id-table">
       <thead>
       <tr>
-        <th><label id='id_id_label'>ID</label></th>
-        <th><label id='id_type_label'>ID Type</label></th>
-        <th><label id='id_relation_type_label'>Relation Type</label></th>
+        <th><label id='id_id_label' class="<%= inital ? '' : 'submit-required'%>">ID</label></th>
+        <th><label id='id_type_label' class="<%= inital ? '' : 'submit-required'%>">ID Type</label></th>
+        <th><label id='id_relation_type_label' class="<%= inital ? '' : 'submit-required'%>">Relation Type</label></th>
         <th><label>ID Resource Type</label></th>
         <th><label>ID Date</label></th>
       </tr>
       </thead>
       <tbody>
 
-      <%  if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['ids'].blank? %>
+      <%  if inital %>
         <%= render :partial => 'id_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
       <% else %>
         <% @studyhub_resource.resource_json['ids'].each_with_index do |id, index| %>

@@ -107,9 +107,10 @@ module StudyhubResourcesHelper
       html += '<table class="table table-striped table-hover steps">
       <thead>
       <tr>
-<th class="col-md-2">Relation type</th>
-<th class="col-md-2">ID Type</th>
-   <th class="col-md-3">ID</th>
+        <th class="col-md-2">Relation type</th>
+        <th class="col-md-2">ID Type</th>
+        <th class="col-md-3">ID</th>
+        <th>ID Resource Type</th>
         <th>ID Date</th>
       </tr>
       </thead>
@@ -119,6 +120,7 @@ module StudyhubResourcesHelper
         html += '<td class="id_relation_type">' + (d['id_relation_type'].nil? ? '' : d['id_relation_type'].underscore.humanize ) + '</td>'
         html += '<td class="id_type">' + d['id_type'] + '</td>'
         html += '<td class="id_id">' + d['id_id'] + '</td>'
+        html += '<td class="id_resource_type_general">' + d['id_resource_type_general'] + '</td>'
         html += '<td class="id_date">' + d['id_date'] + '</td>'
         html += '</tr>'
       end
@@ -266,8 +268,22 @@ module StudyhubResourcesHelper
       role["role_affiliation_identifier_scheme"] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_identifier_scheme']".to_sym].first
     end
 
-
     role
+  end
+
+  def process_id_error_messags(index)
+
+    id = {}
+
+    if (@error_keys.include? "ids[#{index}]['id_relation_type']")
+      id["id_relation_type"] = @studyhub_resource.errors.messages["ids[#{index}]['id_relation_type']".to_sym].first
+    end
+
+    if (@error_keys.include? "ids[#{index}]['id_type']")
+      id["id_type"] = @studyhub_resource.errors.messages["ids[#{index}]['id_type']".to_sym].first
+    end
+
+    id
   end
 
 end

@@ -23,6 +23,7 @@ class StudyhubResource < ApplicationRecord
 
   validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
+  validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
@@ -64,6 +65,17 @@ class StudyhubResource < ApplicationRecord
 
   def check_title_presence
     errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if title.blank?
+  end
+
+
+  def check_id_presence
+
+    resource_json['ids'].each_with_index do |id,index|
+      unless id['id_id'].blank?
+        errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
+        errors.add("ids[#{index}]['id_relation_type']".to_sym, "can't be blank")  if id['id_relation_type'].blank?
+      end
+    end
   end
 
   def check_role_presence

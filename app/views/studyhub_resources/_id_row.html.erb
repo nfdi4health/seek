@@ -1,4 +1,6 @@
+
 <%
+  id_error = (defined? index).nil? ? {} : process_id_error_messags(index)
   id_types = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first.sample_controlled_vocab_terms
   id_relation_types = SampleControlledVocab.where(title: 'NFDI4Health ID Relation Type').first.sample_controlled_vocab_terms
   id_resource_type_generals =  SampleControlledVocab.where(title: 'NFDI4Health ID Resource Type General').first.sample_controlled_vocab_terms
@@ -31,23 +33,26 @@
   </td>
 
   <td>
-    <div class="form-group">
+    <div class="form-group <%= "has-error text-danger" if id_error.include? "id_type" %>">
       <%= f.collection_select "studyhub_resource[id_type][#{index}]", id_types.map(&:label), :to_s, :to_s,
-                              { :include_blank => false, :selected => id_type }, :class => "form-control" %>
+                              { :include_blank => true, :selected => id_type }, :class => "form-control" %>
+      <small><%= id_error["id_type"] if id_error.include? "id_type" %></small>
     </div>
   </td>
 
+
   <td>
-    <div class="form-group">
+    <div class="form-group <%= "has-error text-danger" if id_error.include? "id_relation_type" %>">
       <%= f.collection_select "studyhub_resource[id_relation_type][#{index}]", id_relation_types.map(&:label), :to_s, :to_s,
-                              { :include_blank => false, :selected => id_relation_type }, :class => "form-control" %>
+                              { :include_blank => true, :selected => id_relation_type }, :class => "form-control" %>
+      <small><%= id_error["id_relation_type"] if id_error.include? "id_relation_type" %></small>
     </div>
   </td>
 
   <td>
     <div class="form-group">
       <%= f.collection_select "studyhub_resource[id_resource_type_general][#{index}]", id_resource_type_generals.map(&:label), :to_s, :to_s,
-                              { :include_blank => false, :selected => id_resource_type_general }, :class => "form-control" %>
+                              { :include_blank => true, :selected => id_resource_type_general }, :class => "form-control" %>
     </div>
   </td>
 

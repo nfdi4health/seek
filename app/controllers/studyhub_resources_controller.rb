@@ -386,6 +386,7 @@ class StudyhubResourcesController < ApplicationController
       entry['id_id'] = params[:id_id][key]
       entry['id_date'] = params[:id_date][key]
       entry['id_relation_type'] = params[:id_relation_type][key]
+      entry['id_resource_type_general'] = params[:id_resource_type_general][key]
       ids << entry unless entry['id_id'].blank?
     end
     ids
