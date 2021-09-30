@@ -106,7 +106,6 @@ var SR = {
 
     setRoleNameTypeVisibility:function () {
         role_name_type = $j(this).val();
-         // alert ($j(this).parent().parent().attr('data-index'))
         index = $j(this).parent().parent().attr('data-index');
 
         switch (role_name_type){
@@ -159,7 +158,7 @@ var SR = {
             alert("value:"+value);
             $j('select[name="studyhub_resource[role_name_identifier_schemes]['+index+']"]').prev().addClass('required');
         }
-        },
+    },
 
     setStudyPrimaryDesignVisibility: function () {
 
@@ -187,6 +186,28 @@ var SR = {
 
     removeSubmitButton: function () {
         $j('#submit_button').remove();
+    },
+
+    addAddtionalRequiredIDFields: function (){
+        $j('#id-ids-alert').removeClass("hidden");
+        $j('#id_id_label').addClass("required");
+        $j('#id_type_label').addClass("required");
+        $j('#id_relation_type_label').addClass("required");
+
+        i = 0;
+
+        $j('input[name^="studyhub_resource[id_id]').each( function( index, element ){
+            if($j(this).val() != '') {
+                i++;
+            }
+        });
+
+        if ( i==0 ) {
+            $j('#id-ids-alert').addClass("hidden");
+            $j('#id_id_label').removeClass("required");
+            $j('#id_type_label').removeClass("required");
+            $j('#id_relation_type_label').removeClass("required");
+        }
     }
 };
 
@@ -200,20 +221,20 @@ function intialRoleVisibility(index) {
 
 
     role_name_type = $j('select[name="studyhub_resource[role_name_type]['+index+']"]').val()
-        switch (role_name_type){
-            case 'Personal':
-                $j('input[name="studyhub_resource[role_name_personal_given_name]['+index+']"]').parent().show();
-                $j('input[name="studyhub_resource[role_name_personal_family_name]['+index+']"]').parent().show();
-                $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').parent().show();
-                $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().show();
-                $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().show();
-                break;
-            case 'Organisational':
-                $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').parent().show();
-                break;
-            default:
+    switch (role_name_type){
+        case 'Personal':
+            $j('input[name="studyhub_resource[role_name_personal_given_name]['+index+']"]').parent().show();
+            $j('input[name="studyhub_resource[role_name_personal_family_name]['+index+']"]').parent().show();
+            $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').parent().show();
+            $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().show();
+            $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().show();
+            break;
+        case 'Organisational':
+            $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').parent().show();
+            break;
+        default:
 
-        }
+    }
 }
 
 function toggle(block_id) {
@@ -223,10 +244,10 @@ function toggle(block_id) {
     }
 
     $j("html").animate(
-                {
-                    scrollTop: $j('#'+block_id).parent().parent().offset().top
-                },
-                800 //speed
-            );
+        {
+            scrollTop: $j('#'+block_id).parent().parent().offset().top
+        },
+        800 //speed
+    );
 }
 

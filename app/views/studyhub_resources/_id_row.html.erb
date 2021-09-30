@@ -1,19 +1,20 @@
 <%
   id_types = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first.sample_controlled_vocab_terms
   id_relation_types = SampleControlledVocab.where(title: 'NFDI4Health ID Relation Type').first.sample_controlled_vocab_terms
+  id_resource_type_generals =  SampleControlledVocab.where(title: 'NFDI4Health ID Resource Type General').first.sample_controlled_vocab_terms
 %>
 <% id_row ||= nil %>
 <% index ||= 'row-template' %>
 <% row_num = index.to_i %>
 
 <%
-
   unless studyhub_resource.resource_json.nil?
     ids = studyhub_resource.resource_json['ids']
     id_id = ids[row_num]["id_id"] unless ids.empty?
     id_date = ids[row_num]["id_date"] unless ids.empty?
     id_type = ids[row_num]["id_type"] unless ids.empty?
     id_relation_type = ids[row_num]["id_relation_type"] unless ids.empty?
+    id_resource_type_general = ids[row_num]["id_resource_type_general"] unless ids.empty?
   end
 
 %>
@@ -25,6 +26,12 @@
 
   <td>
     <div class="form-group">
+      <%= f.text_field "studyhub_resource[id_id][#{index}]", :class => "form-control",:value => id_id %>
+    </div>
+  </td>
+
+  <td>
+    <div class="form-group">
       <%= f.collection_select "studyhub_resource[id_type][#{index}]", id_types.map(&:label), :to_s, :to_s,
                               { :include_blank => false, :selected => id_type }, :class => "form-control" %>
     </div>
@@ -32,7 +39,15 @@
 
   <td>
     <div class="form-group">
-      <%= f.text_field "studyhub_resource[id_id][#{index}]", :class => "form-control",:value => id_id %>
+      <%= f.collection_select "studyhub_resource[id_relation_type][#{index}]", id_relation_types.map(&:label), :to_s, :to_s,
+                              { :include_blank => false, :selected => id_relation_type }, :class => "form-control" %>
+    </div>
+  </td>
+
+  <td>
+    <div class="form-group">
+      <%= f.collection_select "studyhub_resource[id_resource_type_general][#{index}]", id_resource_type_generals.map(&:label), :to_s, :to_s,
+                              { :include_blank => false, :selected => id_resource_type_general }, :class => "form-control" %>
     </div>
   </td>
 
@@ -44,16 +59,6 @@
     </div>
   </td>
 
-
-  <td>
-    <div class="form-group">
-      <%= f.collection_select "studyhub_resource[id_relation_type][#{index}]", id_relation_types.map(&:label), :to_s, :to_s,
-                              { :include_blank => false, :selected => id_relation_type }, :class => "form-control" %>
-    </div>
-  </td>
-
-<td></td>
-<td></td>
 
   <td>
     <% if allow_row_removal %>
@@ -74,5 +79,9 @@
 </tr>
 
 <script>
+
     $j(document).on('click', '[data-calendar]', SR.addCalendar);
+    $j('studyhub_resource[id_id]').on('change', '.destroy-row', SR.removeIDRow);
+    $j('input[name^="studyhub_resource[id_id]').change(SR.addAddtionalRequiredIDFields);
+
 </script>

@@ -8,7 +8,8 @@
 <div id="resource_titles">
   <div class="alert alert-info">
     <p>
-      <b>The first title and description will be by default the main title and description</b> of the resource.
+      You can add more than one <b>title</b>, <b>description</b> or <b>acronym</b> for the resource in different languages.
+        The first title and description will be by default the main title and description.
     </p>
   </div>
     <table class="table" id="resource-title-table">
@@ -42,10 +43,7 @@
       <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f } %>
       </tbody>
     </table>
-
   </div>
-
-
 
 <script>
     //used to hold the element Id that needs updating after csreating a new CV

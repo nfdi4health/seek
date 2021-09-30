@@ -60,7 +60,7 @@ disable_authorization_checks do
 
   # resource_language
   resource_language_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Language').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[EN DE FR ES])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[EN DE FR ES Other])
   )
 
   #resource_use_rights_label
@@ -87,22 +87,26 @@ disable_authorization_checks do
 
   # id_type
   id_type_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[arXiv bibcode DOI EAN13 EISSN ISBN ISSN ISTC LISSN LSID NFDI4Health PMID PURL URL URN w3id ORCID ISNI ROR GRID DRKS ISRCTN EudraCT NCT(clinicaltrials.gov) Other])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[arXiv bibcode DOI EAN13 EISSN Handle ISBN ISSN ISTC LISSN LSID PMID
+PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4Health Other])
 
   )
 
   # id_resource_type_general
   id_resource_type_general_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Resource Type General').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Audiovisual Book BookChapter Collection
-                                                                                                 ComputationalNotebook ConferencePaper ConferenceProceeding DataPaper Dataset Dissertation Event Image InteractiveResource Journal JournalArticle Model
-                                                                                                 OutputManagementPlan PeerReview PhysicalObject Preprint ReportService Software Sound Standard Text Workflow Other])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Audiovisual', 'Book', 'Book chapter', 'Collection', 'Computational notebook', 'Conference paper',
+                                                                                               'Conference proceeding', 'Data paper', 'Dataset', 'Dissertation', 'Event', 'Image', 'Interactive resource',
+                                                                                               'Journal', 'Journal article', 'Model', 'Output management plan', 'Peer review', 'Physical object', 'Preprint',
+                                                                                               'Report', 'Service', 'Software', 'Sound', 'Standard', 'Text', 'Workflow', 'Other'])
   )
 
   # id_relation_type
   id_relation_types_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Relation Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[IsCitedBy Cites IsSupplementTo IsSupplementedBy IsContinuedBy Continues
-                                                                                                 IsDescribedBy Describes HasMetadata IsMetadataFor HasVersion IsVersionOf IsNewVersionOf IsPreviousVersionOf IsPartOf HasPart IsReferencedBy References IsDocumentedBy Documents
-                                                                                                 IsCompiledBy Compiles IsVariantFormOf IsOriginalFormOf IsIdenticalTo IsReviewedBy Reviews IsDerivedFrom IsSourceOf IsRequiredBy Requires IsObsoletedBy Obsoletes])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['is cited by', 'cites', 'is supplement to', 'is supplemented by', 'is continued by', 'continues', 'is described by',
+                                                                                               'describes', 'has metadata', 'is metadata for', 'has version', 'is version of', 'is new version of', 'is previous version of',
+                                                                                               'is part of', 'has part', 'is referenced by', 'references', 'is documented by', 'documents', 'is compiled by', 'compiles',
+                                                                                               'is variant form of', 'is original form of', 'is identical to', 'is reviewed by', 'reviews', 'is derived from', 'is source of',
+                                                                                               'is required by', 'requires', 'is obsoleted by', 'obsoletes', 'has grant number', 'has alternate ID'])
   )
 
 

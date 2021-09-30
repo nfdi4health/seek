@@ -1,4 +1,4 @@
-<% help_text = "*******************************************" %>
+<% help_text = "Please add help text for this section." %>
 <%= folding_panel("Associated Resources:", collapsed, :body_options => {:id => 'associated_resources'},
                   :help_text => help_text) do %>
 
@@ -14,17 +14,23 @@
         </div>
       </div>
     </div>
+
+    <div id="id-ids-alert" class="alert alert-danger hidden">
+      <div>
+        <p>If <b>ID</b> is given, you must also enter <b>ID Type</b> and <b>Relation Type</b>.</p>
+      </div>
+    </div>
   </div>
 
   <div id="id_ids">
-    <table class="table" id="id-id-table">
+    <table class="table id-id-table" id="id-id-table">
       <thead>
       <tr>
-        <th><label>ID Type</label></th>
-        <th><label>ID</label></th>
+        <th><label id='id_id_label'>ID</label></th>
+        <th><label id='id_type_label'>ID Type</label></th>
+        <th><label id='id_relation_type_label'>Relation Type</label></th>
+        <th><label>ID Resource Type</label></th>
         <th><label>ID Date</label></th>
-        <th><label>Relation Type</label></th>
-        <th width="19em"></th>
       </tr>
       </thead>
       <tbody>
