@@ -24,7 +24,6 @@ class StudyhubResource < ApplicationRecord
   validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
-  validate :check_acronym_presence, on:  [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
 
@@ -89,10 +88,6 @@ class StudyhubResource < ApplicationRecord
       end
       errors.add(:base, "Please add the required fields for resource roles.") if errors.messages.keys.select {|x| x.to_s.include? "roles" }.size  > 0
     end
-  end
-
-  def check_acronym_presence
-    errors.add(:acronym, "can't be blank") if resource_json['resource_acronyms'].blank?
   end
 
   def check_description_presence
