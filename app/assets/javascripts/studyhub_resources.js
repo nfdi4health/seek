@@ -208,7 +208,23 @@ var SR = {
             $j('#id_type_label').removeClass("required");
             $j('#id_relation_type_label').removeClass("required");
         }
+    },
+
+    addAddtionalRequiredFieldStudyConditionsClassificationCode: function () {
+
+     if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
+         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
+     }else {
+         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().removeClass('submit-required');
+     }
+    },
+
+    intialRequiredFields: function (){
+        if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
+        }
     }
+
 };
 
 function intialRoleVisibility(index) {
