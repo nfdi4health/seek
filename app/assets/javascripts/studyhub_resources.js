@@ -223,6 +223,23 @@ var SR = {
         if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
         }
+
+        study_outcome_title =  $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_title]"]').val()
+        study_outcome_description =  $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_description]"]').val()
+        if ( study_outcome_title != '' || study_outcome_description !=''){
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_type]"]').prev().addClass('submit-required');
+        }
+
+    },
+
+    addAddtionalRequiredStudyOutcomeType: function () {
+        study_outcome_title =  $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_title]"]').val()
+        study_outcome_description =  $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_description]"]').val()
+        if ( study_outcome_title != '' || study_outcome_description !=''){
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_type]"]').prev().addClass('submit-required');
+        } else {
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_type]"]').prev().removeClass('submit-required');
+        }
     }
 
 };

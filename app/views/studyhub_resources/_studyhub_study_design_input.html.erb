@@ -34,6 +34,9 @@
         SR.intialStudyDataSharingPlanVisibility();
         SR.intialRequiredFields();
 
+        $j('#studyhub_resource_study_design').on('change', 'input[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_title]"]', SR.addAddtionalRequiredStudyOutcomeType);
+        $j('#studyhub_resource_study_design').on('change', 'textarea[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_description]"]', SR.addAddtionalRequiredStudyOutcomeType);
+        s
         $j('#studyhub_resource_study_design').on('change', 'input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]', SR.addAddtionalRequiredFieldStudyConditionsClassificationCode);
         $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]', SR.setStudyPrimaryDesignVisibility);
         $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_generally]"]', SR.setStudyDataSharingPlanVisibility);

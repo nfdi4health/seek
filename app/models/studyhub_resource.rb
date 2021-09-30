@@ -118,7 +118,7 @@ class StudyhubResource < ApplicationRecord
       required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL if get_study_primary_design_type == NON_INTERVENTIONAL
       required_fields['study_design'] += ['study_conditions_classification'] if !resource_json["study_design"]["study_conditions"].blank?
       required_fields['study_design'] += ['study_arm_group_type'] if !resource_json["study_design"]["study_arm_group_label"].blank?
-
+      required_fields['study_design'] += ['study_outcome_type'] unless resource_json["study_design"]["study_outcome_title"].blank? && resource_json["study_design"]["study_outcome_description"].blank?
     end
 
     required_fields.each do |type, fields|
