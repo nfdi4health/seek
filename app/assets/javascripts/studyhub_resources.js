@@ -104,6 +104,63 @@ var SR = {
 
     },
 
+
+    intialStudyAttributesVisibility: function () {
+
+        study_primary_design = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
+        study_status = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status]"]').val();
+        study_masking = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').val();
+
+
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().hide();
+        $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().hide();
+
+
+        if  (study_primary_design=="Interventional" && (study_status=="At the planning stage" || study_status.startsWith('Ongoing'))){
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().show();
+        }
+
+        if (study_status.startsWith('Suspended') || study_status .startsWith('Terminated')) {
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().show();
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().show();
+        }
+
+
+        if  (study_masking=="Yes") {
+            $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().show();
+        }
+
+    },
+
+    setStudyAttributesVisibility: function () {
+        study_primary_design = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
+        study_status = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status]"]').val();
+        study_masking = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').val();
+
+        if  (study_primary_design=="Interventional" && (study_status == "At the planning stage" || study_status.startsWith('Ongoing'))) {
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().show();
+        }else{
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().hide();
+        }
+
+        if (study_status.startsWith('Suspended') || study_status .startsWith('Terminated')) {
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().show();
+            $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().show();
+        }else{
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().hide();
+            $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().hide();
+
+        }
+
+        if  (study_masking=="Yes") {
+            $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().show();
+        }else{
+            $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().hide();
+        }
+
+    },
+
     setRoleNameTypeVisibility:function () {
         role_name_type = $j(this).val();
         index = $j(this).parent().parent().attr('data-index');
@@ -153,9 +210,7 @@ var SR = {
     setRolePersonIdentifierSchemeAsRequirerd: function () {
         value = $j(this).val()
         index = $j(this).parent().parent().attr('data-index');
-        alert(index);
         if (value){
-            alert("value:"+value);
             $j('select[name="studyhub_resource[role_name_identifier_schemes]['+index+']"]').prev().addClass('required');
         }
     },
@@ -212,11 +267,11 @@ var SR = {
 
     addAddtionalRequiredFieldStudyConditionsClassificationCode: function () {
 
-     if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
-         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
-     }else {
-         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().removeClass('submit-required');
-     }
+        if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
+        }else {
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().removeClass('submit-required');
+        }
     },
 
     intialRequiredFields: function (){

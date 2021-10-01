@@ -306,7 +306,7 @@ class StudyhubResourcesController < ApplicationController
       params[:resource_json][:resource] = resource
 
       if @rt.is_studytype?
-        study_design = set_study_data_sharing_plan(study_design)
+        study_design = clear_conditional_required_attributes(study_design)
         params[:resource_json][:study_design] = study_design
       end
 
@@ -330,7 +330,24 @@ class StudyhubResourcesController < ApplicationController
     cm_study_design_attributes
   end
 
-  def set_study_data_sharing_plan(study_design)
+  def clear_conditional_required_attributes(study_design)
+
+    # clear_study_status
+    if study_design['study_primary_design'] == StudyhubResource::INTERVENTIONAL
+      if study_design['study_status'] != 'At the planning stage' && !study_design['study_status'].start_with?('Ongoing')
+        study_design['study_status_when_intervention'] = ''
+      end
+    else
+      study_design['study_status_when_intervention'] = ''
+    end
+
+
+    # clear_study_masking
+    unless study_design['study_masking'] == "Yes"
+      study_design['study_masking_roles'] = ''
+    end
+
+    # clear_study_data_sharing_plan
     unless study_design['study_data_sharing_plan_generally'].start_with?('Yes')
       study_design['study_data_sharing_plan_supporting_information'] = []
       study_design['study_data_sharing_plan_time_frame'] = ''
