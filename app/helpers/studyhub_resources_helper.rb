@@ -240,6 +240,10 @@ module StudyhubResourcesHelper
 
     role = {}
 
+    if (@error_keys.include? "roles[#{index}]['role_type']")
+      role["role_type"] = @studyhub_resource.errors.messages["roles[#{index}]['role_type']".to_sym].first
+    end
+
     if (@error_keys.include? "roles[#{index}]['role_name_type']")
       role["role_name_type"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_type']".to_sym].first
     end

@@ -82,6 +82,8 @@ class StudyhubResource < ApplicationRecord
 
     if resource_json['roles'].blank?
       errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
+      errors.add("roles[0]['role_type']".to_sym, "can't be blank")
+      errors.add("roles[0]['role_name_type']".to_sym, "can't be blank")
     else
       resource_json['roles'].each_with_index do |role,index|
         errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
