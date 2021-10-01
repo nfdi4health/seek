@@ -6,6 +6,7 @@
 
   <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign General",supported_type:@studyhub_resource.class.name).first %>
   <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource } %>
+    <button id="study_primary_design_next_button" type="button" class="btn btn-success float-right hidden" onclick="toggle('study_design_interventional')">Next</button>
 <% end %>
 
     <%= folding_panel("Non Interventional Study:", collapsed, :body_options => {:id => 'study_design_non_interventional'},

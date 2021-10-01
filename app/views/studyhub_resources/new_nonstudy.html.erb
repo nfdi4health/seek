@@ -1,14 +1,3 @@
-<%= sr_type.inspect %>
-<br>
-<%= @studyhub_resource.inspect %>
-<br>
-<%= @studyhub_resource.content_blob.inspect %>
-<br>
-<%= @studyhub_resource.content_blob.id %>
-<br>
-session[:uploaded_content_blob_id]= <%= session[:uploaded_content_blob_id].inspect %>
-
-
 <% collapsed = @studyhub_resource.resource_json.nil? %>
 <div class="row">
   <div style="margin:auto;width:70%;">

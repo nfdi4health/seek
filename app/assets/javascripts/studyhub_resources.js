@@ -89,19 +89,49 @@ var SR = {
             case 'Interventional':
                 $j('div[id="study_design_interventional"]').parent().parent().show();
                 $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+                $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
                 break;
 
             case 'Non-interventional':
                 $j('div[id="study_design_non_interventional"]').parent().parent().show();
                 $j('div[id="study_design_interventional"]').parent().parent().hide();
+                $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
+                $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_non_interventional\')');
                 break;
-
             default:
                 $j('div[id="study_design_non_interventional"]').parent().parent().hide();
                 $j('div[id="study_design_interventional"]').parent().parent().hide();
 
         }
 
+    },
+
+    setStudyPrimaryDesignVisibility: function () {
+
+        $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
+
+        design = $j(this).val();
+
+        switch (design){
+            case 'Interventional':
+
+                $j('div[id="study_design_interventional"]').parent().parent().show();
+                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+                $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_interventional\')');
+                break;
+
+            case 'Non-interventional':
+                $j('div[id="study_design_non_interventional"]').parent().parent().show();
+                $j('div[id="study_design_interventional"]').parent().parent().hide();
+                $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_non_interventional\')');
+                break;
+
+            default:
+                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+                $j('div[id="study_design_interventional"]').parent().parent().hide();
+                $j('button[id="study_primary_design_next_button"]').addClass('hidden');
+
+        }
     },
 
 
@@ -134,6 +164,7 @@ var SR = {
     },
 
     setStudyAttributesVisibility: function () {
+
         study_primary_design = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
         study_status = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status]"]').val();
         study_masking = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').val();
@@ -215,29 +246,6 @@ var SR = {
         }
     },
 
-    setStudyPrimaryDesignVisibility: function () {
-
-        design = $j(this).val();
-
-        switch (design){
-            case 'Interventional':
-
-                $j('div[id="study_design_interventional"]').parent().parent().show();
-                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
-                break;
-
-            case 'Non-interventional':
-
-                $j('div[id="study_design_non_interventional"]').parent().parent().show();
-                $j('div[id="study_design_interventional"]').parent().parent().hide();
-                break;
-
-            default:
-                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
-                $j('div[id="study_design_interventional"]').parent().parent().hide();
-
-        }
-    },
 
     removeSubmitButton: function () {
         $j('#submit_button').remove();

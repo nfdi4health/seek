@@ -585,7 +585,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_supporting_information').create!(
-        title: 'study_data_sharing_plan_supporting_information', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_supporting_information_cv,
+        title: 'study_data_sharing_plan_supporting_information', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_supporting_information_cv,
         description: attribute_descriptions['study_data_sharing_plan_supporting_information']
       ),
 
@@ -630,7 +630,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ),
 
       CustomMetadataAttribute.where(title: 'study_biospecimen_retention').create!(
-        title: 'study_biospecimen_retention', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_biospecimen_retention_cv,
+        title: 'study_biospecimen_retention', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_biospecimen_retention_cv,
         description: attribute_descriptions['study_biospecimen_retention']
       ),
 
