@@ -277,9 +277,23 @@ var SR = {
         }
     },
 
+    addAddtionalRequiredFieldStudyArmGroupType: function () {
+
+        if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').val() != ''){
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').prev().addClass('submit-required');
+        }else {
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').prev().removeClass('submit-required');
+        }
+    },
+
     intialRequiredFields: function (){
+
         if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
+        }
+
+        if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').val() != ''){
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').prev().addClass('submit-required');
         }
 
         study_outcome_title =  $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_title]"]').val()
