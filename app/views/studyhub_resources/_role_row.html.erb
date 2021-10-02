@@ -169,10 +169,7 @@
 
 <script>
     $j(document).ready(function () {
-
-        intialRoleVisibility(<%= row_num %>);
-
         $j('select[name="studyhub_resource[role_name_type][<%= row_num %>]"]').on('change', SR.setRoleNameTypeVisibility);
-<!--        $j('input[name="studyhub_resource[role_name_identifier][<%#= row_num %>]"]').on('change', SR.setRolePersonIdentifierSchemeAsRequirerd);-->
+        $j('input[name^="studyhub_resource[role_name_identifier]').change(SR.setRolePersonIdentifierSchemeAsRequirerd);
     });
 </script>

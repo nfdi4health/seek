@@ -204,6 +204,7 @@ var SR = {
                 $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().show();
                 $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().show();
                 $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').parent().hide();
+                $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').val('');
                 break;
 
             case 'Organisational':
@@ -213,6 +214,11 @@ var SR = {
                 $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').parent().hide();
                 $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().hide();
                 $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().hide();
+                $j('input[name="studyhub_resource[role_name_personal_given_name]['+index+']"]').val('');
+                $j('input[name="studyhub_resource[role_name_personal_family_name]['+index+']"]').val('');
+                $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').val('');
+                $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').val('');
+                $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').val('');
                 break;
 
             default:
@@ -225,24 +231,13 @@ var SR = {
         }
     },
 
-    // setRoleRequirerdAttributes:function () {
-    //     role_name_type = $j(this).val();
-    //     index = $j(this).parent().parent().attr('data-index');
-    //     switch (role_name_type){
-    //         case 'Personal':
-    //             $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').prev().addClass('required');
-    //             break;
-    //         case 'Organisational':
-    //             $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').prev().removeClass('required');
-    //             break;
-    //     }
-    // },
-
     setRolePersonIdentifierSchemeAsRequirerd: function () {
         value = $j(this).val()
         index = $j(this).parent().parent().attr('data-index');
         if (value){
-            $j('select[name="studyhub_resource[role_name_identifier_schemes]['+index+']"]').prev().addClass('required');
+            $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').prev().addClass('submit-required');
+        }else{
+            $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').prev().removeClass('submit-required');
         }
     },
 
@@ -303,11 +298,21 @@ var SR = {
         } else {
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_type]"]').prev().removeClass('submit-required');
         }
+    },
+
+    intialRolesVisibility: function (){
+        $j('select[name^="studyhub_resource[role_type]').each( function( index, element ){
+            index = $j(this).parent().parent().attr('data-index');
+            if (index != 'row-template') {
+                intialRoleVisibility(index);
+            }
+        });
     }
 
 };
 
 function intialRoleVisibility(index) {
+
     $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').parent().hide();
     $j('input[name="studyhub_resource[role_name_personal_given_name]['+index+']"]').parent().hide();
     $j('input[name="studyhub_resource[role_name_personal_family_name]['+index+']"]').parent().hide();
@@ -315,8 +320,8 @@ function intialRoleVisibility(index) {
     $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().hide();
     $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().hide();
 
-
     role_name_type = $j('select[name="studyhub_resource[role_name_type]['+index+']"]').val()
+
     switch (role_name_type){
         case 'Personal':
             $j('input[name="studyhub_resource[role_name_personal_given_name]['+index+']"]').parent().show();
@@ -324,6 +329,13 @@ function intialRoleVisibility(index) {
             $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').parent().show();
             $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().show();
             $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().show();
+
+            if($j('select[name="studyhub_resource[role_name_identifier]['+index+']"]').val() != ''){
+                $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').prev().addClass('submit-required');
+            }else{
+                $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').prev().removeClass('submit-required');
+            }
+
             break;
         case 'Organisational':
             $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').parent().show();

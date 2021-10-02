@@ -44,6 +44,8 @@
     //used to hold the element Id that needs updating after creating a new CV
     $j(document).ready(function () {
 
+        SR.intialRolesVisibility();
+
         $j('#add-role-row').click(function () {
             var newRow = $j('#new-role-row').clone().html();
             var index = 0;
