@@ -241,6 +241,16 @@ var SR = {
         }
     },
 
+    setRoleAffiliationIdentifierSchemeAsRequirerd: function () {
+        value = $j(this).val()
+        index = $j(this).parent().parent().attr('data-index');
+        if (value){
+            $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']"]').prev().addClass('submit-required');
+        }else{
+            $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']"]').prev().removeClass('submit-required');
+        }
+    },
+
 
     removeSubmitButton: function () {
         $j('#submit_button').remove();
@@ -334,6 +344,13 @@ function intialRoleVisibility(index) {
     $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().hide();
     $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().hide();
 
+
+    if($j('input[name="studyhub_resource[role_affiliation_identifier]['+index+']"]').val() != ''){
+        $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']"]').prev().addClass('submit-required');
+    }else{
+        $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']"]').prev().removeClass('submit-required');
+    }
+
     role_name_type = $j('select[name="studyhub_resource[role_name_type]['+index+']"]').val()
 
     switch (role_name_type){
@@ -344,7 +361,7 @@ function intialRoleVisibility(index) {
             $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().show();
             $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().show();
 
-            if($j('select[name="studyhub_resource[role_name_identifier]['+index+']"]').val() != ''){
+            if($j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').val() != ''){
                 $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').prev().addClass('submit-required');
             }else{
                 $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').prev().removeClass('submit-required');

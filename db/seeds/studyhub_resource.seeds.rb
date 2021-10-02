@@ -523,7 +523,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ),
 
       CustomMetadataAttribute.where(title: 'study_population').create!(
-        title: 'study_population', required: true, sample_attribute_type: text_type, description: attribute_descriptions['study_population']
+        title: 'study_population', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_population']
       ),
 
       CustomMetadataAttribute.where(title: 'study_target_sample_size').create!(

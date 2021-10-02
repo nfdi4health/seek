@@ -99,6 +99,9 @@ class StudyhubResource < ApplicationRecord
           errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")  if role['role_name_organisational'].blank?
           errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.")  if !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
         end
+
+        errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.") if  !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
+
       end
       errors.add(:base, "Please add the required fields for resource roles.") if errors.messages.keys.select {|x| x.to_s.include? "roles" }.size  > 0
     end
