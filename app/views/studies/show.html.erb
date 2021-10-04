@@ -25,12 +25,15 @@
                 <%= investigation_link(@study.investigation) %>
               </p>
 
-              <%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @study}%>
-		<p id="position">
+
+              <%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @study}%>        
+		<p id="possition">
           		<b><%= "Study position" %>: </b>
           		<%= @study.position %>
         	</p>
-        	<%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @study}%>
+
+        	<%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @study}%>        
+
               <% unless @study.experimentalists.blank? %>
                 <p>
                   <b>Experimentalists:</b>
@@ -63,5 +66,6 @@
     <div id="related-items" class="tab-pane fade">
       <%= render :partial=>"general/items_related_to", :object => @study -%>
     </div>
+    
 
 </div>

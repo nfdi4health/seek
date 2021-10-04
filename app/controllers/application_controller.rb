@@ -172,6 +172,7 @@ class ApplicationController < ActionController::Base
           end
         end
         format.json { render json: {"title": "Unauthorized", "detail": flash[:error].to_s}, status: :unauthorized}
+        format.js { render json: {"title": "Unauthorized", "detail": flash[:error].to_s}, status: :unauthorized}
       end
     end
   end
@@ -636,5 +637,37 @@ class ApplicationController < ActionController::Base
       end
     end
     keys
+  end
+
+  def set_displaying_single_page
+    @single_page = true
+  end
+
+  def displaying_single_page?
+    @single_page || false
+  end
+
+  helper_method :displaying_single_page?
+
+  def display_isa_graph?
+    !displaying_single_page?
+  end
+
+  helper_method :display_isa_graph?
+
+
+  def creator_related_params
+    [:other_creators,
+     # For directly assigning SEEK people (API):
+     { creator_ids: [] },
+     # For directly setting SEEK and non-SEEK people (API):
+     { api_assets_creators: [:creator_id, :given_name,
+                             :family_name, :affiliation,
+                             :orcid, :pos] },
+     # For incrementally adding, removing, modifying  SEEK and non-SEEK people (UI):
+     { assets_creators_attributes: [:id, :creator_id, :given_name,
+                                    :family_name, :affiliation,
+                                    :orcid, :pos, :_destroy] }
+    ]
   end
 end

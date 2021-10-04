@@ -1,5 +1,5 @@
 class StudySerializer < SnapshottableSerializer
-  attributes :title, :description, :experimentalists, :other_creators  
+  attributes :title, :description, :experimentalists, :other_creators , :position
 
   has_one :studyhub_resource
   has_many :people
@@ -11,4 +11,8 @@ class StudySerializer < SnapshottableSerializer
   has_many :sops
   has_many :publications
   has_many :documents
+
+  attribute :creators do
+    serialize_assets_creators
+  end
 end

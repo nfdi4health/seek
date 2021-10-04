@@ -59,6 +59,7 @@
 //= require i18n/translations
 //= require_tree ./templates
 //= require simplemde.min
+//= require sortable.min
 //= require admin
 //= require studyhub_resources
 //= require studyhub_resources_tooltips
