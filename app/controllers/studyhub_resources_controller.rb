@@ -304,11 +304,7 @@ class StudyhubResourcesController < ApplicationController
       end
 
       params[:resource_json][:resource] = resource
-
-      if @rt.is_studytype?
-        study_design = clear_conditional_required_attributes(study_design)
-        params[:resource_json][:study_design] = study_design
-      end
+      params[:resource_json][:study_design] = study_design if @rt.is_studytype?
 
     end
     return resource, study_design
@@ -328,23 +324,6 @@ class StudyhubResourcesController < ApplicationController
       cm_study_design_attributes += cm_study_design_non_interventional_attributes
     end
     cm_study_design_attributes
-  end
-
-  def clear_conditional_required_attributes(study_design)
-
-    # clear_study_masking
-    unless study_design['study_masking'] == "Yes"
-      study_design['study_masking_roles'] = ''
-    end
-
-    # clear_study_data_sharing_plan
-    unless study_design['study_data_sharing_plan_generally'].start_with?('Yes')
-      study_design['study_data_sharing_plan_supporting_information'] = []
-      study_design['study_data_sharing_plan_time_frame'] = ''
-      study_design['study_data_sharing_plan_access_criteria'] = ''
-      study_design['study_data_sharing_plan_url'] = ''
-    end
-    study_design
   end
 
   def parse_roles(params)

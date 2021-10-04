@@ -78,6 +78,11 @@ var SR = {
             $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_time_frame]"]').parent().hide();
             $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_access_criteria]"]').parent().hide();
             $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_url]"]').parent().hide();
+
+            $j('div[id="studyhub_resource_custom_metadata_attributes_data_study_data_sharing_plan_supporting_information"]').children().eq(1).empty();
+            $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_time_frame]"]').val('');
+            $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_access_criteria]"]').val('');
+            $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_url]"]').val('');
         }
     },
 
@@ -144,6 +149,7 @@ var SR = {
 
         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().hide();
         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().hide();
+        $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().hide();
         $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().hide();
 
 
@@ -153,7 +159,7 @@ var SR = {
 
         if (study_status.startsWith('Suspended') || study_status .startsWith('Terminated')) {
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().show();
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().show();
+            $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().show();
         }
 
 
@@ -182,14 +188,16 @@ var SR = {
             $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().show();
         }else{
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().hide();
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').val('');
             $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').parent().hide();
-
+            $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').val('');
         }
 
         if  (study_masking=="Yes") {
             $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().show();
         }else{
             $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().hide();
+            $j('div[id="studyhub_resource_custom_metadata_attributes_data_study_masking_roles"]').children().eq(1).empty();
         }
 
     },

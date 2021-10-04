@@ -38,7 +38,7 @@ class StudyhubResource < ApplicationRecord
   REQUIRED_FIELDS_RESOURCE_BASIC = %w[resource_type_general resource_use_rights_label].freeze
   REQUIRED_FIELDS_RESOURCE_USE_RIGHTS = %w[resource_use_rights_authors_confirmation_1 resource_use_rights_authors_confirmation_2 resource_use_rights_authors_confirmation_3 resource_use_rights_support_by_licencing].freeze
   REQUIRED_FIELDS_STUDY_DESIGN_GENERAL = ['study_primary_design','study_status','study_data_sharing_plan_generally','study_country','study_subject'].freeze
-  REQUIRED_FIELDS_INTERVENTIONAL = %w[study_type_interventional study_primary_outcome_title].freeze
+  REQUIRED_FIELDS_INTERVENTIONAL = %w[study_type_interventional].freeze
   REQUIRED_FIELDS_NON_INTERVENTIONAL = %w[study_type_non_interventional].freeze
   INTERVENTIONAL = 'Interventional'.freeze
   NON_INTERVENTIONAL = 'Non-interventional'.freeze
