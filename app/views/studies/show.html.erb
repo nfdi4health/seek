@@ -14,7 +14,16 @@
           <%= investigation_link(@study.investigation) %>
         </p>
 
-        <%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @study}%>        
+        <%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @study}%>
+
+        <p>
+          <label><%= t('person_responsible').capitalize %>:</label>
+          <% if @study.person_responsible.try :can_view? -%>
+              <%= link_to @study.person_responsible.name,@study.person_responsible %>
+          <% else -%>
+              <span class="none_text">Not available</span>
+          <% end -%>
+        </p>
 
         <% unless @study.experimentalists.blank? %>
           <p>
@@ -33,11 +42,7 @@
         </div>
     <% end %>
 
-
     <%= render partial: 'custom_metadata/custom_metadata_attribute_values', locals: {resource: @study} %>
-    <%= render partial: 'studyhub_resources/parent_child_relationships', locals: {resource: @study} %>
-    <%#= render partial: 'studyhub_resources/associated_studyhub_resource.html.erb', locals: {resource: @study} %>
-
 
     <%= render partial: 'general/isa_graph', locals: { root_item: @study, options: { depth: 4 } } %>
 

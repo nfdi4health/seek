@@ -45,12 +45,12 @@
           <b><%= t('study') %>: </b>
           <%= study_link(@assay.study) %>
         </p>
-        <p id="assay_type" class="nfdi-hidden">
+        <p id="assay_type">
           <b><%= assay_type_text -%>:</b>
           <%= link_to_assay_type(@assay) -%>
         </p>
         <% unless @assay.is_modelling? -%>
-            <p id="technology_type" >
+            <p id="technology_type">
               <b>Technology type: </b>
               <%= link_to_technology_type(@assay) -%>
             </p>
@@ -59,8 +59,6 @@
         <% if Seek::Config.organisms_enabled %>
             <%= list_assay_organisms("Organisms", @assay.assay_organisms,{:id=>"organism"}) %>
         <% end %>
-
-
 
         <% if Seek::Config.human_diseases_enabled %>
             <%= list_assay_human_diseases("Human Diseases", @assay.assay_human_diseases,{:id=>"human_disease"}) %>
@@ -76,9 +74,6 @@
     <% end %>
 
     <%= render partial: 'custom_metadata/custom_metadata_attribute_values', locals: {resource: @assay} %>
-    <%= render partial: 'studyhub_resources/parent_child_relationships', locals: {resource: @assay} %>
-    <%#= render partial: 'studyhub_resources/associated_studyhub_resource.html.erb', locals: {resource: @assay} %>
-
 
     <% if ((@assay.is_modelling?) && !@assay.models.empty? && !@assay.data_files.empty?) %><%#MODELLING ASSAY %>
         <div class="data_model_relationship">
