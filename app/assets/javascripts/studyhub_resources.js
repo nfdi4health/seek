@@ -173,6 +173,8 @@ var SR = {
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().show();
         }else{
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().hide();
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').val('');
+
         }
 
         if (study_status.startsWith('Suspended') || study_status .startsWith('Terminated')) {

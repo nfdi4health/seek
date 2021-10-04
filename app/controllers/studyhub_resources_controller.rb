@@ -332,16 +332,6 @@ class StudyhubResourcesController < ApplicationController
 
   def clear_conditional_required_attributes(study_design)
 
-    # clear_study_status
-    if study_design['study_primary_design'] == StudyhubResource::INTERVENTIONAL
-      if study_design['study_status'] != 'At the planning stage' && !study_design['study_status'].start_with?('Ongoing')
-        study_design['study_status_when_intervention'] = ''
-      end
-    else
-      study_design['study_status_when_intervention'] = ''
-    end
-
-
     # clear_study_masking
     unless study_design['study_masking'] == "Yes"
       study_design['study_masking_roles'] = ''
