@@ -1,49 +1,5 @@
 module StudyhubResourcesHelper
 
-  def associated_studyhub_resource_web_link(resource)
-
-    label = "studyhub_resources.#{resource.studyhub_resource_type.key}"
-
-    #todo change hardcoded url
-    #url = URI.join("http://covid19.studyhub.nfdi4health.de/resource/", resource.id.to_s).to_s
-    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + '.json'
-    content_tag :p, class: :id do
-      content_tag(:strong) do
-        t(label) + ':'
-      end + ' ' + link_to(url, url)
-    end
-  end
-
-  def studyhub_resource_in_seek_id_json(resource)
-
-    label = 'studyhub_resources.id'
-    url = URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s + '.json'
-    content_tag :p, class: :id do
-      content_tag(:strong) do
-        t(label) + ':'
-      end + ' ' + link_to(url, url)
-    end
-  end
-
-
-  def studyhub_resource_associated_resource(types)
-    html = ''
-    types.each do |type|
-      resource = StudyhubResource.find(type['id_id'])
-      html += "<div class='nfdi_id_type'>"
-      html += resource.studyhub_resource_type.title
-      html += ' '
-      html += list_item_title(resource, {:include_avatar => false})
-      html += ' '
-      html += type['id_relation_type']
-      html += ' '
-      html += (link_to 'this resource', show_resource_path(@studyhub_resource) ).to_s
-      html += '</div>'
-    end
-    html.html_safe
-  end
-
-
   def studyhub_resource_items(items,item_type)
     html = ''
     if items.any?
