@@ -34,6 +34,15 @@ var SR = {
         });
     },
 
+    enableNextButton: function () {
+        if ($j(this).val() == '') {
+            $j('#select_sr_type_button').prop('disabled', true);
+        } else {
+            $j('#select_sr_type_button').prop('disabled', false);
+        }
+
+    },
+
     intialResourceUseRightVisibility: function () {
         check_license = $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_label]"]').val();
         if (check_license.startsWith('CC')) {
@@ -252,7 +261,7 @@ var SR = {
     },
 
     setRoleAffiliationIdentifierSchemeAsRequirerd: function () {
-        value = $j(this).val()
+        value = $j(this).val();
         index = $j(this).parent().parent().attr('data-index');
         if (value){
             $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']"]').prev().addClass('submit-required');
