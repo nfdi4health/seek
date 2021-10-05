@@ -99,7 +99,7 @@ en:
     managing: "Manage"
 
   asset_housekeeper: 'Asset housekeeper'
-  asset_gatekeeper: 'Asset gatekeeper'
+  asset_gatekeeper: 'Reviewer'
   project_administrator: 'Project administrator'
   pal: 'PAL'
   programme_administrator: 'Programme administrator'
@@ -171,12 +171,11 @@ you can choose to have a %{project} linked to a site managed %{programme} instea
   <p>'
 
 
-  studyhub_resource: 'Studyhub Resource'
+  studyhub_resource: 'NFDI4Health Resource'
   studyhub_resources:
-    studyhub_resource: 'Studyhub Resource'
+    studyhub_resource: 'NFDI4Health Resource'
     id: 'Resource ID'
     study: 'Study'
     substudy: 'Substudy'
     instrument: 'Instrument'
     document: 'Document'
-    gatekeep: 'data quality managers'
