@@ -709,9 +709,9 @@ class ProjectsControllerTest < ActionController::TestCase
     login_as person.user
     get :show, params: { id: project }
     assert_select 'div.box_about_actor p.asset_gatekeepers' do
-      assert_select 'strong', text: 'Asset gatekeepers:', count: 1
+      assert_select 'strong', text: I18n.t('asset_gatekeeper').pluralize+':', count: 1
       assert_select 'a', count: 0
-      assert_select 'span.none_text', text: "No Asset gatekeepers for this #{I18n.t('project')}", count: 1
+      assert_select 'span.none_text', text: "No #{I18n.t('asset_gatekeeper').pluralize} for this #{I18n.t('project')}", count: 1
     end
   end
 
