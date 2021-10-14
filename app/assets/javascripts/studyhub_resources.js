@@ -45,7 +45,11 @@ var SR = {
 
     intialResourceUseRightVisibility: function () {
         check_license = $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_label]"]').val();
-        if (check_license.startsWith('CC')) {
+
+        if (check_license == '') {
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_label]"]').val('Not applicable');
+        }
+        else if (check_license.startsWith('CC')) {
             $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').prev().addClass('submit-required');
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').prev().addClass('submit-required');
         }
