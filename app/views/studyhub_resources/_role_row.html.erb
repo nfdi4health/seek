@@ -12,10 +12,8 @@
 <% row_num = index.to_i %>
 
 <%
-  roles = @studyhub_resource.resource_json.nil? ? nil : studyhub_resource.resource_json['roles']
-
-  unless index == 'row-template'
-    unless @studyhub_resource.resource_json.nil? || roles[row_num].blank?
+  unless  studyhub_resource.nil? || studyhub_resource.resource_json.nil? || studyhub_resource.resource_json['roles'][row_num].blank?
+    roles = studyhub_resource.resource_json['roles']
     role_type =  roles[row_num]["role_type"]
     role_name_type = roles[row_num]["role_name_type"]
 
@@ -37,7 +35,6 @@
     role_affiliation_name = roles[row_num]["role_affiliation_name"]
     role_affiliation_web_page = roles[row_num]["role_affiliation_web_page"]
     role_affiliation_address = roles[row_num]["role_affiliation_address"]
-    end
   end
 %>
 
@@ -46,7 +43,7 @@
 
 <div id="role-<%= index-%>" class="resource-role" data-index="<%= index-%>">
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_type" %>">
-  <label class="required">Role Type</label>
+    <label class="required">Role Type</label>
     <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
                             { :include_blank => "Please select...", :selected => role_type }, :class => "form-control role_type" %>
     <p class="help-block"><small>Type of the resource contributor.</small></p>

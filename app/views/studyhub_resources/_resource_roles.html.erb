@@ -32,7 +32,7 @@
     </div>
 
     <div id="new-role-row" style="display: none">
-      <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f} %>
+      <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>nil,:f => f} %>
     </div>
   </div>
   <% if @studyhub_resource.is_studytype? %>
