@@ -43,7 +43,7 @@ class StudyhubResource < ApplicationRecord
   REQUIRED_FIELDS_NON_INTERVENTIONAL = %w[study_type_non_interventional].freeze
   INTERVENTIONAL = 'Interventional'.freeze
   NON_INTERVENTIONAL = 'Non-interventional'.freeze
-  URL_FIELDS = %w[resource_web_page].freeze
+  URL_FIELDS = %w[resource_web_page study_data_sharing_plan_url].freeze
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values
@@ -69,11 +69,22 @@ class StudyhubResource < ApplicationRecord
 
   def check_urls
 
-    errors.add("resource_web_page".to_sym, "is not a url.") unless validate_url(resource_json["resource"]["resource_web_page"].strip)
+    unless validate_url(resource_json['resource']['resource_web_page'].strip)
+      errors.add('resource_web_page'.to_sym, 'is not a url.')
+    end
 
     unless resource_json['roles'].blank?
       resource_json['roles'].each_with_index do |role,index|
-        errors.add("roles[#{index}]['role_affiliation_web_page']".to_sym, "is not a url.") unless validate_url(role['role_affiliation_web_page'].strip)
+        unless validate_url(role['role_affiliation_web_page'].strip)
+          errors.add("roles[#{index}]['role_affiliation_web_page']".to_sym, 'is not a url.')
+        end
+      end
+    end
+
+
+    unless resource_json['study_design']['study_data_sharing_plan_url'].blank?
+      unless validate_url(resource_json['study_design']['study_data_sharing_plan_url'].strip)
+        errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
       end
     end
 
@@ -120,21 +131,37 @@ class StudyhubResource < ApplicationRecord
         errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
         errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
         if role['role_name_type'] == 'Personal'
-          errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")  if role['role_name_personal_title'].blank?
-          errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")  if role['role_name_personal_given_name'].blank?
-          errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")  if role['role_name_personal_family_name'].blank?
-          errors.add("roles[#{index}]['role_name_identifier_scheme']".to_sym, "Please select the identifier scheme.") if  !role['role_name_identifier'].blank? && role['role_name_identifier_scheme'].blank?
+          if role['role_name_personal_title'].blank?
+            errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")
+          end
+          if role['role_name_personal_given_name'].blank?
+            errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
+          end
+          if role['role_name_personal_family_name'].blank?
+            errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
+          end
+          if !role['role_name_identifier'].blank? && role['role_name_identifier_scheme'].blank?
+            errors.add("roles[#{index}]['role_name_identifier_scheme']".to_sym, "Please select the identifier scheme.")
+          end
         end
 
         if role['role_name_type'] == 'Organisational'
-          errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")  if role['role_name_organisational'].blank?
-          errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.")  if !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
+          if role['role_name_organisational'].blank?
+            errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
+          end
+          if !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
+            errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.")
+          end
         end
 
-        errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.") if  !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
+        if !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
+          errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.")
+        end
 
       end
-      errors.add(:base, "Please add the required fields for resource roles.") if errors.messages.keys.select {|x| x.to_s.include? "roles" }.size  > 0
+      if errors.messages.keys.select {|x| x.to_s.include? "roles" }.size  > 0
+        errors.add(:base, "Please add the required fields for resource roles.")
+      end
     end
   end
 
@@ -146,15 +173,27 @@ class StudyhubResource < ApplicationRecord
 
     required_fields ={}
     required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
-    required_fields['resource'] += REQUIRED_FIELDS_RESOURCE_USE_RIGHTS if resource_json['resource']['resource_use_rights_label'].start_with?('CC')
+    if resource_json['resource']['resource_use_rights_label'].start_with?('CC')
+      required_fields['resource'] += REQUIRED_FIELDS_RESOURCE_USE_RIGHTS
+    end
 
     if is_studytype?
       required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
-      required_fields['study_design'] += REQUIRED_FIELDS_INTERVENTIONAL if get_study_primary_design_type == INTERVENTIONAL
-      required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL if get_study_primary_design_type == NON_INTERVENTIONAL
-      required_fields['study_design'] += ['study_conditions_classification'] if !resource_json["study_design"]["study_conditions"].blank?
-      required_fields['study_design'] += ['study_arm_group_type'] if !resource_json["study_design"]["study_arm_group_label"].blank?
-      required_fields['study_design'] += ['study_outcome_type'] unless resource_json["study_design"]["study_outcome_title"].blank? && resource_json["study_design"]["study_outcome_description"].blank?
+      if get_study_primary_design_type == INTERVENTIONAL
+        required_fields['study_design'] += REQUIRED_FIELDS_INTERVENTIONAL
+      end
+      if get_study_primary_design_type == NON_INTERVENTIONAL
+        required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL
+      end
+      if !resource_json["study_design"]["study_conditions"].blank?
+        required_fields['study_design'] += ['study_conditions_classification']
+      end
+      if !resource_json["study_design"]["study_arm_group_label"].blank?
+        required_fields['study_design'] += ['study_arm_group_type']
+      end
+      unless resource_json["study_design"]["study_outcome_title"].blank? && resource_json["study_design"]["study_outcome_description"].blank?
+        required_fields['study_design'] += ['study_outcome_type']
+      end
     end
 
     required_fields.each do |type, fields|
@@ -170,7 +209,9 @@ class StudyhubResource < ApplicationRecord
 
   def check_content_blob_presence
     unless is_studytype?
-      errors.add(:base, "Please save the #{studyhub_resource_type_title} at first and then upload a file  ") if content_blob.blank?
+      if content_blob.blank?
+        errors.add(:base, "Please save the #{studyhub_resource_type_title} at first and then upload a file  ")
+      end
     end
   end
 

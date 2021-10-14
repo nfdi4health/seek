@@ -63,7 +63,7 @@ study_data_sharing_plan_description: Additional information on data sharing stat
 study_data_sharing_plan_supporting_information: Supporting information available in addition to the study data.
 study_data_sharing_plan_time_frame: Data availability time frame.
 study_data_sharing_plan_access_criteria: Criteria for the access to the study data.
-study_data_sharing_plan_url: Web page with additional information on data sharing.
+study_data_sharing_plan_url: Web page with additional information on data sharing. (please enter a valid URL starting with http/https)
 
 # interventional attributes
 
