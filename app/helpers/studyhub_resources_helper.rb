@@ -228,6 +228,10 @@ module StudyhubResourcesHelper
       role["role_affiliation_identifier_scheme"] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_identifier_scheme']".to_sym].first
     end
 
+    if (@error_keys.include? "roles[#{index}]['role_affiliation_web_page']")
+      role["role_affiliation_web_page"] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_web_page']".to_sym].first
+    end
+
     role
   end
 

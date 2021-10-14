@@ -27,6 +27,7 @@ class StudyhubResource < ApplicationRecord
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
+  validate :final_error_check, on:  [:create, :update]
 
   attr_readonly :studyhub_resource_type_id
   attr_accessor :commit_button
@@ -67,8 +68,15 @@ class StudyhubResource < ApplicationRecord
 
 
   def check_urls
-    url = resource_json["resource"]["resource_web_page"].strip
-    errors.add("resource_web_page".to_sym, "is not a url.") unless validate_url(url)
+
+    errors.add("resource_web_page".to_sym, "is not a url.") unless validate_url(resource_json["resource"]["resource_web_page"].strip)
+
+    unless resource_json['roles'].blank?
+      resource_json['roles'].each_with_index do |role,index|
+        errors.add("roles[#{index}]['role_affiliation_web_page']".to_sym, "is not a url.") unless validate_url(role['role_affiliation_web_page'].strip)
+      end
+    end
+
   end
 
 
@@ -154,10 +162,10 @@ class StudyhubResource < ApplicationRecord
         errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
       end
     end
+  end
 
-
+  def final_error_check
     errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
-
   end
 
   def check_content_blob_presence

@@ -14,7 +14,8 @@
 <%
   roles = @studyhub_resource.resource_json.nil? ? nil : studyhub_resource.resource_json['roles']
 
-  unless @studyhub_resource.resource_json.nil? || roles[row_num].blank?
+  unless index == 'row-template'
+    unless @studyhub_resource.resource_json.nil? || roles[row_num].blank?
     role_type =  roles[row_num]["role_type"]
     role_name_type = roles[row_num]["role_name_type"]
 
@@ -36,7 +37,7 @@
     role_affiliation_name = roles[row_num]["role_affiliation_name"]
     role_affiliation_web_page = roles[row_num]["role_affiliation_web_page"]
     role_affiliation_address = roles[row_num]["role_affiliation_address"]
-
+    end
   end
 %>
 
@@ -130,10 +131,11 @@
     <p class="help-block"><small>Address of the affiliation.</small></p>
   </div>
 
-  <div class="form-group">
+  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_affiliation_web_page" %>">
     <label>Affiliation Web page</label>
     <%= f.text_field "studyhub_resource[role_affiliation_web_page][#{index}]", :class => "form-control",:value => role_affiliation_web_page %>
     <p class="help-block"><small>Web page of the affiliation.</small></p>
+    <small><%= role_error["role_affiliation_web_page"] if role_error.include? "role_affiliation_web_page" %></small>
   </div>
 
   <div class="form-group">
