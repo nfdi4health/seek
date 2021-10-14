@@ -21,8 +21,8 @@ class StudyhubResource < ApplicationRecord
   has_extended_custom_metadata
   acts_as_asset
 
-  validate :studyhub_resource_type_id_not_changed, on: :update
   validate :check_title_presence, on:  [:create, :update]
+  validate :check_urls, on:  [:create, :update]
   validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
@@ -42,6 +42,7 @@ class StudyhubResource < ApplicationRecord
   REQUIRED_FIELDS_NON_INTERVENTIONAL = %w[study_type_non_interventional].freeze
   INTERVENTIONAL = 'Interventional'.freeze
   NON_INTERVENTIONAL = 'Non-interventional'.freeze
+  URL_FIELDS = %w[resource_web_page].freeze
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values
@@ -62,6 +63,28 @@ class StudyhubResource < ApplicationRecord
       "#{resource_json['resource_descriptions'].first['description']}"
     end
   end
+
+
+
+  def check_urls
+    url = resource_json["resource"]["resource_web_page"].strip
+    errors.add("resource_web_page".to_sym, "is not a url.") unless validate_url(url)
+  end
+
+
+  # https://newbedev.com/how-to-check-if-a-url-is-valid
+  def validate_url(url)
+
+    return true if url.blank?
+    begin
+      uri = URI.parse(url)
+      resp = uri.kind_of?(URI::HTTP) || uri.kind_of?(URI::HTTPS)
+    rescue URI::InvalidURIError
+      resp = false
+    end
+    # return true if url =~ /\A#{URI::regexp(['http', 'https'])}\z/
+  end
+
 
   def check_title_presence
     errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if title.blank?
@@ -150,13 +173,6 @@ class StudyhubResource < ApplicationRecord
 
   def is_submitted?
     stage == StudyhubResource::SUBMITTED
-  end
-
-  #@todo: check this validation, it is not working now
-  def studyhub_resource_type_id_not_changed
-    if studyhub_resource_type_id_changed? && self.persisted?
-      errors.add(:base, 'Change of studyhub resource type is not allowed!')
-    end
   end
 
   def studyhub_resource_type_title
