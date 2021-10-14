@@ -14,10 +14,10 @@
 
       <label><%= attribute.title.humanize %></label><%= required_span if attribute.required? %>
         <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
-        <small><%= feedback if is_error %></small>
         <% unless attribute.description.nil? %>
         <%= custom_metadata_attribute_description(attribute.description) %>
       <% end %>
+      <small><%= feedback if is_error %></small>
     <% end %>
   </div>
 

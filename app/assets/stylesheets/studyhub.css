@@ -121,3 +121,7 @@ a {
     background-color: #ffffff;
     margin-top: 20px;
 }
+
+.help-block small{
+    color: #737373
+}
