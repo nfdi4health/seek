@@ -31,12 +31,13 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
 
       format.html do
-        case type.key
-        when 'study','substudy'
+
+        if type.is_studytype?
           render template: 'studyhub_resources/new_study', locals: { sr_type: type }
         else
           render template: 'studyhub_resources/upload_file', locals: { sr_type: type }
         end
+
       end
     end
   end
@@ -67,9 +68,7 @@ class StudyhubResourcesController < ApplicationController
     type =  @studyhub_resource.studyhub_resource_type
     update_sharing_policies @studyhub_resource
 
-    case type.key
-
-    when 'study','substudy'
+    if type.is_studytype?
       respond_to do |format|
         if @studyhub_resource.save
           flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully saved.<br/>".html_safe

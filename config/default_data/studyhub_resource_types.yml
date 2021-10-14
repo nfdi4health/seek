@@ -101,8 +101,13 @@ other_study_document_resource_type:
   title: Other study document
   key: other_study_document
 
-other_resource_type:
+other_non_study_resource_type:
   id: 21
-  title: Other
-  key: other
+  title: Other resource
+  key: other_non_study
 
+
+other_study_resource_type:
+  id: 22
+  title: Other study
+  key: other_study
