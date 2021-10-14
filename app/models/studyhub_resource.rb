@@ -69,6 +69,7 @@ class StudyhubResource < ApplicationRecord
 
   def check_urls
 
+    unless resource_json.nil?
     unless validate_url(resource_json['resource']['resource_web_page'].strip)
       errors.add('resource_web_page'.to_sym, 'is not a url.')
     end
@@ -86,6 +87,7 @@ class StudyhubResource < ApplicationRecord
       unless validate_url(resource_json['study_design']['study_data_sharing_plan_url'].strip)
         errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
       end
+    end
     end
 
   end
@@ -111,7 +113,6 @@ class StudyhubResource < ApplicationRecord
 
 
   def check_id_presence
-
     resource_json['ids'].each_with_index do |id,index|
       unless id['id_id'].blank?
         errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
