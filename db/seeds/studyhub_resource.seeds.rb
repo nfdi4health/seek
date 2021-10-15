@@ -384,22 +384,22 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_1').create!(
-        title: 'resource_use_rights_authors_confirmation_1', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+        title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
         description: attribute_descriptions['resource_use_rights_authors_confirmation_1']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_2').create!(
-        title: 'resource_use_rights_authors_confirmation_2', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+        title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
         description: attribute_descriptions['resource_use_rights_authors_confirmation_2']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_3').create!(
-        title: 'resource_use_rights_authors_confirmation_3', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+        title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
         description: attribute_descriptions['resource_use_rights_authors_confirmation_3']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_support_by_licencing').create!(
-        title: 'resource_use_rights_support_by_licencing', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_support_by_licencing_cv,
+        title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_support_by_licencing_cv,
         description: attribute_descriptions['resource_use_rights_support_by_licencing']
       )
 
