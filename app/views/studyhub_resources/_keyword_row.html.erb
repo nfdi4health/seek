@@ -1,0 +1,47 @@
+<% keyword_row ||= nil %>
+<% index ||= 'row-template' %>
+<% row_num = index.to_i %>
+
+<%
+  unless studyhub_resource.resource_json.nil?
+    keywords = studyhub_resource.resource_json['resource']['resource_keywords']
+    resource_keywords_label = keywords[row_num]["resource_keywords_label"] unless keywords.empty?
+    resource_keywords_label_code = keywords[row_num]["resource_keywords_label_code"] unless keywords.empty?
+  end
+
+%>
+
+<% field_name_prefix = "resource_keywords[resource_keywords_label][#{index}]" %>
+<% allow_row_removal = (index == 0 ? false : true ) %>
+
+<tr class="resource-keyword" data-index="<%= index-%>">
+  <td>
+    <div class="form-group">
+      <%= f.text_field "studyhub_resource[custom_metadata_attributes][data][resource_keywords][resource_keywords_label][#{index}]", :class =>'form-control', :value => resource_keywords_label %>
+    </div>
+  </td>
+
+
+  <td>
+    <div class="form-group">
+      <%= f.text_field "studyhub_resource[custom_metadata_attributes][data][resource_keywords][resource_keywords_label_code][#{index}]", :class =>'form-control', :value => resource_keywords_label_code %>
+    </div>
+  </td>
+
+  <td>
+    <% if allow_row_removal %>
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-danger">
+          Remove
+          <%= check_box_tag "#{field_name_prefix}[_destroy]", '1', false,
+                            class: 'destroy-row', autocomplete: 'off',id:"#{field_name_prefix}-checkbox[_destroy]" %>
+        </label>
+      </div>
+    <% end %>
+
+  </td>
+
+  <% if keyword_row %>
+    <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
+  <% end %>
+</tr>

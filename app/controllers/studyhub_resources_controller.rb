@@ -291,8 +291,10 @@ class StudyhubResourcesController < ApplicationController
       params[:custom_metadata_attributes][:data].keys.each do |key|
         value = if StudyhubResource::MULTISELECT_ATTRIBUTES.include? key
           params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
-        else
-          params[:custom_metadata_attributes][:data][key]
+                elsif key == StudyhubResource::RESOURCE_KEYWORDS
+                  parse_resource_keywords(params[:custom_metadata_attributes][:data][key])
+                else
+                  params[:custom_metadata_attributes][:data][key]
                 end
 
         if cm_resource_attributes.include? key
@@ -323,6 +325,20 @@ class StudyhubResourcesController < ApplicationController
       cm_study_design_attributes += cm_study_design_non_interventional_attributes
     end
     cm_study_design_attributes
+  end
+
+  def parse_resource_keywords(params)
+
+    resource_keywords = []
+
+    params[:resource_keywords_label].keys.each do |key|
+      next if key == 'row-template'
+      entry = {}
+      entry['resource_keywords_label'] = params[:resource_keywords_label][key]
+      entry['resource_keywords_label_code'] = params[:resource_keywords_label_code][key]
+      resource_keywords << entry unless entry['resource_keywords_label'].blank?
+    end
+    resource_keywords
   end
 
   def parse_roles(params)

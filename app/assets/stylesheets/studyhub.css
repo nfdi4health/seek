@@ -38,6 +38,13 @@ a {
     margin: 3em 0;
 }
 
+.resource-keyword {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 2em 2em;
+    margin: 3em 0;
+}
+
 .item-hidden {display: none;}
 
 #step_one {

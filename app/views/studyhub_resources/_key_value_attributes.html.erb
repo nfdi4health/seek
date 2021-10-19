@@ -6,6 +6,8 @@
       <% unless resource[key].blank? %>
             <%= resource[key].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ')  %>
       <% end %>
+      <% elsif key == StudyhubResource::RESOURCE_KEYWORDS %>
+      <%= resource_keywords(resource[key])  %>
       <% elsif StudyhubResource::URL_FIELDS.include? key %>
         <label><%= key.humanize(keep_id_suffix: true) %>: </label>
         <%= link_to resource[key].truncate(100), resource[key], target: :_blank %>

@@ -20,6 +20,11 @@ var SR = {
         row.remove();
     },
 
+    removeKeywordsRow: function () {
+        var row = $j(this).parents('.resource-keyword');
+        row.remove();
+    },
+
     removeRoleRow: function () {
         var row = $j(this).parents('.resource-role');
         row.remove();

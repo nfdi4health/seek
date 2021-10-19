@@ -44,6 +44,7 @@ class StudyhubResource < ApplicationRecord
   INTERVENTIONAL = 'Interventional'.freeze
   NON_INTERVENTIONAL = 'Non-interventional'.freeze
   URL_FIELDS = %w[resource_web_page study_data_sharing_plan_url].freeze
+  RESOURCE_KEYWORDS = 'resource_keywords'.freeze
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values
