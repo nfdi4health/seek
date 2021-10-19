@@ -1,0 +1,69 @@
+<% inital = @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['resource']['resource_keywords'].blank? %>
+
+
+  <div id="resource_keywords">
+    <table class="table resource_keyword-table" id="resource_keyword-table">
+      <thead>
+      <tr>
+        <th><label>Resource Keywords Label</label></th>
+        <th><label>Resource Keywords Label Code</label></th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <%  if inital %>
+        <%= render :partial => 'keyword_row', :locals=> {:studyhub_resource=>@studyhub_resource, :f => f, :index => 0} %>
+      <% else %>
+        <% @studyhub_resource.resource_json['resource']['resource_keywords'].each_with_index do |id, index| %>
+          <%= render :partial => 'keyword_row', :locals=> {:studyhub_resource=>@studyhub_resource, :f => f, :index => index} %>
+        <% end %>
+      <% end %>
+      <tr id="keyword-row">
+        <td><small>Key word describing the resource</small></td>
+        <td><small>Code of the key word (IRI)</small></td>
+      </tr>
+      <tr>
+        <td colspan="6">
+          <%= button_link_to('Add more', 'add', '#', :id => 'add-keyword-row') %>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <table id="new-keyword-row" style="display: none">
+      <tbody>
+      <%= render :partial => 'keyword_row', :locals=> {:studyhub_resource=>@studyhub_resource, :f => f } %>
+      </tbody>
+    </table>
+  </div>
+
+
+<script>
+    //used to hold the element Id that needs updating after creating a new CV
+    $j(document).ready(function () {
+        $j('#add-keyword-row').click(function () {
+            var newRow = $j('#new-keyword-row tbody').clone().html();
+            var index = 0;
+            $j('#resource_keyword-table tr.resource-keyword').each(function () {
+                var newIndex = parseInt($j(this).data('index'));
+                if (newIndex > index) {
+                    index = newIndex;
+                }
+            });
+
+            index++;
+            console.log(index);
+            newRow = newRow.replace(/row-template/g, index);
+
+            $j('#resource_keyword-table #keyword-row').before($j(newRow));
+            $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_keywords][resource_keywords_label]['+index+']"]').val("");
+            $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_keywords][resource_keywords_label_code]['+index+']"]').val("");
+
+            return false;
+        });
+
+        $j('#resource_keyword-table').on('change', '.destroy-row', SR.removeKeywordsRow);
+
+    });
+</script>
+
