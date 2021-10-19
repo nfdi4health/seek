@@ -22,3 +22,14 @@
     <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :collapsed => collapsed }  %>
   <% end -%>
 </div>
+
+<script type="text/javascript">
+    $j(document).ready(function () {
+        $j('form input').keydown(function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
