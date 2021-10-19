@@ -14,7 +14,7 @@
       <%= render :partial => 'resource_keywords', :locals=> { :attribute => attribute,:resource => resource, :f => f } %>
     <% else %>
 
-      <label><%= attribute.title.humanize %></label><%= required_span if attribute.required? %>
+      <label><%= attribute.label %></label><%= required_span if attribute.required? %>
         <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
         <% unless attribute.description.nil? %>
         <%= custom_metadata_attribute_description(attribute.description) %>

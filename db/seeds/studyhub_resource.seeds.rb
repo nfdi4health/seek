@@ -385,22 +385,26 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_1').create!(
         title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
-        description: attribute_descriptions['resource_use_rights_authors_confirmation_1']
+        description: attribute_descriptions['resource_use_rights_authors_confirmation_1'],
+        label: 'The authors confirm that they have authority to license the document.'
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_2').create!(
         title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
-        description: attribute_descriptions['resource_use_rights_authors_confirmation_2']
+        description: attribute_descriptions['resource_use_rights_authors_confirmation_2'],
+        label: 'The authors confirm that they have read and understand the terms of the chosen license.'
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_3').create!(
         title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
-        description: attribute_descriptions['resource_use_rights_authors_confirmation_3']
+        description: attribute_descriptions['resource_use_rights_authors_confirmation_3'],
+        label: 'The authors understand that CC licensing is not revocable.'
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_support_by_licencing').create!(
         title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_support_by_licencing_cv,
-        description: attribute_descriptions['resource_use_rights_support_by_licencing']
+        description: attribute_descriptions['resource_use_rights_support_by_licencing'],
+        label: 'The authors confirm that NFDI4Health is allowed to licence the document, i.e. to mark the document with the licence information'
       )
 
 
