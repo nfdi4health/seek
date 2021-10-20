@@ -1,3 +1,4 @@
+<% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign General",supported_type:@studyhub_resource.class.name).first %>
 <div id="study_design" >
-  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { resource: resource } %>
+  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt, resource: resource } %>
 </div>

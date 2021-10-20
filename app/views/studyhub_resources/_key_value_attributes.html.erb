@@ -1,18 +1,17 @@
-<% resource.keys.each do |key| %>
-  <% attribute = CustomMetadataAttribute.where(title: key).first %>
-  <% hidden_class = resource[key].blank? ? "item-hidden" : nil %>
+<% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
+  <% hidden_class = resource[attribute.title].blank? ? "item-hidden" : nil %>
   <p class=<%= hidden_class %>>
     <label><%= attribute.label %>: </label>
-    <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? key %>
-      <% unless resource[key].blank? %>
-            <%= resource[key].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ')  %>
+    <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? attribute.title %>
+      <% unless resource[attribute.title].blank? %>
+            <%= resource[attribute.title].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ')  %>
       <% end %>
-      <% elsif key == StudyhubResource::RESOURCE_KEYWORDS %>
-      <%= resource_keywords(resource[key])  %>
-      <% elsif StudyhubResource::URL_FIELDS.include? key %>
-        <%= link_to resource[key].truncate(100), resource[key], target: :_blank %>
+      <% elsif attribute.title == StudyhubResource::RESOURCE_KEYWORDS %>
+      <%= resource_keywords(resource[attribute.title])  %>
+      <% elsif StudyhubResource::URL_FIELDS.include? attribute.title %>
+        <%= link_to resource[attribute.title].truncate(100), resource[attribute.title], target: :_blank %>
     <% else %>
-      <%= resource[key] %>
+      <%= resource[attribute.title] %>
     <% end %>
   </p>
 <% end %>
