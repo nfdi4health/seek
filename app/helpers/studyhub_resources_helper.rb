@@ -192,28 +192,40 @@ module StudyhubResourcesHelper
     end
   end
 
+  # def resource_keywords(value)
+  #   html = ''
+  #   if value.any?
+  #     html += '<div class="table-responsive">'
+  #     html += '<table class="table table-striped table-hover steps">
+  #     <thead>
+  #     <tr>
+  #       <th class="col-md-5">Resource Keywords</th>
+  #       <th></th>
+  #     </tr>
+  #     </thead>
+  #     <tbody>'
+  #     value.each do |d|
+  #       html += '<tr>'
+  #       html += '<td class=""><b>Label:</b> ' + d['resource_keywords_label']+'</td>'
+  #       html += '<td class=""><b>Label code:</b> '+ d['resource_keywords_label_code']+'</td>'
+  #       html += '</tr>'
+  #     end
+  #     html += '</tbody></table></div>'
+  #   end
+  #   html.html_safe
+  # end
+
   def resource_keywords(value)
     html = ''
+
     if value.any?
-      html += '<div class="table-responsive">'
-      html += '<table class="table table-striped table-hover steps">
-      <thead>
-      <tr>
-        <th class="col-md-5">Resource Keywords</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>'
       value.each do |d|
-        html += '<tr>'
-        html += '<td class=""><b>Label:</b> ' + d['resource_keywords_label']+'</td>'
-        html += '<td class=""><b>Label code:</b> '+ d['resource_keywords_label_code']+'</td>'
-        html += '</tr>'
+      html += d['resource_keywords_label']
+      html += '('+d['resource_keywords_label_code']+')' unless d['resource_keywords_label_code'].blank?
+      html += '; '
       end
-      html += '</tbody></table></div>'
     end
     html.html_safe
-
   end
 
   def process_role_error_messags(index)
