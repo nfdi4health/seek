@@ -27,11 +27,11 @@
     <table class="table id-id-table" id="id-id-table">
       <thead>
       <tr>
+        <th><label>Type of related resource</label></th>
+        <th><label id='id_type_label' class="<%= inital ? '' : 'submit-required'%>">Type of ID</label></th>
         <th><label id='id_id_label' class="<%= inital ? '' : 'submit-required'%>">ID</label></th>
-        <th><label id='id_type_label' class="<%= inital ? '' : 'submit-required'%>">ID Type</label></th>
-        <th><label id='id_relation_type_label' class="<%= inital ? '' : 'submit-required'%>">Relation Type</label></th>
-        <th><label>ID Resource Type</label></th>
-        <th><label>ID Date</label></th>
+        <th><label>Date</label></th>
+        <th><label id='id_relation_type_label' class="<%= inital ? '' : 'submit-required'%>">Relation</label></th>
       </tr>
       </thead>
       <tbody>
@@ -45,6 +45,14 @@
       <% end %>
 
       <tr id="id-row">
+        <td><small>Type of the related resource referenced by the ID.</small></td>
+        <td><small>Type of the ID.</small></td>
+        <td><small>An identifier (ID) related to, or associated with, the resource. This can be ID(s) of the related resource(s), or an alternate identifier of the given resource provided by another registering system.</small></td>
+        <td><small>If known, date of ID assignment.</small></td>
+        <td><small>Type of the related resource referenced by the ID.</small></td>
+      </tr>
+
+      <tr>
         <td colspan="6">
           <%= button_link_to('Add more IDs', 'add', '#', :id => 'add-id-row') %>
         </td>

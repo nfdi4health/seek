@@ -25,10 +25,10 @@
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
 <tr class="id-id" data-index="<%= index-%>">
-
   <td>
     <div class="form-group">
-      <%= f.text_field "studyhub_resource[id_id][#{index}]", :class => "form-control",:value => id_id %>
+      <%= f.collection_select "studyhub_resource[id_resource_type_general][#{index}]", id_resource_type_generals.map(&:label), :to_s, :to_s,
+                              { :include_blank => true, :selected => id_resource_type_general }, :class => "form-control" %>
     </div>
   </td>
 
@@ -40,6 +40,20 @@
     </div>
   </td>
 
+  <td>
+    <div class="form-group">
+      <%= f.text_field "studyhub_resource[id_id][#{index}]", :class => "form-control",:value => id_id %>
+    </div>
+  </td>
+
+  <td>
+    <div class="form-group">
+      <div style="position:relative">
+        <%= f.text_field "studyhub_resource[id_date][#{index}]", data: { calendar: true }, :class =>"calendar form-control", :value => id_date %>
+      </div>
+    </div>
+  </td>
+
 
   <td>
     <div class="form-group <%= "has-error text-danger" if id_error.include? "id_relation_type" %>">
@@ -48,22 +62,6 @@
       <small><%= id_error["id_relation_type"] if id_error.include? "id_relation_type" %></small>
     </div>
   </td>
-
-  <td>
-    <div class="form-group">
-      <%= f.collection_select "studyhub_resource[id_resource_type_general][#{index}]", id_resource_type_generals.map(&:label), :to_s, :to_s,
-                              { :include_blank => true, :selected => id_resource_type_general }, :class => "form-control" %>
-    </div>
-  </td>
-
-  <td>
-    <div class="form-group">
-      <div style="position:relative">
-      <%= f.text_field "studyhub_resource[id_date][#{index}]", data: { calendar: true }, :class =>"calendar form-control", :value => id_date %>
-      </div>
-    </div>
-  </td>
-
 
   <td>
     <% if allow_row_removal %>
