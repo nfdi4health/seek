@@ -10,10 +10,10 @@ resource_format: Format of the resource.
 
 resource_use_rights_label: License defining the rights to re-use the resource.
 resource_use_rights_description: Additional information about the terms and conditions for (re-)use.
-resource_use_rights_authors_confirmation_1: The authors confirm that they have authority to license the document.
-resource_use_rights_authors_confirmation_2: The authors confirm that they have read and understand the terms of the chosen license.
-resource_use_rights_authors_confirmation_3: The authors understand that CC licensing is not revocable.
-resource_use_rights_support_by_licencing: The authors confirm that NFDI4Health is allowed to licence the document, i.e. to mark the document with the licence information
+resource_use_rights_authors_confirmation_1:
+resource_use_rights_authors_confirmation_2:
+resource_use_rights_authors_confirmation_3:
+resource_use_rights_support_by_licencing:
 
 # study design general
 

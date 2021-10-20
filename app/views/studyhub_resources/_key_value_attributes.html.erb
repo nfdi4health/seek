@@ -1,18 +1,17 @@
 <% resource.keys.each do |key| %>
+  <% attribute = CustomMetadataAttribute.where(title: key).first %>
   <% hidden_class = resource[key].blank? ? "item-hidden" : nil %>
   <p class=<%= hidden_class %>>
+    <label><%= attribute.label %>: </label>
     <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? key %>
-      <label><%= key.humanize(keep_id_suffix: true) %>: </label>
       <% unless resource[key].blank? %>
             <%= resource[key].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ')  %>
       <% end %>
       <% elsif key == StudyhubResource::RESOURCE_KEYWORDS %>
       <%= resource_keywords(resource[key])  %>
       <% elsif StudyhubResource::URL_FIELDS.include? key %>
-        <label><%= key.humanize(keep_id_suffix: true) %>: </label>
         <%= link_to resource[key].truncate(100), resource[key], target: :_blank %>
     <% else %>
-      <label><%= key.humanize(keep_id_suffix: true) %>: </label>
       <%= resource[key] %>
     <% end %>
   </p>

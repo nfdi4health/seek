@@ -54,22 +54,27 @@ var SR = {
         if (check_license == '') {
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_label]"]').val('Not applicable');
         }
-        else if (check_license.startsWith('CC')) {
-            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').prev().addClass('submit-required');
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').prev().addClass('submit-required');
+
+        if (check_license.startsWith('CC')) {
+            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().show();
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().show();
+        }else {
+            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().hide();
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().hide();
         }
     },
 
     setResourceUseRightVisibility: function () {
         check_license = $j(this).val();
         if (check_license.startsWith('CC')) {
-           $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').prev().addClass('submit-required');
-           $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').prev().addClass('submit-required');
-
+           $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().show();
+           $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().show();
         }
         else{
-            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').prev().removeClass('submit-required');
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').prev().removeClass('submit-required');
+            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().hide();
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().hide();
+            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').val('');
+            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').val('');
         }
     },
 
