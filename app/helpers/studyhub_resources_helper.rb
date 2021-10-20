@@ -111,7 +111,7 @@ module StudyhubResourcesHelper
         html += '<p class="role_affiliation_address"><strong>Address: </strong>'+d["role_affiliation_address"]+'</p>' unless d["role_affiliation_address"].blank?
         html += '<p class="role_affiliation_web_page"><strong>Webpage: </strong>'+ link_to(d["role_affiliation_web_page"].truncate(100), d["role_affiliation_web_page"], target: :_blank ) +'</p>' unless d["role_affiliation_web_page"].blank?
         html += '<p class="role_affiliation_identifier"><strong>Identifier: </strong>'+d["role_affiliation_identifier"]+'</p>' unless d["role_affiliation_identifier"].blank?
-        html += '<p class="role_name_identifier_scheme"><strong>Identifier Scheme: </strong>'+d["role_name_identifier_scheme"]+'</p>' unless d["role_name_identifier_scheme"].blank?
+        html += '<p class="role_affiliation_identifier_scheme"><strong>Identifier Scheme: </strong>'+d["role_affiliation_identifier_scheme"]+'</p>' unless d["role_affiliation_identifier_scheme"].blank?
         html +=  '</p>'
         html += '</div>'
       end

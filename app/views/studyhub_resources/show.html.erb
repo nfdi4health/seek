@@ -42,7 +42,7 @@
     <% end %>
 
     <% unless @studyhub_resource.resource_json['roles'].blank? %>
-      <%= panel("Roles:") do %>
+      <%= panel("Contributors:") do %>
         <%= studyhub_resource_roles @studyhub_resource.resource_json['roles'] -%>
       <% end %>
     <% end %>
