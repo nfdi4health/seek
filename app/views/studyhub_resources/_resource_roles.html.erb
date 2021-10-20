@@ -1,5 +1,5 @@
-<% help_text = "*******************************************" %>
-  <%= folding_panel("Resource Roles:", collapsed, :body_options => {:id => 'resource_roles'},
+<% help_text = "A role, or a contributor, is a person, a group of persons or an institution contributing to the development of the resource." %>
+  <%= folding_panel("Contributors:", collapsed, :body_options => {:id => 'resource_roles'},
                     :help_text => help_text) do %>
 
   <div class="help-block">
@@ -68,7 +68,6 @@
         });
 
         $j('#resource-role-table').on('change', '.destroy-row', SR.removeRoleRow);
-        $j('#resource-role-table').on('change', '.role_type', SR.setSpecificRoleTypeVisibility);
 
     });
 </script>

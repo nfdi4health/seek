@@ -43,111 +43,125 @@
 
 <div id="role-<%= index-%>" class="resource-role" data-index="<%= index-%>">
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_type" %>">
-    <label class="required">Role Type</label>
+    <label class="required">Role</label>
     <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
                             { :include_blank => "Please select...", :selected => role_type }, :class => "form-control role_type" %>
-    <p class="help-block"><small>Type of the resource contributor.</small></p>
+    <p class="help-block"><small>Type or role of the contributor.</small></p>
     <small><%= role_error["role_type"] if role_error.include? "role_type" %></small>
   </div>
 
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_type" %>">
-    <label class="required">Role Name Type</label>
+    <label class="required">Type of the name</label>
     <%= f.collection_select "studyhub_resource[role_name_type][#{index}]", role_name_types.map(&:label), :to_s, :to_s,
                             { :include_blank => "Please select...", :selected => role_name_type }, :class => "form-control role_name_types" %>
-    <p class="help-block"><small>Type of the name.</small></p>
+    <p class="help-block"><small>Type of the name of the conributor.</small></p>
     <small><%= role_error["role_name_type"] if role_error.include? "role_name_type" %></small>
   </div>
 
 
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_organisational" %>">
-    <label class="required">Role Name Organisational</label>
+    <label class="required">Name</label>
     <%= f.text_field "studyhub_resource[role_name_organisational][#{index}]", :class => "form-control",:value =>role_name_organisational %>
-    <p class="help-block"><small>Name of the contributor.</small></p>
+    <p class="help-block"><small>Name of the institution or research group.</small></p>
     <small><%= role_error["role_name_organisational"] if role_error.include? "role_name_organisational" %></small>
   </div>
 
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_personal_title" %>">
-    <label class="required">Personal Title</label>
+    <label class="required">Title</label>
     <%= f.collection_select "studyhub_resource[role_name_personal_title][#{index}]", role_name_personal_titles.map(&:label), :to_s, :to_s,
                             { :include_blank => "Please select...", :selected => role_name_personal_title }, :class => "form-control role_type" %>
-    <p class="help-block"><small>Title of the contributor.</small></p>
+    <p class="help-block"><small>Title of the person.</small></p>
     <small><%= role_error["role_name_personal_title"] if role_error.include? "role_name_personal_title" %></small>
   </div>
 
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_personal_given_name" %>">
-    <label class="required">Given Name</label>
+    <label class="required">First Name</label>
     <%= f.text_field "studyhub_resource[role_name_personal_given_name][#{index}]", :class => "form-control",:value =>role_name_personal_given_name %>
-    <p class="help-block"><small>Given name of the contributor.</small></p>
+    <p class="help-block"><small>First name of the person.</small></p>
     <small><%= role_error["role_name_personal_given_name"] if role_error.include? "role_name_personal_given_name" %></small>
   </div>
 
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_personal_family_name" %>">
-    <label class="required">Family Name</label>
+    <label class="required">Last name</label>
     <%= f.text_field "studyhub_resource[role_name_personal_family_name][#{index}]", :class => "form-control",:value =>role_name_personal_family_name %>
-    <p class="help-block"><small>Family name of the contributor.</small></p>
+    <p class="help-block"><small>Last name of the person.</small></p>
     <small><%= role_error["role_name_personal_family_name"] if role_error.include? "role_name_personal_family_name" %></small>
   </div>
 
-  <div class="form-group">
-    <label>Person Identifier</label>
-    <%= f.text_field "studyhub_resource[role_name_identifier][#{index}]", :class => "form-control",:value =>role_name_identifier %>
-    <p class="help-block"><small>ID of the contributor.</small></p>
-  </div>
+  <table class="table">
+    <tr>
+      <td>
+        <div class="form-group">
+          <label>ID</label>
+          <%= f.text_field "studyhub_resource[role_name_identifier][#{index}]", :class => "form-control",:value =>role_name_identifier %>
+          <p class="help-block"><small>Identifier(s) of the contributor according to various schemes.</small></p>
+        </div>
 
-  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_identifier_scheme" %>">
-    <label>Person Identifier Scheme</label>
-    <%= f.collection_select "studyhub_resource[role_name_identifier_scheme][#{index}]", role_name_identifier_schemes.map(&:label), :to_s, :to_s,
-                            { :include_blank => "Please select...", :selected => role_name_identifier_scheme }, :class => "form-control role_type" %>
-    <p class="help-block"><small>Type of the contributor's ID. It is mandatory if the person identifier is given.</small></p>
-    <small><%= role_error["role_name_identifier_scheme"] if role_error.include? "role_name_identifier_scheme" %></small>
-  </div>
-
+      </td>
+      <td>
+        <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_identifier_scheme" %>">
+          <label>Scheme</label>
+          <%= f.collection_select "studyhub_resource[role_name_identifier_scheme][#{index}]", role_name_identifier_schemes.map(&:label), :to_s, :to_s,
+                                  { :include_blank => "Please select...", :selected => role_name_identifier_scheme }, :class => "form-control role_type" %>
+          <p class="help-block"><small>Type of the identifier scheme. It is mandatory if the identifier of the ID is given.</small></p>
+          <small><%= role_error["role_name_identifier_scheme"] if role_error.include? "role_name_identifier_scheme" %></small>
+        </div>
+      </td>
+    </tr>
+  </table>
 
   <div class="form-group">
     <label>Email</label>
     <%= f.text_field "studyhub_resource[role_email][#{index}]", :class => "form-control",:value => role_email %>
-    <p class="help-block"><small>Email of the contributor.</small></p>
+    <p class="help-block"><small>If applicable, email address associated with the contributor.</small></p>
   </div>
 
   <div class="form-group">
     <label>Phone</label>
     <%= f.text_field "studyhub_resource[role_phone][#{index}]", :class => "form-control",:value => role_phone %>
-    <p class="help-block"><small>Phone number of the contributor.</small></p>
+    <p class="help-block"><small>If applicable, phone number associated with the contributor. </small></p>
   </div>
 
   <div class="form-group">
-    <label>Affiliation Name</label>
+    <label>Affiliation</label>
     <%= f.text_field "studyhub_resource[role_affiliation_name][#{index}]", :class => "form-control",:value => role_affiliation_name %>
-    <p class="help-block"><small>Affiliation of the contributor.</small></p>
+    <p class="help-block"><small>Name of the affiliation of the contributor.</small></p>
   </div>
 
 
   <div class="form-group">
-    <label>Affiliation Address</label>
+    <label>Affiliation address</label>
     <%= f.text_field "studyhub_resource[role_affiliation_address][#{index}]", :class => "form-control",:value => role_affiliation_address %>
     <p class="help-block"><small>Address of the affiliation.</small></p>
   </div>
 
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_affiliation_web_page" %>">
-    <label>Affiliation Web page</label>
+    <label>Affiliation web page</label>
     <%= f.text_field "studyhub_resource[role_affiliation_web_page][#{index}]", :class => "form-control",:value => role_affiliation_web_page %>
-    <p class="help-block"><small>Web page of the affiliation. ( please enter a valid URL starting with http/https ) </small></p>
+    <p class="help-block"><small>If available, web page of the affiliation. ( please enter a valid URL starting with http/https ) </small></p>
     <small><%= role_error["role_affiliation_web_page"] if role_error.include? "role_affiliation_web_page" %></small>
   </div>
 
-  <div class="form-group">
-    <label>Affiliation Identifier</label>
-    <%= f.text_field "studyhub_resource[role_affiliation_identifier][#{index}]", :class => "form-control",:value => role_affiliation_identifier %>
-    <p class="help-block"><small>Identifier of the affiliation.</small></p>
-  </div>
-
-  <div class="form-group <%= "has-error text-danger" if role_error.include? "role_affiliation_identifier_scheme" %>">
-    <label class="">Affiliation Identifier Scheme</label>
-    <%= f.collection_select "studyhub_resource[role_affiliation_identifier_scheme][#{index}]", role_affiliation_identifier_schemes.map(&:label), :to_s, :to_s,
-                            { :include_blank => "Please select...", :selected => role_affiliation_identifier_scheme }, :class => "form-control role_type" %>
-    <p class="help-block"><small>Type of the affiliation's ID. It is mandatory if the identifier of the affiliation is given.</small></p>
-    <small><%= role_error["role_affiliation_identifier_scheme"] if role_error.include? "role_affiliation_identifier_scheme" %></small>
-  </div>
+  <table class="table">
+    <tr>
+      <td>
+        <div class="form-group">
+          <label>Affiliation ID</label>
+          <%= f.text_field "studyhub_resource[role_affiliation_identifier][#{index}]", :class => "form-control",:value => role_affiliation_identifier %>
+          <p class="help-block"><small>Identifier(s) of the affiliation.</small></p>
+        </div>
+      </td>
+      <td>
+        <div class="form-group <%= "has-error text-danger" if role_error.include? "role_affiliation_identifier_scheme" %>">
+          <label class="">Scheme</label>
+          <%= f.collection_select "studyhub_resource[role_affiliation_identifier_scheme][#{index}]", role_affiliation_identifier_schemes.map(&:label), :to_s, :to_s,
+                                  { :include_blank => "Please select...", :selected => role_affiliation_identifier_scheme }, :class => "form-control role_type" %>
+          <p class="help-block"><small>Type of the identifier scheme. It is mandatory if the identifier of the affiliation is given.</small></p>
+          <small><%= role_error["role_affiliation_identifier_scheme"] if role_error.include? "role_affiliation_identifier_scheme" %></small>
+        </div>
+      </td>
+    </tr>
+  </table>
 
   <div class="form-group">
     <% if allow_row_removal %>

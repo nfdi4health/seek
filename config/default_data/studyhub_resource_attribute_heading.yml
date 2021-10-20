@@ -1,39 +1,39 @@
 # resource general
 
-resource_type_general: A more general term describing the resource.
-resource_keywords_label: Key word(s) or key phrase(s) describing the resource.
-resource_keywords_label_code: If known, the code of the key word in the used classification/vocabulary.
-resource_language: Language of the resource, i.e., the language in which a study is conducted, or the language in which a study document is composed.
-resource_version: If existing, the version number of the resource.
-resource_web_page: If existing, a link to the web page directly relevant to the resource. (please enter a valid URL starting with http/https)
-resource_format: "If applicable, technical format of the resource.
-File extension or MIME type can be used, e.g., PDF, XML, MPG or application/pdf, text/xml, video/mpeg."
+resource_type_general: General type of the resource
+resource_keywords_label: Keyword
+resource_keywords_label_code: Keyword code
+resource_language: Primary language of the resource
+resource_version: Version
+resource_web_page: Web page
+resource_format: Format
 
-resource_use_rights_label: License defining the rights to re-use the resource.
-resource_use_rights_description: Any additional descriptive information explaining terms and conditions for the (re-)use of the resource.
+resource_use_rights_label: "Use rights: Licence"
+resource_use_rights_description: "Use rights: Additional information"
 resource_use_rights_authors_confirmation_1: The authors confirm that they have authority to license the document.
 resource_use_rights_authors_confirmation_2: The authors confirm that they have read and understand the terms of the chosen license.
 resource_use_rights_authors_confirmation_3: The authors understand that CC licensing is not revocable.
-resource_use_rights_support_by_licencing: The authors confirm that NFDI4Health is allowed to licence the document, i.e. to mark the document with the licence information
+resource_use_rights_support_by_licencing: The authors confirm that NFDI4Health is allowed to licence the document, i.e. to mark the document with the licence information.
 
 
-# role
-role: A role, or a contributor, is a person, a group of persons or an institution contributing to the development of the resource.
-role_type: Type or role of the contributor.
-role_name_type: Type of the name of the conributor.
-role_name_organisational: Name of the institution or research group.
-role_name_personal_given_name: First name of the person.
-role_name_personal_family_name: Last name of the person.
-role_name_personal_title: Title of the person.
-role_name_identifier: Identifier(s) of the contributor according to various schemes.
-role_name_identifier_scheme: Type of the identifier scheme.
-role_email: If applicable, email address associated with the contributor.
-role_phone: If applicable, phone number associated with the contributor.
-role_affiliation_name: Name of the affiliation of the contributor.
-role_affiliation_address: address	Address of the affiliation.
-role_affiliation_web_page: If available, web page of the affiliation.
-role_affiliation_identifier: Identifier(s) of the affiliation.
-role_affiliation_identifier_scheme:	Type of the identifier scheme.
+# roles
+
+role: Contributors
+role_type: Role
+role_name_type: Type of the name
+role_name_organisational: Name
+role_name_personal_given_name: First name
+role_name_personal_family_name:	Last name
+role_name_personal_title: Title
+role_name_identifier: ID
+role_name_identifier_scheme: Scheme
+role_email: Email
+role_phone: Phone
+role_affiliation_name: Affiliation
+role_affiliation_address: Affiliation address
+role_affiliation_web_page: Affiliation web page
+role_affiliation_identifier: Affiliation ID
+role_affiliation_identifier_scheme: Scheme
 
 # study design general
 

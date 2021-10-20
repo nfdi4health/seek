@@ -6,6 +6,9 @@ puts 'Seeded NFDI4Health Studyhub Resource Metadata'
 configpath = File.join(Rails.root, 'config/default_data', 'studyhub_resource_attribute_descriptions.yml')
 attribute_descriptions = YAML::load_file(configpath)
 
+configpath = File.join(Rails.root, 'config/default_data', 'studyhub_resource_attribute_heading.yml')
+attribute_headings = YAML::load_file(configpath)
+
 int_type = SampleAttributeType.find_or_initialize_by(title: 'Integer')
 int_type.update_attributes(base_type: Seek::Samples::BaseType::INTEGER, placeholder: '1')
 
@@ -346,11 +349,13 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
     custom_metadata_attributes: [
 
       CustomMetadataAttribute.where(title: 'resource_type_general').create!(
-        title: 'resource_type_general', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_general_cv, description: attribute_descriptions['resource_type_general']
+        title: 'resource_type_general', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_general_cv,
+        description: attribute_descriptions['resource_type_general'], label: attribute_headings['resource_type_general']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_keywords').create!(
-        title: 'resource_keywords', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_keywords']
+        title: 'resource_keywords', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['resource_keywords'], label: attribute_headings['resource_keywords']
       ),
 
 
@@ -359,52 +364,58 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       # ),
 
       CustomMetadataAttribute.where(title: 'resource_language').create!(
-        title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv, description: attribute_descriptions['resource_language']
+        title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv,
+        description: attribute_descriptions['resource_language'], label: attribute_headings['resource_language']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_web_page').create!(
-        title: 'resource_web_page', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_web_page']
+        title: 'resource_web_page', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['resource_web_page'], label: attribute_headings['resource_web_page']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_version').create!(
-        title: 'resource_version', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_version']
+        title: 'resource_version', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['resource_version'], label: attribute_headings['resource_version']
       ),
 
 
       CustomMetadataAttribute.where(title: 'resource_format').create!(
-        title: 'resource_format', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_format']
+        title: 'resource_format', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['resource_format'], label: attribute_headings['resource_format']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_label').create!(
-        title: 'resource_use_rights_label', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_label_cv, description: attribute_descriptions['resource_use_rights_label']
+        title: 'resource_use_rights_label', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_label_cv,
+        description: attribute_descriptions['resource_use_rights_label'], label: attribute_headings['resource_use_rights_label']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_description').create!(
-        title: 'resource_use_rights_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['resource_use_rights_description']
+        title: 'resource_use_rights_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['resource_use_rights_description'], label: attribute_headings['resource_use_rights_description']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_1').create!(
         title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
         description: attribute_descriptions['resource_use_rights_authors_confirmation_1'],
-        label: 'The authors confirm that they have authority to license the document.'
+        label: attribute_headings['resource_use_rights_authors_confirmation_1']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_2').create!(
         title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
         description: attribute_descriptions['resource_use_rights_authors_confirmation_2'],
-        label: 'The authors confirm that they have read and understand the terms of the chosen license.'
+        label: attribute_headings['resource_use_rights_authors_confirmation_2']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_authors_confirmation_3').create!(
         title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
         description: attribute_descriptions['resource_use_rights_authors_confirmation_3'],
-        label: 'The authors understand that CC licensing is not revocable.'
+        label: attribute_headings['resource_use_rights_authors_confirmation_3']
       ),
 
       CustomMetadataAttribute.where(title: 'resource_use_rights_support_by_licencing').create!(
         title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_support_by_licencing_cv,
         description: attribute_descriptions['resource_use_rights_support_by_licencing'],
-        label: 'The authors confirm that NFDI4Health is allowed to licence the document, i.e. to mark the document with the licence information'
+        label: attribute_headings['resource_use_rights_support_by_licencing']
       )
 
 

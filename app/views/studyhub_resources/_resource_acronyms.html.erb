@@ -9,7 +9,7 @@
   <table class="table" id="resource-acronym-table">
     <thead>
     <tr class="form-group <%= "has-error text-danger" if is_error %>">
-      <th width="19em"><label>Acronym language&nbsp;&nbsp;&nbsp;</label></th>
+      <th width="19em"><label>Language&nbsp;&nbsp;&nbsp;</label></th>
       <th class="col-10"><label>Acronym</label></th>
       <th><%= feedback if is_error %></th>
     </tr>
@@ -23,6 +23,10 @@
       <% end %>
     <% end %>
     <tr id="acronym-row">
+      <td><small>Language of the acronym.</small></td>
+      <td><small>If existing, acronym(s) of the resource.</small></td>
+    </tr>
+    <tr >
       <td colspan="6">
         <%= button_link_to('Add more acronyms', 'add', '#', :id => 'add-acronym-row') %>
       </td>

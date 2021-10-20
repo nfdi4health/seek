@@ -15,7 +15,7 @@
     <table class="table" id="resource-title-table">
       <thead>
       <tr class="form-group <%= "has-error text-danger" if is_error %>">
-        <th width="19em"><label class="save-required">Title language</label></th>
+        <th width="19em"><label class="save-required">language</label></th>
         <th class="col-10"><label class="save-required">Title</label></th>
         <th><%= feedback if is_error %></th>
       </tr>
@@ -28,6 +28,10 @@
           <%= render :partial => 'title_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
         <% end %>
       <% end %>
+      <tr id="title-row">
+        <td><small>Language of the title.</small></td>
+        <td><small>Scientific unabbreviated title of the resource. </small></td>
+      </tr>
       <tr id="title-row">
           <td colspan="6">
             <%= button_link_to('Add more titles', 'add', '#', :id => 'add-title-row') %>

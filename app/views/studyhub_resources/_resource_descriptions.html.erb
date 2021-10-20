@@ -9,8 +9,8 @@
     <table class="table" id="resource-description-table">
       <thead>
       <tr class="form-group <%= "has-error text-danger" if is_error %>">
-        <th width="19em"><label class="submit-required">Description language</label></th>
-        <th class="col-10"><label class="submit-required">Description Text</label></th>
+        <th width="19em"><label class="submit-required">Language</label></th>
+        <th class="col-10"><label class="submit-required">Description</label></th>
         <th><%= feedback if is_error %></th>
       </tr>
       </thead>
@@ -25,7 +25,11 @@
         <% end %>
       <% end %>
 
-        <tr id="description-row">
+      <tr id="description-row">
+        <td><small>Language of the summary describing the resource.</small></td>
+        <td><small>A short plain text summary describing the resource in English.</small></td>
+      </tr>
+        <tr>
           <td colspan="6">
             <%= button_link_to('Add more descriptions', 'add', '#', :id => 'add-description-row') %>
           </td>
