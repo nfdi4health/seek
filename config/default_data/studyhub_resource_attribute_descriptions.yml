@@ -37,76 +37,87 @@ role_affiliation_identifier_scheme:	Type of the identifier scheme.
 
 # study design general
 
-study_primary_design: Primary design of the study.
-study_type_description: Additional information on study design.
-study_conditions: Primary disease or health condition(s) studied, or fokus of the study.
-study_conditions_classification: Controlled terminology name. It is mandatory if the study conditions are given.
-study_conditions_classification_code: Code of the term in the controlled terminology (IRI).
-study_ethics_commitee_approval: Approval from the ethics commitee.
-study_status: Overall status for the study.
-study_status_enrolling_by_invitation: Are participants enrolled by invitation?
-study_status_when_intervention: Do participants receive an intervention?
-study_status_halted_stage: At what stage the study was halted?
-study_status_halted_reason: Reason why study was halted.
-study_recruitment_status_register: Overall recruitment status for the study.
-study_start_date:  Start date of data collection for the study.
-study_end_date: End date of data collection for the study.
-study_region: Region(s) and/or cities within a country, in which the study takes place.
-study_centers: Is the study conducted at one study or more than one study sites?
-study_centers_number: Number of study sites.
-study_subject: Primary unit of interest in the study.
-study_sampling: Applied sampling method.
+study_primary_design: Primary design of a study. Select between non-interventional and interventional study design.
+study_type_description: If needed, additional descriptive information providing more details about the study type.
+study_conditions: Primary health condition(s) or disease(s) studied in the study, or the focus of the study (e.g., medication(s), food(s), therapy(ies), device(s), etc.)
+study_conditions_classification: If used, controlled terminology.
+study_conditions_classification_code: Code of the term (health condition, disease, or focus of the study) in the used controlled terminology.
+study_ethics_commitee_approval: Status of the study approval from the (leading) ethics commitee.
+
+
+study_status:
+study_status_enrolling_by_invitation: Specification whether study participants have been selected from a predetermined population or enrolled by invitation.
+study_status_when_intervention: Specification whether study participants receive intervention or have completed it but are still being followed according to the primary objective of the study.
+study_status_halted_stage: If the study was stopped prematurely, specification of the stage at what it was halted.
+study_status_halted_reason: If the study was stopped prematurely, specification of the reason(s) why it was halted.
+study_recruitment_status_register:
+study_start_date:
+study_end_date: In case of studies with patients or other participants, it is the date when the last participant is examined or receives an intervention, or the date of the last participant’s last visit.
+study_region: If applicable, region(s) and/or city(ies) within a country in which the study takes place.
+study_centers: Indication, whether a study is conducted at one study site (monocenter study) or at more than one study site (multicenter study).
+study_centers_number: Number of study sites involved in the study.
+study_subject: Primary unit of operational and/or administrative interest in the study.
+study_sampling: Type of the sampling method applied for the selection of study participants.
 study_data_source: Sources from which the data are generated or extracted.
-study_data_source_description: Additional information on study data sources.
-study_eligibility_age_min: Minimum age of participants in years.
-study_eligibility_age_min_description: Additional information about the minimum age of participants.
-study_eligibility_age_max: Maximum age of participants in years.
-study_eligibility_age_max_description: Additional information about the maximum age of participants.
-study_eligibility_gender: Gender of participants.
-study_eligibility_inclusion_criteria: Inclusion criteria for study.
-study_eligibility_exclusion_criteria: Exclusion criteria for study.
-study_population: Description of study population.
-study_target_sample_size: Intended number of study observational units.
-study_obtained_sample_size: Obtained number of study observational units.
-study_age_min_examined: Minimum age of participants in years.
-study_age_min_examined_description: Additional information about the minimum age of participants.
-study_age_max_examined: Maximum age of participants in years.
-study_age_max_examined_description: Additional information about the maximum age of participants.
-study_hypothesis: Hypotheses underlying the study.
-study_outcome_type: Type of the outcome measure.
-study_outcome_title: Name of the outcome measure.
-study_outcome_description: Additional information about the outcome measure.
-study_outcome_time_frame: Time frame of assessment specific to the outcome measure.
-study_design_comment: Additional information on the study design.
-study_data_sharing_plan_generally: Plan to share the data?
-study_data_sharing_plan_description: Additional information on data sharing statement.
-study_data_sharing_plan_supporting_information: Supporting information available in addition to the study data.
-study_data_sharing_plan_time_frame: Data availability time frame.
-study_data_sharing_plan_access_criteria: Criteria for the access to the study data.
-study_data_sharing_plan_url: Web page with additional information on data sharing. (please enter a valid URL starting with http/https)
+study_data_source_description: If needed, additional descriptive information about study data sources (e.g., indication of the data source(s) not listed in the property „Data sources”, or more detailed description of the selected data sources).
+study_eligibility_age_min: Minimum age of potential participants eligible to participate in the study provided in years.
+study_eligibility_age_min_description: If needed, additional descriptive information about the minimum age of the potential study participants.
+study_eligibility_age_max: Maximum age of potential participants eligible to participate in the study provided in years.
+
+
+study_eligibility_age_max_description: If needed, additional descriptive information about the maximum age of the potential study participants.
+study_eligibility_gender: Gender of the potential participants eligible to participate in the study.
+study_eligibility_inclusion_criteria: Inclusion criteria for participation in the study.
+study_eligibility_exclusion_criteria: Exclusion criteria for participation in the study.
+study_population: Additional descriptive information providing more details about study population. Any information important for the given study population can be specified here.
+
+
+
+study_target_sample_size: Intended number of observational units for the whole study (e.g., intended number of study participants at all study sites).
+study_obtained_sample_size: Obtained number of observational units for the whole study (e.g., obtained number of study participants at all study sites). The value is only available after the end of recruitment.
+study_age_min_examined: Minimum age of study participants at the time of examination provided in years.
+study_age_min_examined_description: If needed, additional descriptive information about the minimum age of study participants at the time of examination.
+study_age_max_examined: Maximum age of study participants at the time of examination provided in years.
+study_age_max_examined_description: If needed, additional descriptive information about the maximum age of study participants at the time of examination.
+study_hypothesis: Statement of the hypotheses underlying the study.
+study_outcome_type: Type of the outcome measure
+study_outcome_title: Name of a outcome measure (or for non-interventional studies, name of a specific measurement or observation used to describe patterns of diseases or traits or associations with exposures, risk factors or treatment).
+
+study_outcome_description: Additional descriptive information about the given outcome measure.
+study_outcome_time_frame: Description of the time point(s) at which the measurement is assessed for the specific metric used.
+study_design_comment: Any additional descriptive information about specific aspects of the study design that cannot be captured by other properties.
+study_data_sharing_plan_generally: Indication whether there is a plan to make data collected in the study available. In case of studies with patients or other individuals, this refers to individual participant data (IPD).
+study_data_sharing_plan_description: Additional descriptive information providing more details about the data sharing.
+study_data_sharing_plan_supporting_information: "Supporting information which will be made available in addition to the study data."
+study_data_sharing_plan_time_frame: Indication when the study data and, if applicable, supporting information will become available and for how long.
+study_data_sharing_plan_access_criteria: "Indication by what access criteria data will be shared, including:<br>
+a) with whom,<br>
+b) for what types of analyses, and <br>
+c) by what mechanism.<br>"
+study_data_sharing_plan_url: If existing, a link to the web page where additional information on data sharing can be found.
 
 # interventional attributes
 
-study_type_interventional: Specific type of the study.
-study_primary_purpose: The main purpose of the intervention(s).
-study_phase: Numerical phase of the study.
-study_masking: Is masking of intervention(s) assignment implemented?
-study_masking_roles: Party(ies) who are masked.
-study_masking_description: Additional information about masking.
-study_allocation: Type of allocation of individual participants to an arm.
-study_off_label_use: Off-label use of a drug product.
-study_arm_group_label: Name of the arm.
-study_arm_group_type: Role of the arm in the study. It is mandatory if study arm group label is given.
-study_arm_group_description: Additional information on the arm.
-study_intervention_name: Name of the intervention.
-study_intervention_type: Type of the intervention.
-study_intervention_description: Additional information on the intervention.
-study_intervention_arm_group_label: Arm associated with the intervention.
+study_type_interventional: In case of an interventional study, the strategy for assigning interventions to participants.
+study_primary_purpose: The main objective of the intervention(s) being evaluated by the study.
+study_phase: If applicable, numerical phase of the study.
+study_masking: Indication, whether a masking (or blinding) of intervention(s) assignment is implemented (i.e., whether someone is prevented from having knowledge of the interventions assigned to individual participants).
+study_masking_roles: If masking is implemented, the party(ies) who are masked.
+study_masking_description: If needed, additional descriptive information about masking (e.g., information about other parties who may be masked).
+study_allocation: Type of assignment (allocation) of individual participants to an arm.
+study_off_label_use: Unapproved (off-label) use of a drug product.
+study_arm_group_label: A short name of the arm.
+study_arm_group_type: Role of the given arm in the study.
+study_arm_group_description: Additional descriptive information about the given arm.
+study_intervention_name: A short descriptive name of the intervention.
+study_intervention_type: Type of the given intervention.
+study_intervention_description: Additional descriptive information about the given intervention.
+study_intervention_arm_group_label: Name of the arm associated with the given intervention.
 
 # non_interventional attributes
 
-study_type_non_interventional: Specific type of the study.
-study_time_perspective: Relationship of observation period to time of enrollment.
-study_target_follow-up_duration: Target follow-up duration.
-study_biospecimen_retention: Which biosamples are retained?
-study_biospecomen_description: Biosamples to be retained.
+study_type_non_interventional: In case of a non-interventional study, the primary strategy for participant identification and follow-up.
+study_time_perspective: Temporal relationship of observation period to time of participant enrollment.
+study_target_follow-up_duration: If applicable, anticipated time period over which each participant is to be followed, provided in years.
+study_biospecimen_retention: Indication whether samples of material from study participants are retained in a biorepository.
+study_biospecomen_description: Specification all types of biospecimens to be retained (e.g., blood, serum, urine, etc.)

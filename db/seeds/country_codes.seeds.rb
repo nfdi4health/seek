@@ -278,7 +278,7 @@ after :studyhub_resource do
     cmt = CustomMetadataType.where(title: 'NFDI4Health Studyhub Resource StudyDesign General', supported_type: 'StudyhubResource').first
     cmt.custom_metadata_attributes.push(CustomMetadataAttribute.where(title: 'study_country').create!(
       title: 'study_country', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_country_cv,
-      description: 'Country or countries in which a study takes place.'
+      description: 'Country or countries in which the study takes place.', label: 'Countries where the study takes place'
     ))
   end
 end

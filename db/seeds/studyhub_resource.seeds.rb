@@ -428,196 +428,239 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
     custom_metadata_attributes: [
 
       CustomMetadataAttribute.where(title: 'study_primary_design').create!(
-        title: 'study_primary_design', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_design_cv, description: attribute_descriptions['study_primary_design']
+        title: 'study_primary_design', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_design_cv,
+        description: attribute_descriptions['study_primary_design'], label: attribute_headings['study_primary_design']
       ),
 
       CustomMetadataAttribute.where(title: 'study_type_description').create!(
-        title: 'study_type_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_type_description']
+        title: 'study_type_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_type_description'], label: attribute_headings['study_type_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_conditions').create!(
-        title: 'study_conditions', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_conditions']
+        title: 'study_conditions', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_conditions'], label: attribute_headings['study_conditions']
       ),
 
       CustomMetadataAttribute.where(title: 'study_conditions_classification').create!(
         title: 'study_conditions_classification', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_conditions_classification_cv,
-        description: attribute_descriptions['study_conditions_classification']
+        description: attribute_descriptions['study_conditions_classification'],label: attribute_headings['study_conditions_classification']
       ),
 
       CustomMetadataAttribute.where(title: 'study_conditions_classification_code').create!(
-        title: 'study_conditions_classification_code', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_conditions_classification_code']
+        title: 'study_conditions_classification_code', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_conditions_classification_code'],label: attribute_headings['study_conditions_classification_code']
       ),
 
       CustomMetadataAttribute.where(title: 'study_ethics_commitee_approval').create!(
         title: 'study_ethics_commitee_approval', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_ethics_commitee_approval_cv,
-        description: attribute_descriptions['study_ethics_commitee_approval']
+        description: attribute_descriptions['study_ethics_commitee_approval'],label: attribute_headings['study_ethics_commitee_approval']
       ),
 
       CustomMetadataAttribute.where(title: 'study_status').create!(
-        title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv, description: attribute_descriptions['study_status']
+        title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv,
+        description: attribute_descriptions['study_status'],label: attribute_headings['study_status']
       ),
 
       CustomMetadataAttribute.where(title: 'study_status_enrolling_by_invitation').create!(
-        title: 'study_status_enrolling_by_invitation', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_enrolling_by_invitation_cv, description: attribute_descriptions['study_status_enrolling_by_invitation']
+        title: 'study_status_enrolling_by_invitation', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_enrolling_by_invitation_cv,
+        description: attribute_descriptions['study_status_enrolling_by_invitation'],label: attribute_headings['study_status_enrolling_by_invitation']
       ),
 
       CustomMetadataAttribute.where(title: 'study_status_when_intervention').create!(
-        title: 'study_status_when_intervention', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_when_intervention_cv, description: attribute_descriptions['study_status_when_intervention']
+        title: 'study_status_when_intervention', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_when_intervention_cv,
+        description: attribute_descriptions['study_status_when_intervention'], label: attribute_headings['study_status_when_intervention']
       ),
 
       CustomMetadataAttribute.where(title: 'study_status_halted_stage').create!(
-        title: 'study_status_halted_stage', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_halted_stage_cv, description: attribute_descriptions['study_status_halted_stage']
+        title: 'study_status_halted_stage', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_halted_stage_cv,
+        description: attribute_descriptions['study_status_halted_stage'], label: attribute_headings['study_status_halted_stage']
       ),
 
       CustomMetadataAttribute.where(title: 'study_status_halted_reason').create!(
-        title: 'study_status_halted_reason', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_status_halted_reason']
+        title: 'study_status_halted_reason', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_status_halted_reason'], label: attribute_headings['study_status_halted_reason']
       ),
 
       CustomMetadataAttribute.where(title: 'study_recruitment_status_register').create!(
-        title: 'study_recruitment_status_register', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_recruitment_status_register_cv, description: attribute_descriptions['study_recruitment_status_register']
+        title: 'study_recruitment_status_register', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_recruitment_status_register_cv,
+        description: attribute_descriptions['study_recruitment_status_register'],label: attribute_headings['study_recruitment_status_register']
       ),
 
       CustomMetadataAttribute.where(title: 'study_start_date').create!(
-        title: 'study_start_date', required: false, sample_attribute_type: date_type, description: attribute_descriptions['study_start_date']
+        title: 'study_start_date', required: false, sample_attribute_type: date_type,
+        description: attribute_descriptions['study_start_date'],label: attribute_headings['study_start_date']
       ),
 
       CustomMetadataAttribute.where(title: 'study_end_date').create!(
-        title: 'study_end_date', required: false, sample_attribute_type: date_type, description: attribute_descriptions['study_end_date']
+        title: 'study_end_date', required: false, sample_attribute_type: date_type,
+        description: attribute_descriptions['study_end_date'],label: attribute_headings['study_end_date']
       ),
 
       CustomMetadataAttribute.where(title: 'study_centers').create!(
-        title: 'study_centers', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_centers_cv, description: attribute_descriptions['study_centers']
+        title: 'study_centers', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_centers_cv,
+        description: attribute_descriptions['study_centers'],label: attribute_headings['study_centers']
       ),
 
       CustomMetadataAttribute.where(title: 'study_centers_number').create!(
-        title: 'study_centers_number', required: false, sample_attribute_type: int_type, description: attribute_descriptions['study_centers_number']
+        title: 'study_centers_number', required: false, sample_attribute_type: int_type,
+        description: attribute_descriptions['study_centers_number'],label: attribute_headings['study_centers_number']
       ),
 
       CustomMetadataAttribute.where(title: 'study_subject').create!(
-        title: 'study_subject', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_subject_cv, description: attribute_descriptions['study_subject']
+        title: 'study_subject', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_subject_cv,
+        description: attribute_descriptions['study_subject'],label: attribute_headings['study_subject']
       ),
 
       CustomMetadataAttribute.where(title: 'study_sampling').create!(
-        title: 'study_sampling', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sampling_cv, description: attribute_descriptions['study_sampling']
+        title: 'study_sampling', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sampling_cv,
+        description: attribute_descriptions['study_sampling'],label: attribute_headings['study_sampling']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_source').create!(
-        title: 'study_data_source', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_source_cv, description: attribute_descriptions['study_data_source']
+        title: 'study_data_source', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_source_cv,
+        description: attribute_descriptions['study_data_source'],label: attribute_headings['study_data_source']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_source_description').create!(
-        title: 'study_data_source_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_data_source_description']
+        title: 'study_data_source_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_data_source_description'], label: attribute_headings['study_data_source_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_age_min').create!(
-        title: 'study_eligibility_age_min', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_eligibility_age_min']
+        title: 'study_eligibility_age_min', required: false, sample_attribute_type: float_type,
+        description: attribute_descriptions['study_eligibility_age_min'],label: attribute_headings['study_eligibility_age_min']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_age_min_description').create!(
-        title: 'study_eligibility_age_min_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_eligibility_age_min_description']
+        title: 'study_eligibility_age_min_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_eligibility_age_min_description'],label: attribute_headings['study_eligibility_age_min_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_age_max').create!(
-        title: 'study_eligibility_age_max', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_eligibility_age_max']
+        title: 'study_eligibility_age_max', required: false, sample_attribute_type: float_type,
+        description: attribute_descriptions['study_eligibility_age_max'],label: attribute_headings['study_eligibility_age_max']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_age_max_description').create!(
-        title: 'study_eligibility_age_max_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_eligibility_age_max_description']
+        title: 'study_eligibility_age_max_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_eligibility_age_max_description'],label: attribute_headings['study_eligibility_age_max_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_gender').create!(
-        title: 'study_eligibility_gender', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_eligibility_gender_cv, description: attribute_descriptions['study_eligibility_gender']
+        title: 'study_eligibility_gender', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_eligibility_gender_cv,
+        description: attribute_descriptions['study_eligibility_gender'],label: attribute_headings['study_eligibility_gender']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_inclusion_criteria').create!(
-        title: 'study_eligibility_inclusion_criteria', required: false, sample_attribute_type: string_type,description: attribute_descriptions['study_eligibility_inclusion_criteria']
+        title: 'study_eligibility_inclusion_criteria', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_eligibility_inclusion_criteria'],label: attribute_headings['study_eligibility_inclusion_criteria']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_exclusion_criteria').create!(
-        title: 'study_eligibility_exclusion_criteria', required: false, sample_attribute_type: string_type,description: attribute_descriptions['study_eligibility_exclusion_criteria']
+        title: 'study_eligibility_exclusion_criteria', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_eligibility_exclusion_criteria'],label: attribute_headings['study_eligibility_exclusion_criteria']
       ),
 
       CustomMetadataAttribute.where(title: 'study_population').create!(
-        title: 'study_population', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_population']
+        title: 'study_population', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_population'],label: attribute_headings['study_population']
       ),
 
       CustomMetadataAttribute.where(title: 'study_target_sample_size').create!(
-        title: 'study_target_sample_size', required: false, sample_attribute_type: int_type, description: attribute_descriptions['study_target_sample_size']
+        title: 'study_target_sample_size', required: false, sample_attribute_type: int_type,
+        description: attribute_descriptions['study_target_sample_size'],label: attribute_headings['study_target_sample_size']
       ),
 
       CustomMetadataAttribute.where(title: 'study_obtained_sample_size').create!(
-        title: 'study_obtained_sample_size', required: false, sample_attribute_type: int_type, description: attribute_descriptions['study_obtained_sample_size']
+        title: 'study_obtained_sample_size', required: false, sample_attribute_type: int_type,
+        description: attribute_descriptions['study_obtained_sample_size'],label: attribute_headings['study_obtained_sample_size']
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_min_examined').create!(
-        title: 'study_age_min_examined', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_age_min_examined']
+        title: 'study_age_min_examined', required: false, sample_attribute_type: float_type,
+        description: attribute_descriptions['study_age_min_examined'],label: attribute_headings['study_age_min_examined']
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_min_examined_description').create!(
-        title: 'study_age_min_examined_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_age_min_examined_description']
+        title: 'study_age_min_examined_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_age_min_examined_description'],label: attribute_headings['study_age_min_examined_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_max_examined').create!(
-        title: 'study_age_max_examined', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_age_max_examined']
+        title: 'study_age_max_examined', required: false, sample_attribute_type: float_type,
+        description: attribute_descriptions['study_age_max_examined'],label: attribute_headings['study_age_max_examined']
       ),
 
       CustomMetadataAttribute.where(title: 'study_age_max_examined_description').create!(
-        title: 'study_age_max_examined_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_age_max_examined_description']
+        title: 'study_age_max_examined_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_age_max_examined_description'],label: attribute_headings['study_age_max_examined_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_hypothesis').create!(
-        title: 'study_hypothesis', required: false , sample_attribute_type: text_type, description: attribute_descriptions['study_hypothesis']
+        title: 'study_hypothesis', required: false , sample_attribute_type: text_type,
+        description: attribute_descriptions['study_hypothesis'],label: attribute_headings['study_hypothesis']
       ),
 
 
       CustomMetadataAttribute.where(title: 'study_outcome_type').create!(
-        title: 'study_outcome_type', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_outcome_type_cv, description: attribute_descriptions['study_outcome_type']
+        title: 'study_outcome_type', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_outcome_type_cv,
+        description: attribute_descriptions['study_outcome_type'],label: attribute_headings['study_outcome_type']
       ),
 
       CustomMetadataAttribute.where(title: 'study_outcome_title').create!(
-        title: 'study_outcome_title', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_outcome_title']
+        title: 'study_outcome_title', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_outcome_title'],label: attribute_headings['study_outcome_title']
       ),
 
       CustomMetadataAttribute.where(title: 'study_outcome_description').create!(
-        title: 'study_outcome_description', required: false , sample_attribute_type: text_type, description: attribute_descriptions['study_outcome_description']
+        title: 'study_outcome_description', required: false , sample_attribute_type: text_type,
+        description: attribute_descriptions['study_outcome_description'],label: attribute_headings['study_outcome_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_outcome_time_frame').create!(
-        title: 'study_outcome_time_frame', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_outcome_time_frame']
+        title: 'study_outcome_time_frame', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_outcome_time_frame'],label: attribute_headings['study_outcome_time_frame']
       ),
 
       CustomMetadataAttribute.where(title: 'study_design_comment').create!(
-        title: 'study_design_comment', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_design_comment']
+        title: 'study_design_comment', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_design_comment'],label: attribute_headings['study_design_comment']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_generally').create!(
         title: 'study_data_sharing_plan_generally', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_generally_cv,
-        description: attribute_descriptions['study_data_sharing_plan_generally']
+        description: attribute_descriptions['study_data_sharing_plan_generally'],label: attribute_headings['study_data_sharing_plan_generally']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_description').create!(
-        title: 'study_data_sharing_plan_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_data_sharing_plan_description']
+        title: 'study_data_sharing_plan_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_data_sharing_plan_description'],label: attribute_headings['study_data_sharing_plan_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_supporting_information').create!(
         title: 'study_data_sharing_plan_supporting_information', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_supporting_information_cv,
-        description: attribute_descriptions['study_data_sharing_plan_supporting_information']
+        description: attribute_descriptions['study_data_sharing_plan_supporting_information'],label: attribute_headings['study_data_sharing_plan_supporting_information']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_time_frame').create!(
-        title: 'study_data_sharing_plan_time_frame', required: false, sample_attribute_type: string_type,description: attribute_descriptions['study_data_sharing_plan_time_frame']
+        title: 'study_data_sharing_plan_time_frame', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_data_sharing_plan_time_frame'],label: attribute_headings['study_data_sharing_plan_time_frame']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_access_criteria').create!(
-        title: 'study_data_sharing_plan_access_criteria', required: false, sample_attribute_type: string_type,description: attribute_descriptions['study_data_sharing_plan_access_criteria']
+        title: 'study_data_sharing_plan_access_criteria', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_data_sharing_plan_access_criteria'],label: attribute_headings['study_data_sharing_plan_access_criteria']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_url').create!(
-        title: 'study_data_sharing_plan_url', required: false, sample_attribute_type: string_type,description: attribute_descriptions['study_data_sharing_plan_url']
+        title: 'study_data_sharing_plan_url', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_data_sharing_plan_url'],label: attribute_headings['study_data_sharing_plan_url']
       ),
 
       CustomMetadataAttribute.where(title: 'study_region').create!(
-        title: 'study_region', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_region']
+        title: 'study_region', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_region'], label: attribute_headings['study_region']
       )
     ]
   )
@@ -632,25 +675,28 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       CustomMetadataAttribute.where(title: 'study_type_non_interventional').create!(
         title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv,
-        description: attribute_descriptions['study_type_non_interventional']
+        description: attribute_descriptions['study_type_non_interventional'], label: attribute_headings['study_type_non_interventional']
+
       ),
 
       CustomMetadataAttribute.where(title: 'study_time_perspective').create!(
         title: 'study_time_perspective', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_time_perspective_cv,
-        description: attribute_descriptions['study_time_perspective']
+        description: attribute_descriptions['study_time_perspective'], label: attribute_headings['study_time_perspective']
       ),
 
       CustomMetadataAttribute.where(title: 'study_target_follow-up_duration').create!(
-        title: 'study_target_follow-up_duration', required: false, sample_attribute_type: float_type, description: attribute_descriptions['study_target_follow-up_duration']
+        title: 'study_target_follow-up_duration', required: false, sample_attribute_type: float_type,
+        description: attribute_descriptions['study_target_follow-up_duration'],label: attribute_headings['study_target_follow']
       ),
 
       CustomMetadataAttribute.where(title: 'study_biospecimen_retention').create!(
         title: 'study_biospecimen_retention', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_biospecimen_retention_cv,
-        description: attribute_descriptions['study_biospecimen_retention']
+        description: attribute_descriptions['study_biospecimen_retention'],label: attribute_headings['study_biospecimen_retention']
       ),
 
       CustomMetadataAttribute.where(title: 'study_biospecomen_description').create!(
-        title: 'study_biospecomen_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_biospecomen_description']
+        title: 'study_biospecomen_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_biospecomen_description'],label: attribute_headings['study_biospecomen_description']
       )
 
     ]
@@ -665,64 +711,79 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       #************************ interventional study design ***********************
 
       CustomMetadataAttribute.where(title: 'study_type_interventional').create!(
-        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv, description: attribute_descriptions['study_type_interventional']
+        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv,
+        description: attribute_descriptions['study_type_interventional'],label: attribute_headings['study_type_interventional']
       ),
 
       CustomMetadataAttribute.where(title: 'study_primary_purpose').create!(
-        title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv, description: attribute_descriptions['study_primary_purpose']
+        title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv,
+        description: attribute_descriptions['study_primary_purpose'],label: attribute_headings['study_primary_purpose']
       ),
 
       CustomMetadataAttribute.where(title: 'study_phase').create!(
-        title: 'study_phase', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_phase_cv, description: attribute_descriptions['study_phase']
+        title: 'study_phase', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_phase_cv,
+        description: attribute_descriptions['study_phase'],label: attribute_headings['study_phase']
       ),
 
       CustomMetadataAttribute.where(title: 'study_masking').create!(
-        title: 'study_masking', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_cv, description: attribute_descriptions['study_masking']
+        title: 'study_masking', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_cv,
+        description: attribute_descriptions['study_masking'],label: attribute_headings['study_masking']
       ),
 
       CustomMetadataAttribute.where(title: 'study_masking_roles').create!(
-        title: 'study_masking_roles', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_roles_cv, description: attribute_descriptions['study_masking_roles']
+        title: 'study_masking_roles', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_roles_cv,
+        description: attribute_descriptions['study_masking_roles'],label: attribute_headings['study_masking_roles']
       ),
 
       CustomMetadataAttribute.where(title: 'study_masking_description').create!(
-        title: 'study_masking_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_masking_description']
+        title: 'study_masking_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_masking_description'],label: attribute_headings['study_masking_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_allocation').create!(
-        title: 'study_allocation', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_allocation_cv, description: attribute_descriptions['study_allocation']
+        title: 'study_allocation', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_allocation_cv,
+        description: attribute_descriptions['study_allocation'],label: attribute_headings['study_allocation']
       ),
 
       CustomMetadataAttribute.where(title: 'study_off_label_use').create!(
-        title: 'study_off_label_use', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_off_label_use_cv, description: attribute_descriptions['study_off_label_use']
+        title: 'study_off_label_use', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_off_label_use_cv,
+        description: attribute_descriptions['study_off_label_use'],label: attribute_headings['study_off_label_use']
       ),
 
       CustomMetadataAttribute.where(title: 'study_arm_group_label').create!(
-        title: 'study_arm_group_label', required: false, sample_attribute_type: string_type, description: attribute_descriptions['study_arm_group_label']
+        title: 'study_arm_group_label', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_arm_group_label'],label: attribute_headings['study_arm_group_label']
       ),
 
       CustomMetadataAttribute.where(title: 'study_arm_group_type').create!(
-        title: 'study_arm_group_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_arm_group_type_cv, description: attribute_descriptions['study_arm_group_type']
+        title: 'study_arm_group_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_arm_group_type_cv,
+        description: attribute_descriptions['study_arm_group_type'],label: attribute_headings['study_arm_group_type']
       ),
 
       CustomMetadataAttribute.where(title: 'study_arm_group_description').create!(
-        title: 'study_arm_group_description', required: false, sample_attribute_type: text_type, description: attribute_descriptions['study_arm_group_description']
+        title: 'study_arm_group_description', required: false, sample_attribute_type: text_type,
+        description: attribute_descriptions['study_arm_group_description'],label: attribute_headings['study_arm_group_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_intervention_name').create!(
-        title: 'study_intervention_name', required: false , sample_attribute_type: string_type, description: attribute_descriptions['study_intervention_name']
+        title: 'study_intervention_name', required: false , sample_attribute_type: string_type,
+        description: attribute_descriptions['study_intervention_name'],label: attribute_headings['study_intervention_name']
       ),
 
       CustomMetadataAttribute.where(title: 'study_intervention_type').create!(
-        title: 'study_intervention_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_intervention_type_cv, description: attribute_descriptions['study_intervention_type']
+        title: 'study_intervention_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_intervention_type_cv,
+        description: attribute_descriptions['study_intervention_type'],label: attribute_headings['study_intervention_type']
       ),
 
 
       CustomMetadataAttribute.where(title: 'study_intervention_description').create!(
-        title: 'study_intervention_description', required: false , sample_attribute_type: text_type, description: attribute_descriptions['study_intervention_description']
+        title: 'study_intervention_description', required: false , sample_attribute_type: text_type,
+        description: attribute_descriptions['study_intervention_description'],label: attribute_headings['study_intervention_description']
       ),
 
       CustomMetadataAttribute.where(title: 'study_intervention_arm_group_label').create!(
-        title: 'study_intervention_arm_group_label', required: false , sample_attribute_type: string_type, description: attribute_descriptions['study_intervention_arm_group_label']
+        title: 'study_intervention_arm_group_label', required: false , sample_attribute_type: string_type,
+        description: attribute_descriptions['study_intervention_arm_group_label'],label: attribute_headings['study_intervention_arm_group_label']
       )
     ]
   )
