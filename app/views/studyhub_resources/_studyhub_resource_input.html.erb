@@ -9,6 +9,10 @@
 
     $j(document).ready(function () {
 
+        if (<%= @studyhub_resource.is_studytype? %>) {
+            SR.hideResourceAttributes();
+        }
+
         SR.intialResourceUseRightVisibility();
         $j('#general_resource_information').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_label]"]', SR.setResourceUseRightVisibility);
 

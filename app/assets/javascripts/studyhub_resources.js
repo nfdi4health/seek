@@ -48,6 +48,12 @@ var SR = {
 
     },
 
+     hideResourceAttributes: function () {
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_version]"]').parent().hide();
+        $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_format]"]').parent().hide();
+
+    },
+
     intialResourceUseRightVisibility: function () {
         check_license = $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_label]"]').val();
 
