@@ -2,7 +2,8 @@
 
   possibilities = attribute.sample_controlled_vocab.sample_controlled_vocab_terms
   resource ||= nil
-  title = attribute.label
+  title = attribute.title
+  label = attribute.label
 
   if @studyhub_resource.resource_json.nil? || resource.nil? || resource[title].blank?
     selected = []
@@ -18,7 +19,7 @@
     value_method: :id,
     text_method: :label,
     object_type_text: t('studyhub_resources.study'),
-    association_text: title.humanize,
+    association_text: label.humanize,
     possibilities_options:{},
     required: attribute.required,
     selected: selected,
