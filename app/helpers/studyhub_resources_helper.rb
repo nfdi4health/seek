@@ -89,30 +89,21 @@ module StudyhubResourcesHelper
     html = ''
     if roles.any?
       roles.each do |d|
-        html += '<div style="margin-bottom: 40px">'
-
-        case d['role_name_type']
-        when 'Personal'
-          role_name = d['role_name_personal_title'] + ' ' + d['role_name_personal_given_name']+ ' '+ d['role_name_personal_family_name']
-        when 'Organisational'
-          role_name = d['role_name_organisational']
-        end
-
-        html += '<p class="role_type"><strong>Role Type: </strong>'+d['role_type']+'</p>'
-        html += '<p class="role_name_type"><strong>Role Name Type: </strong>'+d['role_name_type']+'</p>'
-        html += '<p class="role_name"><strong>Name: </strong>'+role_name +'</p>'
-
+        html += '<div class="row">'
+        html += '<div class="column">'
+        # html += '<p class="role_type"><strong>'+d['role_type']+': </strong>'+role_name+'('+d['role_name_type']+')</p>'
+        html += '<p class="role_type"><strong>'+d['role_type']+': </strong>'+role_name(d)+'</p>'
         html += '<p class="role_email"><strong>Email: </strong>'+d["role_email"] +'</p>' unless d["role_email"].blank?
         html += '<p class="role_phone"><strong>Phone: </strong>'+d["role_phone"] +'</p>' unless d["role_phone"].blank?
-        html += '<p class="role_name_identifier"><strong>Identifier: </strong>'+d["role_name_identifier"] +'</p>' unless d["role_name_identifier"].blank?
-        html += '<p class="role_name_identifier_scheme"><strong>Identifier Scheme: </strong>'+d["role_name_identifier_scheme"] +'</p>' unless d["role_name_identifier_scheme"].blank?
-
+        html +=  role_schema_link(d,'name')
+        html += '</div>'
+        html += '<div class="column">'
         html += '<p class="role_affiliation_name"><strong>Affiliation: </strong>'+d["role_affiliation_name"]+'</p>' unless d["role_affiliation_name"].blank?
         html += '<p class="role_affiliation_address"><strong>Address: </strong>'+d["role_affiliation_address"]+'</p>' unless d["role_affiliation_address"].blank?
         html += '<p class="role_affiliation_web_page"><strong>Webpage: </strong>'+ link_to(d["role_affiliation_web_page"].truncate(100), d["role_affiliation_web_page"], target: :_blank ) +'</p>' unless d["role_affiliation_web_page"].blank?
-        html += '<p class="role_affiliation_identifier"><strong>Identifier: </strong>'+d["role_affiliation_identifier"]+'</p>' unless d["role_affiliation_identifier"].blank?
-        html += '<p class="role_affiliation_identifier_scheme"><strong>Identifier Scheme: </strong>'+d["role_affiliation_identifier_scheme"]+'</p>' unless d["role_affiliation_identifier_scheme"].blank?
+        html +=  role_schema_link(d,'affiliation')
         html +=  '</p>'
+        html += '</div>'
         html += '</div>'
       end
     end
@@ -220,9 +211,9 @@ module StudyhubResourcesHelper
 
     if value.any?
       value.each do |d|
-      html += d['resource_keywords_label']
-      html += '('+d['resource_keywords_label_code']+')' unless d['resource_keywords_label_code'].blank?
-      html += '; '
+        html += d['resource_keywords_label']
+        html += '('+d['resource_keywords_label_code']+')' unless d['resource_keywords_label_code'].blank?
+        html += '; '
       end
     end
     html.html_safe
@@ -284,6 +275,38 @@ module StudyhubResourcesHelper
     end
 
     id
+  end
+
+  def role_schema_link(role,type)
+    html = ''
+    identifier = 'role_'+type+'_identifier'
+    identifier_scheme = 'role_'+type+'_identifier_scheme'
+
+    id =  role[identifier]
+    case role[identifier_scheme]
+    when 'ORCID'
+      logo = image(:orcid_id)
+      html += '<p class="'+identifier_scheme+'"><strong>ORCID: </strong>'+link_to(logo +' https://orcid.org/'+id, 'https://orcid.org/'+id, target: '_blank') +'</p>' unless id.blank?
+    when 'ROR'
+      html += '<p class="'+identifier_scheme+'"><strong>ROR: </strong>'+link_to('https://ror.org/'+id, 'https://ror.org/'+id, target: '_blank') +'</p>' unless id.blank?
+    when 'GRID'
+      html += '<p class="'+identifier_scheme+'"><strong>GRID: </strong>'+id +'</p>' unless id.blank?
+    when 'ISNI'
+      html += '<p class="'+identifier_scheme+'"><strong>ISNI: </strong>'+id +'</p>' unless id.blank?
+    end
+    html
+  end
+
+  private
+
+  def role_name(d)
+    case d['role_name_type']
+    when 'Personal'
+      role_name = d['role_name_personal_title'] + ' ' + d['role_name_personal_given_name'] + ' ' + d['role_name_personal_family_name']
+    when 'Organisational'
+      role_name = d['role_name_organisational']
+    end
+    role_name
   end
 
 end

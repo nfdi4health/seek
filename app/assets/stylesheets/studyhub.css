@@ -132,3 +132,19 @@ a {
 .help-block small{
     color: #737373
 }
+
+.column {
+    float: left;
+    width: 50%;
+
+}
+.row {
+    margin: 10px 0 30px 0;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
