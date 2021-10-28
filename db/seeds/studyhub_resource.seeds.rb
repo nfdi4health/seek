@@ -432,6 +432,17 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
         description: attribute_descriptions['study_primary_design'], label: attribute_headings['study_primary_design']
       ),
 
+      CustomMetadataAttribute.where(title: 'study_type_non_interventional').create!(
+        title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv,
+        description: attribute_descriptions['study_type_non_interventional'], label: attribute_headings['study_type_non_interventional']
+
+      ),
+
+      CustomMetadataAttribute.where(title: 'study_type_interventional').create!(
+        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv,
+        description: attribute_descriptions['study_type_interventional'],label: attribute_headings['study_type_interventional']
+      ),
+
       CustomMetadataAttribute.where(title: 'study_type_description').create!(
         title: 'study_type_description', required: false, sample_attribute_type: text_type,
         description: attribute_descriptions['study_type_description'], label: attribute_headings['study_type_description']
@@ -673,12 +684,6 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       #************************ non interventional study design  *******************
 
-      CustomMetadataAttribute.where(title: 'study_type_non_interventional').create!(
-        title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv,
-        description: attribute_descriptions['study_type_non_interventional'], label: attribute_headings['study_type_non_interventional']
-
-      ),
-
       CustomMetadataAttribute.where(title: 'study_time_perspective').create!(
         title: 'study_time_perspective', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_time_perspective_cv,
         description: attribute_descriptions['study_time_perspective'], label: attribute_headings['study_time_perspective']
@@ -710,10 +715,6 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       #************************ interventional study design ***********************
 
-      CustomMetadataAttribute.where(title: 'study_type_interventional').create!(
-        title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv,
-        description: attribute_descriptions['study_type_interventional'],label: attribute_headings['study_type_interventional']
-      ),
 
       CustomMetadataAttribute.where(title: 'study_primary_purpose').create!(
         title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv,

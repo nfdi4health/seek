@@ -118,24 +118,28 @@ var SR = {
 
     intialStudyPrimaryDesignVisibility: function () {
 
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+        $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+        $j('div[id="study_design_interventional"]').parent().parent().hide();
+
         study_type = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
 
         switch (study_type){
             case 'Interventional':
                 $j('div[id="study_design_interventional"]').parent().parent().show();
-                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().show();
                 $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
+                $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_interventional\')');
                 break;
 
             case 'Non-interventional':
                 $j('div[id="study_design_non_interventional"]').parent().parent().show();
-                $j('div[id="study_design_interventional"]').parent().parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().show();
                 $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
                 $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_non_interventional\')');
                 break;
-            default:
-                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
-                $j('div[id="study_design_interventional"]').parent().parent().hide();
+
 
         }
 
@@ -144,26 +148,28 @@ var SR = {
     setStudyPrimaryDesignVisibility: function () {
 
         $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
+        $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+        $j('div[id="study_design_interventional"]').parent().parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
 
         design = $j(this).val();
 
         switch (design){
             case 'Interventional':
-
                 $j('div[id="study_design_interventional"]').parent().parent().show();
-                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').val('');
                 $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_interventional\')');
                 break;
 
             case 'Non-interventional':
                 $j('div[id="study_design_non_interventional"]').parent().parent().show();
-                $j('div[id="study_design_interventional"]').parent().parent().hide();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().show();
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').val('');
                 $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_non_interventional\')');
                 break;
-
             default:
-                $j('div[id="study_design_non_interventional"]').parent().parent().hide();
-                $j('div[id="study_design_interventional"]').parent().parent().hide();
                 $j('button[id="study_primary_design_next_button"]').addClass('hidden');
 
         }
