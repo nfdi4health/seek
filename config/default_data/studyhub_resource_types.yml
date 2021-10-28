@@ -105,9 +105,3 @@ other_non_study_resource_type:
   id: 21
   title: Other resource
   key: other_non_study
-
-
-other_study_resource_type:
-  id: 22
-  title: Other study
-  key: other_study
