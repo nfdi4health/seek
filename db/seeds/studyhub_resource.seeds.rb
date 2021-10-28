@@ -283,13 +283,13 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   #study_time_perspective
   study_time_perspective_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Time Perspective').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Retrospective Prospective Cross-sectiona Other])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Retrospective Prospective Cross-sectional Other])
   )
 
   #study_phase
   study_phase_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Phase').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Early-phase-1 phase-1
-                                                                                                 phase-1-phase-2 phase-2 phase-2a phase-2b phase-2-phase-3 phase-3 phase-3a phase-3b phase-4 other Not-application])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Early-phase-1','Phase-1','Phase-1-phase-2','Phase-2', 'Phase-2a','Phase-2b',
+                                                                                               'Phase-2-phase-3','Phase-3','Phase-3a','Phase-3b','Phase-4','Other','Not applicable'])
   )
 
   #study_masking
