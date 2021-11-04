@@ -132,18 +132,22 @@ class StudyhubResource < ApplicationRecord
       resource_json['roles'].each_with_index do |role,index|
         errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
         errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
+
         if role['role_name_type'] == 'Personal'
+
           if role['role_name_personal_title'].blank?
             errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")
           end
+
           if role['role_name_personal_given_name'].blank?
             errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
           end
+          
           if role['role_name_personal_family_name'].blank?
             errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
           end
 
-          if !role['role_name_identifiers'].blank?
+          unless role['role_name_identifiers'].blank?
             role['role_name_identifiers'].each_with_index do |id,id_index|
               if !id['role_name_identifier'].blank? && id['role_name_identifier_scheme'].blank?
                 errors.add("roles[#{index}]['role_name_identifier_scheme'][#{id_index}]".to_sym, "Please select the identifier scheme.")
@@ -185,27 +189,32 @@ class StudyhubResource < ApplicationRecord
     end
 
     if is_studytype?
+
       required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
+      s
       if get_study_primary_design_type == INTERVENTIONAL
         required_fields['study_design'] += REQUIRED_FIELDS_INTERVENTIONAL
       end
+
       if get_study_primary_design_type == NON_INTERVENTIONAL
         required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL
       end
-      if !resource_json["study_design"]["study_conditions"].blank?
+
+      unless resource_json['study_design']['study_conditions'].blank?
         required_fields['study_design'] += ['study_conditions_classification']
       end
-      if !resource_json["study_design"]["study_arm_group_label"].blank?
+
+      unless resource_json['study_design']['study_arm_group_label'].blank?
         required_fields['study_design'] += ['study_arm_group_type']
       end
-      unless resource_json["study_design"]["study_outcome_title"].blank? && resource_json["study_design"]["study_outcome_description"].blank?
+      unless resource_json['study_design']['study_outcome_title'].blank? && resource_json['study_design']['s'].blank?
         required_fields['study_design'] += ['study_outcome_type']
       end
     end
 
     required_fields.each do |type, fields|
       fields.each do |name|
-        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
+        errors.add(name.to_sym, 'Please enter the #{name.humanize.downcase}.') if resource_json[type][name].blank?
       end
     end
   end
@@ -217,14 +226,14 @@ class StudyhubResource < ApplicationRecord
   def check_content_blob_presence
     unless is_studytype?
       if content_blob.blank?
-        errors.add(:base, "Please save the #{studyhub_resource_type_title} at first and then upload a file  ")
+        errors.add(:base, 'Please save the #{studyhub_resource_type_title} at first and then upload a file!')
       end
     end
   end
 
 
   def request_to_submit?
-    (commit_button == 'Submit') ? true : false
+    commit_button == 'Submit'
   end
 
   def is_submitted?
