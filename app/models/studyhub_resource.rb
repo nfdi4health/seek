@@ -142,9 +142,14 @@ class StudyhubResource < ApplicationRecord
           if role['role_name_personal_family_name'].blank?
             errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
           end
-          if !role['role_name_identifier'].blank? && role['role_name_identifier_scheme'].blank?
-            errors.add("roles[#{index}]['role_name_identifier_scheme']".to_sym, "Please select the identifier scheme.")
-          end
+
+          if !role['role_name_identifiers'].blank?
+            role['role_name_identifiers'].each_with_index do |id,id_index|
+              if !id['role_name_identifier'].blank? && id['role_name_identifier_scheme'].blank?
+                errors.add("roles[#{index}]['role_name_identifier_scheme'][#{id_index}]".to_sym, "Please select the identifier scheme.")
+              end
+            end
+        end
         end
 
         if role['role_name_type'] == 'Organisational'

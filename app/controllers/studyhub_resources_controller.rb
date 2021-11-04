@@ -361,15 +361,24 @@ class StudyhubResourcesController < ApplicationController
         entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
       end
 
-      entry['role_name_identifier'] = params[:role_name_identifier][key]
-      entry['role_name_identifier_scheme'] = params[:role_name_identifier_scheme][key]
+
+      entry['role_name_identifiers'] = []
+
+      params[:role_name_identifier][key].keys.each do |k2|
+        identifier = {}
+        identifier['role_name_identifier'] = params[:role_name_identifier][key][k2]
+        identifier['role_name_identifier_scheme'] = params['role_name_identifier_scheme'][key][k2]
+        entry['role_name_identifiers'] << identifier unless params[:role_name_identifier][key][k2].blank?
+      end
+
+
       entry['role_email'] = params[:role_email][key]
       entry['role_phone'] = params[:role_phone][key]
       entry['role_affiliation_name'] = params[:role_affiliation_name][key]
       entry['role_affiliation_address'] = params[:role_affiliation_address][key]
       entry['role_affiliation_web_page'] = params[:role_affiliation_web_page][key]
-      entry['role_affiliation_identifier'] = params[:role_affiliation_identifier][key]
-      entry['role_affiliation_identifier_scheme'] = params[:role_affiliation_identifier_scheme][key]
+      # entry['role_affiliation_identifier'] = params[:role_affiliation_identifier][key]
+      # entry['role_affiliation_identifier_scheme'] = params[:role_affiliation_identifier_scheme][key]
 
       roles << entry unless entry['role_type'].blank?
 

@@ -1,0 +1,68 @@
+<% role_identifier_row ||= nil %>
+
+<% index ||= 'row-template' %>
+<% num ||= 'num-template' %>
+
+<% role_error = (defined? num).nil? ? {} : process_role_error_messags(num) %>
+
+<%
+  role_name_identifier_schemes = SampleControlledVocab.where(title: 'NFDI4Health Role Name Identifier Scheme').first.sample_controlled_vocab_terms
+  role_affiliation_identifier_schemes = SampleControlledVocab.where(title: 'NFDI4Health Role Affiliation Identifier Scheme').first.sample_controlled_vocab_terms
+
+  unless role.blank? || role["role_name_identifiers"].blank? || num == 'num-template'
+
+
+    role_name_identifier = role["role_name_identifiers"][index]["role_name_identifier"]
+    role_name_identifier_scheme = role["role_name_identifiers"][index]["role_name_identifier_scheme"]
+
+    # role_affiliation_identifier = roles[row_num]["role_affiliation_identifier"]
+    # role_affiliation_identifier_scheme = roles[row_num]["role_affiliation_identifier_scheme"]
+
+
+  end
+
+%>
+
+<% field_name_prefix = "studyhub_resource[role_name_identifier][#{num}][#{index}]" %>
+<% allow_row_removal = (index == 0 ? false : true ) %>
+
+
+<tr class='resource-identifier' data-index='<%= index-%>'>
+  <td>
+    <div class="form-group">
+      index: <%= index %>
+      num: <%= num %>
+      <%= f.text_field "studyhub_resource[role_name_identifier][#{num}][#{index}]", :class => "form-control",:value =>role_name_identifier %>
+    </div>
+
+  </td>
+  <td>
+    <div class="form-group <%= "has-error text-danger" unless role_error["role_name_identifier_scheme"][num][index].nil? %>">
+      <%= f.collection_select "studyhub_resource[role_name_identifier_scheme][#{num}][#{index}]", role_name_identifier_schemes.map(&:label), :to_s, :to_s,
+                              { :include_blank => "Please select...", :selected => role_name_identifier_scheme }, :class => "form-control role_type" %>
+      <small><%= role_error["role_name_identifier_scheme"][num][index]  %></small>
+    </div>
+  </td>
+  <td>
+    <% if allow_row_removal %>
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-danger">
+          Remove
+          <%= check_box_tag "#{field_name_prefix}[_destroy]", '1', false,
+                            class: 'destroy-row', autocomplete: 'off',id:"#{field_name_prefix}-checkbox[_destroy]" %>
+        </label>
+      </div>
+    <% end %>
+  </td>
+
+  <% if role_identifier_row %>
+    <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
+  <% end %>
+</tr>
+
+
+<script>
+    $j(document).ready(function () {
+        $j('input[name^="studyhub_resource[role_name_identifier]').change(SR.setRolePersonIdentifierSchemeAsRequirerd);
+    });
+</script>

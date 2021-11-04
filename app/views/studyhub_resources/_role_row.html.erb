@@ -4,37 +4,28 @@
   role_types = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first.sample_controlled_vocab_terms
   role_name_types = SampleControlledVocab.where(title: 'NFDI4Health Role Name Type').first.sample_controlled_vocab_terms
   role_name_personal_titles = SampleControlledVocab.where(title: 'NFDI4Health Role Name Personal Title').first.sample_controlled_vocab_terms
-  role_name_identifier_schemes = SampleControlledVocab.where(title: 'NFDI4Health Role Name Identifier Scheme').first.sample_controlled_vocab_terms
-  role_affiliation_identifier_schemes = SampleControlledVocab.where(title: 'NFDI4Health Role Affiliation Identifier Scheme').first.sample_controlled_vocab_terms
 %>
 <% role_row ||= nil %>
 <% index ||= 'row-template' %>
 <% row_num = index.to_i %>
 
 <%
-  unless  studyhub_resource.nil? || studyhub_resource.resource_json.nil? || studyhub_resource.resource_json['roles'][row_num].blank?
-    roles = studyhub_resource.resource_json['roles']
-    role_type =  roles[row_num]["role_type"]
-    role_name_type = roles[row_num]["role_name_type"]
+  unless  role.blank?
+    role_type =  role["role_type"]
+    role_name_type = role["role_name_type"]
 
-    role_name_personal_title = roles[row_num]["role_name_personal_title"]
-    role_name_personal_given_name = roles[row_num]["role_name_personal_given_name"]
-    role_name_personal_family_name = roles[row_num]["role_name_personal_family_name"]
+    role_name_personal_title = role["role_name_personal_title"]
+    role_name_personal_given_name = role["role_name_personal_given_name"]
+    role_name_personal_family_name = role["role_name_personal_family_name"]
 
-    role_name_organisational = roles[row_num]["role_name_organisational"]
+    role_name_organisational = role["role_name_organisational"]
 
-    role_name_identifier = roles[row_num]["role_name_identifier"]
-    role_name_identifier_scheme = roles[row_num]["role_name_identifier_scheme"]
+    role_email = role["role_email"]
+    role_phone = role["role_phone"]
 
-    role_affiliation_identifier = roles[row_num]["role_affiliation_identifier"]
-    role_affiliation_identifier_scheme = roles[row_num]["role_affiliation_identifier_scheme"]
-
-    role_email = roles[row_num]["role_email"]
-    role_phone = roles[row_num]["role_phone"]
-
-    role_affiliation_name = roles[row_num]["role_affiliation_name"]
-    role_affiliation_web_page = roles[row_num]["role_affiliation_web_page"]
-    role_affiliation_address = roles[row_num]["role_affiliation_address"]
+    role_affiliation_name = role["role_affiliation_name"]
+    role_affiliation_web_page = role["role_affiliation_web_page"]
+    role_affiliation_address = role["role_affiliation_address"]
   end
 %>
 
@@ -88,27 +79,7 @@
     <small><%= role_error["role_name_personal_family_name"] if role_error.include? "role_name_personal_family_name" %></small>
   </div>
 
-  <table class="table">
-    <tr>
-      <td>
-        <div class="form-group">
-          <label>ID</label>
-          <%= f.text_field "studyhub_resource[role_name_identifier][#{index}]", :class => "form-control",:value =>role_name_identifier %>
-          <p class="help-block"><small>Identifier(s) of the contributor according to various schemes.</small></p>
-        </div>
-
-      </td>
-      <td>
-        <div class="form-group <%= "has-error text-danger" if role_error.include? "role_name_identifier_scheme" %>">
-          <label>Scheme</label>
-          <%= f.collection_select "studyhub_resource[role_name_identifier_scheme][#{index}]", role_name_identifier_schemes.map(&:label), :to_s, :to_s,
-                                  { :include_blank => "Please select...", :selected => role_name_identifier_scheme }, :class => "form-control role_type" %>
-          <p class="help-block"><small>Type of the identifier scheme. It is mandatory if the identifier of the ID is given.</small></p>
-          <small><%= role_error["role_name_identifier_scheme"] if role_error.include? "role_name_identifier_scheme" %></small>
-        </div>
-      </td>
-    </tr>
-  </table>
+  <%= render :partial => 'resource_role_identifier', :locals=> { :f => f, :type => 'name', :num => index, :role=> role } %>
 
   <div class="form-group">
     <label>Email</label>
@@ -142,26 +113,8 @@
     <small><%= role_error["role_affiliation_web_page"] if role_error.include? "role_affiliation_web_page" %></small>
   </div>
 
-  <table class="table">
-    <tr>
-      <td>
-        <div class="form-group">
-          <label>Affiliation ID</label>
-          <%= f.text_field "studyhub_resource[role_affiliation_identifier][#{index}]", :class => "form-control",:value => role_affiliation_identifier %>
-          <p class="help-block"><small>Identifier(s) of the affiliation.</small></p>
-        </div>
-      </td>
-      <td>
-        <div class="form-group <%= "has-error text-danger" if role_error.include? "role_affiliation_identifier_scheme" %>">
-          <label class="">Scheme</label>
-          <%= f.collection_select "studyhub_resource[role_affiliation_identifier_scheme][#{index}]", role_affiliation_identifier_schemes.map(&:label), :to_s, :to_s,
-                                  { :include_blank => "Please select...", :selected => role_affiliation_identifier_scheme }, :class => "form-control role_type" %>
-          <p class="help-block"><small>Type of the identifier scheme. It is mandatory if the identifier of the affiliation is given.</small></p>
-          <small><%= role_error["role_affiliation_identifier_scheme"] if role_error.include? "role_affiliation_identifier_scheme" %></small>
-        </div>
-      </td>
-    </tr>
-  </table>
+  <%#= render :partial => 'resource_role_identifier', :locals=> { :f => f, :type => 'affiliation', :num => index, :roles=> roles } %>
+
 
   <div class="form-group">
     <% if allow_row_removal %>
@@ -183,7 +136,6 @@
 <script>
     $j(document).ready(function () {
         $j('select[name="studyhub_resource[role_name_type][<%= row_num %>]"]').on('change', SR.setRoleNameTypeVisibility);
-        $j('input[name^="studyhub_resource[role_name_identifier]').change(SR.setRolePersonIdentifierSchemeAsRequirerd);
         $j('input[name^="studyhub_resource[role_affiliation_identifier]').change(SR.setRoleAffiliationIdentifierSchemeAsRequirerd);
     });
 </script>

@@ -17,10 +17,10 @@
     <div class="table" id="resource-role-table">
 
       <% if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['roles'].blank? %>
-        <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => 0} %>
+        <%= render :partial => 'role_row', :locals=> {:role=>nil,:f => f, :index => 0} %>
       <% else %>
         <% @studyhub_resource.resource_json['roles'].each_with_index do |role, index| %>
-          <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>@studyhub_resource,:f => f, :index => index} %>
+          <%= render :partial => 'role_row', :locals=> {:role=>@studyhub_resource.resource_json['roles'][index],:f => f, :index => index} %>
         <% end %>
       <% end %>
 
@@ -32,7 +32,7 @@
     </div>
 
     <div id="new-role-row" style="display: none">
-      <%= render :partial => 'role_row', :locals=> {:studyhub_resource=>nil,:f => f} %>
+      <%= render :partial => 'role_row', :locals=> {:role=>nil,:f => f} %>
     </div>
   </div>
   <% if @studyhub_resource.is_studytype? %>
