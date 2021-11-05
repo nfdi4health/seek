@@ -124,7 +124,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'activerecord-import'
 
-gem "puma", ">= 3.12.6"
+gem "puma", "~>4.3"
 
 gem "doorkeeper", ">= 5.2.5"
 
@@ -132,7 +132,7 @@ gem 'request_store'
 
 gem 'bundler', '>= 1.8.4'
 
-gem 'ro-crate', '~> 0.4.9'
+gem 'ro-crate', '~> 0.4.14'
 
 gem 'git'
 gem 'i18n-js'

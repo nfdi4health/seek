@@ -139,6 +139,7 @@ SEEK::Application.routes.draw do
       get :registration_form
       get :edit_tag      
       post :update_home_settings
+      post :delete_carousel_form
       post :restart_server
       post :restart_delayed_job
       post :update_admins
@@ -667,6 +668,9 @@ SEEK::Application.routes.draw do
     collection do
       get :attribute_form
       get :filter
+      post :batch_create
+      put :batch_update
+      delete :batch_delete
     end
     resources :people, :programmes, :projects, :assays, :studies, :investigations, :data_files, :publications, :samples,
               :strains, :organisms, :collections, only: [:index]
