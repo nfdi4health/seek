@@ -172,7 +172,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   #study_status_when_intervention
   study_status_when_intervention_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status When Intervention').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Intervention ongoing', 'Intervention completed', 'follow-up ongoing'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Intervention ongoing', 'Intervention completed', 'Follow-up ongoing'])
   )
 
   #study_status_halted_stage
@@ -263,7 +263,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ['Blood', 'Buccal cells', 'Cord blood', 'DNA','Faeces', 'Hair','Immortalized cell lines', 'Isolated pathogen', 'Nail', 'Plasma', 'RNA', 'Saliva', 'Serum', 'Tissue (Frozen)', 'Tissue (FFPE)',
        'Urine', 'Other biological samples','Administrative databases', 'Cognitive measurements', 'Genealogical records', 'Imaging data (ultrasound)', 'Imaging data (MRI)', 'Imaging data (MRI, radiography)',
        'Imaging data (CT)', 'Other imaging data', 'Medical records', 'Registries', 'Interview', 'Questionnaire', 'Physiological/Biochemical measurements', 'Genomics', 'Metabolomics', 'Transcriptomics',
-       'Proteomics', 'Other omics Technology', 'Other'])
+       'Proteomics', 'Other omics technology', 'Other'])
   )
 
   #study_data_sharing_plan_generally
