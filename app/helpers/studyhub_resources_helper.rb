@@ -105,9 +105,37 @@ module StudyhubResourcesHelper
         html +=  '</p>'
         html += '</div>'
         html += '</div>'
+        html += '<hr>'
       end
     end
     html.html_safe
+  end
+
+  def role_schema_link(role,type)
+    html = ''
+    identifier = 'role_'+type+'_identifier'
+    identifiers = 'role_'+type+'_identifiers'
+    identifier_scheme = 'role_'+type+'_identifier_scheme'
+
+    if role[identifiers].size > 0
+      html += '<p class="role_'+type+'_identifiers"><strong>'+(type=='name'? 'personal' : type).capitalize+' identifiers:</strong></p>'
+      role[identifiers].each do |d|
+        id = d[identifier]
+        case d[identifier_scheme]
+        when 'ORCID'
+          logo = image(:orcid_id)
+          html += '<p class="'+identifier_scheme+'"><strong>ORCID: </strong>'+link_to(logo +' https://orcid.org/'+id, 'https://orcid.org/'+id, target: '_blank') +'</p>' unless id.blank?
+        when 'ROR'
+          html += '<p class="'+identifier_scheme+'"><strong>ROR: </strong>'+link_to('https://ror.org/'+id, 'https://ror.org/'+id, target: '_blank') +'</p>' unless id.blank?
+        when 'GRID'
+          html += '<p class="'+identifier_scheme+'"><strong>GRID: </strong>'+link_to('https://www.grid.ac/institutes/'+id, 'https://www.grid.ac/institutes/'+id, target: '_blank') +'</p>' unless id.blank?
+        when 'ISNI'
+          html += '<p class="'+identifier_scheme+'"><strong>ISNI: </strong>'+link_to('https://isni.org/isni/'+id, 'https://isni.org/isni/'+id, target: '_blank') +'</p>' unless id.blank?
+        end
+      end
+    end
+
+    html
   end
 
 
@@ -299,25 +327,7 @@ module StudyhubResourcesHelper
     id
   end
 
-  def role_schema_link(role,type)
-    html = ''
-    identifier = 'role_'+type+'_identifier'
-    identifier_scheme = 'role_'+type+'_identifier_scheme'
 
-    id =  role[identifier]
-    case role[identifier_scheme]
-    when 'ORCID'
-      logo = image(:orcid_id)
-      html += '<p class="'+identifier_scheme+'"><strong>ORCID: </strong>'+link_to(logo +' https://orcid.org/'+id, 'https://orcid.org/'+id, target: '_blank') +'</p>' unless id.blank?
-    when 'ROR'
-      html += '<p class="'+identifier_scheme+'"><strong>ROR: </strong>'+link_to('https://ror.org/'+id, 'https://ror.org/'+id, target: '_blank') +'</p>' unless id.blank?
-    when 'GRID'
-      html += '<p class="'+identifier_scheme+'"><strong>GRID: </strong>'+id +'</p>' unless id.blank?
-    when 'ISNI'
-      html += '<p class="'+identifier_scheme+'"><strong>ISNI: </strong>'+id +'</p>' unless id.blank?
-    end
-    html
-  end
 
   private
 
