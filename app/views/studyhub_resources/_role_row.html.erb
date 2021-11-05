@@ -113,7 +113,7 @@
     <small><%= role_error["role_affiliation_web_page"] if role_error.include? "role_affiliation_web_page" %></small>
   </div>
 
-  <%#= render :partial => 'resource_role_identifier', :locals=> { :f => f, :type => 'affiliation', :num => index, :roles=> roles } %>
+  <%= render :partial => 'resource_role_identifier', :locals=> { :f => f, :type => 'affiliation', :num => index, :role=> role } %>
 
 
   <div class="form-group">
@@ -135,7 +135,7 @@
 
 <script>
     $j(document).ready(function () {
-        $j('select[name="studyhub_resource[role_name_type][<%= row_num %>]"]').on('change', SR.setRoleNameTypeVisibility);
+        $j('select[name^="studyhub_resource[role_name_type]"]').change(SR.setRoleNameTypeVisibility);
         $j('input[name^="studyhub_resource[role_affiliation_identifier]').change(SR.setRoleAffiliationIdentifierSchemeAsRequirerd);
     });
 </script>

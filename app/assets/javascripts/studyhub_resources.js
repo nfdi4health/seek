@@ -279,9 +279,9 @@ var SR = {
         }
     },
 
-    setRolePersonIdentifierSchemeAsRequirerd: function () {
+    setRoleIdentifierSchemeAsRequirerd: function () {
         value = $j(this).val()
-        scheme_name = $j(this).attr("name").replace('role_name_identifier', 'role_name_identifier_scheme')
+        scheme_name = $j(this).attr("name").replace('identifier', 'identifier_scheme')
         if (value){
             $j('select[name="'+scheme_name+'"]').parent().addClass('submit-required');
         }else{
@@ -391,10 +391,6 @@ function intialRoleVisibility(index) {
     $j('select[name="studyhub_resource[role_name_personal_title]['+index+']"]').parent().hide();
 
     $j('#resource_identifiers-'+index).hide();
-    //
-    // $j('input[name="studyhub_resource[role_name_identifier]['+index+']"]').parent().hide();
-    // $j('select[name="studyhub_resource[role_name_identifier_scheme]['+index+']"]').parent().hide();
-
 
     if($j('input[name="studyhub_resource[role_affiliation_identifier]['+index+']"]').val() != ''){
         $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']"]').prev().addClass('submit-required');
@@ -424,9 +420,17 @@ function intialRoleVisibility(index) {
         case 'Organisational':
             $j('input[name="studyhub_resource[role_name_organisational]['+index+']"]').parent().show();
             break;
-        default:
 
     }
+
+
+    $j('select[name^="studyhub_resource[role_affiliation_identifier_scheme]['+index+']"]').each( function( id, element ){
+        if($j('input[name="studyhub_resource[role_affiliation_identifier]['+index+']['+id+']"]').val() != ''){
+            $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']['+id+']"]').parent().addClass('submit-required');
+        }else{
+            $j('select[name="studyhub_resource[role_affiliation_identifier_scheme]['+index+']['+id+']"]').parent().removeClass('submit-required');
+        }
+    });
 }
 
 function toggle(block_id) {

@@ -222,8 +222,7 @@ module StudyhubResourcesHelper
   def process_role_error_messags(index)
 
     role = {}
-    role["role_name_identifier_scheme"]= {}
-    role["role_name_identifier_scheme"][index] = {}
+
 
     @error_keys.each do |key|
 
@@ -251,21 +250,38 @@ module StudyhubResourcesHelper
         role["role_name_organisational"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_organisational']".to_sym].first
       end
 
-      if (key.include? 'role_name_identifier_scheme')
-        id_index = key[-2,1].to_i
-        role["role_name_identifier_scheme"][index][id_index] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_identifier_scheme'][#{id_index}]".to_sym].first
-      end
-
-      if (key.include? 'role_affiliation_identifier_scheme')
-        role["role_affiliation_identifier_scheme"] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_identifier_scheme']".to_sym].first
-      end
-
       if (key.include? 'role_affiliation_web_page')
         role["role_affiliation_web_page"] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_web_page']".to_sym].first
       end
     end
 
     role
+  end
+
+
+  def process_role_id_error_messags(index,type)
+
+    role_type_identifier_scheme  = "role_#{type}_identifier_scheme"
+
+    role = {}
+    role[role_type_identifier_scheme]= {}
+    role[role_type_identifier_scheme][index] = {}
+
+
+    @error_keys.each do |key|
+      if (key.include? "role_#{type}_identifier_scheme")
+        id_index = key[-2,1].to_i
+        role[role_type_identifier_scheme][index][id_index] = if index == 'row-template'
+                                                               nil
+                                                             else
+                                                               @studyhub_resource.errors.messages[key.to_sym].first
+                                                             end
+
+      end
+    end
+
+    role
+
   end
 
   def process_id_error_messags(index)

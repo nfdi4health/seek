@@ -44,6 +44,7 @@
     //used to hold the element Id that needs updating after creating a new CV
     $j(document).ready(function () {
 
+        //initial all the existing roles visibility
         SR.intialRolesVisibility();
 
         $j('#add-role-row').click(function () {
@@ -60,10 +61,8 @@
 
             $j('#resource-role-table #role-row').before($j(newRow));
 
+            //initial new role visibility
             intialRoleVisibility(index);
-
-            $j('select[name="studyhub_resource[role_name_type]['+index+']"]').on('change', SR.setRoleNameTypeVisibility);
-
             return false;
         });
 

@@ -4,17 +4,18 @@ class StudyhubResource < ApplicationRecord
   belongs_to :study, optional: true, dependent: :destroy
   belongs_to :studyhub_resource_type, inverse_of: :studyhub_resources
 
-  has_many :children_relationships, class_name: 'StudyhubResourceRelationship',
-           foreign_key: 'parent_id',
-           dependent: :destroy
+  # has_many :children_relationships, class_name: 'StudyhubResourceRelationship',
+  #          foreign_key: 'parent_id',
+  #          dependent: :destroy
+  #
+  # has_many :children, through: :children_relationships
+  #
+  # has_many :parents_relationships, class_name: 'StudyhubResourceRelationship',
+  #          foreign_key: 'child_id',
+  #          dependent: :destroy
+  #
+  # has_many :parents, through: :parents_relationships
 
-  has_many :children, through: :children_relationships
-
-  has_many :parents_relationships, class_name: 'StudyhubResourceRelationship',
-           foreign_key: 'child_id',
-           dependent: :destroy
-
-  has_many :parents, through: :parents_relationships
   has_one :content_blob,:as => :asset, :foreign_key => :asset_id
 
 
@@ -45,6 +46,7 @@ class StudyhubResource < ApplicationRecord
   NON_INTERVENTIONAL = 'Non-interventional'.freeze
   URL_FIELDS = %w[resource_web_page study_data_sharing_plan_url].freeze
   RESOURCE_KEYWORDS = 'resource_keywords'.freeze
+  ID_TYPE = %w[name affiliation].freeze
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values
@@ -71,24 +73,23 @@ class StudyhubResource < ApplicationRecord
   def check_urls
 
     unless resource_json.nil?
-    unless validate_url(resource_json['resource']['resource_web_page'].strip)
-      errors.add('resource_web_page'.to_sym, 'is not a url.')
-    end
+      unless validate_url(resource_json['resource']['resource_web_page'].strip)
+        errors.add('resource_web_page'.to_sym, 'is not a url.')
+      end
 
-    unless resource_json['roles'].blank?
-      resource_json['roles'].each_with_index do |role,index|
-        unless validate_url(role['role_affiliation_web_page'].strip)
-          errors.add("roles[#{index}]['role_affiliation_web_page']".to_sym, 'is not a url.')
+      unless resource_json['roles'].blank?
+        resource_json['roles'].each_with_index do |role,index|
+          unless validate_url(role['role_affiliation_web_page'].strip)
+            errors.add("roles[#{index}]['role_affiliation_web_page']".to_sym, 'is not a url.')
+          end
         end
       end
-    end
 
-
-    unless resource_json['study_design']['study_data_sharing_plan_url'].blank?
-      unless validate_url(resource_json['study_design']['study_data_sharing_plan_url'].strip)
-        errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
+      unless resource_json['study_design']['study_data_sharing_plan_url'].blank?
+        unless validate_url(resource_json['study_design']['study_data_sharing_plan_url'].strip)
+          errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
+        end
       end
-    end
     end
 
   end
@@ -142,34 +143,29 @@ class StudyhubResource < ApplicationRecord
           if role['role_name_personal_given_name'].blank?
             errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
           end
-          
+
           if role['role_name_personal_family_name'].blank?
             errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
           end
 
-          unless role['role_name_identifiers'].blank?
-            role['role_name_identifiers'].each_with_index do |id,id_index|
-              if !id['role_name_identifier'].blank? && id['role_name_identifier_scheme'].blank?
-                errors.add("roles[#{index}]['role_name_identifier_scheme'][#{id_index}]".to_sym, "Please select the identifier scheme.")
+          ID_TYPE.each do |type|
+            unless role["role_#{type}_identifiers"].blank?
+              role["role_#{type}_identifiers"].each_with_index do |id,id_index|
+                if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
+                  errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, "Please select the identifier scheme.")
+                end
               end
             end
-        end
+          end
         end
 
         if role['role_name_type'] == 'Organisational'
           if role['role_name_organisational'].blank?
             errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
           end
-          if !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
-            errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.")
-          end
         end
-
-        if !role['role_affiliation_identifier'].blank? && role['role_affiliation_identifier_scheme'].blank?
-          errors.add("roles[#{index}]['role_affiliation_identifier_scheme']".to_sym, "Please select the affiliation identifier scheme.")
-        end
-
       end
+
       if errors.messages.keys.select {|x| x.to_s.include? "roles" }.size  > 0
         errors.add(:base, "Please add the required fields for resource roles.")
       end
@@ -252,29 +248,29 @@ class StudyhubResource < ApplicationRecord
                  end
   end
 
-  def add_child(child)
-    children_relationships.create(child_id: child.id)
-  end
-
-  def remove_child(child)
-    children_relationships.find_by(child_id: child.id).destroy
-  end
-
-  def is_parent?(child)
-    children.include?(child)
-  end
-
-  def add_parent(parent)
-    parents_relationships.create(parent_id: parent.id)
-  end
-
-  def remove_parent(parent)
-    parents_relationships.find_by(parent_id: parent.id).destroy
-  end
-
-  def is_child?(parent)
-    parents.include?(parent)
-  end
+  # def add_child(child)
+  #   children_relationships.create(child_id: child.id)
+  # end
+  #
+  # def remove_child(child)
+  #   children_relationships.find_by(child_id: child.id).destroy
+  # end
+  #
+  # def is_parent?(child)
+  #   children.include?(child)
+  # end
+  #
+  # def add_parent(parent)
+  #   parents_relationships.create(parent_id: parent.id)
+  # end
+  #
+  # def remove_parent(parent)
+  #   parents_relationships.find_by(parent_id: parent.id).destroy
+  # end
+  #
+  # def is_child?(parent)
+  #   parents.include?(parent)
+  # end
 
   # if the resource type is study or substudy
   def is_studytype?

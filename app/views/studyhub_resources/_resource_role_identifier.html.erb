@@ -1,6 +1,7 @@
-<% inital = @studyhub_resource.resource_json.nil? || role.blank? || role["role_name_identifiers"].blank? %>
+<% role_type_identifiers = "role_#{type}_identifiers" %>
+<% inital = @studyhub_resource.resource_json.nil? || role.blank? || role[role_type_identifiers].blank? %>
   <div id='resource_identifiers-<%= num.to_s%>'>
-    <table class='table resource_role_identifier-table-<%= num.to_s%>' id='resource_role_identifier-table-<%= num.to_s%>'>
+    <table class='table resource_role_identifier-table-<%= num.to_s%>-<%= type %>' id='resource_role_identifier-table-<%= num.to_s%>-<%= type %>'>
       <thead>
       <tr>
         <td> <label>ID</label></td>
@@ -12,23 +13,23 @@
       <%  if inital %>
         <%= render :partial => 'role_identifier_row', :locals=> {:role=>role, :type => type, :num => num, :f => f, :index => 0} %>
       <% else %>
-        <% role["role_name_identifiers"].each_with_index do |id, index| %>
+        <% role[role_type_identifiers].each_with_index do |id, index| %>
           <%= render :partial => 'role_identifier_row', :locals=> {:role=>role, :type => type, :num => num, :f => f, :index => index} %>
         <% end %>
       <% end %>
 
 
       <tr id="identifier-row">
-        <td><small>Identifier(s) of the contributor according to various schemes.</small></td>
+        <td><small>Identifier(s) of the <%= type %> according to various schemes.</small></td>
         <td><small>Type of the identifier scheme. <br>It is mandatory if the identifier of the ID is given.</small></td>
         <td colspan="6">
-          <%= button_link_to('Add more', 'add', '#', :id => 'add-identifier-row-'+num.to_s) %>
+          <%= button_link_to('Add more', 'add', '#', :id => "add-identifier-row-#{num.to_s}-#{type}") %>
         </td>
       </tr>
       </tbody>
     </table>
 
-    <table id='new-identifier-row-<%= num.to_s %>' style="display: none">
+    <table id='new-identifier-row-<%= num.to_s %>-<%= type %>' style="display: none">
       <tbody>
       <%= render :partial => 'role_identifier_row', :locals=> {:role=>nil, :type => type, :f => f } %>
       </tbody>
@@ -38,10 +39,10 @@
 <script>
     //used to hold the element Id that needs updating after creating a new CV
     $j(document).ready(function () {
-        $j('#add-identifier-row-<%= num %>').click(function () {
-            var newRow = $j('#new-identifier-row-<%= num %> tbody').clone().html();
+        $j('#add-identifier-row-<%= num %>-<%= type %>').click(function () {
+            var newRow = $j('#new-identifier-row-<%= num %>-<%= type %> tbody').clone().html();
             var index = 0;
-            $j('#resource_role_identifier-table-<%= num %> tr.resource-identifier').each(function () {
+            $j('#resource_role_identifier-table-<%= num %>-<%= type %> tr.resource-identifier').each(function () {
                 var newIndex = parseInt($j(this).data('index'));
                 if (newIndex > index) {
                     index = newIndex;
@@ -49,20 +50,14 @@
             });
 
             index++;
-            console.log(index);
             newRow = newRow.replace(/row-template/g, index);
             newRow = newRow.replace(/num-template/g, <%= num %>);
 
-            $j('#resource_role_identifier-table-<%= num %> #identifier-row').before($j(newRow));
-            // $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_keywords][resource_keywords_label]['+index+']"]').val("");
-            // $j('input[name="studyhub_resource[custom_metadata_attributes][data][resource_keywords][resource_keywords_label_code]['+index+']"]').val("");
-
+            $j('#resource_role_identifier-table-<%= num %>-<%= type %> #identifier-row').before($j(newRow));
             return false;
-
-
         });
 
-         $j('#resource_role_identifier-table-<%= num %>').on('change', '.destroy-row', SR.removeRoleIdentifersRow);
+         $j('#resource_role_identifier-table-<%= num %>-<%= type %>').on('change', '.destroy-row', SR.removeRoleIdentifersRow);
 
     });
 </script>

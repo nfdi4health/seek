@@ -363,14 +363,18 @@ class StudyhubResourcesController < ApplicationController
 
 
       entry['role_name_identifiers'] = []
+      entry['role_affiliation_identifiers'] = []
 
-      params[:role_name_identifier][key].keys.each do |k2|
-        identifier = {}
-        identifier['role_name_identifier'] = params[:role_name_identifier][key][k2]
-        identifier['role_name_identifier_scheme'] = params['role_name_identifier_scheme'][key][k2]
-        entry['role_name_identifiers'] << identifier unless params[:role_name_identifier][key][k2].blank?
+      StudyhubResource::ID_TYPE.each do |type|
+
+        params["role_#{type}_identifier".to_sym][key].keys.each do |k2|
+          identifier = {}
+          identifier["role_#{type}_identifier"] = params["role_#{type}_identifier".to_sym][key][k2]
+          identifier["role_#{type}_identifier_scheme"] = params["role_#{type}_identifier_scheme"][key][k2]
+          entry["role_#{type}_identifiers"] << identifier unless params["role_#{type}_identifier".to_sym][key][k2].blank?
+        end
+
       end
-
 
       entry['role_email'] = params[:role_email][key]
       entry['role_phone'] = params[:role_phone][key]
