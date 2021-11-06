@@ -1,12 +1,14 @@
 <% inital = @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['resource']['resource_keywords'].blank? %>
+<% cm_resource_keywords_label = CustomMetadataAttribute.where(title: 'resource_keywords_label').first %>
+<% cm_resource_keywords_label_code = CustomMetadataAttribute.where(title: 'resource_keywords_label_code').first %>
 
 
   <div id="resource_keywords">
     <table class="table resource_keyword-table" id="resource_keyword-table">
       <thead>
       <tr>
-        <th><label>Keywords</label></th>
-        <th><label>Keywords Code</label></th>
+        <th><label><%= cm_resource_keywords_label.label %></label></th>
+        <th><label><%= cm_resource_keywords_label_code.label %></label></th>
       </tr>
       </thead>
       <tbody>
@@ -19,8 +21,8 @@
         <% end %>
       <% end %>
       <tr id="keyword-row">
-        <td><small>Key word(s) or key phrase(s) describing the resource.</small></td>
-        <td><small>If known, the code of the key word in the used classification/vocabulary.</small></td>
+        <td><small><%= cm_resource_keywords_label.description %></small></td>
+        <td><small><%= cm_resource_keywords_label_code.description %></small></td>
       </tr>
       <tr>
         <td colspan="6">
