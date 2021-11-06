@@ -353,15 +353,23 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
         description: attribute_descriptions['resource_type_general'], label: attribute_headings['resource_type_general']
       ),
 
+
+      # ******************************** ResourceKeywords Group ***********************
       CustomMetadataAttribute.where(title: 'resource_keywords').create!(
         title: 'resource_keywords', required: false, sample_attribute_type: string_type,
         description: attribute_descriptions['resource_keywords'], label: attribute_headings['resource_keywords']
       ),
 
+      CustomMetadataAttribute.where(title: 'resource_keywords_label').create!(
+        title: 'resource_keywords_label', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['resource_keywords_label'], label: attribute_headings['resource_keywords_label']
+      ),
 
-      # CustomMetadataAttribute.where(title: 'resource_keywords_label_code').create!(
-      #   title: 'resource_keywords_label_code', required: false, sample_attribute_type: string_type, description: attribute_descriptions['resource_keywords_label_code']
-      # ),
+      CustomMetadataAttribute.where(title: 'resource_keywords_label_code').create!(
+        title: 'resource_keywords_label_code', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['resource_keywords_label_code'], label: attribute_headings['resource_keywords_label_code']
+      ),
+      # ****************************************************************
 
       CustomMetadataAttribute.where(title: 'resource_language').create!(
         title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv,
@@ -448,6 +456,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
         description: attribute_descriptions['study_type_description'], label: attribute_headings['study_type_description']
       ),
 
+      # ****************** StudyDesignConditions ******************
       CustomMetadataAttribute.where(title: 'study_conditions').create!(
         title: 'study_conditions', required: false, sample_attribute_type: string_type,
         description: attribute_descriptions['study_conditions'], label: attribute_headings['study_conditions']
@@ -462,6 +471,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
         title: 'study_conditions_classification_code', required: false, sample_attribute_type: string_type,
         description: attribute_descriptions['study_conditions_classification_code'],label: attribute_headings['study_conditions_classification_code']
       ),
+      # ****************************************************************
 
       CustomMetadataAttribute.where(title: 'study_ethics_commitee_approval').create!(
         title: 'study_ethics_commitee_approval', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_ethics_commitee_approval_cv,

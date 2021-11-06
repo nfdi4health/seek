@@ -1,25 +1,27 @@
 <% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
- <%
-   if @error_keys.include? attribute.title
-     feedback = @studyhub_resource.errors.messages[attribute.title.to_sym].first
-     is_error = true
-   end
- %>
+  <%
+    if @error_keys.include? attribute.title
+      feedback = @studyhub_resource.errors.messages[attribute.title.to_sym].first
+      is_error = true
+    end
+  %>
 
   <div class="form-group <%= "has-error text-danger" if is_error %>">
-    <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? attribute.title  %>
-      <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
-      <small><%= feedback if is_error %></small>
-    <% elsif attribute.title == StudyhubResource::RESOURCE_KEYWORDS %>
-      <%= render :partial => 'resource_keywords', :locals=> { :attribute => attribute,:resource => resource, :f => f } %>
-    <% else %>
+    <% unless StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? attribute.title  %>
+      <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? attribute.title  %>
+        <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
+        <small><%= feedback if is_error %></small>
+      <% elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS.include? attribute.title  %>
+        <%= render :partial => attribute.title, :locals=> { :attribute => attribute,:resource => resource, :f => f} %>
+      <% else %>
 
-      <label><%= attribute.label %></label><%= required_span if attribute.required? %>
+        <label><%= attribute.label %></label><%= required_span if attribute.required? %>
         <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
         <% unless attribute.description.nil? %>
-        <%= custom_metadata_attribute_description(attribute.description) %>
+          <%= custom_metadata_attribute_description(attribute.description) %>
+        <% end %>
+        <small><%= feedback if is_error %></small>
       <% end %>
-      <small><%= feedback if is_error %></small>
     <% end %>
   </div>
 
