@@ -4,7 +4,7 @@
     <table class='table resource_role_identifier-table-<%= num.to_s%>-<%= type %>' id='resource_role_identifier-table-<%= num.to_s%>-<%= type %>'>
       <thead>
       <tr>
-        <td> <label>ID</label></td>
+        <td> <label><%= type=='affiliation'? 'Affiliation ' : 'Personal ' %>ID</label></td>
         <td> <label>Scheme</label></td>
       </tr>
       </thead>
