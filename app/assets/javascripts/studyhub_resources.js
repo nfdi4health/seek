@@ -35,6 +35,10 @@ var SR = {
         row.remove();
     },
 
+    removeSingleRow: function () {
+        var row = $j(this).parents('.single-role');
+        row.remove();
+    },
 
     addCalendar: function () {
         var showTime = $j(this).data('calendar') === 'mixed';

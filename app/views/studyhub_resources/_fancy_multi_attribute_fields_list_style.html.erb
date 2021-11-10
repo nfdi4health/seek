@@ -1,0 +1,51 @@
+<% key = attribute.title  %>
+
+<%= folding_panel(key.humanize, true, :body_options => {:id => key }) do %>
+<div id="<%= key %>">
+  <div class="table" id="<%= key.singularize %>-table">
+
+    <% if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json[key].blank? %>
+      <%= render :partial => "single_row", :locals=> {:single_row=>nil,:f => f, :key=> key, :index => 0, :resource=>resource} %>
+    <% else %>
+      <% @studyhub_resource.resource_json[key].each_with_index do |single, index| %>
+        <%= render :partial => 'single_row', :locals=> {:single_row=>@studyhub_resource.resource_json[key][index], :key => key, :f => f, :index => index,:resource=>resource } %>
+      <% end %>
+    <% end %>
+
+    <div id="<%= key.singularize %>-row">
+      <div colspan="6">
+        <%= button_link_to('Add more', 'add', '#', :id => "add-#{key.singularize}-row") %>
+      </div>
+    </div>
+  </div>
+
+  <div id="new-<%= key.singularize %>-row" style="display: none">
+    <%= render :partial => 'single_row', :locals=> {:single_row=>nil, :key=> key, :f => f,:resource=>resource} %>
+  </div>
+</div>
+<% end %>
+<script>
+    //used to hold the element Id that needs updating after creating a new CV
+    $j(document).ready(function () {
+
+        $j('#add-<%= key.singularize %>-row').click(function () {
+            var newRow = $j('#new-<%= key.singularize %>-row').clone().html();
+            var index = 0;
+            $j('#<%= key.singularize %>-table div.<%= key.singularize %>').each(function () {
+                var newIndex = parseInt($j(this).data('index'));
+                if (newIndex > index) {
+                    index = newIndex;
+                }
+            });
+            index++;
+            newRow = newRow.replace(/row-template/g, index);
+
+            $j('#<%= key.singularize %>-table #<%= key.singularize %>-row').before($j(newRow));
+
+
+            return false;
+        });
+
+        $j('#<%= key.singularize %>-table').on('change', '.destroy-row', SR.removeSingleRow);
+    });
+</script>

@@ -1,0 +1,71 @@
+<%#
+<!--  role_types = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first.sample_controlled_vocab_terms-->
+<!--  role_name_types = SampleControlledVocab.where(title: 'NFDI4Health Role Name Type').first.sample_controlled_vocab_terms-->
+<!--  role_name_personal_titles = SampleControlledVocab.where(title: 'NFDI4Health Role Name Personal Title').first.sample_controlled_vocab_terms-->
+%>
+<% row ||= nil %>
+<% index ||= 'row-template' %>
+<% row_num = index.to_i %>
+
+<%
+  # role is here single_row
+  unless  single_row.blank?
+    # role_type =  role["role_type"]
+    # role_name_type = role["role_name_type"]
+    #
+    # role_name_personal_title = role["role_name_personal_title"]
+    # role_name_personal_given_name = role["role_name_personal_given_name"]
+    # role_name_personal_family_name = role["role_name_personal_family_name"]
+    #
+    # role_name_organisational = role["role_name_organisational"]
+    #
+    # role_email = role["role_email"]
+    # role_phone = role["role_phone"]
+    #
+    # role_affiliation_name = role["role_affiliation_name"]
+    # role_affiliation_web_page = role["role_affiliation_web_page"]
+    # role_affiliation_address = role["role_affiliation_address"]
+  end
+%>
+
+<% allow_row_removal = (index == 0 ? false : true ) %>
+
+
+
+<%# field_name_prefix = key+"["+resource_keywords_label"+]["+index+"]" %>
+<% field_name_prefix = "#{key}[#{StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE[key].first}][#{index}]" %>
+
+
+<div id="role-<%= index-%>" class="<%= key.singularize %> single-role" data-index="<%= index-%>">
+
+
+  <% StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE[key].each do |v| %>
+    <% attribute = CustomMetadataAttribute.where(title: v ).first %>
+
+    <label><%= attribute.label %></label><%= required_span if attribute.required? %>
+    <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource,index) %>
+    <% unless attribute.description.nil? %>
+      <%= custom_metadata_attribute_description(attribute.description) %>
+    <% end %>
+
+  <% end %>
+
+
+
+  <div class="form-group">
+    <% if allow_row_removal %>
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-danger">
+          Remove
+          <%= check_box_tag "#{field_name_prefix}[_destroy]", '1', false,
+                            class: 'destroy-row', autocomplete: 'off',id:"#{field_name_prefix}-checkbox[_destroy]" %>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <% if row %>
+    <%= hidden_field_tag("#{field_name_prefix}[id]", id) %>
+  <% end %>
+</div>
+

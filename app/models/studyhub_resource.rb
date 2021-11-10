@@ -62,8 +62,16 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
-  MULTI_ATTRIBUTE_FIELDS = %w[resource_keywords study_conditions].freeze
-  MULTI_ATTRIBUTE_SKIPPED_FIELDS = %w[resource_keywords_label resource_keywords_label_code study_conditions_classification study_conditions_classification_code].freeze
+  # MULTI_ATTRIBUTE_FIELDS = %w[resource_keywords study_conditions].freeze
+  MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { "study_conditions" => %w[study_conditions study_conditions_classification study_conditions_classification_code],
+                              "outcomes" => %w[study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame]
+  }.freeze
+
+  MULTI_ATTRIBUTE_FIELDS_ROW_STYLE =  { "resource_keywords" => %w[resource_keywords_label resource_keywords_label_code]
+  }.freeze
+
+  MULTI_ATTRIBUTE_SKIPPED_FIELDS = %w[resource_keywords_label resource_keywords_label_code study_conditions_classification study_conditions_classification_code
+                                    study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame].freeze
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?

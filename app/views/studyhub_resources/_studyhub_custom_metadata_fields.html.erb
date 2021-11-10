@@ -11,10 +11,11 @@
       <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? attribute.title  %>
         <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
         <small><%= feedback if is_error %></small>
-      <% elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS.include? attribute.title  %>
-        <%= render :partial => attribute.title, :locals=> { :attribute => attribute,:resource => resource, :f => f} %>
+      <% elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.keys.include? attribute.title  %>
+        <%= render :partial => 'fancy_multi_attribute_fields_list_style', :locals=> { :attribute => attribute,:resource => resource, :f => f} %>
+      <% elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_ROW_STYLE.keys.include? attribute.title  %>
+        <%= render :partial => attribute.title , :locals=> { :attribute => attribute,:resource => resource, :f => f} %>
       <% else %>
-
         <label><%= attribute.label %></label><%= required_span if attribute.required? %>
         <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource) %>
         <% unless attribute.description.nil? %>

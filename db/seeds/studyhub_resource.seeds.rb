@@ -623,6 +623,13 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
         description: attribute_descriptions['study_hypothesis'],label: attribute_headings['study_hypothesis']
       ),
 
+      # ****************** StudyDesignOutcomes ******************
+
+      CustomMetadataAttribute.where(title: 'outcomes').create!(
+        title: 'outcomes', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_design_outcomes'], label: attribute_headings['study_design_outcomes']
+      ),
+
 
       CustomMetadataAttribute.where(title: 'study_outcome_type').create!(
         title: 'study_outcome_type', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_outcome_type_cv,
@@ -643,6 +650,8 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
         title: 'study_outcome_time_frame', required: false, sample_attribute_type: text_type,
         description: attribute_descriptions['study_outcome_time_frame'],label: attribute_headings['study_outcome_time_frame']
       ),
+
+      # ****************** StudyDesignOutcomes ******************
 
       CustomMetadataAttribute.where(title: 'study_design_comment').create!(
         title: 'study_design_comment', required: false, sample_attribute_type: text_type,

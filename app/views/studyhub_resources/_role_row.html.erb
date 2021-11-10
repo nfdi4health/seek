@@ -32,7 +32,7 @@
 <% field_name_prefix = "resource_roles[role][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
-<div id="role-<%= index-%>" class="resource-role" data-index="<%= index-%>">
+<div id="role-<%= index-%>" class="resource-role single-role" data-index="<%= index-%>">
   <div class="form-group <%= "has-error text-danger" if role_error.include? "role_type" %>">
     <label class="required">Role</label>
     <%= f.collection_select "studyhub_resource[role_type][#{index}]", role_types.map(&:label), :to_s, :to_s,
