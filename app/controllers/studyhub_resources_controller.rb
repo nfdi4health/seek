@@ -278,6 +278,22 @@ class StudyhubResourcesController < ApplicationController
     CustomMetadataType.where(title:title).first.custom_metadata_attributes.map(&:title)
   end
 
+  def parse_multi_attributes(params)
+    Rails.logger.info("+++++++++++++++++++++++++")
+    Rails.logger.info("params:"+params.inspect)
+    values = []
+
+    params.values.first.keys.each do |index|
+      entry = {}
+      next if index == 'row-template'
+      params.keys.each do |key|
+        entry[key] = params[key][index]
+      end
+      values << entry
+    end
+    values
+  end
+
   def parse_custom_metadata_attributes(params)
 
     cm_resource_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource General')
@@ -293,6 +309,8 @@ class StudyhubResourcesController < ApplicationController
           params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
                 elsif key == StudyhubResource::RESOURCE_KEYWORDS
                   parse_resource_keywords(params[:custom_metadata_attributes][:data][key])
+                elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.include? key
+                  parse_multi_attributes(params[:custom_metadata_attributes][:data][key])
                 else
                   params[:custom_metadata_attributes][:data][key]
                 end
@@ -338,6 +356,7 @@ class StudyhubResourcesController < ApplicationController
       entry['resource_keywords_label_code'] = params[:resource_keywords_label_code][key]
       resource_keywords << entry unless entry['resource_keywords_label'].blank?
     end
+
     resource_keywords
   end
 
@@ -350,7 +369,6 @@ class StudyhubResourcesController < ApplicationController
 
       entry['role_type'] = params[:role_type][key]
       entry['role_name_type'] = params[:role_name_type][key]
-
 
       case entry['role_name_type']
       when 'Organisational'

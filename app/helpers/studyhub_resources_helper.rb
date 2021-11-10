@@ -139,11 +139,17 @@ module StudyhubResourcesHelper
   end
 
 
-  def studyhub_custom_metadata_form_field_for_attribute(attribute, resource)
+  def studyhub_custom_metadata_form_field_for_attribute(attribute, resource, index = nil)
 
     base_type = attribute.sample_attribute_type.base_type
     clz = "custom_metadata_attribute_#{base_type.downcase}"
-    element_name = "studyhub_resource[custom_metadata_attributes][data][#{attribute.title}]"
+
+    if index.nil?
+      element_name = "studyhub_resource[custom_metadata_attributes][data][#{attribute.title}]"
+    else
+      key = get_attribute_key(attribute.title)
+      element_name = "studyhub_resource[custom_metadata_attributes][data][#{key}][#{attribute.title}][#{index}]"
+    end
 
     value = resource[attribute.title] unless resource.nil?
 
@@ -330,6 +336,10 @@ module StudyhubResourcesHelper
 
 
   private
+
+  def get_attribute_key(value)
+    StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.select{|key, array| array.include? value }.keys.first
+  end
 
   def role_name(d)
     case d['role_name_type']
