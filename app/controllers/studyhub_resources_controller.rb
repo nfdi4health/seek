@@ -279,7 +279,7 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def parse_multi_attributes(params)
-    Rails.logger.info("+++++++++++++++++++++++++")
+
     Rails.logger.info("params:"+params.inspect)
     values = []
 

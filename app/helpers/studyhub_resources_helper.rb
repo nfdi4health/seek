@@ -151,7 +151,13 @@ module StudyhubResourcesHelper
       element_name = "studyhub_resource[custom_metadata_attributes][data][#{key}][#{attribute.title}][#{index}]"
     end
 
-    value = resource[attribute.title] unless resource.nil?
+    if index.nil?
+      value = resource[attribute.title] unless resource.nil?
+    elsif index == 'row-template'
+      value = nil
+    else
+      value = resource[key][index.to_i][attribute.title] unless resource.nil?
+    end
 
     placeholder = "e.g. #{attribute.sample_attribute_type.placeholder}" unless attribute.sample_attribute_type.placeholder.blank?
 

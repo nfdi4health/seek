@@ -1,40 +1,9 @@
-<%#
-<!--  role_types = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first.sample_controlled_vocab_terms-->
-<!--  role_name_types = SampleControlledVocab.where(title: 'NFDI4Health Role Name Type').first.sample_controlled_vocab_terms-->
-<!--  role_name_personal_titles = SampleControlledVocab.where(title: 'NFDI4Health Role Name Personal Title').first.sample_controlled_vocab_terms-->
-%>
 <% row ||= nil %>
 <% index ||= 'row-template' %>
 <% row_num = index.to_i %>
-
-<%
-  # role is here single_row
-  unless  single_row.blank?
-    # role_type =  role["role_type"]
-    # role_name_type = role["role_name_type"]
-    #
-    # role_name_personal_title = role["role_name_personal_title"]
-    # role_name_personal_given_name = role["role_name_personal_given_name"]
-    # role_name_personal_family_name = role["role_name_personal_family_name"]
-    #
-    # role_name_organisational = role["role_name_organisational"]
-    #
-    # role_email = role["role_email"]
-    # role_phone = role["role_phone"]
-    #
-    # role_affiliation_name = role["role_affiliation_name"]
-    # role_affiliation_web_page = role["role_affiliation_web_page"]
-    # role_affiliation_address = role["role_affiliation_address"]
-  end
-%>
-
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
-
-
-<%# field_name_prefix = key+"["+resource_keywords_label"+]["+index+"]" %>
 <% field_name_prefix = "#{key}[#{StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE[key].first}][#{index}]" %>
-
 
 <div id="role-<%= index-%>" class="<%= key.singularize %> single-role" data-index="<%= index-%>">
 

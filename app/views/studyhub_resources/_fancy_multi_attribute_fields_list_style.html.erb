@@ -1,14 +1,13 @@
 <% key = attribute.title  %>
-
+<%  rows = @studyhub_resource.resource_json['study_design'][key] unless @studyhub_resource.resource_json.nil? %>
 <%= folding_panel(key.humanize, true, :body_options => {:id => key }) do %>
 <div id="<%= key %>">
   <div class="table" id="<%= key.singularize %>-table">
-
-    <% if @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json[key].blank? %>
+    <% if @studyhub_resource.resource_json.nil? || rows.blank? %>
       <%= render :partial => "single_row", :locals=> {:single_row=>nil,:f => f, :key=> key, :index => 0, :resource=>resource} %>
     <% else %>
-      <% @studyhub_resource.resource_json[key].each_with_index do |single, index| %>
-        <%= render :partial => 'single_row', :locals=> {:single_row=>@studyhub_resource.resource_json[key][index], :key => key, :f => f, :index => index,:resource=>resource } %>
+      <% rows.each_with_index do |row, index| %>
+        <%= render :partial => 'single_row', :locals=> {:single_row=> rows[index], :key => key, :f => f, :index => index,:resource=>resource } %>
       <% end %>
     <% end %>
 

@@ -1,4 +1,4 @@
-<% resource = @studyhub_resource.resource_json.nil? ? @studyhub_resource : @studyhub_resource.resource_json["study_design"] %>
+<% resource = @studyhub_resource.resource_json.nil? ? nil : @studyhub_resource.resource_json["study_design"] %>
 
 <div id="studyhub_resource_study_design">
   <%= folding_panel("Study Design General:", collapsed, :body_options => {:id => 'study_design_general'},
