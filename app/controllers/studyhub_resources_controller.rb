@@ -279,17 +279,14 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def parse_multi_attributes(params)
-
-    Rails.logger.info("params:"+params.inspect)
     values = []
-
     params.values.first.keys.each do |index|
       entry = {}
       next if index == 'row-template'
       params.keys.each do |key|
         entry[key] = params[key][index]
       end
-      values << entry
+      values << entry unless entry.values.select{|v|!v.blank?}.blank?
     end
     values
   end
@@ -399,8 +396,6 @@ class StudyhubResourcesController < ApplicationController
       entry['role_affiliation_name'] = params[:role_affiliation_name][key]
       entry['role_affiliation_address'] = params[:role_affiliation_address][key]
       entry['role_affiliation_web_page'] = params[:role_affiliation_web_page][key]
-      # entry['role_affiliation_identifier'] = params[:role_affiliation_identifier][key]
-      # entry['role_affiliation_identifier_scheme'] = params[:role_affiliation_identifier_scheme][key]
 
       roles << entry unless entry['role_type'].blank?
 
