@@ -330,13 +330,14 @@ var SR = {
         }
     },
 
-    addAddtionalRequiredFieldStudyConditionsClassificationCode: function () {
-
-        if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
-        }else {
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().removeClass('submit-required');
-        }
+    addAddtionalRequiredStudyConditionsFields: function (){
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][study_conditions][study_conditions]').each( function( index, element ){
+            if($j(this).val() == '') {
+                $j(this).next().next().removeClass('submit-required');
+            }else{
+                $j(this).next().next().addClass("submit-required");
+            }
+        });
     },
 
     addAddtionalRequiredFieldStudyArmGroupType: function () {
@@ -350,9 +351,14 @@ var SR = {
 
     intialRequiredFields: function (){
 
-        if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_conditions]"]').val() != ''){
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_conditions_classification]"]').prev().addClass('submit-required');
-        }
+
+        //study_conditions
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][study_conditions][study_conditions]').each( function( index, element ){
+            if($j(this).val() != '') {
+                $j(this).next().next().addClass('submit-required');
+            }
+        });
+
 
         if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').val() != ''){
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').prev().addClass('submit-required');
