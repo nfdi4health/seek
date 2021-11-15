@@ -223,7 +223,7 @@ class StudyhubResource < ApplicationRecord
 
     required_fields.each do |type, fields|
       fields.each do |name|
-        errors.add(name.to_sym, 'Please enter the #{name.humanize.downcase}.') if resource_json[type][name].blank?
+        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
       end
     end
   end
@@ -235,7 +235,7 @@ class StudyhubResource < ApplicationRecord
   def check_content_blob_presence
     unless is_studytype?
       if content_blob.blank?
-        errors.add(:base, 'Please save the #{studyhub_resource_type_title} at first and then upload a file!')
+        errors.add(:base, "Please save the #{studyhub_resource_type_title} at first and then upload a file!")
       end
     end
   end
