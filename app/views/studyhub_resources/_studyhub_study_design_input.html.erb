@@ -5,7 +5,7 @@
                     :help_text => "Here is help text.") do %>
 
   <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign General",supported_type:@studyhub_resource.class.name).first %>
-  <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource, :f => f } %>
+  <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource, :f => f,  collapsed: collapsed } %>
     <button id="study_primary_design_next_button" type="button" class="btn btn-success float-right hidden" onclick="toggle('study_design_interventional')">Next</button>
 <% end %>
 

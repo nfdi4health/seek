@@ -1,6 +1,6 @@
 <% key = attribute.title  %>
 <%  rows = @studyhub_resource.resource_json['study_design'][key] unless @studyhub_resource.resource_json.nil? %>
-<%= folding_panel(key.humanize, true, :body_options => {:id => key }) do %>
+<%= folding_panel(key.humanize, collapsed, :body_options => {:id => key }) do %>
 <div id="<%= key %>">
   <div class="table" id="<%= key.singularize %>-table">
     <% if @studyhub_resource.resource_json.nil? || rows.blank? %>
