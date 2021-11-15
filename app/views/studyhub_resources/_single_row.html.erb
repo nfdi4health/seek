@@ -1,25 +1,36 @@
+<% unless @studyhub_resource.resource_json.nil? %>
+  <% error = (defined? index).nil? ? {} : process_multi_attributes_single_row_error_messags(key) %>
+<% end %>
+
 <% row ||= nil %>
 <% index ||= 'row-template' %>
-<% row_num = index.to_i %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
 <% field_name_prefix = "#{key}[#{StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE[key].first}][#{index}]" %>
 
 <div id="role-<%= index-%>" class="<%= key.singularize %> single-role" data-index="<%= index-%>">
-
-
   <% StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE[key].each do |v| %>
     <% attribute = CustomMetadataAttribute.where(title: v ).first %>
-
+    <%
+      unless error.blank?
+        if (error.keys.include? attribute.title) && (error[attribute.title].keys.include? index)
+        feedback = error[attribute.title][index]
+        is_error = true
+        end
+      end
+    %>
+  <div class="form-group <%= "has-error text-danger" if is_error %>">
     <label><%= attribute.label %></label><%= required_span if attribute.required? %>
     <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource,index) %>
+
     <% unless attribute.description.nil? %>
       <%= custom_metadata_attribute_description(attribute.description) %>
     <% end %>
-
+    <% if is_error %>
+      <p><small><%= feedback %></small></p>
+    <% end %>
+  </div>
   <% end %>
-
-
 
   <div class="form-group">
     <% if allow_row_removal %>

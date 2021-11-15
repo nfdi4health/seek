@@ -93,14 +93,14 @@ module StudyhubResourcesHelper
         html += '<div class="column">'
         # html += '<p class="role_type"><strong>'+d['role_type']+': </strong>'+role_name+'('+d['role_name_type']+')</p>'
         html += '<p class="role_type"><strong>'+d['role_type']+': </strong>'+role_name(d)+'</p>'
-        html += '<p class="role_email"><strong>Email: </strong>'+d["role_email"] +'</p>' unless d["role_email"].blank?
-        html += '<p class="role_phone"><strong>Phone: </strong>'+d["role_phone"] +'</p>' unless d["role_phone"].blank?
+        html += '<p class="role_email"><strong>Email: </strong>'+d['role_email'] +'</p>' unless d['role_email'].blank?
+        html += '<p class="role_phone"><strong>Phone: </strong>'+d['role_phone'] +'</p>' unless d['role_phone'].blank?
         html +=  role_schema_link(d,'name')
         html += '</div>'
         html += '<div class="column">'
-        html += '<p class="role_affiliation_name"><strong>Affiliation: </strong>'+d["role_affiliation_name"]+'</p>' unless d["role_affiliation_name"].blank?
-        html += '<p class="role_affiliation_address"><strong>Address: </strong>'+d["role_affiliation_address"]+'</p>' unless d["role_affiliation_address"].blank?
-        html += '<p class="role_affiliation_web_page"><strong>Webpage: </strong>'+ link_to(d["role_affiliation_web_page"].truncate(100), d["role_affiliation_web_page"], target: :_blank ) +'</p>' unless d["role_affiliation_web_page"].blank?
+        html += '<p class="role_affiliation_name"><strong>Affiliation: </strong>'+d['role_affiliation_name']+'</p>' unless d['role_affiliation_name'].blank?
+        html += '<p class="role_affiliation_address"><strong>Address: </strong>'+d['role_affiliation_address']+'</p>' unless d['role_affiliation_address'].blank?
+        html += '<p class="role_affiliation_web_page"><strong>Webpage: </strong>'+ link_to(d['role_affiliation_web_page'].truncate(100), d['role_affiliation_web_page'], target: :_blank ) +'</p>' unless d['role_affiliation_web_page'].blank?
         html +=  role_schema_link(d,'affiliation')
         html +=  '</p>'
         html += '</div>'
@@ -156,7 +156,7 @@ module StudyhubResourcesHelper
     elsif index == 'row-template'
       value = nil
     else
-      value = resource[key][index.to_i][attribute.title] unless resource[key][index.to_i].nil?
+      value = resource[key][index.to_i][attribute.title] unless resource.nil? || resource[key][index.to_i].nil?
     end
 
     placeholder = "e.g. #{attribute.sample_attribute_type.placeholder}" unless attribute.sample_attribute_type.placeholder.blank?
@@ -223,29 +223,6 @@ module StudyhubResourcesHelper
     end
   end
 
-  # def resource_keywords(value)
-  #   html = ''
-  #   if value.any?
-  #     html += '<div class="table-responsive">'
-  #     html += '<table class="table table-striped table-hover steps">
-  #     <thead>
-  #     <tr>
-  #       <th class="col-md-5">Resource Keywords</th>
-  #       <th></th>
-  #     </tr>
-  #     </thead>
-  #     <tbody>'
-  #     value.each do |d|
-  #       html += '<tr>'
-  #       html += '<td class=""><b>Label:</b> ' + d['resource_keywords_label']+'</td>'
-  #       html += '<td class=""><b>Label code:</b> '+ d['resource_keywords_label_code']+'</td>'
-  #       html += '</tr>'
-  #     end
-  #     html += '</tbody></table></div>'
-  #   end
-  #   html.html_safe
-  # end
-
   def resource_keywords(value)
     html = ''
 
@@ -267,35 +244,52 @@ module StudyhubResourcesHelper
     @error_keys.each do |key|
 
       if (key.include? 'role_type')
-        role["role_type"] = @studyhub_resource.errors.messages["roles[#{index}]['role_type']".to_sym].first
+        role['role_type'] = @studyhub_resource.errors.messages["roles[#{index}]['role_type']".to_sym].first
       end
 
       if (key.include? 'role_name_type')
-        role["role_name_type"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_type']".to_sym].first
+        role['role_name_type'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_type']".to_sym].first
       end
 
       if (key.include? 'role_name_personal_title')
-        role["role_name_personal_title"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_title']".to_sym].first
+        role['role_name_personal_title'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_title']".to_sym].first
       end
 
       if (key.include? 'role_name_personal_given_name')
-        role["role_name_personal_given_name"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_given_name']".to_sym].first
+        role['role_name_personal_given_name'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_given_name']".to_sym].first
       end
 
       if (key.include? 'role_name_personal_family_name')
-        role["role_name_personal_family_name"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_family_name']".to_sym].first
+        role['role_name_personal_family_name'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_family_name']".to_sym].first
       end
 
       if (key.include? 'role_name_organisational')
-        role["role_name_organisational"] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_organisational']".to_sym].first
+        role['role_name_organisational'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_organisational']".to_sym].first
       end
 
       if (key.include? 'role_affiliation_web_page')
-        role["role_affiliation_web_page"] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_web_page']".to_sym].first
+        role['role_affiliation_web_page'] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_web_page']".to_sym].first
       end
     end
 
     role
+  end
+
+  def process_multi_attributes_single_row_error_messags(key)
+    error = {}
+    case key
+
+    when 'study_conditions'
+      error['study_conditions_classification'] = {}
+      @error_keys.each_with_index  do |key|
+          if (key.include? 'study_conditions_classification')
+            index = key[-2,1].to_i
+            error['study_conditions_classification'][index] = @studyhub_resource.errors.messages[key.to_sym].first
+          end
+        end
+    end
+
+    error
   end
 
 
@@ -329,11 +323,11 @@ module StudyhubResourcesHelper
     id = {}
 
     if (@error_keys.include? "ids[#{index}]['id_relation_type']")
-      id["id_relation_type"] = @studyhub_resource.errors.messages["ids[#{index}]['id_relation_type']".to_sym].first
+      id['id_relation_type'] = @studyhub_resource.errors.messages["ids[#{index}]['id_relation_type']".to_sym].first
     end
 
     if (@error_keys.include? "ids[#{index}]['id_type']")
-      id["id_type"] = @studyhub_resource.errors.messages["ids[#{index}]['id_type']".to_sym].first
+      id['id_type'] = @studyhub_resource.errors.messages["ids[#{index}]['id_type']".to_sym].first
     end
 
     id

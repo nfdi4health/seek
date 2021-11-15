@@ -333,9 +333,9 @@ var SR = {
     addAddtionalRequiredStudyConditionsFields: function (){
         $j('input[name^="studyhub_resource[custom_metadata_attributes][data][study_conditions][study_conditions]').each( function( index, element ){
             if($j(this).val() == '') {
-                $j(this).next().next().removeClass('submit-required');
+                $j(this).parent().next().children('label').removeClass('submit-required');
             }else{
-                $j(this).next().next().addClass("submit-required");
+                $j(this).parent().next().children('label').addClass("submit-required");
             }
         });
     },
@@ -355,7 +355,7 @@ var SR = {
         //study_conditions
         $j('input[name^="studyhub_resource[custom_metadata_attributes][data][study_conditions][study_conditions]').each( function( index, element ){
             if($j(this).val() != '') {
-                $j(this).next().next().addClass('submit-required');
+                $j(this).parent().next().children('label').addClass('submit-required');
             }
         });
 

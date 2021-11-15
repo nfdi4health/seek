@@ -4,17 +4,6 @@ class StudyhubResource < ApplicationRecord
   belongs_to :study, optional: true, dependent: :destroy
   belongs_to :studyhub_resource_type, inverse_of: :studyhub_resources
 
-  # has_many :children_relationships, class_name: 'StudyhubResourceRelationship',
-  #          foreign_key: 'parent_id',
-  #          dependent: :destroy
-  #
-  # has_many :children, through: :children_relationships
-  #
-  # has_many :parents_relationships, class_name: 'StudyhubResourceRelationship',
-  #          foreign_key: 'child_id',
-  #          dependent: :destroy
-  #
-  # has_many :parents, through: :parents_relationships
 
   has_one :content_blob,:as => :asset, :foreign_key => :asset_id
 
@@ -27,7 +16,8 @@ class StudyhubResource < ApplicationRecord
   validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
-  validate :full_validations_before_submit, on:  [:create, :update], if: :request_to_submit?
+  validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
+  validate :check_required_multi_attributes, on:  [:create, :update], if: :request_to_submit?
   validate :final_error_check, on:  [:create, :update]
 
   attr_readonly :studyhub_resource_type_id
@@ -63,11 +53,11 @@ class StudyhubResource < ApplicationRecord
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
   # MULTI_ATTRIBUTE_FIELDS = %w[resource_keywords study_conditions].freeze
-  MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { "study_conditions" => %w[study_conditions study_conditions_classification study_conditions_classification_code],
-                              "outcomes" => %w[study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame]
+  MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { 'study_conditions' => %w[study_conditions study_conditions_classification study_conditions_classification_code],
+                              'outcomes' => %w[study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame]
   }.freeze
 
-  MULTI_ATTRIBUTE_FIELDS_ROW_STYLE =  { "resource_keywords" => %w[resource_keywords_label resource_keywords_label_code]
+  MULTI_ATTRIBUTE_FIELDS_ROW_STYLE =  { 'resource_keywords' => %w[resource_keywords_label resource_keywords_label_code]
   }.freeze
 
   MULTI_ATTRIBUTE_SKIPPED_FIELDS = %w[resource_keywords_label resource_keywords_label_code study_conditions_classification study_conditions_classification_code
@@ -165,7 +155,7 @@ class StudyhubResource < ApplicationRecord
             unless role["role_#{type}_identifiers"].blank?
               role["role_#{type}_identifiers"].each_with_index do |id,id_index|
                 if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
-                  errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, "Please select the identifier scheme.")
+                  errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
                 end
               end
             end
@@ -179,8 +169,8 @@ class StudyhubResource < ApplicationRecord
         end
       end
 
-      if errors.messages.keys.select {|x| x.to_s.include? "roles" }.size  > 0
-        errors.add(:base, "Please add the required fields for resource roles.")
+      if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
+        errors.add(:base, 'Please add the required fields for resource roles.')
       end
     end
   end
@@ -189,7 +179,7 @@ class StudyhubResource < ApplicationRecord
     errors.add(:description, "can't be blank") if resource_json['resource_descriptions'].blank?
   end
 
-  def full_validations_before_submit
+  def check_required_singular_attributes
 
     required_fields ={}
     required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
@@ -200,7 +190,7 @@ class StudyhubResource < ApplicationRecord
     if is_studytype?
 
       required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL
-      s
+
       if get_study_primary_design_type == INTERVENTIONAL
         required_fields['study_design'] += REQUIRED_FIELDS_INTERVENTIONAL
       end
@@ -209,21 +199,30 @@ class StudyhubResource < ApplicationRecord
         required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL
       end
 
-      unless resource_json['study_design']['study_conditions'].blank?
-        required_fields['study_design'] += ['study_conditions_classification']
-      end
-
       unless resource_json['study_design']['study_arm_group_label'].blank?
         required_fields['study_design'] += ['study_arm_group_type']
       end
+
       unless resource_json['study_design']['study_outcome_title'].blank? && resource_json['study_design']['s'].blank?
         required_fields['study_design'] += ['study_outcome_type']
       end
+
     end
 
     required_fields.each do |type, fields|
       fields.each do |name|
         errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
+      end
+    end
+  end
+
+  def check_required_multi_attributes
+
+    if is_studytype?
+      resource_json['study_design']['study_conditions'].each_with_index  do |condition, index|
+        if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
+          errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
+        end
       end
     end
   end
@@ -310,6 +309,5 @@ class StudyhubResource < ApplicationRecord
       'unknown'
     end
   end
-
 
 end
