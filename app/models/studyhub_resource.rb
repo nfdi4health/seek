@@ -68,6 +68,9 @@ class StudyhubResource < ApplicationRecord
                                     study_arm_group_label study_arm_group_type study_arm_group_description
                                     study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label].freeze
 
+
+  NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze
+
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
       'Studyhub Resources'
