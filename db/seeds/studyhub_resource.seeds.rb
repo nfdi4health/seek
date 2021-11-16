@@ -794,6 +794,13 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       # ****************** StudyArmGroups ******************
 
+      # ****************** StudyDesignIntervention ******************
+
+      CustomMetadataAttribute.where(title: 'study_design_intervention').create!(
+        title: 'study_design_intervention', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_design_intervention'], label: attribute_headings['study_design_intervention']
+      ),
+
       CustomMetadataAttribute.where(title: 'study_intervention_name').create!(
         title: 'study_intervention_name', required: false , sample_attribute_type: string_type,
         description: attribute_descriptions['study_intervention_name'],label: attribute_headings['study_intervention_name']
@@ -814,6 +821,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
         title: 'study_intervention_arm_group_label', required: false , sample_attribute_type: string_type,
         description: attribute_descriptions['study_intervention_arm_group_label'],label: attribute_headings['study_intervention_arm_group_label']
       )
+       # ****************** StudyDesignIntervention ******************
     ]
   )
 
