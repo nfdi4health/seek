@@ -574,12 +574,12 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_inclusion_criteria').create!(
-        title: 'study_eligibility_inclusion_criteria', required: false, sample_attribute_type: string_type,
+        title: 'study_eligibility_inclusion_criteria', required: false, sample_attribute_type: text_type,
         description: attribute_descriptions['study_eligibility_inclusion_criteria'],label: attribute_headings['study_eligibility_inclusion_criteria']
       ),
 
       CustomMetadataAttribute.where(title: 'study_eligibility_exclusion_criteria').create!(
-        title: 'study_eligibility_exclusion_criteria', required: false, sample_attribute_type: string_type,
+        title: 'study_eligibility_exclusion_criteria', required: false, sample_attribute_type: text_type,
         description: attribute_descriptions['study_eligibility_exclusion_criteria'],label: attribute_headings['study_eligibility_exclusion_criteria']
       ),
 
