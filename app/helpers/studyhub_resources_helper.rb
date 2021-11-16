@@ -156,7 +156,7 @@ module StudyhubResourcesHelper
     elsif index == 'row-template'
       value = nil
     else
-      value = resource[key][index.to_i][attribute.title] unless resource.nil? || resource[key][index.to_i].nil?
+      value = resource[key][index.to_i][attribute.title] unless resource.nil? || resource[key].nil? || resource[key][index.to_i].nil?
     end
 
     placeholder = "e.g. #{attribute.sample_attribute_type.placeholder}" unless attribute.sample_attribute_type.placeholder.blank?
