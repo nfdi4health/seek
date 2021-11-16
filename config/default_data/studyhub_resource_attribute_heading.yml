@@ -82,10 +82,12 @@ study_age_max_examined_description: Additional information about the actual maxi
 
 
 study_hypothesis: Hypotheses underlying the study
+
 study_outcome_type: Type of the outcome measure
 study_outcome_title: Name of the outcome measure
 study_outcome_description: Description of the outcome measure
 study_outcome_time_frame: Time frame of the assessment specific to the outcome measure
+
 study_design_comment: Additional information on the study design
 
 

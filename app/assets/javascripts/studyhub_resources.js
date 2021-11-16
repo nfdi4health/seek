@@ -330,7 +330,7 @@ var SR = {
         }
     },
 
-    addAddtionalRequiredStudyConditionsFields: function (){
+    addAddtionalRequiredStudyConditionsField: function (){
         $j('input[name^="studyhub_resource[custom_metadata_attributes][data][study_conditions][study_conditions]').each( function( index, element ){
             if($j(this).val() == '') {
                 $j(this).parent().next().children('label').removeClass('submit-required');
@@ -339,6 +339,21 @@ var SR = {
             }
         });
     },
+
+    addAddtionalRequiredOutcomesField: function (){
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][outcomes][study_outcome_title]').each( function( index, element ){
+            if($j(this).val() == '') {
+                $j(this).parent().parent().children(':first').children('label').removeClass('submit-required');
+                // $j(this).parent().prev().children('label').removeClass("submit-required");
+            }else{
+                // alert($j(this).val());
+                $j(this).parent().parent().children(':first').children('label').addClass('submit-required');
+                // $j(this).parent().prev().children('label').addClass("submit-required");
+            }
+        });
+    },
+
+
 
     addAddtionalRequiredFieldStudyArmGroupType: function () {
 
@@ -359,27 +374,18 @@ var SR = {
             }
         });
 
+        //study_outcomes
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][outcomes][study_outcome_title]').each( function( index, element ){
+            if($j(this).val() != '') {
+                $j(this).parent().parent().children(':first').children('label').addClass('submit-required');
+            }
+        });
+
 
         if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').val() != ''){
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').prev().addClass('submit-required');
         }
 
-        study_outcome_title =  $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_title]"]').val()
-        study_outcome_description =  $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_description]"]').val()
-        if ( study_outcome_title != '' || study_outcome_description !=''){
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_type]"]').prev().addClass('submit-required');
-        }
-
-    },
-
-    addAddtionalRequiredStudyOutcomeType: function () {
-        study_outcome_title =  $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_title]"]').val()
-        study_outcome_description =  $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_description]"]').val()
-        if ( study_outcome_title != '' || study_outcome_description !=''){
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_type]"]').prev().addClass('submit-required');
-        } else {
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_outcome_type]"]').prev().removeClass('submit-required');
-        }
     },
 
     intialRolesVisibility: function (){
