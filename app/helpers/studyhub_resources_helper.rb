@@ -295,6 +295,14 @@ module StudyhubResourcesHelper
           error['study_outcome_type'][index] = @studyhub_resource.errors.messages[key.to_sym].first
         end
       end
+    when 'interventional_study_design_arms'
+      error['study_arm_group_type'] = {}
+      @error_keys.each_with_index  do |key|
+        if (key.include? 'study_arm_group_type')
+          index = key[-2,1].to_i
+          error['study_arm_group_type'][index] = @studyhub_resource.errors.messages[key.to_sym].first
+        end
+      end
     end
 
     error

@@ -353,6 +353,16 @@ var SR = {
         });
     },
 
+    addAddtionalRequiredStudyArmGroupsField: function (){
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][interventional_study_design_arms][study_arm_group_label]').each( function( index, element ){
+            if($j(this).val() == '') {
+                $j(this).parent().next().children('label').removeClass('submit-required');
+            }else{
+                $j(this).parent().next().children('label').addClass("submit-required");
+            }
+        });
+    },
+
 
 
     addAddtionalRequiredFieldStudyArmGroupType: function () {
@@ -381,10 +391,12 @@ var SR = {
             }
         });
 
-
-        if ( $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_label]"]').val() != ''){
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_arm_group_type]"]').prev().addClass('submit-required');
-        }
+        //interventional_study_design_arms
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][interventional_study_design_arms][study_arm_group_label]').each( function( index, element ){
+            if($j(this).val() != '') {
+                $j(this).parent().next().children('label').addClass('submit-required');
+            }
+        });
 
     },
 

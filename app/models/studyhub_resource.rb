@@ -54,14 +54,17 @@ class StudyhubResource < ApplicationRecord
   #  This section defines attributes which have 0-n relationship
   # MULTI_ATTRIBUTE_FIELDS = %w[resource_keywords study_conditions].freeze
   MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { 'study_conditions' => %w[study_conditions study_conditions_classification study_conditions_classification_code],
-                              'outcomes' => %w[study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame]
+                              'outcomes' => %w[study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame],
+                                         'interventional_study_design_arms' => %w[study_arm_group_label study_arm_group_type study_arm_group_description]
+
   }.freeze
 
   MULTI_ATTRIBUTE_FIELDS_ROW_STYLE =  { 'resource_keywords' => %w[resource_keywords_label resource_keywords_label_code]
   }.freeze
 
   MULTI_ATTRIBUTE_SKIPPED_FIELDS = %w[resource_keywords_label resource_keywords_label_code study_conditions_classification study_conditions_classification_code
-                                    study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame].freeze
+                                    study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame
+                                    study_arm_group_label study_arm_group_type study_arm_group_description].freeze
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
@@ -229,6 +232,12 @@ class StudyhubResource < ApplicationRecord
       resource_json['study_design']['outcomes'].each_with_index  do |outcome, index|
         if !outcome['study_outcome_title'].blank? && outcome['study_outcome_type'].blank?
           errors.add("study_outcome_type[#{index}]".to_sym, 'Please select the type of the outcome measure.')
+        end
+      end
+
+      resource_json['study_design']['interventional_study_design_arms'].each_with_index  do |outcome, index|
+        if !outcome['study_arm_group_label'].blank? && outcome['study_arm_group_type'].blank?
+          errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
         end
       end
 

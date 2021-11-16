@@ -108,9 +108,12 @@ study_masking_roles: Masked party(ies)
 study_masking_description: Additional information about masking
 study_allocation: Type of allocation of participants to an arm
 study_off_label_use: Off-label use of a drug product
+
+#interventional_study_design_arm
 study_arm_group_label: Name of the arm
 study_arm_group_type: Role of the arm
-study_arm_group_description: Additional  information about the arm
+study_arm_group_description: Additional information about the arm
+
 study_intervention_name: Name of the intervention
 study_intervention_type: Type of the intervention.
 study_intervention_description: Additional information about the intervention
