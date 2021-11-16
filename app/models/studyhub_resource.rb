@@ -73,12 +73,13 @@ class StudyhubResource < ApplicationRecord
   NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze
 
   INTEGER_ATTRIBUTES =  %w[study_centers_number study_target_sample_size study_obtained_sample_size].freeze
+  FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined study_age_max_examined study_target_follow-up_duration].freeze
 
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
       'Studyhub Resources'
     else
-      "#{resource_json['resource_descriptions'].first['description']}"
+       resource_json['resource_descriptions'].first['description']
     end
   end
 
@@ -108,11 +109,19 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_numericality
-    INTEGER_ATTRIBUTES.each do |value|
+    INTEGER_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
       begin
         Integer(resource_json['study_design'][value])
       rescue ArgumentError, TypeError
         errors.add(value.to_sym, 'The value must be an integer.')
+      end
+    end
+
+    FLOAT_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
+      begin
+        Float(resource_json['study_design'][value])
+      rescue ArgumentError, TypeError
+        errors.add(value.to_sym, 'The value must be a float.')
       end
     end
   end
@@ -271,30 +280,6 @@ class StudyhubResource < ApplicationRecord
                    StudyhubResource::SAVED
                  end
   end
-
-  # def add_child(child)
-  #   children_relationships.create(child_id: child.id)
-  # end
-  #
-  # def remove_child(child)
-  #   children_relationships.find_by(child_id: child.id).destroy
-  # end
-  #
-  # def is_parent?(child)
-  #   children.include?(child)
-  # end
-  #
-  # def add_parent(parent)
-  #   parents_relationships.create(parent_id: parent.id)
-  # end
-  #
-  # def remove_parent(parent)
-  #   parents_relationships.find_by(parent_id: parent.id).destroy
-  # end
-  #
-  # def is_child?(parent)
-  #   parents.include?(parent)
-  # end
 
   # if the resource type is study or substudy
   def is_studytype?
