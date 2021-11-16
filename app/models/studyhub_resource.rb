@@ -219,11 +219,19 @@ class StudyhubResource < ApplicationRecord
   def check_required_multi_attributes
 
     if is_studytype?
+
       resource_json['study_design']['study_conditions'].each_with_index  do |condition, index|
         if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
           errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
         end
       end
+
+      resource_json['study_design']['outcomes'].each_with_index  do |outcome, index|
+        if !outcome['study_outcome_title'].blank? && outcome['study_outcome_type'].blank?
+          errors.add("study_outcome_type[#{index}]".to_sym, 'Please select the type of the outcome measure.')
+        end
+      end
+
     end
   end
 
