@@ -13,6 +13,7 @@ class StudyhubResource < ApplicationRecord
 
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
+  validate :check_numericality, on:  [:create, :update]
   validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
@@ -71,6 +72,8 @@ class StudyhubResource < ApplicationRecord
 
   NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze
 
+  INTEGER_ATTRIBUTES =  %w[study_centers_number study_target_sample_size study_obtained_sample_size].freeze
+
   def description
     if resource_json.nil? || resource_json['resource_descriptions'].blank?
       'Studyhub Resources'
@@ -102,21 +105,16 @@ class StudyhubResource < ApplicationRecord
         end
       end
     end
-
   end
 
-
-  # https://newbedev.com/how-to-check-if-a-url-is-valid
-  def validate_url(url)
-
-    return true if url.blank?
-    begin
-      uri = URI.parse(url)
-      resp = uri.kind_of?(URI::HTTP) || uri.kind_of?(URI::HTTPS)
-    rescue URI::InvalidURIError
-      resp = false
+  def check_numericality
+    INTEGER_ATTRIBUTES.each do |value|
+      begin
+        Integer(resource_json['study_design'][value])
+      rescue ArgumentError, TypeError
+        errors.add(value.to_sym, 'The value must be an integer.')
+      end
     end
-    # return true if url =~ /\A#{URI::regexp(['http', 'https'])}\z/
   end
 
 
@@ -207,14 +205,6 @@ class StudyhubResource < ApplicationRecord
         required_fields['study_design'] += REQUIRED_FIELDS_NON_INTERVENTIONAL
       end
 
-      unless resource_json['study_design']['study_arm_group_label'].blank?
-        required_fields['study_design'] += ['study_arm_group_type']
-      end
-
-      unless resource_json['study_design']['study_outcome_title'].blank? && resource_json['study_design']['s'].blank?
-        required_fields['study_design'] += ['study_outcome_type']
-      end
-
     end
 
     required_fields.each do |type, fields|
@@ -240,8 +230,8 @@ class StudyhubResource < ApplicationRecord
         end
       end
 
-      resource_json['study_design']['interventional_study_design_arms'].each_with_index  do |outcome, index|
-        if !outcome['study_arm_group_label'].blank? && outcome['study_arm_group_type'].blank?
+      resource_json['study_design']['interventional_study_design_arms'].each_with_index  do |arm, index|
+        if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
           errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
         end
       end
@@ -330,6 +320,25 @@ class StudyhubResource < ApplicationRecord
     else
       'unknown'
     end
+  end
+
+  private
+
+  def is_integer?
+    self.to_i.to_s == self
+  end
+
+  # https://newbedev.com/how-to-check-if-a-url-is-valid
+  def validate_url(url)
+
+    return true if url.blank?
+    begin
+      uri = URI.parse(url)
+      resp = uri.kind_of?(URI::HTTP) || uri.kind_of?(URI::HTTPS)
+    rescue URI::InvalidURIError
+      resp = false
+    end
+    # return true if url =~ /\A#{URI::regexp(['http', 'https'])}\z/
   end
 
 end
