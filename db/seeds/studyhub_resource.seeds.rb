@@ -674,12 +674,12 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_time_frame').create!(
-        title: 'study_data_sharing_plan_time_frame', required: false, sample_attribute_type: string_type,
+        title: 'study_data_sharing_plan_time_frame', required: false, sample_attribute_type: text_type,
         description: attribute_descriptions['study_data_sharing_plan_time_frame'],label: attribute_headings['study_data_sharing_plan_time_frame']
       ),
 
       CustomMetadataAttribute.where(title: 'study_data_sharing_plan_access_criteria').create!(
-        title: 'study_data_sharing_plan_access_criteria', required: false, sample_attribute_type: string_type,
+        title: 'study_data_sharing_plan_access_criteria', required: false, sample_attribute_type: text_type,
         description: attribute_descriptions['study_data_sharing_plan_access_criteria'],label: attribute_headings['study_data_sharing_plan_access_criteria']
       ),
 
