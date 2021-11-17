@@ -100,7 +100,7 @@ class StudyhubResource < ApplicationRecord
         end
       end
 
-      unless resource_json['study_design']['study_data_sharing_plan_url'].blank?
+      unless resource_json['study_design'].blank? || resource_json['study_design']['study_data_sharing_plan_url'].blank?
         unless validate_url(resource_json['study_design']['study_data_sharing_plan_url'].strip)
           errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
         end
@@ -109,6 +109,8 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_numericality
+
+    unless resource_json.nil? || resource_json['study_design'].blank?
     INTEGER_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
       begin
         Integer(resource_json['study_design'][value])
@@ -123,6 +125,7 @@ class StudyhubResource < ApplicationRecord
       rescue ArgumentError, TypeError
         errors.add(value.to_sym, 'The value must be a float.')
       end
+    end
     end
   end
 
