@@ -47,6 +47,13 @@ a {
     margin: 3em 0;
 }
 
+.array_attributes{
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 1em 1em;
+    margin: 1em 1em;
+}
+
 .item-hidden {display: none;}
 
 #step_one {

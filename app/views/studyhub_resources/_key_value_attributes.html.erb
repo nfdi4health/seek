@@ -9,6 +9,8 @@
         <% end %>
       <% elsif attribute.title == StudyhubResource::RESOURCE_KEYWORDS %>
         <%= resource_keywords(resource[attribute.title])  %>
+      <% elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.include? attribute.title %>
+        <%= display_array_attribute_fields(resource[attribute.title]) %>
       <% elsif StudyhubResource::URL_FIELDS.include? attribute.title %>
         <%= link_to resource[attribute.title].truncate(100), resource[attribute.title], target: :_blank %>
       <% else %>

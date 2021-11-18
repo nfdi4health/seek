@@ -1,21 +1,21 @@
 module StudyhubResourcesHelper
 
-  def studyhub_resource_items(items,item_type)
+  def studyhub_resource_items(items, item_type)
     html = ''
     if items.any?
       html += '<div class="table-responsive">'
       html += '<table class="table table-striped table-hover steps">
       <thead>
       <tr>
-        <th class="col-md-1">'+item_type.capitalize+' Language</th>
-        <th>'+item_type.capitalize+'</th>
+        <th class="col-md-1">' + item_type.capitalize + ' Language</th>
+        <th>' + item_type.capitalize + '</th>
       </tr>
       </thead>
       <tbody>'
       items.each do |d|
         html += '<tr>'
-        html += '<td class="'+item_type+'_language">' + d[item_type+'_language'] + '</td>'
-        html += '<td class="'+item_type+'">' + d[item_type] + '</td>'
+        html += '<td class="' + item_type + '_language">' + d[item_type + '_language'] + '</td>'
+        html += '<td class="' + item_type + '">' + d[item_type] + '</td>'
       end
       html += '</tbody></table></div>'
     end
@@ -45,16 +45,15 @@ module StudyhubResourcesHelper
       ids.each do |d|
         html += '<tr>'
         html += '<td class="id_resource_type">' + StudyhubResource.find(d['id_id']).studyhub_resource_type.title + '</td>'
-        html += '<td class="id_id">' + 'NFDI4Health-'+d['id_id'] + '</td>'
+        html += '<td class="id_id">' + 'NFDI4Health-' + d['id_id'] + '</td>'
         # html += '<td class="id_title">' + StudyhubResource.find(d["id_id"]).title + '</td>'
-        html += '<td class="id_title">' + (link_to StudyhubResource.find(d['id_id']).title, show_resource_path(StudyhubResource.find(d['id_id'])) ).to_s + '</td>'
+        html += '<td class="id_title">' + (link_to StudyhubResource.find(d['id_id']).title, show_resource_path(StudyhubResource.find(d['id_id']))).to_s + '</td>'
         html += '</tr>'
       end
       html += '</tbody></table></div>'
     end
     html.html_safe
   end
-
 
   def studyhub_resource_other_ids (ids)
     html = ''
@@ -77,7 +76,7 @@ module StudyhubResourcesHelper
         html += '<td class="id_type">' + d['id_type'] + '</td>'
         html += '<td class="id_id">' + d['id_id'] + '</td>'
         html += '<td class="id_date">' + d['id_date'] + '</td>'
-        html += '<td class="id_relation_type">' + (d['id_relation_type'].nil? ? '' : d['id_relation_type'].underscore.humanize ) + '</td>'
+        html += '<td class="id_relation_type">' + (d['id_relation_type'].nil? ? '' : d['id_relation_type'].underscore.humanize) + '</td>'
         html += '</tr>'
       end
       html += '</tbody></table></div>'
@@ -92,17 +91,17 @@ module StudyhubResourcesHelper
         html += '<div class="row">'
         html += '<div class="column">'
         # html += '<p class="role_type"><strong>'+d['role_type']+': </strong>'+role_name+'('+d['role_name_type']+')</p>'
-        html += '<p class="role_type"><strong>'+d['role_type']+': </strong>'+role_name(d)+'</p>'
-        html += '<p class="role_email"><strong>Email: </strong>'+d['role_email'] +'</p>' unless d['role_email'].blank?
-        html += '<p class="role_phone"><strong>Phone: </strong>'+d['role_phone'] +'</p>' unless d['role_phone'].blank?
-        html +=  role_schema_link(d,'name')
+        html += '<p class="role_type"><strong>' + d['role_type'] + ': </strong>' + role_name(d) + '</p>'
+        html += '<p class="role_email"><strong>Email: </strong>' + d['role_email'] + '</p>' unless d['role_email'].blank?
+        html += '<p class="role_phone"><strong>Phone: </strong>' + d['role_phone'] + '</p>' unless d['role_phone'].blank?
+        html += role_schema_link(d, 'name')
         html += '</div>'
         html += '<div class="column">'
-        html += '<p class="role_affiliation_name"><strong>Affiliation: </strong>'+d['role_affiliation_name']+'</p>' unless d['role_affiliation_name'].blank?
-        html += '<p class="role_affiliation_address"><strong>Address: </strong>'+d['role_affiliation_address']+'</p>' unless d['role_affiliation_address'].blank?
-        html += '<p class="role_affiliation_web_page"><strong>Webpage: </strong>'+ link_to(d['role_affiliation_web_page'].truncate(100), d['role_affiliation_web_page'], target: :_blank ) +'</p>' unless d['role_affiliation_web_page'].blank?
-        html +=  role_schema_link(d,'affiliation')
-        html +=  '</p>'
+        html += '<p class="role_affiliation_name"><strong>Affiliation: </strong>' + d['role_affiliation_name'] + '</p>' unless d['role_affiliation_name'].blank?
+        html += '<p class="role_affiliation_address"><strong>Address: </strong>' + d['role_affiliation_address'] + '</p>' unless d['role_affiliation_address'].blank?
+        html += '<p class="role_affiliation_web_page"><strong>Webpage: </strong>' + link_to(d['role_affiliation_web_page'].truncate(100), d['role_affiliation_web_page'], target: :_blank) + '</p>' unless d['role_affiliation_web_page'].blank?
+        html += role_schema_link(d, 'affiliation')
+        html += '</p>'
         html += '</div>'
         html += '</div>'
         html += '<hr>'
@@ -111,33 +110,46 @@ module StudyhubResourcesHelper
     html.html_safe
   end
 
-  def role_schema_link(role,type)
+  def role_schema_link(role, type)
     html = ''
-    identifier = 'role_'+type+'_identifier'
-    identifiers = 'role_'+type+'_identifiers'
-    identifier_scheme = 'role_'+type+'_identifier_scheme'
+    identifier = 'role_' + type + '_identifier'
+    identifiers = 'role_' + type + '_identifiers'
+    identifier_scheme = 'role_' + type + '_identifier_scheme'
 
     if role[identifiers].size > 0
-      html += '<p class="role_'+type+'_identifiers"><strong>'+(type=='name'? 'personal' : type).capitalize+' '+'identifier'.pluralize( role[identifiers].size )+':</strong></p>'
+      html += '<p class="role_' + type + '_identifiers"><strong>' + (type == 'name' ? 'personal' : type).capitalize + ' ' + 'identifier'.pluralize(role[identifiers].size) + ':</strong></p>'
       role[identifiers].each do |d|
         id = d[identifier]
         case d[identifier_scheme]
         when 'ORCID'
           logo = image(:orcid_id)
-          html += '<p class="'+identifier_scheme+'"><strong>ORCID: </strong>'+link_to(logo +' https://orcid.org/'+id, 'https://orcid.org/'+id, target: '_blank') +'</p>' unless id.blank?
+          html += '<p class="' + identifier_scheme + '"><strong>ORCID: </strong>' + link_to(logo +' https://orcid.org/' + id, 'https://orcid.org/' + id, target: '_blank') + '</p>' unless id.blank?
         when 'ROR'
-          html += '<p class="'+identifier_scheme+'"><strong>ROR: </strong>'+link_to('https://ror.org/'+id, 'https://ror.org/'+id, target: '_blank') +'</p>' unless id.blank?
+          html += '<p class="' + identifier_scheme + '"><strong>ROR: </strong>' + link_to('https://ror.org/' + id, 'https://ror.org/' + id, target: '_blank') + '</p>' unless id.blank?
         when 'GRID'
-          html += '<p class="'+identifier_scheme+'"><strong>GRID: </strong>'+link_to('https://www.grid.ac/institutes/'+id, 'https://www.grid.ac/institutes/'+id, target: '_blank') +'</p>' unless id.blank?
+          html += '<p class="' + identifier_scheme + '"><strong>GRID: </strong>' + link_to('https://www.grid.ac/institutes/' + id, 'https://www.grid.ac/institutes/' + id, target: '_blank') + '</p>' unless id.blank?
         when 'ISNI'
-          html += '<p class="'+identifier_scheme+'"><strong>ISNI: </strong>'+link_to('https://isni.org/isni/'+id, 'https://isni.org/isni/'+id, target: '_blank') +'</p>' unless id.blank?
+          html += '<p class="' + identifier_scheme + '"><strong>ISNI: </strong>' + link_to('https://isni.org/isni/' + id, 'https://isni.org/isni/' + id, target: '_blank') + '</p>' unless id.blank?
         end
       end
     end
 
-    html
+    html.html_safe
   end
 
+  def display_array_attribute_fields(array_attribute)
+
+    html = '<div>'
+    array_attribute.each do |row|
+      html += '<div class="array_attributes">'
+      row.keys.reject{ |x| row[x].blank? }.each do |key|
+          html += '<li>' + CustomMetadataAttribute.where(title: key).first.label + ': ' + row[key] + '</li>'
+      end
+      html += '</div>'
+    end
+    html += '</div>'
+    html.html_safe
+  end
 
   def studyhub_custom_metadata_form_field_for_attribute(attribute, resource, index = nil)
 
@@ -165,18 +177,18 @@ module StudyhubResourcesHelper
     when Seek::Samples::BaseType::TEXT
       text_area_tag element_name, value, class: "form-control #{clz}"
     when Seek::Samples::BaseType::DATE_TIME
-      content_tag :div, style:'position:relative' do
-        text_field_tag element_name,value, data: { calendar: 'mixed' }, class: "calendar form-control #{clz}", placeholder: placeholder
+      content_tag :div, style: 'position:relative' do
+        text_field_tag element_name, value, data: { calendar: 'mixed' }, class: "calendar form-control #{clz}", placeholder: placeholder
       end
     when Seek::Samples::BaseType::DATE
-      content_tag :div, style:'position:relative' do
+      content_tag :div, style: 'position:relative' do
         text_field_tag element_name, value, data: { calendar: true }, class: "calendar form-control #{clz}", placeholder: placeholder
       end
     when Seek::Samples::BaseType::BOOLEAN
       check_box_tag element_name, value, class: clz.to_s
     when Seek::Samples::BaseType::SEEK_DATA_FILE
       options = options_from_collection_for_select(DataFile.authorized_for(:view), :id,
-                                                   :title, value.try(:[],'id'))
+                                                   :title, value.try(:[], 'id'))
       select_tag(element_name, options, include_blank: !attribute.required?, class: "form-control #{clz}")
     when Seek::Samples::BaseType::CV
       controlled_vocab_form_field attribute, element_name, value
@@ -197,7 +209,7 @@ module StudyhubResourcesHelper
       non_study << [x.title, x.key]
     end
 
-    { 'Study Type' => study,'Non Study Type' => non_study }
+    { 'Study Type' => study, 'Non Study Type' => non_study }
   end
 
   def controlled_vocab_form_field(attribute, element_name, value)
@@ -229,7 +241,7 @@ module StudyhubResourcesHelper
     if value.any?
       value.each do |d|
         html += d['resource_keywords_label']
-        html += '('+d['resource_keywords_label_code']+')' unless d['resource_keywords_label_code'].blank?
+        html += '(' + d['resource_keywords_label_code'] + ')' unless d['resource_keywords_label_code'].blank?
         html += '; '
       end
     end
@@ -239,7 +251,6 @@ module StudyhubResourcesHelper
   def process_role_error_messags(index)
 
     role = {}
-
 
     @error_keys.each do |key|
 
@@ -281,25 +292,25 @@ module StudyhubResourcesHelper
 
     when 'study_conditions'
       error['study_conditions_classification'] = {}
-      @error_keys.each_with_index  do |key|
-          if (key.include? 'study_conditions_classification')
-            index = key[-2,1].to_i
-            error['study_conditions_classification'][index] = @studyhub_resource.errors.messages[key.to_sym].first
-          end
+      @error_keys.each_with_index do |key|
+        if (key.include? 'study_conditions_classification')
+          index = key[-2, 1].to_i
+          error['study_conditions_classification'][index] = @studyhub_resource.errors.messages[key.to_sym].first
+        end
       end
     when 'outcomes'
       error['study_outcome_type'] = {}
-      @error_keys.each_with_index  do |key|
+      @error_keys.each_with_index do |key|
         if (key.include? 'study_outcome_type')
-          index = key[-2,1].to_i
+          index = key[-2, 1].to_i
           error['study_outcome_type'][index] = @studyhub_resource.errors.messages[key.to_sym].first
         end
       end
     when 'interventional_study_design_arms'
       error['study_arm_group_type'] = {}
-      @error_keys.each_with_index  do |key|
+      @error_keys.each_with_index do |key|
         if (key.include? 'study_arm_group_type')
-          index = key[-2,1].to_i
+          index = key[-2, 1].to_i
           error['study_arm_group_type'][index] = @studyhub_resource.errors.messages[key.to_sym].first
         end
       end
@@ -308,19 +319,17 @@ module StudyhubResourcesHelper
     error
   end
 
+  def process_role_id_error_messags(index, type)
 
-  def process_role_id_error_messags(index,type)
-
-    role_type_identifier_scheme  = "role_#{type}_identifier_scheme"
+    role_type_identifier_scheme = "role_#{type}_identifier_scheme"
 
     role = {}
-    role[role_type_identifier_scheme]= {}
+    role[role_type_identifier_scheme] = {}
     role[role_type_identifier_scheme][index] = {}
-
 
     @error_keys.each do |key|
       if (key.include? "role_#{type}_identifier_scheme")
-        id_index = key[-2,1].to_i
+        id_index = key[-2, 1].to_i
         role[role_type_identifier_scheme][index][id_index] = if index == 'row-template'
                                                                nil
                                                              else
@@ -349,12 +358,10 @@ module StudyhubResourcesHelper
     id
   end
 
-
-
   private
 
   def get_attribute_key(value)
-    StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.select{|key, array| array.include? value }.keys.first
+    StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.select { |key, array| array.include? value }.keys.first
   end
 
   def role_name(d)
