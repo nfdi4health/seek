@@ -140,7 +140,7 @@ module StudyhubResourcesHelper
   def display_array_attribute_fields(array_attribute)
 
     html = '<div>'
-    array_attribute.each do |row|
+    array_attribute&.each do |row|
       html += '<div class="array_attributes">'
       row.keys.reject{ |x| row[x].blank? }.each do |key|
           html += '<li>' + CustomMetadataAttribute.where(title: key).first.label + ': ' + row[key] + '</li>'
@@ -152,7 +152,7 @@ module StudyhubResourcesHelper
   end
 
   def studyhub_custom_metadata_form_field_for_attribute(attribute, resource, index = nil)
-
+    
     base_type = attribute.sample_attribute_type.base_type
     clz = "custom_metadata_attribute_#{base_type.downcase}"
 

@@ -1,4 +1,16 @@
 <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign General",supported_type:@studyhub_resource.class.name).first %>
-<div id="study_design" >
+<% cmt_interventional = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign Non Interventional Study",supported_type:@studyhub_resource.class.name).first %>
+<% cmt_non_interventional = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign Interventional Study",supported_type:@studyhub_resource.class.name).first %>
+
+<div id="study_design_general" >
   <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt, resource: resource } %>
+</div>
+
+<div id="study_design_general_interventional" >
+  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt_interventional, resource: resource } %>
+</div>
+
+
+<div id="study_design_general_non_interventional" >
+  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt_non_interventional, resource: resource } %>
 </div>
