@@ -76,10 +76,10 @@ class StudyhubResource < ApplicationRecord
   FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined study_age_max_examined study_target_follow-up_duration].freeze
 
   def description
-    if resource_json.nil? || resource_json['resource_descriptions'].blank?
+    if resource_json.nil? || resource_json['resource_descriptions'].nil?
       'Studyhub Resources'
     else
-       resource_json['resource_descriptions'].first['description']
+      resource_json['resource_descriptions'].first['description']
     end
   end
 
@@ -111,21 +111,21 @@ class StudyhubResource < ApplicationRecord
   def check_numericality
 
     unless resource_json.nil? || resource_json['study_design'].blank?
-    INTEGER_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
-      begin
-        Integer(resource_json['study_design'][value])
-      rescue ArgumentError, TypeError
-        errors.add(value.to_sym, 'The value must be an integer.')
+      INTEGER_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
+        begin
+          Integer(resource_json['study_design'][value])
+        rescue ArgumentError, TypeError
+          errors.add(value.to_sym, 'The value must be an integer.')
+        end
       end
-    end
 
-    FLOAT_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
-      begin
-        Float(resource_json['study_design'][value])
-      rescue ArgumentError, TypeError
-        errors.add(value.to_sym, 'The value must be a float.')
+      FLOAT_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
+        begin
+          Float(resource_json['study_design'][value])
+        rescue ArgumentError, TypeError
+          errors.add(value.to_sym, 'The value must be a float.')
+        end
       end
-    end
     end
   end
 
@@ -229,24 +229,23 @@ class StudyhubResource < ApplicationRecord
   def check_required_multi_attributes
 
     if is_studytype?
-
-      resource_json['study_design']['study_conditions'].each_with_index  do |condition, index|
+      resource_json['study_design']['study_conditions']&.each_with_index  do |condition, index|
         if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
           errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
         end
       end
 
-      resource_json['study_design']['outcomes'].each_with_index  do |outcome, index|
+      resource_json['study_design']['outcomes']&.each_with_index  do |outcome, index|
         if !outcome['study_outcome_title'].blank? && outcome['study_outcome_type'].blank?
           errors.add("study_outcome_type[#{index}]".to_sym, 'Please select the type of the outcome measure.')
         end
       end
 
-      resource_json['study_design']['interventional_study_design_arms'].each_with_index  do |arm, index|
-        if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
-          errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
+      resource_json['study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
+          if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
+            errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
+          end
         end
-      end
 
     end
   end
