@@ -360,11 +360,12 @@ module StudyhubResourcesHelper
 
 
   def custom_metadata_attribute_description_with_read_more(description)
+    desc_array = description.split("<lb>")
     html = '<div class="addtional-info help-block">'
     html += "<small>#{description.split("<lb>").first}"
-    html += '<a href="#"> read more</a>' unless description.split("<lb>").last.blank?
+    html += '<a href="#"> read more</a>' unless desc_array.size == 1
     html += '</small>'
-    unless description.split("<lb>").last.blank?
+    unless desc_array.size == 1
       html += '<div class="less">'
       html += "<small>#{description.split("<lb>").last}</small>"
       html += '</div>'

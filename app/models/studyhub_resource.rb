@@ -75,7 +75,7 @@ class StudyhubResource < ApplicationRecord
   FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined study_age_max_examined study_target_follow-up_duration].freeze
 
   def description
-    if resource_json.nil? || resource_json['resource_descriptions'].nil?
+    if resource_json.nil? || resource_json['resource_descriptions'].blank?
       'Studyhub Resources'
     else
       resource_json['resource_descriptions'].first['description']
