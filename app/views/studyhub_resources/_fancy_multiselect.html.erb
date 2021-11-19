@@ -44,7 +44,7 @@
         <div class="form-group">
             <%= select_tag nil, select_options, possibilities_options-%>
         <% unless description.nil? %>
-          <%= custom_metadata_attribute_description(description) %>
+          <%= custom_metadata_attribute_description_with_read_more(description) %>
         <% end %>
         </div>
       </div>

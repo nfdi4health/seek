@@ -10,15 +10,8 @@ module CustomMetadataHelper
 end
 
 def custom_metadata_attribute_description(description)
-  html = '<div class="addtional-info help-block">'
-  html += "<small>#{description.split("<lb>").first}"
-  html += '<a href="#"> read more</a>' unless description.split("<lb>").last.blank?
-  html += '</small>'
-  unless description.split("<lb>").last.blank?
-    html += '<div class="less">'
-    html += "<small>#{description.split("<lb>").last}</small>"
-    html += '</div>'
-  end
-  html += '</div>'
+  html = '<p class="help-block">'
+  html += '<small>'+description+'</small>'
+  html += '</p>'
   html.html_safe
 end

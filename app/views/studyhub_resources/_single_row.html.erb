@@ -24,7 +24,7 @@
     <%= studyhub_custom_metadata_form_field_for_attribute(attribute,resource,index) %>
 
     <% unless attribute.description.nil? %>
-      <%= custom_metadata_attribute_description(attribute.description) %>
+      <%= custom_metadata_attribute_description_with_read_more(attribute.description) %>
     <% end %>
     <% if is_error %>
       <p><small><%= feedback %></small></p>

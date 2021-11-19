@@ -152,7 +152,7 @@ module StudyhubResourcesHelper
   end
 
   def studyhub_custom_metadata_form_field_for_attribute(attribute, resource, index = nil)
-    
+
     base_type = attribute.sample_attribute_type.base_type
     clz = "custom_metadata_attribute_#{base_type.downcase}"
 
@@ -356,6 +356,21 @@ module StudyhubResourcesHelper
     end
 
     id
+  end
+
+
+  def custom_metadata_attribute_description_with_read_more(description)
+    html = '<div class="addtional-info help-block">'
+    html += "<small>#{description.split("<lb>").first}"
+    html += '<a href="#"> read more</a>' unless description.split("<lb>").last.blank?
+    html += '</small>'
+    unless description.split("<lb>").last.blank?
+      html += '<div class="less">'
+      html += "<small>#{description.split("<lb>").last}</small>"
+      html += '</div>'
+    end
+    html += '</div>'
+    html.html_safe
   end
 
   private
