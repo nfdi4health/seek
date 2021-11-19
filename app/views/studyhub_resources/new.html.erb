@@ -11,6 +11,13 @@
       <div id="studyhub_resource_type_selection" >
         <div class="form-group">
           <%= panel(panel_title, :id => 'new_studyhub_resource') do %>
+            <div class="alert alert-info">
+              <p>
+                Select one value from the drop-down list.
+                The selected value will form a pair with the property “Resource Type (General)”.<br>
+                For example, the “Resource Type” of “Questionnaire” paired with the “Resource Type (General)” of “Text” yields “Text/ Questionnaire”.
+              </p>
+            </div>
             <%= select_tag "studyhub_resource[studyhub_resource_type]", grouped_options_for_select(grouped_options_for_studyhub_resource_type),
                            { :prompt => "Please select a type:", :class => "form-control" } %>
           <% end -%>
