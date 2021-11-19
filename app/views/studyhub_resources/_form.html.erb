@@ -31,5 +31,13 @@
                 return false;
             }
         });
+
+        $j('.addtional-info').find('a[href="#"]').on('click', function (e) {
+            e.preventDefault();
+            this.expand = !this.expand;
+            $j(this).text(this.expand? " read less":" read more");
+            $j(this).closest('.addtional-info').find('.less, .more').toggleClass('less more');
+        });
+
     });
 </script>

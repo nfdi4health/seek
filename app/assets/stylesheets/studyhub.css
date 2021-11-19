@@ -157,3 +157,11 @@ a {
     display: table;
     clear: both;
 }
+
+.less {
+    height: 0px;
+    overflow:hidden;
+}
+.more {
+    height: auto;
+}
