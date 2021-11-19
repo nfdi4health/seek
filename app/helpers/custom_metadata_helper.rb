@@ -11,11 +11,14 @@ end
 
 def custom_metadata_attribute_description(description)
   html = '<div class="addtional-info help-block">'
-  html += '<small>' + description.split("<lb>").first + '<a href="#"> read more</a>'
+  html += "<small>#{description.split("<lb>").first}"
+  html += '<a href="#"> read more</a>' unless description.split("<lb>").last.blank?
   html += '</small>'
-  html += '<div class="less">'
-  html += '<small>'+description.split("<lb>").last+'</small>'
-  html += '</div>'
+  unless description.split("<lb>").last.blank?
+    html += '<div class="less">'
+    html += "<small>#{description.split("<lb>").last}</small>"
+    html += '</div>'
+  end
   html += '</div>'
   html.html_safe
 end
