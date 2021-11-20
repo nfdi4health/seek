@@ -16,10 +16,8 @@
   <%= render partial: 'studyhub_basic', locals: { :f => f, :collapsed => collapsed } %>
   <%= render :partial => 'resource_roles', :locals=> { :f => f,:collapsed => collapsed} %>
   <%= render :partial => 'resource_ids', :locals=> { :f => f,:collapsed => collapsed} %>
-  <% if @studyhub_resource.new_record? %>
+  <% if @studyhub_resource.is_studytype? %>
      <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :collapsed => collapsed } %>
-  <% elsif @studyhub_resource.is_studytype?%>
-    <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :collapsed => collapsed }  %>
   <% end -%>
 </div>
 
