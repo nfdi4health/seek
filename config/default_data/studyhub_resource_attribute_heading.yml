@@ -55,7 +55,7 @@ study_start_date:  Start date of data collection for the study
 study_end_date: End date of data collection for the study
 study_country: Countries where the study takes place
 study_region: Regions and/or cities where the study takes place
-study_centers: Is the study conducted at one study or more than one study sites?
+study_centers: Is the study conducted at one study site or more than one study sites?
 study_centers_number: Number of study sites.
 study_subject: Primary unit of interest in the study
 
