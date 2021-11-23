@@ -625,9 +625,9 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       # ****************** StudyDesignOutcomes ******************
 
-      CustomMetadataAttribute.where(title: 'outcomes').create!(
-        title: 'outcomes', required: false, sample_attribute_type: string_type,
-        description: attribute_descriptions['study_design_outcomes'], label: attribute_headings['study_design_outcomes']
+      CustomMetadataAttribute.where(title: 'study_outcomes').create!(
+        title: 'study_outcomes', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['study_outcomes'], label: attribute_headings['study_outcomes']
       ),
 
 
@@ -772,9 +772,9 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       # ****************** StudyArmGroups ******************
 
-      CustomMetadataAttribute.where(title: 'study_arms').create!(
-        title: 'study_arms', required: false, sample_attribute_type: string_type,
-        description: attribute_descriptions['study_arms'], label: attribute_headings['study_arms']
+      CustomMetadataAttribute.where(title: 'interventional_study_design_arms').create!(
+        title: 'interventional_study_design_arms', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['interventional_study_design_arms'], label: attribute_headings['interventional_study_design_arms']
       ),
 
       CustomMetadataAttribute.where(title: 'study_arm_group_label').create!(
@@ -796,9 +796,9 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
       # ****************** StudyDesignIntervention ******************
 
-      CustomMetadataAttribute.where(title: 'study_design_intervention').create!(
-        title: 'study_design_intervention', required: false, sample_attribute_type: string_type,
-        description: attribute_descriptions['study_design_intervention'], label: attribute_headings['study_design_intervention']
+      CustomMetadataAttribute.where(title: 'interventional_study_design_interventions').create!(
+        title: 'interventional_study_design_interventions', required: false, sample_attribute_type: string_type,
+        description: attribute_descriptions['interventional_study_design_interventions'], label: attribute_headings['interventional_study_design_interventions']
       ),
 
       CustomMetadataAttribute.where(title: 'study_intervention_name').create!(

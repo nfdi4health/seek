@@ -83,6 +83,7 @@ study_age_max_examined_description: Additional information about the actual maxi
 
 study_hypothesis: Hypotheses underlying the study
 
+study_outcomes: Study outcomes
 study_outcome_type: Type of the outcome measure
 study_outcome_title: Name of the outcome measure
 study_outcome_description: Description of the outcome measure
@@ -109,18 +110,20 @@ study_masking_description: Additional information about masking
 study_allocation: Type of allocation of participants to an arm
 study_off_label_use: Off-label use of a drug product
 
-#interventional_study_design_arm
+#interventional_study_design_arms
+interventional_study_design_arms: Study arms
 study_arm_group_label: Name of the arm
 study_arm_group_type: Role of the arm
 study_arm_group_description: Additional information about the arm
 
+#interventional_study_design_interventions
+interventional_study_design_interventions: Study design interventions
 study_intervention_name: Name of the intervention
 study_intervention_type: Type of the intervention.
 study_intervention_description: Additional information about the intervention
 study_intervention_arm_group_label: Associated arm
 
 # non_interventional attributes
-
 study_type_non_interventional: Study type
 study_time_perspective: "Study type: Time perspective"
 study_target_follow-up_duration: Target follow-up duration
