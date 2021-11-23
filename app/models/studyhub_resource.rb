@@ -55,7 +55,7 @@ class StudyhubResource < ApplicationRecord
   #  This section defines attributes which have 0-n relationship
   MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { 'study_conditions' => %w[study_conditions study_conditions_classification study_conditions_classification_code],
                                          'outcomes' => %w[study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame],
-                                         'interventional_study_design_arms' => %w[study_arm_group_label study_arm_group_type study_arm_group_description],
+                                         'study_arms' => %w[study_arm_group_label study_arm_group_type study_arm_group_description],
                                          'study_design_intervention' => %w[study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label]
 
   }.freeze
