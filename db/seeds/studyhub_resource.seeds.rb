@@ -314,7 +314,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   #study_arm_group_type
   study_arm_group_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Arm Group Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Experimental', 'active Comparator', 'Placebo comparator',
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Experimental', 'Active comparator', 'Placebo comparator',
                                                                                                'Sham comparator', 'No intervention', 'Other'])
     )
 
