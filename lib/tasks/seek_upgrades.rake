@@ -9,6 +9,7 @@ namespace :seek do
   task upgrade_version_tasks: %i[
     environment
     db:seed:workflow_classes
+    db:seed:studyhub_resource
   ]
 
   # these are the tasks that are executes for each upgrade as standard, and rarely change
