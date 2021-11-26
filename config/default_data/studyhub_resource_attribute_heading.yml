@@ -49,17 +49,17 @@ study_status: Overall status of the study
 study_status_enrolling_by_invitation: Are participants enrolled by invitation?
 study_status_when_intervention: Do participants receive an intervention?
 study_status_halted_stage: At what stage the study was halted?
-study_status_halted_reason: Reason why study was halted.
-study_recruitment_status_register: Overall recruitment status for the study.
+study_status_halted_reason: Reason why study was halted
+study_recruitment_status_register: Overall recruitment status for the study
 study_start_date:  Start date of data collection for the study
 study_end_date: End date of data collection for the study
 study_country: Countries where the study takes place
 study_region: Regions and/or cities where the study takes place
 study_centers: Is the study conducted at one study site or more than one study sites?
-study_centers_number: Number of study sites.
+study_centers_number: Number of study sites
 study_subject: Primary unit of interest in the study
 
-study_sampling: Applied sampling method.
+study_sampling: Applied sampling method
 study_data_source: Data sources
 
 study_data_source_description: Additional information about data sources
@@ -68,7 +68,7 @@ study_eligibility_age_min_description: "Eligibility criteria: Additional informa
 study_eligibility_age_max: "Eligibility criteria: Maximum age"
 study_eligibility_age_max_description: "Eligibility criteria: Additional information about the maximum age"
 study_eligibility_gender: "Eligibility criteria: Gender"
-study_eligibility_inclusion_criteria: "Eligibility criteria: Inclusion criteria."
+study_eligibility_inclusion_criteria: "Eligibility criteria: Inclusion criteria"
 study_eligibility_exclusion_criteria: "Eligibility criteria: Exclusion criteria"
 study_population: Description of study population
 study_target_sample_size: Target sample size
@@ -119,7 +119,7 @@ study_arm_group_description: Additional information about the arm
 #interventional_study_design_interventions
 interventional_study_design_interventions: Study design interventions
 study_intervention_name: Name of the intervention
-study_intervention_type: Type of the intervention.
+study_intervention_type: Type of the intervention
 study_intervention_description: Additional information about the intervention
 study_intervention_arm_group_label: Associated arm
 
