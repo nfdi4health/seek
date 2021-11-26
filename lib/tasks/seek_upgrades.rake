@@ -10,6 +10,7 @@ namespace :seek do
     environment
     db:seed:workflow_classes
     db:seed:studyhub_resource
+    db:seed:country_codes
   ]
 
   # these are the tasks that are executes for each upgrade as standard, and rarely change
