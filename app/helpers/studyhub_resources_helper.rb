@@ -298,7 +298,7 @@ module StudyhubResourcesHelper
           error['study_conditions_classification'][index] = @studyhub_resource.errors.messages[key.to_sym].first
         end
       end
-    when 'outcomes'
+    when 'study_outcomes'
       error['study_outcome_type'] = {}
       @error_keys.each_with_index do |key|
         if (key.include? 'study_outcome_type')

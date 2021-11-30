@@ -234,7 +234,7 @@ class StudyhubResource < ApplicationRecord
         end
       end
 
-      resource_json['study_design']['outcomes']&.each_with_index  do |outcome, index|
+      resource_json['study_design']['study_outcomes']&.each_with_index  do |outcome, index|
         if !outcome['study_outcome_title'].blank? && outcome['study_outcome_type'].blank?
           errors.add("study_outcome_type[#{index}]".to_sym, 'Please select the type of the outcome measure.')
         end

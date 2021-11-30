@@ -341,12 +341,11 @@ var SR = {
     },
 
     addAddtionalRequiredOutcomesField: function (){
-        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][outcomes][study_outcome_title]').each( function( index, element ){
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][study_outcomes][study_outcome_title]').each( function( index, element ){
             if($j(this).val() == '') {
                 $j(this).parent().parent().children(':first').children('label').removeClass('submit-required');
                 // $j(this).parent().prev().children('label').removeClass("submit-required");
             }else{
-                // alert($j(this).val());
                 $j(this).parent().parent().children(':first').children('label').addClass('submit-required');
                 // $j(this).parent().prev().children('label').addClass("submit-required");
             }
@@ -385,7 +384,7 @@ var SR = {
         });
 
         //study_outcomes
-        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][outcomes][study_outcome_title]').each( function( index, element ){
+        $j('input[name^="studyhub_resource[custom_metadata_attributes][data][study_outcomes][study_outcome_title]').each( function( index, element ){
             if($j(this).val() != '') {
                 $j(this).parent().parent().children(':first').children('label').addClass('submit-required');
             }
