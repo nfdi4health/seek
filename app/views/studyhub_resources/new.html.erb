@@ -1,5 +1,5 @@
 <%
-  panel_title = "Please select a #{ t('studyhub_resources.studyhub_resource')} Type:"
+  panel_title = "Please select a #{ t('studyhub_resources.studyhub_resource')} type from the drop-down list:"
   # @studyhub_resource_type = nil
   # selected_type = @studyhub_resource.studyhub_resource_type.nil? ? nil : @studyhub_resource.studyhub_resource_type.key
 %>
@@ -11,13 +11,6 @@
       <div id="studyhub_resource_type_selection" >
         <div class="form-group">
           <%= panel(panel_title, :id => 'new_studyhub_resource') do %>
-            <div class="alert alert-info">
-              <p>
-                Select one value from the drop-down list.
-                The selected value will form a pair with the property “Resource Type (General)”.<br>
-                For example, the “Resource Type” of “Questionnaire” paired with the “Resource Type (General)” of “Text” yields “Text/ Questionnaire”.
-              </p>
-            </div>
             <%= select_tag "studyhub_resource[studyhub_resource_type]", grouped_options_for_select(grouped_options_for_studyhub_resource_type),
                            { :prompt => "Please select a type:", :class => "form-control" } %>
           <% end -%>
