@@ -1,5 +1,6 @@
 <% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
-  <%
+  <% unless StudyhubResource::NOT_PUBLIC_DISPLAY_ATTRIBUTES.include? attribute.title %>
+    <%
     if @error_keys.include? attribute.title
       feedback = @studyhub_resource.errors.messages[attribute.title.to_sym].first
       is_error = true
@@ -25,5 +26,5 @@
       <% end %>
     <% end %>
   </div>
-
+  <% end %>
 <% end %>
