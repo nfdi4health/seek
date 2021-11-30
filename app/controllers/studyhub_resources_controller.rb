@@ -207,7 +207,7 @@ class StudyhubResourcesController < ApplicationController
               By clicking on the button “Submit”, you confirm the correctness of the data entered and apply for registration of your resource in the NFDI4Health Task Force COVID-19 system.
               <br/>
               Please note, after the form is submitted successfully, your data is still private.
-              You can send a request to publish your data. Your request will be reviewed by our "+ t('studyhub_resources.gatekeep')+".
+              You can send a request to publish your data. Your request will be reviewed by our "+ t('asset_gatekeeper').downcase+ ".
               If the data have been entered correctly, your application will be approved and the resource will be published.
               <br/>
               </div>"
