@@ -349,7 +349,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   resource_type_general = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_type_general')
   resource_type_general.update_attributes(
     title: 'resource_type_general', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_type_general_cv,
-    description: attribute_descriptions['resource_type_general'], label: attribute_headings['resource_type_general']
+    description: attribute_descriptions['resource_type_general'], label: attribute_headings['resource_type_general'],pos:1
   )
 
   # ******************************** ResourceKeywords Group ***********************
@@ -357,21 +357,21 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   resource_keywords = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_keywords')
   resource_keywords.update_attributes(
     title: 'resource_keywords', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['resource_keywords'], label: attribute_headings['resource_keywords']
+    description: attribute_descriptions['resource_keywords'], label: attribute_headings['resource_keywords'],pos:2
   )
 
 
   resource_keywords_label = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_keywords_label')
   resource_keywords_label.update_attributes(
     title: 'resource_keywords_label', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['resource_keywords_label'], label: attribute_headings['resource_keywords_label']
+    description: attribute_descriptions['resource_keywords_label'], label: attribute_headings['resource_keywords_label'],pos:3
   )
 
 
   resource_keywords_label_code = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_keywords_label_code')
   resource_keywords_label_code.update_attributes(
     title: 'resource_keywords_label_code', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['resource_keywords_label_code'], label: attribute_headings['resource_keywords_label_code']
+    description: attribute_descriptions['resource_keywords_label_code'], label: attribute_headings['resource_keywords_label_code'],pos:4
   )
   # ****************************************************************
 
@@ -379,67 +379,67 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   resource_language = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_language')
   resource_language.update_attributes(
     title: 'resource_language', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: resource_language_cv,
-    description: attribute_descriptions['resource_language'], label: attribute_headings['resource_language']
+    description: attribute_descriptions['resource_language'], label: attribute_headings['resource_language'],pos:5
   )
 
   resource_web_page = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_web_page')
   resource_web_page.update_attributes(
     title: 'resource_web_page', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['resource_web_page'], label: attribute_headings['resource_web_page']
+    description: attribute_descriptions['resource_web_page'], label: attribute_headings['resource_web_page'],pos:6
   )
 
 
   resource_version = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_version')
   resource_version.update_attributes(
     title: 'resource_version', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['resource_version'], label: attribute_headings['resource_version']
+    description: attribute_descriptions['resource_version'], label: attribute_headings['resource_version'],pos:7
   )
 
 
   resource_format = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_format')
   resource_format.update_attributes(
     title: 'resource_format', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['resource_format'], label: attribute_headings['resource_format']
+    description: attribute_descriptions['resource_format'], label: attribute_headings['resource_format'],pos:8
   )
 
   resource_use_rights_label = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_label')
   resource_use_rights_label.update_attributes(
     title: 'resource_use_rights_label', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_label_cv,
-    description: attribute_descriptions['resource_use_rights_label'], label: attribute_headings['resource_use_rights_label']
+    description: attribute_descriptions['resource_use_rights_label'], label: attribute_headings['resource_use_rights_label'], pos:9
   )
 
   resource_use_rights_description = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_description')
   resource_use_rights_description.update_attributes(
     title: 'resource_use_rights_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['resource_use_rights_description'], label: attribute_headings['resource_use_rights_description']
+    description: attribute_descriptions['resource_use_rights_description'], label: attribute_headings['resource_use_rights_description'],pos:10
   )
 
   resource_use_rights_authors_confirmation_1 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_1')
   resource_use_rights_authors_confirmation_1.update_attributes(
     title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_1'],
-    label: attribute_headings['resource_use_rights_authors_confirmation_1']
+    label: attribute_headings['resource_use_rights_authors_confirmation_1'],pos:11
   )
 
   resource_use_rights_authors_confirmation_2 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_2')
   resource_use_rights_authors_confirmation_2.update_attributes(
     title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_2'],
-    label: attribute_headings['resource_use_rights_authors_confirmation_2']
+    label: attribute_headings['resource_use_rights_authors_confirmation_2'],pos:12
   )
 
   resource_use_rights_authors_confirmation_3 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_3')
   resource_use_rights_authors_confirmation_3.update_attributes(
     title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_3'],
-    label: attribute_headings['resource_use_rights_authors_confirmation_3']
+    label: attribute_headings['resource_use_rights_authors_confirmation_3'],pos:13
   )
 
   resource_use_rights_support_by_licencing = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_support_by_licencing')
   resource_use_rights_support_by_licencing.update_attributes(
     title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_support_by_licencing_cv,
     description: attribute_descriptions['resource_use_rights_support_by_licencing'],
-    label: attribute_headings['resource_use_rights_support_by_licencing']
+    label: attribute_headings['resource_use_rights_support_by_licencing'],pos:14
   )
 
   cmt_studyhub_resource_general = CustomMetadataType.find_or_initialize_by(title: 'NFDI4Health Studyhub Resource General', supported_type: 'StudyhubResource')
@@ -460,135 +460,135 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   study_primary_design = CustomMetadataAttribute.find_or_initialize_by(title: 'study_primary_design')
   study_primary_design.update_attributes(
     title: 'study_primary_design', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_design_cv,
-    description: attribute_descriptions['study_primary_design'], label: attribute_headings['study_primary_design']
+    description: attribute_descriptions['study_primary_design'], label: attribute_headings['study_primary_design'],pos:1
   )
 
   study_type_non_interventional = CustomMetadataAttribute.find_or_initialize_by(title: 'study_type_non_interventional')
   study_type_non_interventional.update_attributes(
     title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv,
-    description: attribute_descriptions['study_type_non_interventional'], label: attribute_headings['study_type_non_interventional']
+    description: attribute_descriptions['study_type_non_interventional'], label: attribute_headings['study_type_non_interventional'],pos:2
   )
 
   study_type_interventional = CustomMetadataAttribute.find_or_initialize_by(title: 'study_type_interventional')
   study_type_interventional.update_attributes(
     title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv,
-    description: attribute_descriptions['study_type_interventional'],label: attribute_headings['study_type_interventional']
+    description: attribute_descriptions['study_type_interventional'],label: attribute_headings['study_type_interventional'],pos:3
   )
 
 
   study_type_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_type_description')
   study_type_description.update_attributes(
     title: 'study_type_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_type_description'], label: attribute_headings['study_type_description']
+    description: attribute_descriptions['study_type_description'], label: attribute_headings['study_type_description'],pos:4
   )
 
   # ****************** StudyDesignConditions ******************
   study_conditions = CustomMetadataAttribute.find_or_initialize_by(title: 'study_conditions')
   study_conditions.update_attributes(
     title: 'study_conditions', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['study_conditions'], label: attribute_headings['study_conditions']
+    description: attribute_descriptions['study_conditions'], label: attribute_headings['study_conditions'],pos:5
   )
 
   study_conditions_classification = CustomMetadataAttribute.find_or_initialize_by(title: 'study_conditions_classification')
   study_conditions_classification.update_attributes(
     title: 'study_conditions_classification', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_conditions_classification_cv,
-    description: attribute_descriptions['study_conditions_classification'],label: attribute_headings['study_conditions_classification']
+    description: attribute_descriptions['study_conditions_classification'],label: attribute_headings['study_conditions_classification'],pos:6
   )
 
 
   study_conditions_classification_code = CustomMetadataAttribute.find_or_initialize_by(title: 'study_conditions_classification_code')
   study_conditions_classification_code.update_attributes(
     title: 'study_conditions_classification_code', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['study_conditions_classification_code'],label: attribute_headings['study_conditions_classification_code']
+    description: attribute_descriptions['study_conditions_classification_code'],label: attribute_headings['study_conditions_classification_code'],pos:7
   )
   # ****************************************************************
 
   study_ethics_commitee_approval = CustomMetadataAttribute.find_or_initialize_by(title: 'study_ethics_commitee_approval')
   study_ethics_commitee_approval.update_attributes(
     title: 'study_ethics_commitee_approval', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_ethics_commitee_approval_cv,
-    description: attribute_descriptions['study_ethics_commitee_approval'],label: attribute_headings['study_ethics_commitee_approval']
+    description: attribute_descriptions['study_ethics_commitee_approval'],label: attribute_headings['study_ethics_commitee_approval'],pos:8
   )
 
   study_status = CustomMetadataAttribute.find_or_initialize_by(title: 'study_status')
   study_status.update_attributes(
     title: 'study_status', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv,
-    description: attribute_descriptions['study_status'],label: attribute_headings['study_status']
+    description: attribute_descriptions['study_status'],label: attribute_headings['study_status'],pos:9
   )
 
   study_status_enrolling_by_invitation = CustomMetadataAttribute.find_or_initialize_by(title: 'study_status_enrolling_by_invitation')
   study_status_enrolling_by_invitation.update_attributes(
     title: 'study_status_enrolling_by_invitation', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_enrolling_by_invitation_cv,
-    description: attribute_descriptions['study_status_enrolling_by_invitation'],label: attribute_headings['study_status_enrolling_by_invitation']
+    description: attribute_descriptions['study_status_enrolling_by_invitation'],label: attribute_headings['study_status_enrolling_by_invitation'],pos:10
   )
 
 
   study_status_when_intervention = CustomMetadataAttribute.find_or_initialize_by(title: 'study_status_when_intervention')
   study_status_when_intervention.update_attributes(
     title: 'study_status_when_intervention', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_when_intervention_cv,
-    description: attribute_descriptions['study_status_when_intervention'], label: attribute_headings['study_status_when_intervention']
+    description: attribute_descriptions['study_status_when_intervention'], label: attribute_headings['study_status_when_intervention'],pos:11
   )
 
 
   study_status_halted_stage = CustomMetadataAttribute.find_or_initialize_by(title: 'study_status_halted_stage')
   study_status_halted_stage.update_attributes(
     title: 'study_status_halted_stage', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_halted_stage_cv,
-    description: attribute_descriptions['study_status_halted_stage'], label: attribute_headings['study_status_halted_stage']
+    description: attribute_descriptions['study_status_halted_stage'], label: attribute_headings['study_status_halted_stage'],pos:12
   )
 
   study_status_halted_reason = CustomMetadataAttribute.find_or_initialize_by(title: 'study_status_halted_reason')
   study_status_halted_reason.update_attributes(
     title: 'study_status_halted_reason', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_status_halted_reason'], label: attribute_headings['study_status_halted_reason']
+    description: attribute_descriptions['study_status_halted_reason'], label: attribute_headings['study_status_halted_reason'],pos:13
   )
 
   study_recruitment_status_register = CustomMetadataAttribute.find_or_initialize_by(title: 'study_recruitment_status_register')
   study_recruitment_status_register.update_attributes(
     title: 'study_recruitment_status_register', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_recruitment_status_register_cv,
-    description: attribute_descriptions['study_recruitment_status_register'],label: attribute_headings['study_recruitment_status_register']
+    description: attribute_descriptions['study_recruitment_status_register'],label: attribute_headings['study_recruitment_status_register'],pos:14
   )
 
   study_start_date = CustomMetadataAttribute.find_or_initialize_by(title: 'study_start_date')
   study_start_date.update_attributes(
     title: 'study_start_date', required: false, sample_attribute_type: date_type,
-    description: attribute_descriptions['study_start_date'],label: attribute_headings['study_start_date']
+    description: attribute_descriptions['study_start_date'],label: attribute_headings['study_start_date'],pos:15
   )
 
 
   study_end_date = CustomMetadataAttribute.find_or_initialize_by(title: 'study_end_date')
   study_end_date.update_attributes(
     title: 'study_end_date', required: false, sample_attribute_type: date_type,
-    description: attribute_descriptions['study_end_date'],label: attribute_headings['study_end_date']
+    description: attribute_descriptions['study_end_date'],label: attribute_headings['study_end_date'],pos:16
   )
 
   study_centers = CustomMetadataAttribute.find_or_initialize_by(title: 'study_centers')
   study_centers.update_attributes(
     title: 'study_centers', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_centers_cv,
-    description: attribute_descriptions['study_centers'],label: attribute_headings['study_centers']
+    description: attribute_descriptions['study_centers'],label: attribute_headings['study_centers'],pos:19
   )
 
   study_centers_number = CustomMetadataAttribute.find_or_initialize_by(title: 'study_centers_number')
   study_centers_number.update_attributes(
     title: 'study_centers_number', required: false, sample_attribute_type: int_type,
-    description: attribute_descriptions['study_centers_number'],label: attribute_headings['study_centers_number']
+    description: attribute_descriptions['study_centers_number'],label: attribute_headings['study_centers_number'],pos:20
   )
 
 
   study_subject = CustomMetadataAttribute.find_or_initialize_by(title: 'study_subject')
   study_subject.update_attributes(
     title: 'study_subject', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_subject_cv,
-    description: attribute_descriptions['study_subject'],label: attribute_headings['study_subject']
+    description: attribute_descriptions['study_subject'],label: attribute_headings['study_subject'],pos:21
   )
 
   study_sampling = CustomMetadataAttribute.find_or_initialize_by(title: 'study_sampling')
   study_sampling.update_attributes(
     title: 'study_sampling', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_sampling_cv,
-    description: attribute_descriptions['study_sampling'],label: attribute_headings['study_sampling']
+    description: attribute_descriptions['study_sampling'],label: attribute_headings['study_sampling'],pos:22
   )
 
   study_data_source = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_source')
   study_data_source.update_attributes(
     title: 'study_data_source', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_source_cv,
-    description: attribute_descriptions['study_data_source'],label: attribute_headings['study_data_source']
+    description: attribute_descriptions['study_data_source'],label: attribute_headings['study_data_source'],pos:23
   )
 
 
@@ -596,126 +596,126 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   study_data_source_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_source_description')
   study_data_source_description.update_attributes(
     title: 'study_data_source_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_data_source_description'], label: attribute_headings['study_data_source_description']
+    description: attribute_descriptions['study_data_source_description'], label: attribute_headings['study_data_source_description'],pos:24
   )
 
   study_eligibility_age_min = CustomMetadataAttribute.find_or_initialize_by(title: 'study_eligibility_age_min')
   study_eligibility_age_min.update_attributes(
     title: 'study_eligibility_age_min', required: false, sample_attribute_type: float_type,
-    description: attribute_descriptions['study_eligibility_age_min'],label: attribute_headings['study_eligibility_age_min']
+    description: attribute_descriptions['study_eligibility_age_min'],label: attribute_headings['study_eligibility_age_min'],pos:25
   )
 
   study_eligibility_age_min_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_eligibility_age_min_description')
   study_eligibility_age_min_description.update_attributes(
     title: 'study_eligibility_age_min_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_eligibility_age_min_description'],label: attribute_headings['study_eligibility_age_min_description']
+    description: attribute_descriptions['study_eligibility_age_min_description'],label: attribute_headings['study_eligibility_age_min_description'],pos:26
   )
 
   study_eligibility_age_max = CustomMetadataAttribute.find_or_initialize_by(title: 'study_eligibility_age_max')
   study_eligibility_age_max.update_attributes(
     title: 'study_eligibility_age_max', required: false, sample_attribute_type: float_type,
-    description: attribute_descriptions['study_eligibility_age_max'],label: attribute_headings['study_eligibility_age_max']
+    description: attribute_descriptions['study_eligibility_age_max'],label: attribute_headings['study_eligibility_age_max'],pos:27
   )
 
   study_eligibility_age_max_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_eligibility_age_max_description')
   study_eligibility_age_max_description.update_attributes(
     title: 'study_eligibility_age_max_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_eligibility_age_max_description'],label: attribute_headings['study_eligibility_age_max_description']
+    description: attribute_descriptions['study_eligibility_age_max_description'],label: attribute_headings['study_eligibility_age_max_description'],pos:28
   )
   study_eligibility_gender = CustomMetadataAttribute.find_or_initialize_by(title: 'study_eligibility_gender')
   study_eligibility_gender.update_attributes(
     title: 'study_eligibility_gender', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_eligibility_gender_cv,
-    description: attribute_descriptions['study_eligibility_gender'],label: attribute_headings['study_eligibility_gender']
+    description: attribute_descriptions['study_eligibility_gender'],label: attribute_headings['study_eligibility_gender'],pos:29
   )
 
   study_eligibility_inclusion_criteria = CustomMetadataAttribute.find_or_initialize_by(title: 'study_eligibility_inclusion_criteria')
   study_eligibility_inclusion_criteria.update_attributes(
     title: 'study_eligibility_inclusion_criteria', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_eligibility_inclusion_criteria'],label: attribute_headings['study_eligibility_inclusion_criteria']
+    description: attribute_descriptions['study_eligibility_inclusion_criteria'],label: attribute_headings['study_eligibility_inclusion_criteria'],pos:30
   )
 
   study_eligibility_exclusion_criteria = CustomMetadataAttribute.find_or_initialize_by(title: 'study_eligibility_exclusion_criteria')
   study_eligibility_exclusion_criteria.update_attributes(
     title: 'study_eligibility_exclusion_criteria', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_eligibility_exclusion_criteria'],label: attribute_headings['study_eligibility_exclusion_criteria']
+    description: attribute_descriptions['study_eligibility_exclusion_criteria'],label: attribute_headings['study_eligibility_exclusion_criteria'],pos:31
   )
   study_population = CustomMetadataAttribute.find_or_initialize_by(title: 'study_population')
   study_population.update_attributes(
     title: 'study_population', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_population'],label: attribute_headings['study_population']
+    description: attribute_descriptions['study_population'],label: attribute_headings['study_population'],pos:32
   )
 
   study_target_sample_size = CustomMetadataAttribute.find_or_initialize_by(title: 'study_target_sample_size')
   study_target_sample_size.update_attributes(
     title: 'study_target_sample_size', required: false, sample_attribute_type: int_type,
-    description: attribute_descriptions['study_target_sample_size'],label: attribute_headings['study_target_sample_size']
+    description: attribute_descriptions['study_target_sample_size'],label: attribute_headings['study_target_sample_size'],pos:33
   )
 
   study_obtained_sample_size = CustomMetadataAttribute.find_or_initialize_by(title: 'study_obtained_sample_size')
   study_obtained_sample_size.update_attributes(
     title: 'study_obtained_sample_size', required: false, sample_attribute_type: int_type,
-    description: attribute_descriptions['study_obtained_sample_size'],label: attribute_headings['study_obtained_sample_size']
+    description: attribute_descriptions['study_obtained_sample_size'],label: attribute_headings['study_obtained_sample_size'],pos:34
   )
 
   study_age_min_examined = CustomMetadataAttribute.find_or_initialize_by(title: 'study_age_min_examined')
   study_age_min_examined.update_attributes(
     title: 'study_age_min_examined', required: false, sample_attribute_type: float_type,
-    description: attribute_descriptions['study_age_min_examined'],label: attribute_headings['study_age_min_examined']
+    description: attribute_descriptions['study_age_min_examined'],label: attribute_headings['study_age_min_examined'],pos:35
   )
 
   study_age_min_examined_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_age_min_examined_description')
   study_age_min_examined_description.update_attributes(
     title: 'study_age_min_examined_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_age_min_examined_description'],label: attribute_headings['study_age_min_examined_description']
+    description: attribute_descriptions['study_age_min_examined_description'],label: attribute_headings['study_age_min_examined_description'],pos:36
   )
 
   study_age_max_examined = CustomMetadataAttribute.find_or_initialize_by(title: 'study_age_max_examined')
   study_age_max_examined.update_attributes(
     title: 'study_age_max_examined', required: false, sample_attribute_type: float_type,
-    description: attribute_descriptions['study_age_max_examined'],label: attribute_headings['study_age_max_examined']
+    description: attribute_descriptions['study_age_max_examined'],label: attribute_headings['study_age_max_examined'],pos:37
   )
 
   study_age_max_examined_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_age_max_examined_description')
   study_age_max_examined_description.update_attributes(
     title: 'study_age_max_examined_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_age_max_examined_description'],label: attribute_headings['study_age_max_examined_description']
+    description: attribute_descriptions['study_age_max_examined_description'],label: attribute_headings['study_age_max_examined_description'],pos:38
   )
 
   study_hypothesis = CustomMetadataAttribute.find_or_initialize_by(title: 'study_hypothesis')
   study_hypothesis.update_attributes(
     title: 'study_hypothesis', required: false , sample_attribute_type: text_type,
-    description: attribute_descriptions['study_hypothesis'],label: attribute_headings['study_hypothesis']
+    description: attribute_descriptions['study_hypothesis'],label: attribute_headings['study_hypothesis'],pos:39
   )
   # ****************** StudyDesignOutcomes ******************
 
   study_outcomes = CustomMetadataAttribute.find_or_initialize_by(title: 'study_outcomes')
   study_outcomes.update_attributes(
     title: 'study_outcomes', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['study_outcomes'], label: attribute_headings['study_outcomes']
+    description: attribute_descriptions['study_outcomes'], label: attribute_headings['study_outcomes'],pos:40
   )
 
   study_outcome_type = CustomMetadataAttribute.find_or_initialize_by(title: 'study_outcome_type')
   study_outcome_type.update_attributes(
     title: 'study_outcome_type', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_outcome_type_cv,
-    description: attribute_descriptions['study_outcome_type'],label: attribute_headings['study_outcome_type']
+    description: attribute_descriptions['study_outcome_type'],label: attribute_headings['study_outcome_type'],pos:41
   )
 
   study_outcome_title = CustomMetadataAttribute.find_or_initialize_by(title: 'study_outcome_title')
   study_outcome_title.update_attributes(
     title: 'study_outcome_title', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['study_outcome_title'],label: attribute_headings['study_outcome_title']
+    description: attribute_descriptions['study_outcome_title'],label: attribute_headings['study_outcome_title'],pos:42
   )
 
   study_outcome_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_outcome_description')
   study_outcome_description.update_attributes(
     title: 'study_outcome_description', required: false , sample_attribute_type: text_type,
-    description: attribute_descriptions['study_outcome_description'],label: attribute_headings['study_outcome_description']
+    description: attribute_descriptions['study_outcome_description'],label: attribute_headings['study_outcome_description'],pos:43
   )
 
   study_outcome_time_frame = CustomMetadataAttribute.find_or_initialize_by(title: 'study_outcome_time_frame')
   study_outcome_time_frame.update_attributes(
     title: 'study_outcome_time_frame', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_outcome_time_frame'],label: attribute_headings['study_outcome_time_frame']
+    description: attribute_descriptions['study_outcome_time_frame'],label: attribute_headings['study_outcome_time_frame'],pos:44
   )
 
   # ****************** StudyDesignOutcomes ******************
@@ -723,49 +723,49 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   study_design_comment = CustomMetadataAttribute.find_or_initialize_by(title: 'study_design_comment')
   study_design_comment.update_attributes(
     title: 'study_design_comment', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_design_comment'],label: attribute_headings['study_design_comment']
+    description: attribute_descriptions['study_design_comment'],label: attribute_headings['study_design_comment'],pos:45
   )
 
   study_data_sharing_plan_generally = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_sharing_plan_generally')
   study_data_sharing_plan_generally.update_attributes(
     title: 'study_data_sharing_plan_generally', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_generally_cv,
-    description: attribute_descriptions['study_data_sharing_plan_generally'],label: attribute_headings['study_data_sharing_plan_generally']
+    description: attribute_descriptions['study_data_sharing_plan_generally'],label: attribute_headings['study_data_sharing_plan_generally'],pos:46
   )
 
   study_data_sharing_plan_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_sharing_plan_description')
   study_data_sharing_plan_description.update_attributes(
     title: 'study_data_sharing_plan_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_data_sharing_plan_description'],label: attribute_headings['study_data_sharing_plan_description']
+    description: attribute_descriptions['study_data_sharing_plan_description'],label: attribute_headings['study_data_sharing_plan_description'],pos:47
   )
 
   study_data_sharing_plan_supporting_information = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_sharing_plan_supporting_information')
   study_data_sharing_plan_supporting_information.update_attributes(
     title: 'study_data_sharing_plan_supporting_information', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_data_sharing_plan_supporting_information_cv,
-    description: attribute_descriptions['study_data_sharing_plan_supporting_information'],label: attribute_headings['study_data_sharing_plan_supporting_information']
+    description: attribute_descriptions['study_data_sharing_plan_supporting_information'],label: attribute_headings['study_data_sharing_plan_supporting_information'],pos:48
   )
 
   study_data_sharing_plan_time_frame = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_sharing_plan_time_frame')
   study_data_sharing_plan_time_frame.update_attributes(
     title: 'study_data_sharing_plan_time_frame', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_data_sharing_plan_time_frame'],label: attribute_headings['study_data_sharing_plan_time_frame']
+    description: attribute_descriptions['study_data_sharing_plan_time_frame'],label: attribute_headings['study_data_sharing_plan_time_frame'],pos:49
   )
 
   study_data_sharing_plan_access_criteria = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_sharing_plan_access_criteria')
   study_data_sharing_plan_access_criteria.update_attributes(
     title: 'study_data_sharing_plan_access_criteria', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_data_sharing_plan_access_criteria'],label: attribute_headings['study_data_sharing_plan_access_criteria']
+    description: attribute_descriptions['study_data_sharing_plan_access_criteria'],label: attribute_headings['study_data_sharing_plan_access_criteria'],pos:50
   )
 
   study_data_sharing_plan_url = CustomMetadataAttribute.find_or_initialize_by(title: 'study_data_sharing_plan_url')
   study_data_sharing_plan_url.update_attributes(
     title: 'study_data_sharing_plan_url', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['study_data_sharing_plan_url'],label: attribute_headings['study_data_sharing_plan_url']
+    description: attribute_descriptions['study_data_sharing_plan_url'],label: attribute_headings['study_data_sharing_plan_url'],pos:51
   )
 
   study_region = CustomMetadataAttribute.find_or_initialize_by(title: 'study_region')
   study_region.update_attributes(
     title: 'study_region', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['study_region'], label: attribute_headings['study_region']
+    description: attribute_descriptions['study_region'], label: attribute_headings['study_region'],pos:18
   )
 
 
@@ -791,26 +791,26 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   study_time_perspective = CustomMetadataAttribute.find_or_initialize_by(title: 'study_time_perspective')
   study_time_perspective.update_attributes(
     title: 'study_time_perspective', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_time_perspective_cv,
-    description: attribute_descriptions['study_time_perspective'], label: attribute_headings['study_time_perspective']
+    description: attribute_descriptions['study_time_perspective'], label: attribute_headings['study_time_perspective'],pos:1
   )
 
 
   study_target_follow_up_duration = CustomMetadataAttribute.find_or_initialize_by(title: 'study_target_follow-up_duration')
   study_target_follow_up_duration.update_attributes(
     title: 'study_target_follow-up_duration', required: false, sample_attribute_type: float_type,
-    description: attribute_descriptions['study_target_follow-up_duration'],label: attribute_headings['study_target_follow']
+    description: attribute_descriptions['study_target_follow-up_duration'],label: attribute_headings['study_target_follow-up_duration'],pos:2
   )
 
   study_biospecimen_retention = CustomMetadataAttribute.find_or_initialize_by(title: 'study_biospecimen_retention')
   study_biospecimen_retention.update_attributes(
     title: 'study_biospecimen_retention', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_biospecimen_retention_cv,
-    description: attribute_descriptions['study_biospecimen_retention'],label: attribute_headings['study_biospecimen_retention']
+    description: attribute_descriptions['study_biospecimen_retention'],label: attribute_headings['study_biospecimen_retention'],pos:3
   )
 
   study_biospecomen_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_biospecomen_description')
   study_biospecomen_description.update_attributes(
     title: 'study_biospecomen_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_biospecomen_description'],label: attribute_headings['study_biospecomen_description']
+    description: attribute_descriptions['study_biospecomen_description'],label: attribute_headings['study_biospecomen_description'],pos:4
   )
 
 
@@ -832,44 +832,44 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   study_primary_purpose = CustomMetadataAttribute.find_or_initialize_by(title: 'study_primary_purpose')
   study_primary_purpose.update_attributes(
     title: 'study_primary_purpose', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_primary_purpose_cv,
-    description: attribute_descriptions['study_primary_purpose'],label: attribute_headings['study_primary_purpose']
+    description: attribute_descriptions['study_primary_purpose'],label: attribute_headings['study_primary_purpose'],pos:1
   )
 
   study_phase = CustomMetadataAttribute.find_or_initialize_by(title: 'study_phase')
   study_phase.update_attributes(
     title: 'study_phase', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_phase_cv,
-    description: attribute_descriptions['study_phase'],label: attribute_headings['study_phase']
+    description: attribute_descriptions['study_phase'],label: attribute_headings['study_phase'],pos:2
   )
 
   study_masking = CustomMetadataAttribute.find_or_initialize_by(title: 'study_masking')
   study_masking.update_attributes(
     title: 'study_masking', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_cv,
-    description: attribute_descriptions['study_masking'],label: attribute_headings['study_masking']
+    description: attribute_descriptions['study_masking'],label: attribute_headings['study_masking'],pos:3
   )
 
   study_masking_roles = CustomMetadataAttribute.find_or_initialize_by(title: 'study_masking_roles')
   study_masking_roles.update_attributes(
     title: 'study_masking_roles', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_roles_cv,
-    description: attribute_descriptions['study_masking_roles'],label: attribute_headings['study_masking_roles']
+    description: attribute_descriptions['study_masking_roles'],label: attribute_headings['study_masking_roles'],pos:4
   )
 
   study_masking_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_masking_description')
   study_masking_description.update_attributes(
     title: 'study_masking_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_masking_description'],label: attribute_headings['study_masking_description']
+    description: attribute_descriptions['study_masking_description'],label: attribute_headings['study_masking_description'],pos:5
   )
 
   study_allocation = CustomMetadataAttribute.find_or_initialize_by(title: 'study_allocation')
   study_allocation.update_attributes(
     title: 'study_allocation', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_allocation_cv,
-    description: attribute_descriptions['study_allocation'],label: attribute_headings['study_allocation']
+    description: attribute_descriptions['study_allocation'],label: attribute_headings['study_allocation'],pos:6
   )
 
 
   study_off_label_use = CustomMetadataAttribute.find_or_initialize_by(title: 'study_off_label_use')
   study_off_label_use.update_attributes(
     title: 'study_off_label_use', required: false , sample_attribute_type: cv_type, sample_controlled_vocab: study_off_label_use_cv,
-    description: attribute_descriptions['study_off_label_use'],label: attribute_headings['study_off_label_use']
+    description: attribute_descriptions['study_off_label_use'],label: attribute_headings['study_off_label_use'],pos:7
   )
 
   # ****************** StudyArmGroups ******************
@@ -877,25 +877,25 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   interventional_study_design_arms = CustomMetadataAttribute.find_or_initialize_by(title: 'interventional_study_design_arms')
   interventional_study_design_arms.update_attributes(
     title: 'interventional_study_design_arms', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['interventional_study_design_arms'], label: attribute_headings['interventional_study_design_arms']
+    description: attribute_descriptions['interventional_study_design_arms'], label: attribute_headings['interventional_study_design_arms'],pos:8
   )
 
   study_arm_group_label = CustomMetadataAttribute.find_or_initialize_by(title: 'study_arm_group_label')
   study_arm_group_label.update_attributes(
     title: 'study_arm_group_label', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['study_arm_group_label'],label: attribute_headings['study_arm_group_label']
+    description: attribute_descriptions['study_arm_group_label'],label: attribute_headings['study_arm_group_label'],pos:9
   )
 
   study_arm_group_type = CustomMetadataAttribute.find_or_initialize_by(title: 'study_arm_group_type')
   study_arm_group_type.update_attributes(
     title: 'study_arm_group_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_arm_group_type_cv,
-    description: attribute_descriptions['study_arm_group_type'],label: attribute_headings['study_arm_group_type']
+    description: attribute_descriptions['study_arm_group_type'],label: attribute_headings['study_arm_group_type'],pos:10
   )
 
   study_arm_group_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_arm_group_description')
   study_arm_group_description.update_attributes(
     title: 'study_arm_group_description', required: false, sample_attribute_type: text_type,
-    description: attribute_descriptions['study_arm_group_description'],label: attribute_headings['study_arm_group_description']
+    description: attribute_descriptions['study_arm_group_description'],label: attribute_headings['study_arm_group_description'],pos:11
   )
   # ****************** StudyArmGroups ******************
 
@@ -905,31 +905,31 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   interventional_study_design_interventions = CustomMetadataAttribute.find_or_initialize_by(title: 'interventional_study_design_interventions')
   interventional_study_design_interventions.update_attributes(
     title: 'interventional_study_design_interventions', required: false, sample_attribute_type: string_type,
-    description: attribute_descriptions['interventional_study_design_interventions'], label: attribute_headings['interventional_study_design_interventions']
+    description: attribute_descriptions['interventional_study_design_interventions'], label: attribute_headings['interventional_study_design_interventions'],pos:12
   )
 
   study_intervention_name = CustomMetadataAttribute.find_or_initialize_by(title: 'study_intervention_name')
   study_intervention_name.update_attributes(
     title: 'study_intervention_name', required: false , sample_attribute_type: string_type,
-    description: attribute_descriptions['study_intervention_name'],label: attribute_headings['study_intervention_name']
+    description: attribute_descriptions['study_intervention_name'],label: attribute_headings['study_intervention_name'],pos:13
   )
 
   study_intervention_type = CustomMetadataAttribute.find_or_initialize_by(title: 'study_intervention_type')
   study_intervention_type.update_attributes(
     title: 'study_intervention_type', required: false, sample_attribute_type: cv_type,sample_controlled_vocab: study_intervention_type_cv,
-    description: attribute_descriptions['study_intervention_type'],label: attribute_headings['study_intervention_type']
+    description: attribute_descriptions['study_intervention_type'],label: attribute_headings['study_intervention_type'],pos:14
   )
 
   study_intervention_description = CustomMetadataAttribute.find_or_initialize_by(title: 'study_intervention_description')
   study_intervention_description.update_attributes(
     title: 'study_intervention_description', required: false , sample_attribute_type: text_type,
-    description: attribute_descriptions['study_intervention_description'],label: attribute_headings['study_intervention_description']
+    description: attribute_descriptions['study_intervention_description'],label: attribute_headings['study_intervention_description'],pos:15
   )
 
   study_intervention_arm_group_label = CustomMetadataAttribute.find_or_initialize_by(title: 'study_intervention_arm_group_label')
   study_intervention_arm_group_label.update_attributes(
     title: 'study_intervention_arm_group_label', required: false , sample_attribute_type: string_type,
-    description: attribute_descriptions['study_intervention_arm_group_label'],label: attribute_headings['study_intervention_arm_group_label']
+    description: attribute_descriptions['study_intervention_arm_group_label'],label: attribute_headings['study_intervention_arm_group_label'],pos:16
   )
   # ****************** StudyDesignIntervention ******************
 
