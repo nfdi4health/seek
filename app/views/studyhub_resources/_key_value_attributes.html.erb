@@ -1,4 +1,4 @@
-<% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
+<% custom_metadata_type.custom_metadata_attributes.sort_by(&:pos).each do |attribute| %>
   <% unless StudyhubResource::NOT_PUBLIC_DISPLAY_ATTRIBUTES.include? attribute.title %>
     <% hidden_class = resource[attribute.title].blank? ? "item-hidden" : nil %>
     <p class=<%= hidden_class %>>
