@@ -167,16 +167,6 @@ class StudyhubResource < ApplicationRecord
           if role['role_name_personal_family_name'].blank?
             errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
           end
-
-          ID_TYPE.each do |type|
-            unless role["role_#{type}_identifiers"].blank?
-              role["role_#{type}_identifiers"].each_with_index do |id,id_index|
-                if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
-                  errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
-                end
-              end
-            end
-          end
         end
 
         if role['role_name_type'] == 'Organisational'
@@ -184,6 +174,17 @@ class StudyhubResource < ApplicationRecord
             errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
           end
         end
+
+        ID_TYPE.each do |type|
+          unless role["role_#{type}_identifiers"].blank?
+            role["role_#{type}_identifiers"].each_with_index do |id,id_index|
+              if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
+                errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
+              end
+            end
+          end
+        end
+
       end
 
       if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
