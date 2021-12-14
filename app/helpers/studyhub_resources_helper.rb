@@ -254,31 +254,31 @@ module StudyhubResourcesHelper
 
     @error_keys.each do |key|
 
-      if (key.include? 'role_type')
+      if (key.include? "[#{index}]['role_type']")
         role['role_type'] = @studyhub_resource.errors.messages["roles[#{index}]['role_type']".to_sym].first
       end
 
-      if (key.include? 'role_name_type')
+      if (key.include? "[#{index}]['role_name_type']")
         role['role_name_type'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_type']".to_sym].first
       end
 
-      if (key.include? 'role_name_personal_title')
+      if (key.include? "[#{index}]['role_name_personal_title']")
         role['role_name_personal_title'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_title']".to_sym].first
       end
 
-      if (key.include? 'role_name_personal_given_name')
+      if (key.include? "[#{index}]['role_name_personal_given_name']")
         role['role_name_personal_given_name'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_given_name']".to_sym].first
       end
 
-      if (key.include? 'role_name_personal_family_name')
+      if (key.include? "[#{index}]['role_name_personal_family_name']")
         role['role_name_personal_family_name'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_personal_family_name']".to_sym].first
       end
 
-      if (key.include? 'role_name_organisational')
+      if (key.include? "[#{index}]['role_name_organisational']")
         role['role_name_organisational'] = @studyhub_resource.errors.messages["roles[#{index}]['role_name_organisational']".to_sym].first
       end
 
-      if (key.include? 'role_affiliation_web_page')
+      if (key.include? "[#{index}]['role_affiliation_web_page']")
         role['role_affiliation_web_page'] = @studyhub_resource.errors.messages["roles[#{index}]['role_affiliation_web_page']".to_sym].first
       end
     end
@@ -328,7 +328,7 @@ module StudyhubResourcesHelper
     role[role_type_identifier_scheme][index] = {}
 
     @error_keys.each do |key|
-      if (key.include? "role_#{type}_identifier_scheme")
+      if (key.include? "roles[#{index}]['role_#{type}_identifier_scheme']")
         id_index = key[-2, 1].to_i
         role[role_type_identifier_scheme][index][id_index] = if index == 'row-template'
                                                                nil
