@@ -67,10 +67,8 @@
             newRow = newRow.replace(/row-template/g, index);
 
             $j('#resource-title-table #title-row').before($j(newRow));
-            $j('select[name="studyhub_resource[title_language]['+index+']"]').val("EN");
-            $j('input[name="studyhub_resource[resource_title]['+index+']"]').val("");
-
-
+            $j('select[name="studyhub_resource[resource_json][resource_titles][title_language]['+index+']"]').val("EN");
+            $j('input[name="studyhub_resource[resource_json][resource_titles][title]['+index+']"]').val("");
 
             return false;
         });

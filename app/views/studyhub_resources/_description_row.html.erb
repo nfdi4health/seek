@@ -14,21 +14,21 @@
   end
 %>
 
-<% field_name_prefix = "resource_descriptions[description][#{index}]" %>
+<% field_name_prefix = "studyhub_resource[resource_json][resource_descriptions]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
 <tr class="resource-description" data-index="<%= index-%>">
 
   <td>
     <div class="form-group">
-      <%= f.collection_select "studyhub_resource[description_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
+      <%= f.collection_select "#{field_name_prefix}[description_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
                               { :include_blank => false, :selected => description_language }, :class => "form-control" %>
     </div>
   </td>
 
   <td>
     <div class="form-group">
-      <%= f.text_area "studyhub_resource[description][#{index}]", :rows => 5, :class => "form-control", :value => description_text %>
+      <%= f.text_area "#{field_name_prefix}[description][#{index}]", :rows => 5, :class => "form-control", :value => description_text %>
     </div>
   </td>
 

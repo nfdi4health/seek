@@ -233,38 +233,44 @@ class StudyhubResourcesController < ApplicationController
 
   def studyhub_resource_params
 
+    sr_params = {}
+
     @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
     params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
-    sr = params[:studyhub_resource]
-    params[:studyhub_resource][:resource_json] = {}
+    sr_params[:resource_json] = {}
+    resource_json = params[:studyhub_resource][:resource_json]
 
     # parse titles
-    sr[:title] = sr[:resource_title].values[0] unless sr[:resource_title].nil?
-
-    sr[:resource_json][:resource_titles] = parse_resource_titles(sr)
+    sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
+    params[:studyhub_resource][:title]  = parse_resource_titles(resource_json[:resource_titles]).first["title"]
 
     # parse acronyms
-    sr[:resource_json][:resource_acronyms] = parse_resource_acronyms(sr)
+    sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms])
 
     # parse descriptions
-    sr[:resource_json][:resource_descriptions] = parse_resource_descriptions(sr)
+    sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions])
 
 
     # parse IDs
-    sr[:resource_json][:ids] = parse_ids(sr)
-
+    sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids])
 
     # parse roles
-    sr[:resource_json][:roles] = parse_roles(sr)
+    sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles])
 
 
-    params[:studyhub_resource][:resource_json][:resource], params[:studyhub_resource][:resource_json][:study_design] = parse_custom_metadata_attributes(sr)
-    # parse resource information and study design
-
+    #parse resource and study design
+    if !resource_json[:resource].blank?
+       sr_params[:resource_json][:resource] = resource_json[:resource]
+       sr_params[:resource_json][:study_design] = resource_json[:study_design]
+    else
+      sr_params[:resource_json][:resource], sr_params[:resource_json][:study_design] = parse_custom_metadata_attributes(params[:studyhub_resource])
+    end
 
     unless @rt.is_studytype?
-      params[:studyhub_resource][:resource_json] = params[:studyhub_resource][:resource_json].except(:study_design)
+      sr_params[:resource_json] = sr_params[:resource_json].except(:study_design)
     end
+
+    params[:studyhub_resource][:resource_json] = sr_params[:resource_json]
 
     params.require(:studyhub_resource).permit(:title,:studyhub_resource_type_id, :comment, { resource_json: {} }, \
                                             :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, { document_ids: [] },\
@@ -274,9 +280,7 @@ class StudyhubResourcesController < ApplicationController
   end
 
 
-  def  get_custom_metadata_attributes(title)
-    CustomMetadataType.where(title:title).first.custom_metadata_attributes.map(&:title)
-  end
+
 
   def parse_multi_attributes(params)
     values = []
@@ -326,6 +330,10 @@ class StudyhubResourcesController < ApplicationController
     return resource, study_design
   end
 
+  def  get_custom_metadata_attributes(title)
+    CustomMetadataType.where(title:title).first.custom_metadata_attributes.map(&:title)
+  end
+
   def get_study_design_attributes(params)
 
     cm_study_design_general_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign General')
@@ -359,8 +367,12 @@ class StudyhubResourcesController < ApplicationController
 
   def parse_roles(params)
     roles = []
+    if params.kind_of?(Array)
+      params.each do |value|
+        roles << value
+      end
+    else
     params[:role_type].keys.each do |key|
-
       next if key == 'row-template'
       entry = {}
 
@@ -400,11 +412,17 @@ class StudyhubResourcesController < ApplicationController
       roles << entry unless entry['role_type'].blank?
 
     end
+    end
     roles
   end
 
   def parse_ids(params)
     ids = []
+    if params.kind_of?(Array)
+      params.each do |value|
+        ids << value
+      end
+    else
     params[:id_type].keys.each do |key|
       entry = {}
       next if key == 'row-template'
@@ -416,49 +434,61 @@ class StudyhubResourcesController < ApplicationController
       entry['id_resource_type_general'] = params[:id_resource_type_general][key]
       ids << entry unless entry['id_id'].blank?
     end
+    end
     ids
   end
 
   def parse_resource_titles(params)
     resource_titles = []
-    params[:resource_title].keys.each do |key|
-      next if key == 'row-template'
-
-      entry = {}
-      entry['title'] = params[:resource_title][key]
-
-      entry['title_language'] = params[:title_language][key]
-      resource_titles << entry unless entry['title'].blank?
-
+    if params.kind_of?(Array)
+      params.each do |value|
+        resource_titles << value
+      end
+    else
+      params[:title].keys.each do |key|
+        next if key == 'row-template'
+        entry = {}
+        entry['title'] = params[:title][key]
+        entry['title_language'] = params[:title_language][key]
+        resource_titles << entry unless entry['title'].blank?
+      end
     end
     resource_titles
   end
 
   def parse_resource_acronyms(params)
     resource_acronyms = []
-    params[:resource_acronym].keys.each do |key|
-      next if key == 'row-template'
-
-      entry = {}
-      entry['acronym'] = params[:resource_acronym][key]
-
-      entry['acronym_language'] = params[:acronym_language][key]
-      resource_acronyms << entry unless entry['acronym'].blank?
-
+    if params.kind_of?(Array)
+      params.each do |value|
+        resource_acronyms << value
+      end
+    else
+      params[:acronym].keys.each do |key|
+        next if key == 'row-template'
+        entry = {}
+        entry['acronym'] = params[:acronym][key]
+        entry['acronym_language'] = params[:acronym_language][key]
+        resource_acronyms << entry unless entry['acronym'].blank?
+      end
     end
     resource_acronyms
   end
 
   def parse_resource_descriptions(params)
     resource_descriptions = []
-    params[:description].keys.each do |key|
-      next if key == 'row-template'
+    if params.kind_of?(Array)
+      params.each do |value|
+        resource_descriptions << value
+      end
+    else
+      params[:description].keys.each do |key|
+        next if key == 'row-template'
 
-      entry = {}
-      entry['description'] = params[:description][key]
-
-      entry['description_language'] = params[:description_language][key]
-      resource_descriptions << entry unless entry['description'].blank?
+        entry = {}
+        entry['description'] = params[:description][key]
+        entry['description_language'] = params[:description_language][key]
+        resource_descriptions << entry unless entry['description'].blank?
+      end
     end
     resource_descriptions
   end

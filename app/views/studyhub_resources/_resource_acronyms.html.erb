@@ -64,10 +64,8 @@
             newRow = newRow.replace(/row-template/g, index);
 
             $j('#resource-acronym-table #acronym-row').before($j(newRow));
-            $j('select[name="studyhub_resource[acronym_language]['+index+']"]').val("EN");
-            $j('input[name="studyhub_resource[acronym]['+index+']"]').val("");
-
-
+            $j('select[name="studyhub_resource[resource_json][resource_acronyms][acronym_language]['+index+']"]').val("EN");
+            $j('input[name="studyhub_resource[resource_json][resource_acronyms][acronym]['+index+']"]').val("");
 
             return false;
         });
