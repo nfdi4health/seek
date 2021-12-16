@@ -14,13 +14,14 @@ class StudyhubResource < ApplicationRecord
   validate :check_resource_json, on:  [:create, :update]
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
-  validate :check_numericality, on:  [:create, :update]
-  validate :end_date_is_after_start_date, on: [:create, :update]
+  validate :check_numericality, on:  [:create, :update], if: :is_studytype?
+  validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
   validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
-  validate :check_required_multi_attributes, on:  [:create, :update], if: :request_to_submit?
+  validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
+
   validate :final_error_check, on:  [:create, :update]
 
   attr_readonly :studyhub_resource_type_id
@@ -87,45 +88,38 @@ class StudyhubResource < ApplicationRecord
 
 
   def check_urls
+    return if resource_json.nil?
 
-    unless resource_json.nil?
-      unless resource_json['resource'].blank? || validate_url(resource_json['resource']['resource_web_page'].strip)
-        errors.add('resource_web_page'.to_sym, 'is not a url.')
-      end
+    unless resource_json['resource'].blank? || validate_url(resource_json['resource']['resource_web_page'].strip)
+      errors.add('resource_web_page'.to_sym, 'is not a url.')
+    end
 
-      unless resource_json['roles'].blank?
-        resource_json['roles'].each_with_index do |role,index|
-          unless validate_url(role['role_affiliation_web_page'].strip)
-            errors.add("roles[#{index}]['role_affiliation_web_page']".to_sym, 'is not a url.')
-          end
-        end
-      end
-
-      unless resource_json['study_design'].blank? || resource_json['study_design']['study_data_sharing_plan_url'].blank?
-        unless validate_url(resource_json['study_design']['study_data_sharing_plan_url'].strip)
-          errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
-        end
+    resource_json['roles']&.each_with_index do |role,index|
+      unless validate_url(role['role_affiliation_web_page'].strip)
+        errors.add("roles[#{index}]['role_affiliation_web_page']".to_sym, 'is not a url.')
       end
     end
+
+    unless resource_json['study_design'].blank? || resource_json['study_design']['study_data_sharing_plan_url'].blank?
+      unless validate_url(resource_json['study_design']['study_data_sharing_plan_url'].strip)
+        errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
+      end
+    end
+
   end
 
   def check_numericality
-
     unless resource_json.nil? || resource_json['study_design'].blank?
       INTEGER_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
-        begin
-          Integer(resource_json['study_design'][value])
-        rescue ArgumentError, TypeError
-          errors.add(value.to_sym, 'The value must be an integer.')
-        end
+        Integer(resource_json['study_design'][value])
+      rescue ArgumentError, TypeError
+        errors.add(value.to_sym, 'The value must be an integer.')
       end
 
       FLOAT_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
-        begin
-          Float(resource_json['study_design'][value])
-        rescue ArgumentError, TypeError
-          errors.add(value.to_sym, 'The value must be a float.')
-        end
+        Float(resource_json['study_design'][value])
+      rescue ArgumentError, TypeError
+        errors.add(value.to_sym, 'The value must be a float.')
       end
     end
   end
@@ -133,26 +127,26 @@ class StudyhubResource < ApplicationRecord
 
   def end_date_is_after_start_date
 
+    return if resource_json.blank?
+
     start_date = resource_json['study_design']['study_start_date']
     end_date = resource_json['study_design']['study_end_date']
 
     return if end_date.blank? || start_date.blank?
 
-    if end_date < start_date
-      errors.add(:study_end_date, "cannot be before the start date")
-    end
+    errors.add(:study_end_date, "cannot be before the start date") if end_date < start_date
   end
 
   def check_resource_json
-    unless resource_json.blank?
-      errors.add("ids", "Please check if the resource_json[ids] is correct.")  unless resource_json.has_key?('ids')
-      errors.add("roles", "Please check if the resource_json[roles] is correct.")  unless resource_json.has_key?('roles')
-      errors.add("resource", "Please check if the resource_json[resource] is correct.")  unless resource_json.has_key?('resource')
-      errors.add("study_design", "Please check if the resource_json[study_design] is correct.")  unless resource_json.has_key?('study_design')
-      errors.add("resource_titles", "Please check if the resource_json[resource_titles] is correct.")  unless resource_json.has_key?('resource_titles')
-      errors.add("resource_acronyms", "Please check if the resource_json[resource_acronyms] is correct.")  unless resource_json.has_key?('resource_acronyms')
-      errors.add("resource_descriptions", "Please check if the resource_json[resource_descriptions] is correct.")  unless resource_json.has_key?('resource_descriptions')
-    end
+    return if resource_json.blank?
+
+    errors.add("ids", "Please check if the resource_json[ids] is correct.")  unless resource_json.has_key?('ids')
+    errors.add("roles", "Please check if the resource_json[roles] is correct.")  unless resource_json.has_key?('roles')
+    errors.add("resource", "Please check if the resource_json[resource] is correct.") unless resource_json.has_key?('resource')
+    errors.add("study_design", "Please check if the resource_json[study_design] is correct.")  unless resource_json.has_key?('study_design')
+    errors.add("resource_titles", "Please check if the resource_json[resource_titles] is correct.")  unless resource_json.has_key?('resource_titles')
+    errors.add("resource_acronyms", "Please check if the resource_json[resource_acronyms] is correct.") unless resource_json.has_key?('resource_acronyms')
+    errors.add("resource_descriptions", "Please check if the resource_json[resource_descriptions] is correct.") unless resource_json.has_key?('resource_descriptions')
   end
 
 
@@ -162,63 +156,58 @@ class StudyhubResource < ApplicationRecord
 
 
   def check_id_presence
-    if resource_json.has_key?('ids')
-      resource_json['ids'].each_with_index do |id,index|
-        unless id['id_id'].blank?
-          errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
-          errors.add("ids[#{index}]['id_relation_type']".to_sym, "can't be blank")  if id['id_relation_type'].blank?
-        end
+    resource_json['ids']&.each_with_index do |id,index|
+      unless id['id_id'].blank?
+        errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
+        errors.add("ids[#{index}]['id_relation_type']".to_sym, "can't be blank")  if id['id_relation_type'].blank?
       end
     end
   end
 
   def check_role_presence
 
-    if resource_json.has_key?('roles')
-      if resource_json['roles'].blank?
-        errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
-        errors.add("roles[0]['role_type']".to_sym, "can't be blank")
-        errors.add("roles[0]['role_name_type']".to_sym, "can't be blank")
-      else
-        resource_json['roles'].each_with_index do |role,index|
-          errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
-          errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
+    return unless resource_json.has_key?('roles')
+    if resource_json['roles'].blank?
+      errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
+      errors.add("roles[0]['role_type']".to_sym, "can't be blank")
+      errors.add("roles[0]['role_name_type']".to_sym, "can't be blank")
+    else
+      resource_json['roles']&.each_with_index do |role,index|
+        errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
+        errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
 
-          if role['role_name_type'] == 'Personal'
+        if role['role_name_type'] == 'Personal'
 
-            if role['role_name_personal_title'].blank?
-              errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")
-            end
+          if role['role_name_personal_title'].blank?
+            errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")
+          end
 
-            if role['role_name_personal_given_name'].blank?
-              errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
-            end
+          if role['role_name_personal_given_name'].blank?
+            errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
+          end
 
-            if role['role_name_personal_family_name'].blank?
-              errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
-            end
+          if role['role_name_personal_family_name'].blank?
+            errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
+          end
 
-            ID_TYPE.each do |type|
-              unless role["role_#{type}_identifiers"].blank?
-                role["role_#{type}_identifiers"].each_with_index do |id,id_index|
-                  if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
-                    errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
-                  end
-                end
+          ID_TYPE.each do |type|
+            role["role_#{type}_identifiers"]&.each_with_index do |id,id_index|
+              if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
+                errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
               end
             end
           end
+        end
 
-          if role['role_name_type'] == 'Organisational'
-            if role['role_name_organisational'].blank?
-              errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
-            end
+        if role['role_name_type'] == 'Organisational'
+          if role['role_name_organisational'].blank?
+            errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
           end
         end
+      end
 
-        if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
-          errors.add(:base, 'Please add the required fields for resource roles.')
-        end
+      if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
+        errors.add(:base, 'Please add the required fields for resource roles.')
       end
     end
   end
@@ -257,41 +246,29 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_required_multi_attributes
-
-    if is_studytype?
-      resource_json['study_design']['study_conditions']&.each_with_index  do |condition, index|
-        if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
-          errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
-        end
+    resource_json['study_design']['study_conditions']&.each_with_index  do |condition, index|
+      if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
+        errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
       end
-
-      resource_json['study_design']['study_outcomes']&.each_with_index  do |outcome, index|
-        if !outcome['study_outcome_title'].blank? && outcome['study_outcome_type'].blank?
-          errors.add("study_outcome_type[#{index}]".to_sym, 'Please select the type of the outcome measure.')
-        end
-      end
-
-      resource_json['study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
-        if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
-          errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
-        end
-      end
-
     end
+
+    resource_json['study_design']['study_outcomes']&.each_with_index  do |outcome, index|
+      if !outcome['study_outcome_title'].blank? && outcome['study_outcome_type'].blank?
+        errors.add("study_outcome_type[#{index}]".to_sym, 'Please select the type of the outcome measure.')
+      end
+    end
+
+    resource_json['study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
+      if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
+        errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
+      end
+    end
+
   end
 
   def final_error_check
     errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
   end
-
-  def check_content_blob_presence
-    unless is_studytype?
-      if content_blob.blank?
-        errors.add(:base, "Please save the #{studyhub_resource_type_title} at first and then upload a file!")
-      end
-    end
-  end
-
 
   def request_to_submit?
     commit_button == 'Submit'
@@ -349,6 +326,7 @@ class StudyhubResource < ApplicationRecord
   def validate_url(url)
 
     return true if url.blank?
+
     begin
       uri = URI.parse(url)
       resp = uri.kind_of?(URI::HTTP) || uri.kind_of?(URI::HTTPS)
