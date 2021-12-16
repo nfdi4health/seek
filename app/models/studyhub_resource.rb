@@ -11,6 +11,7 @@ class StudyhubResource < ApplicationRecord
   has_extended_custom_metadata
   acts_as_asset
 
+  validate :check_resource_json, on:  [:create, :update]
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update]
@@ -87,7 +88,7 @@ class StudyhubResource < ApplicationRecord
   def check_urls
 
     unless resource_json.nil?
-      unless validate_url(resource_json['resource']['resource_web_page'].strip)
+      unless resource_json['resource'].blank? || validate_url(resource_json['resource']['resource_web_page'].strip)
         errors.add('resource_web_page'.to_sym, 'is not a url.')
       end
 
@@ -128,6 +129,15 @@ class StudyhubResource < ApplicationRecord
     end
   end
 
+  def check_resource_json
+    errors.add("ids", "Please check if the resource_json[ids] is correct.")  unless resource_json.has_key?('ids')
+    errors.add("roles", "Please check if the resource_json[roles] is correct.")  unless resource_json.has_key?('roles')
+    errors.add("resource", "Please check if the resource_json[resource] is correct.")  unless resource_json.has_key?('resource')
+    errors.add("study_design", "Please check if the resource_json[study_design] is correct.")  unless resource_json.has_key?('study_design')
+    errors.add("resource_titles", "Please check if the resource_json[resource_titles] is correct.")  unless resource_json.has_key?('resource_titles')
+    errors.add("resource_acronyms", "Please check if the resource_json[resource_acronyms] is correct.")  unless resource_json.has_key?('resource_acronyms')
+    errors.add("resource_descriptions", "Please check if the resource_json[resource_descriptions] is correct.")  unless resource_json.has_key?('resource_descriptions')
+  end
 
   def check_title_presence
     errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if title.blank?
@@ -135,59 +145,63 @@ class StudyhubResource < ApplicationRecord
 
 
   def check_id_presence
-    resource_json['ids'].each_with_index do |id,index|
-      unless id['id_id'].blank?
-        errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
-        errors.add("ids[#{index}]['id_relation_type']".to_sym, "can't be blank")  if id['id_relation_type'].blank?
+    if resource_json.has_key?('ids')
+      resource_json['ids'].each_with_index do |id,index|
+        unless id['id_id'].blank?
+          errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
+          errors.add("ids[#{index}]['id_relation_type']".to_sym, "can't be blank")  if id['id_relation_type'].blank?
+        end
       end
     end
   end
 
   def check_role_presence
 
-    if resource_json['roles'].blank?
-      errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
-      errors.add("roles[0]['role_type']".to_sym, "can't be blank")
-      errors.add("roles[0]['role_name_type']".to_sym, "can't be blank")
-    else
-      resource_json['roles'].each_with_index do |role,index|
-        errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
-        errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
+    if resource_json.has_key?('roles')
+      if resource_json['roles'].blank?
+        errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
+        errors.add("roles[0]['role_type']".to_sym, "can't be blank")
+        errors.add("roles[0]['role_name_type']".to_sym, "can't be blank")
+      else
+        resource_json['roles'].each_with_index do |role,index|
+          errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
+          errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
 
-        if role['role_name_type'] == 'Personal'
+          if role['role_name_type'] == 'Personal'
 
-          if role['role_name_personal_title'].blank?
-            errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")
-          end
+            if role['role_name_personal_title'].blank?
+              errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")
+            end
 
-          if role['role_name_personal_given_name'].blank?
-            errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
-          end
+            if role['role_name_personal_given_name'].blank?
+              errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
+            end
 
-          if role['role_name_personal_family_name'].blank?
-            errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
-          end
+            if role['role_name_personal_family_name'].blank?
+              errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
+            end
 
-          ID_TYPE.each do |type|
-            unless role["role_#{type}_identifiers"].blank?
-              role["role_#{type}_identifiers"].each_with_index do |id,id_index|
-                if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
-                  errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
+            ID_TYPE.each do |type|
+              unless role["role_#{type}_identifiers"].blank?
+                role["role_#{type}_identifiers"].each_with_index do |id,id_index|
+                  if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
+                    errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
+                  end
                 end
               end
             end
           end
-        end
 
-        if role['role_name_type'] == 'Organisational'
-          if role['role_name_organisational'].blank?
-            errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
+          if role['role_name_type'] == 'Organisational'
+            if role['role_name_organisational'].blank?
+              errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
+            end
           end
         end
-      end
 
-      if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
-        errors.add(:base, 'Please add the required fields for resource roles.')
+        if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
+          errors.add(:base, 'Please add the required fields for resource roles.')
+        end
       end
     end
   end
@@ -241,10 +255,10 @@ class StudyhubResource < ApplicationRecord
       end
 
       resource_json['study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
-          if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
-            errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
-          end
+        if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
+          errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
         end
+      end
 
     end
   end

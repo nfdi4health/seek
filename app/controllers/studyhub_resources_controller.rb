@@ -241,29 +241,31 @@ class StudyhubResourcesController < ApplicationController
     resource_json = params[:studyhub_resource][:resource_json]
 
     # parse titles
-    sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
-    params[:studyhub_resource][:title]  = parse_resource_titles(resource_json[:resource_titles]).first["title"]
+    if resource_json.has_key?('resource_titles')
+       sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
+       params[:studyhub_resource][:title]  = parse_resource_titles(resource_json[:resource_titles]).first["title"]
+    end
 
     # parse acronyms
-    sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms])
+    sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms]) if resource_json.has_key?('resource_acronyms')
 
     # parse descriptions
-    sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions])
+    sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions]) if resource_json.has_key?('resource_descriptions')
 
 
     # parse IDs
-    sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids])
+    sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids]) if resource_json.has_key?('ids')
 
     # parse roles
-    sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles])
+    sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles]) if resource_json.has_key?('roles')
 
 
     #parse resource and study design
-    if !resource_json[:resource].blank?
-       sr_params[:resource_json][:resource] = resource_json[:resource]
-       sr_params[:resource_json][:study_design] = resource_json[:study_design]
-    else
+    if params[:studyhub_resource].has_key?('custom_metadata_attributes')
       sr_params[:resource_json][:resource], sr_params[:resource_json][:study_design] = parse_custom_metadata_attributes(params[:studyhub_resource])
+    else
+      sr_params[:resource_json][:resource] = resource_json[:resource] if resource_json.has_key?('resource')
+      sr_params[:resource_json][:study_design] = resource_json[:study_design] if resource_json.has_key?('study_design')
     end
 
     unless @rt.is_studytype?
