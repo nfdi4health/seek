@@ -14,21 +14,21 @@
 %>
 
 
-<% field_name_prefix = "resource_acronyms[acronym][#{index}]" %>
+<% field_name_prefix = "studyhub_resource[resource_json][resource_acronyms]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
 <tr class="resource-acronym" data-index="<%= index-%>">
 
   <td>
     <div class="form-group">
-      <%= f.collection_select "studyhub_resource[acronym_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
+      <%= f.collection_select "#{field_name_prefix}[acronym_language][#{index}]", resource_languages.map(&:label), :to_s, :to_s,
                               { :include_blank => false, :selected => acronym_language }, :class => "form-control"  %>
     </div>
   </td>
 
   <td>
     <div class="form-group">
-      <%= f.text_field "studyhub_resource[resource_acronym][#{index}]", :class => "form-control", :value => acronym %>
+      <%= f.text_field "#{field_name_prefix}[acronym][#{index}]", :class => "form-control", :value => acronym %>
     </div>
   </td>
 

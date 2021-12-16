@@ -4,8 +4,8 @@
 <% role_type_identifiers = "role_#{type}_identifiers" %>
 <% role_type_identifier_name = "role_#{type}_identifier" %>
 <% role_type_identifier_scheme_name = "role_#{type}_identifier_scheme" %>
-<% field_scheme_prefix = "studyhub_resource[#{role_type_identifier_scheme_name}][#{num}][#{index}]" %>
-<% field_name_prefix = "studyhub_resource[#{role_type_identifier_name}][#{num}][#{index}]" %>
+<% field_scheme_prefix = "studyhub_resource[resource_json][roles][#{role_type_identifier_scheme_name}][#{num}][#{index}]" %>
+<% field_name_prefix = "studyhub_resource[resource_json][roles][#{role_type_identifier_name}][#{num}][#{index}]" %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 <% role_error = (defined? num).nil? ? {} : process_role_id_error_messags(num,type) %>
 
@@ -54,6 +54,6 @@
 
 <script>
     $j(document).ready(function () {
-        $j('input[name^="studyhub_resource[role_<%= type %>_identifier]').change(SR.setRoleIdentifierSchemeAsRequirerd);
+        $j('input[name^="studyhub_resource[resource_json][roles][role_<%= type %>_identifier]').change(SR.setRoleIdentifierSchemeAsRequirerd);
     });
 </script>
