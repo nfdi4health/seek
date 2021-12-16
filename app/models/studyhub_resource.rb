@@ -14,6 +14,7 @@ class StudyhubResource < ApplicationRecord
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update]
+  validate :end_date_is_after_start_date, on: [:create, :update]
   validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
@@ -125,6 +126,18 @@ class StudyhubResource < ApplicationRecord
           errors.add(value.to_sym, 'The value must be a float.')
         end
       end
+    end
+  end
+
+  def end_date_is_after_start_date
+
+    start_date = resource_json['study_design']['study_start_date']
+    end_date = resource_json['study_design']['study_end_date']
+
+    return if end_date.blank? || start_date.blank?
+
+    if end_date < start_date
+      errors.add(:study_end_date, "cannot be before the start date")
     end
   end
 
