@@ -29,15 +29,12 @@ class StudyhubResourcesController < ApplicationController
     @studyhub_resource=StudyhubResource.new
     @studyhub_resource.studyhub_resource_type = type
     respond_to do |format|
-
       format.html do
-
         if type.is_studytype?
-          render template: 'studyhub_resources/new_resource', locals: { sr_type: type }
+          render template: 'studyhub_resources/new_resource'
         else
-          render template: 'studyhub_resources/upload_file', locals: { sr_type: type }
+          render template: 'studyhub_resources/upload_file'
         end
-
       end
     end
   end
@@ -49,15 +46,15 @@ class StudyhubResourcesController < ApplicationController
   def create_content_blob
     clear_session_info
     @studyhub_resource = StudyhubResource.new(studyhub_resource_type_params)
-
-    type =  @studyhub_resource.studyhub_resource_type
     respond_to do |format|
-      if handle_upload_data && @studyhub_resource.content_blob.save
-        session[:uploaded_content_blob_id] = @studyhub_resource.content_blob.id
-        format.html { render template: 'studyhub_resources/new_resource', locals: { sr_type: type }}
-      else
-        session.delete(:uploaded_content_blob_id)
-        format.html { render template: 'studyhub_resources/upload_file', status: :unprocessable_entity }
+      format.html do
+        if handle_upload_data && @studyhub_resource.content_blob.save
+          session[:uploaded_content_blob_id] = @studyhub_resource.content_blob.id
+          render template: 'studyhub_resources/new_resource'
+        else
+          session.delete(:uploaded_content_blob_id)
+          render template: 'studyhub_resources/upload_file', status: :unprocessable_entity
+        end
       end
     end
   end

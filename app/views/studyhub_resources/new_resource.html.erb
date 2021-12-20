@@ -1,10 +1,11 @@
+<% sr_type = @studyhub_resource.studyhub_resource_type %>
 <% collapsed = @studyhub_resource.resource_json.nil? %>
 <div class="row">
   <div style="margin:auto;width:70%;">
     <h1>New <%= sr_type.title %></h1>
     <%= form_with url: studyhub_resources_path, method: :post do |f| %>
       <div id="studyhub_resource_container">
-        <%= hidden_field_tag "studyhub_resource[studyhub_resource_type]", @studyhub_resource.studyhub_resource_type.key -%>
+        <%= hidden_field_tag "studyhub_resource[studyhub_resource_type]", sr_type.key -%>
         <% unless @studyhub_resource.content_blob.nil?  %>
         <%= hidden_field_tag 'content_blob_id', @studyhub_resource.content_blob.id %>
         <% end %>
