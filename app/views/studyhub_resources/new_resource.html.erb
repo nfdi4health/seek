@@ -4,24 +4,21 @@
     <h1>New <%= sr_type.title %></h1>
     <%= form_with url: studyhub_resources_path, method: :post do |f| %>
       <div id="studyhub_resource_container">
-        <%= hidden_field_tag "studyhub_resource[studyhub_resource_type]", sr_type.key -%>
+        <%= hidden_field_tag "studyhub_resource[studyhub_resource_type]", @studyhub_resource.studyhub_resource_type.key -%>
+        <% unless @studyhub_resource.content_blob.nil?  %>
         <%= hidden_field_tag 'content_blob_id', @studyhub_resource.content_blob.id %>
+        <% end %>
         <%= render :partial=> "form", :locals => {:f => f, :collapsed => collapsed } %>
-
         <% if @studyhub_resource.can_manage? %>
           <% # for now set up a default project for nfdi, and can be configure with Seek::Config.nfdi_default_project_id in rails c %>
           <% @studyhub_resource.projects << Project.find(Seek::Config.nfdi_default_project_id) if @studyhub_resource.projects.size == 0 %>
           <%= render :partial => "projects/project_selector", :locals => { :resource => @studyhub_resource } -%>
         <% end %>
         <%= render :partial=> "set_buttons" %>
-
       </div>
     <% end %>
   </div>
 </div>
 
-<script type="text/javascript">
-    $j(document).ready(function () {
-            $j('#studyhub_resource_study_design').hide();
-    });
-</script>
+
+

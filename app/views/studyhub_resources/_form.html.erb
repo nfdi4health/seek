@@ -22,6 +22,19 @@
 </div>
 
 <script type="text/javascript">
+
+    <% unless @studyhub_resource.is_studytype? %>
+    $j(document).ready(function () {
+        $j('#studyhub_resource_study_design').hide();
+    });
+    <% end -%>
+
+    <% if @studyhub_resource.is_studytype? %>
+    $j(document).ready(function () {
+        $j('#step_two').hide();
+    });
+    <% end -%>
+
     $j(document).ready(function () {
         $j('form input').keydown(function (e) {
             if (e.keyCode == 13) {

@@ -33,7 +33,7 @@ class StudyhubResourcesController < ApplicationController
       format.html do
 
         if type.is_studytype?
-          render template: 'studyhub_resources/new_study', locals: { sr_type: type }
+          render template: 'studyhub_resources/new_resource', locals: { sr_type: type }
         else
           render template: 'studyhub_resources/upload_file', locals: { sr_type: type }
         end
@@ -54,7 +54,7 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
       if handle_upload_data && @studyhub_resource.content_blob.save
         session[:uploaded_content_blob_id] = @studyhub_resource.content_blob.id
-        format.html { render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }}
+        format.html { render template: 'studyhub_resources/new_resource', locals: { sr_type: type }}
       else
         session.delete(:uploaded_content_blob_id)
         format.html { render template: 'studyhub_resources/upload_file', status: :unprocessable_entity }
@@ -77,7 +77,7 @@ class StudyhubResourcesController < ApplicationController
           format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
           flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
-          format.html {render template: 'studyhub_resources/new_study', locals: { sr_type: type },status: :unprocessable_entity}
+          format.html {render template: 'studyhub_resources/new_resource', locals: { sr_type: type },status: :unprocessable_entity}
           format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
         end
       end
@@ -100,7 +100,7 @@ class StudyhubResourcesController < ApplicationController
 
         else
           flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
-          format.html { render template: 'studyhub_resources/new_nonstudy', locals: { sr_type: type }, status: :unprocessable_entity}
+          format.html { render template: 'studyhub_resources/new_resource', locals: { sr_type: type }, status: :unprocessable_entity}
         end
       end
     end
