@@ -143,10 +143,10 @@ class StudyhubResource < ApplicationRecord
     errors.add("ids", "Please check if the resource_json[ids] is correct.")  unless resource_json.has_key?('ids')
     errors.add("roles", "Please check if the resource_json[roles] is correct.")  unless resource_json.has_key?('roles')
     errors.add("resource", "Please check if the resource_json[resource] is correct.") unless resource_json.has_key?('resource')
-    errors.add("study_design", "Please check if the resource_json[study_design] is correct.")  unless resource_json.has_key?('study_design')
     errors.add("resource_titles", "Please check if the resource_json[resource_titles] is correct.")  unless resource_json.has_key?('resource_titles')
     errors.add("resource_acronyms", "Please check if the resource_json[resource_acronyms] is correct.") unless resource_json.has_key?('resource_acronyms')
     errors.add("resource_descriptions", "Please check if the resource_json[resource_descriptions] is correct.") unless resource_json.has_key?('resource_descriptions')
+    errors.add("study_design", "Please check if the resource_json[study_design] is correct.")  if (is_studytype? && !resource_json.has_key?('study_design'))
   end
 
 
