@@ -1,7 +1,5 @@
 class StudyhubResource < ApplicationRecord
 
-  belongs_to :assay, optional: true, dependent: :destroy
-  belongs_to :study, optional: true, dependent: :destroy
   belongs_to :studyhub_resource_type, inverse_of: :studyhub_resources
 
 
