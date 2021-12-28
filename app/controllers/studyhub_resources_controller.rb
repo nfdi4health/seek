@@ -64,6 +64,7 @@ class StudyhubResourcesController < ApplicationController
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
     type =  @studyhub_resource.studyhub_resource_type
     update_sharing_policies @studyhub_resource
+    update_relationships(@studyhub_resource, params)
 
     if type.is_studytype?
       respond_to do |format|
@@ -79,26 +80,47 @@ class StudyhubResourcesController < ApplicationController
         end
       end
     else
-
-      # check the content blob id matches that previously uploaded and recorded on the session
-      uploaded_blob_matches = (params[:content_blob_id].to_s == session[:uploaded_content_blob_id].to_s)
-      @studyhub_resource.errors.add(:base, "The file uploaded doesn't match") unless uploaded_blob_matches
-
-      blob = ContentBlob.find(params[:content_blob_id])
-      @studyhub_resource.content_blob = blob
-
-      respond_to do |format|
-        if uploaded_blob_matches && @studyhub_resource.save && blob.save
-          clear_session_info
-
-          flash[:notice] = "#{type.title.downcase} was successfully uploaded and saved." if flash.now[:notice].nil?
-          format.html {redirect_to studyhub_resource_path(@studyhub_resource)}
-          format.json  {render json: @studyhub_resource, status: :created, location: @studyhub_resource}
-
+      if handle_upload_data
+        respond_to do |format|
+        if @studyhub_resource.save
+          format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
         else
-          flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
-          format.html { render template: 'studyhub_resources/new_resource', locals: { sr_type: type }, status: :unprocessable_entity}
+          format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
         end
+        end
+      else
+        handle_upload_data_failure
+      end
+    end
+
+  end
+
+
+  # Receives the submitted metadata and registers the studyhub_resources
+  def create_metadata
+    @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
+    type =  @studyhub_resource.studyhub_resource_type
+    update_sharing_policies @studyhub_resource
+
+    # check the content blob id matches that previously uploaded and recorded on the session
+    uploaded_blob_matches = (params[:content_blob_id].to_s == session[:uploaded_content_blob_id].to_s)
+
+    @studyhub_resource.errors.add(:base, "The file uploaded doesn't match") unless uploaded_blob_matches
+
+    blob = ContentBlob.find(params[:content_blob_id])
+    @studyhub_resource.content_blob = blob
+
+    respond_to do |format|
+      if uploaded_blob_matches && @studyhub_resource.save && blob.save
+        clear_session_info
+
+        flash[:notice] = "#{type.title.downcase} was successfully uploaded and saved." if flash.now[:notice].nil?
+        format.html {redirect_to studyhub_resource_path(@studyhub_resource)}
+        format.json  {render json: @studyhub_resource, status: :created, location: @studyhub_resource}
+
+      else
+        flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
+        format.html { render template: 'studyhub_resources/new_resource', locals: { sr_type: type }, status: :unprocessable_entity}
       end
     end
   end
@@ -240,7 +262,9 @@ class StudyhubResourcesController < ApplicationController
     # parse titles
     if resource_json.has_key?('resource_titles')
        sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
-       params[:studyhub_resource][:title]  = parse_resource_titles(resource_json[:resource_titles]).first["title"]
+       unless sr_params[:resource_json][:resource_titles].blank?
+          params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"]
+       end
     end
 
     # parse acronyms

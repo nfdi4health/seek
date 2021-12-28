@@ -459,6 +459,7 @@ SEEK::Application.routes.draw do
       post :preview_stages
       post :new_resource
       post :create_content_blob
+      post :create_metadata
     end
 
     member do
