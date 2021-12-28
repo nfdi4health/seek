@@ -6,9 +6,9 @@ class StudyhubResourcesController < ApplicationController
   include Seek::Publishing::PublishingCommon
 
   before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show download create_content_blob]
-
   before_action :find_assets, only: [:index]
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
+  before_action :check_studyhub_type, only: [:create, :update]
   api_actions :index, :show, :create, :update, :destroy
 
   def show
@@ -515,4 +515,14 @@ class StudyhubResourcesController < ApplicationController
     resource_descriptions
   end
 
+  def check_studyhub_type
+    type = params[:studyhub_resource][:studyhub_resource_type]
+    if type.blank? || StudyhubResourceType.where(key:type).first.nil?
+      respond_to do |format|
+        format.json {
+          render json: { errors: [{ title: 'Forbidden', details: "The given #{t('studyhub_resources.studyhub_resource')} type is wrong" }] },
+                 status: :forbidden }
+      end
+    end
+  end
 end
