@@ -8,11 +8,11 @@ class StudyhubResourceSerializer < PCSSerializer
 
   has_many :projects
 
-  attribute :content_blob, if: -> { object.respond_to?(:content_blob) && !object.content_blob.nil? } do
-    blob = object.content_blob
-    convert_content_blob_to_json(blob)
+  attribute :content_blobs, if: -> { object.respond_to?(:content_blob) } do
+    blobs = [object.content_blob].compact
+    blobs.map { |cb| convert_content_blob_to_json(cb) }
   end
-  
+
   def convert_content_blob_to_json(cb)
     path = polymorphic_path([cb.asset, cb])
     {
