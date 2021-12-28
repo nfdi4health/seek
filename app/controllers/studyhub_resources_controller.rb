@@ -253,8 +253,7 @@ class StudyhubResourcesController < ApplicationController
   def studyhub_resource_params
 
     sr_params = {}
-
-    @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
+    @rt = params[:id].nil? ? StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first : StudyhubResource.find(params[:id]).studyhub_resource_type
     params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
     sr_params[:resource_json] = {}
     resource_json = params[:studyhub_resource][:resource_json]

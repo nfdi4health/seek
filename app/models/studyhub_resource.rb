@@ -288,7 +288,7 @@ class StudyhubResource < ApplicationRecord
                  end
   end
 
-  # if the resource type is study or substudy
+  # if the resource type is study or non_study
   def is_studytype?
     self.studyhub_resource_type.is_studytype?
   end
