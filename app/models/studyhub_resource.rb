@@ -9,7 +9,6 @@ class StudyhubResource < ApplicationRecord
   has_extended_custom_metadata
   acts_as_asset
 
-  validate :check_resource_json, on:  [:create, :update]
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
@@ -133,18 +132,6 @@ class StudyhubResource < ApplicationRecord
     return if end_date.blank? || start_date.blank?
 
     errors.add(:study_end_date, "cannot be before the start date") if end_date < start_date
-  end
-
-  def check_resource_json
-    return if resource_json.blank?
-
-    errors.add("ids", "Please check if the resource_json[ids] is correct.")  unless resource_json.has_key?('ids')
-    errors.add("roles", "Please check if the resource_json[roles] is correct.")  unless resource_json.has_key?('roles')
-    errors.add("resource", "Please check if the resource_json[resource] is correct.") unless resource_json.has_key?('resource')
-    errors.add("resource_titles", "Please check if the resource_json[resource_titles] is correct.")  unless resource_json.has_key?('resource_titles')
-    errors.add("resource_acronyms", "Please check if the resource_json[resource_acronyms] is correct.") unless resource_json.has_key?('resource_acronyms')
-    errors.add("resource_descriptions", "Please check if the resource_json[resource_descriptions] is correct.") unless resource_json.has_key?('resource_descriptions')
-    errors.add("study_design", "Please check if the resource_json[study_design] is correct.")  if (is_studytype? && !resource_json.has_key?('study_design'))
   end
 
 

@@ -8,7 +8,9 @@ class StudyhubResourcesController < ApplicationController
   before_action :find_and_authorize_requested_item, only: %i[edit update destroy manage manage_update show download create_content_blob]
   before_action :find_assets, only: [:index]
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
-  before_action :check_studyhub_type, only: [:create, :update]
+  before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
+  before_action :check_resource_json, only: [:create, :update], if: :json_api_request?
+
   api_actions :index, :show, :create, :update, :destroy
 
   def show
@@ -259,7 +261,7 @@ class StudyhubResourcesController < ApplicationController
     resource_json = params[:studyhub_resource][:resource_json]
 
     # parse titles
-    if resource_json.has_key?('resource_titles')
+    if resource_json.key?('resource_titles')
        sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
        unless sr_params[:resource_json][:resource_titles].blank?
           params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"]
@@ -267,30 +269,32 @@ class StudyhubResourcesController < ApplicationController
     end
 
     # parse acronyms
-    sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms]) if resource_json.has_key?('resource_acronyms')
+    if resource_json.key?('resource_acronyms')
+      sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms])
+    end
 
     # parse descriptions
-    sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions]) if resource_json.has_key?('resource_descriptions')
+    if resource_json.key?('resource_descriptions')
+      sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions])
+    end
 
 
     # parse IDs
-    sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids]) if resource_json.has_key?('ids')
+    sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids]) if resource_json.key?('ids')
 
     # parse roles
-    sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles]) if resource_json.has_key?('roles')
+    sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles]) if resource_json.key?('roles')
 
 
     #parse resource and study design
-    if params[:studyhub_resource].has_key?('custom_metadata_attributes')
+    if params[:studyhub_resource].key?('custom_metadata_attributes')
       sr_params[:resource_json][:resource], sr_params[:resource_json][:study_design] = parse_custom_metadata_attributes(params[:studyhub_resource])
     else
-      sr_params[:resource_json][:resource] = resource_json[:resource] if resource_json.has_key?('resource')
-      sr_params[:resource_json][:study_design] = resource_json[:study_design] if resource_json.has_key?('study_design')
+      sr_params[:resource_json][:resource] = resource_json[:resource] if resource_json.key?('resource')
+      sr_params[:resource_json][:study_design] = resource_json[:study_design] if resource_json.key?('study_design')
     end
 
-    unless @rt.is_studytype?
-      sr_params[:resource_json] = sr_params[:resource_json].except(:study_design)
-    end
+    sr_params[:resource_json] = sr_params[:resource_json].except(:study_design) unless @rt.is_studytype?
 
     params[:studyhub_resource][:resource_json] = sr_params[:resource_json]
 
@@ -420,7 +424,9 @@ class StudyhubResourcesController < ApplicationController
           identifier = {}
           identifier["role_#{type}_identifier"] = params["role_#{type}_identifier".to_sym][key][k2]
           identifier["role_#{type}_identifier_scheme"] = params["role_#{type}_identifier_scheme"][key][k2]
-          entry["role_#{type}_identifiers"] << identifier unless params["role_#{type}_identifier".to_sym][key][k2].blank?
+          unless params["role_#{type}_identifier".to_sym][key][k2].blank?
+            entry["role_#{type}_identifiers"] << identifier
+          end
         end
 
       end
@@ -505,7 +511,6 @@ class StudyhubResourcesController < ApplicationController
     else
       params[:description].keys.each do |key|
         next if key == 'row-template'
-
         entry = {}
         entry['description'] = params[:description][key]
         entry['description_language'] = params[:description_language][key]
@@ -515,14 +520,63 @@ class StudyhubResourcesController < ApplicationController
     resource_descriptions
   end
 
-  def check_studyhub_type
-    type = params[:studyhub_resource][:studyhub_resource_type]
-    if type.blank? || StudyhubResourceType.where(key:type).first.nil?
-      respond_to do |format|
-        format.json {
-          render json: { errors: [{ title: 'Forbidden', details: "The given #{t('studyhub_resources.studyhub_resource')} type is wrong" }] },
-                 status: :forbidden }
+  def check_studyhub_resource_type
+    begin
+      type = params[:studyhub_resource][:studyhub_resource_type]
+      if type.blank? || StudyhubResourceType.where(key:type).first.nil?
+        raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong."
       end
+    rescue ArgumentError => e
+      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+      render plain: output, status: :unprocessable_entity
     end
   end
+
+  def check_resource_json
+    begin
+      if params[:studyhub_resource][:resource_json].blank?
+        raise ArgumentError, 'A POST/PUT request must specify a data:attributes:resource_json.'
+      else
+
+        resource_json = params[:studyhub_resource][:resource_json]
+
+        unless resource_json.key?(:ids) && resource_json[:ids].is_a?(Array)
+          raise ArgumentError, 'A POST/PUT request must specify a resource_json:ids and "ids" is an array.'
+        end
+
+        unless resource_json.key?(:roles) && resource_json[:roles].is_a?(Array)
+          raise ArgumentError, 'A POST/PUT request must specify a resource_json:roles and "roles" is an array.'
+        end
+
+        unless resource_json.key?(:resource)
+          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource.'
+        end
+
+        unless resource_json.key?(:resource_titles) && resource_json[:resource_titles].is_a?(Array)
+          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_titles and "resource_titles" is an array.'
+        end
+
+        unless resource_json.key?(:resource_acronyms) && resource_json[:resource_acronyms].is_a?(Array)
+          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_acronyms and "resource_acronyms" is an array.'
+        end
+
+        unless resource_json.key?(:resource_descriptions) && resource_json[:resource_descriptions].is_a?(Array)
+          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_descriptions and "resource_descriptions" is an array.'
+        end
+
+        if (StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type])  && !resource_json.key?('study_design')
+          raise ArgumentError, "A POST/PUT request must specify a resource_json:study_design for creating a #{params[:studyhub_resource][:studyhub_resource_type]}."
+        end
+
+        unless (StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type]) || params.key?(:content_blobs)
+          raise ArgumentError, "A POST/PUT request must specify a 'content_blobs' for creating a #{params[:studyhub_resource][:studyhub_resource_type]}."
+        end
+
+      end
+    rescue ArgumentError => e
+      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+      render plain: output, status: :unprocessable_entity
+    end
+  end
+
 end
