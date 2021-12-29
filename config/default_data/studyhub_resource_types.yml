@@ -44,10 +44,10 @@ sop_resource_type:
   title: Manual of operations (SOPs)
   key: sop
 
-sstatistical_analysis_plan_resource_type:
+statistical_analysis_plan_resource_type:
   id: 10
   title: Statistical analysis plan
-  key: sstatistical_analysis_plan
+  key: statistical_analysis_plan
 
 data_management_plan_resource_type:
   id: 11
