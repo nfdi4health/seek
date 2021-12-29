@@ -255,7 +255,9 @@ class StudyhubResourcesController < ApplicationController
   def studyhub_resource_params
 
     sr_params = {}
-    @rt = params[:id].nil? ? StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first : StudyhubResource.find(params[:id]).studyhub_resource_type
+
+    @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
+
     params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
     sr_params[:resource_json] = {}
     resource_json = params[:studyhub_resource][:resource_json]
@@ -526,6 +528,13 @@ class StudyhubResourcesController < ApplicationController
       if type.blank? || StudyhubResourceType.where(key:type).first.nil?
         raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong."
       end
+
+      if params[:action]=='update'
+        unless StudyhubResource.find(params[:id]).studyhub_resource_type.key == params[:studyhub_resource][:studyhub_resource_type]
+          raise ArgumentError, "A PUT request can not change 'studyhub_resource_type'."
+        end
+      end
+
     rescue ArgumentError => e
       output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
       render plain: output, status: :unprocessable_entity
