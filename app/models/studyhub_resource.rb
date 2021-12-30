@@ -67,7 +67,7 @@ class StudyhubResource < ApplicationRecord
   MULTI_ATTRIBUTE_SKIPPED_FIELDS = %w[resource_keywords_label resource_keywords_label_code study_conditions_classification study_conditions_classification_code
                                     study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame
                                     study_arm_group_label study_arm_group_type study_arm_group_description
-                                    study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label].freeze
+                                    study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label study_recruitment_status_register].freeze
 
 
   NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze

@@ -84,11 +84,11 @@ class StudyhubResourcesController < ApplicationController
     else
       if handle_upload_data
         respond_to do |format|
-        if @studyhub_resource.save
-          format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
-        else
-          format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
-        end
+          if @studyhub_resource.save
+            format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
+          else
+            format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
+          end
         end
       else
         handle_upload_data_failure
@@ -264,7 +264,7 @@ class StudyhubResourcesController < ApplicationController
 
     # parse titles
     if resource_json.key?('resource_titles')
-       sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
+      sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
        unless sr_params[:resource_json][:resource_titles].blank?
           params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"]
        end
@@ -335,7 +335,7 @@ class StudyhubResourcesController < ApplicationController
 
       params[:custom_metadata_attributes][:data].keys.each do |key|
         value = if StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.values.flatten.include? key
-          params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
+                  params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
                 elsif key == StudyhubResource::RESOURCE_KEYWORDS
                   parse_resource_keywords(params[:custom_metadata_attributes][:data][key])
                 elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.include? key
@@ -369,7 +369,8 @@ class StudyhubResourcesController < ApplicationController
     cm_study_design_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Interventional Study')
 
     cm_study_design_attributes = cm_study_design_general_attributes
-    case params[:custom_metadata_attributes][:data]['study_primary_design']
+    type = json_api_request? ? params[:resource_json][:study_design]['study_primary_design'] : params[:custom_metadata_attributes][:data]['study_primary_design']
+    case type
     when StudyhubResource::INTERVENTIONAL
       cm_study_design_attributes += cm_study_design_interventional_attributes
     when StudyhubResource::NON_INTERVENTIONAL
@@ -400,48 +401,48 @@ class StudyhubResourcesController < ApplicationController
         roles << value
       end
     else
-    params[:role_type].keys.each do |key|
-      next if key == 'row-template'
-      entry = {}
+      params[:role_type].keys.each do |key|
+        next if key == 'row-template'
+        entry = {}
 
-      entry['role_type'] = params[:role_type][key]
-      entry['role_name_type'] = params[:role_name_type][key]
+        entry['role_type'] = params[:role_type][key]
+        entry['role_name_type'] = params[:role_name_type][key]
 
-      case entry['role_name_type']
-      when 'Organisational'
-        entry['role_name_organisational'] = params[:role_name_organisational][key]
-      when 'Personal'
-        entry['role_name_personal_title'] = params[:role_name_personal_title][key]
-        entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
-        entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
-      end
-
-
-      entry['role_name_identifiers'] = []
-      entry['role_affiliation_identifiers'] = []
-
-      StudyhubResource::ID_TYPE.each do |type|
-
-        params["role_#{type}_identifier".to_sym][key].keys.each do |k2|
-          identifier = {}
-          identifier["role_#{type}_identifier"] = params["role_#{type}_identifier".to_sym][key][k2]
-          identifier["role_#{type}_identifier_scheme"] = params["role_#{type}_identifier_scheme"][key][k2]
-          unless params["role_#{type}_identifier".to_sym][key][k2].blank?
-            entry["role_#{type}_identifiers"] << identifier
-          end
+        case entry['role_name_type']
+        when 'Organisational'
+          entry['role_name_organisational'] = params[:role_name_organisational][key]
+        when 'Personal'
+          entry['role_name_personal_title'] = params[:role_name_personal_title][key]
+          entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
+          entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
         end
 
+
+        entry['role_name_identifiers'] = []
+        entry['role_affiliation_identifiers'] = []
+
+        StudyhubResource::ID_TYPE.each do |type|
+
+          params["role_#{type}_identifier".to_sym][key].keys.each do |k2|
+            identifier = {}
+            identifier["role_#{type}_identifier"] = params["role_#{type}_identifier".to_sym][key][k2]
+            identifier["role_#{type}_identifier_scheme"] = params["role_#{type}_identifier_scheme"][key][k2]
+            unless params["role_#{type}_identifier".to_sym][key][k2].blank?
+              entry["role_#{type}_identifiers"] << identifier
+            end
+          end
+
+        end
+
+        entry['role_email'] = params[:role_email][key]
+        entry['role_phone'] = params[:role_phone][key]
+        entry['role_affiliation_name'] = params[:role_affiliation_name][key]
+        entry['role_affiliation_address'] = params[:role_affiliation_address][key]
+        entry['role_affiliation_web_page'] = params[:role_affiliation_web_page][key]
+
+        roles << entry unless entry['role_type'].blank?
+
       end
-
-      entry['role_email'] = params[:role_email][key]
-      entry['role_phone'] = params[:role_phone][key]
-      entry['role_affiliation_name'] = params[:role_affiliation_name][key]
-      entry['role_affiliation_address'] = params[:role_affiliation_address][key]
-      entry['role_affiliation_web_page'] = params[:role_affiliation_web_page][key]
-
-      roles << entry unless entry['role_type'].blank?
-
-    end
     end
     roles
   end
@@ -453,17 +454,17 @@ class StudyhubResourcesController < ApplicationController
         ids << value
       end
     else
-    params[:id_type].keys.each do |key|
-      entry = {}
-      next if key == 'row-template'
+      params[:id_type].keys.each do |key|
+        entry = {}
+        next if key == 'row-template'
 
-      entry['id_type'] = params[:id_type][key]
-      entry['id_id'] = params[:id_id][key]
-      entry['id_date'] = params[:id_date][key]
-      entry['id_relation_type'] = params[:id_relation_type][key]
-      entry['id_resource_type_general'] = params[:id_resource_type_general][key]
-      ids << entry unless entry['id_id'].blank?
-    end
+        entry['id_type'] = params[:id_type][key]
+        entry['id_id'] = params[:id_id][key]
+        entry['id_date'] = params[:id_date][key]
+        entry['id_relation_type'] = params[:id_relation_type][key]
+        entry['id_resource_type_general'] = params[:id_resource_type_general][key]
+        ids << entry unless entry['id_id'].blank?
+      end
     end
     ids
   end
@@ -581,6 +582,52 @@ class StudyhubResourcesController < ApplicationController
           raise ArgumentError, "A POST/PUT request must specify a 'content_blobs' for creating a #{params[:studyhub_resource][:studyhub_resource_type]}."
         end
 
+        check_resource_json_resource
+
+        if StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type]
+          check_resource_json_study_design
+        end
+
+      end
+    rescue ArgumentError => e
+      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+      render plain: output, status: :unprocessable_entity
+    end
+  end
+
+  def check_resource_json_resource
+
+    cmt = CustomMetadataType.where(title:'NFDI4Health Studyhub Resource General').first
+    attributes = cmt.custom_metadata_attributes.map(&:title).reject{|x| StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? x}
+    keys_array = params[:studyhub_resource][:resource_json][:resource].keys
+
+    begin
+        unless (attributes-keys_array).blank?
+          errors = attributes - keys_array
+          raise ArgumentError, "A POST/PUT request must specify a resource_json:resource:#{errors.join(',')}"
+        end
+        rescue ArgumentError => e
+          output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+          render plain: output, status: :unprocessable_entity
+      end
+  end
+
+
+  def check_resource_json_study_design
+
+    cm_study_design_attributes = get_study_design_attributes(params[:studyhub_resource])
+
+    attributes = cm_study_design_attributes.reject{|x| StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? x }
+
+    #todo: check the weird problem with "study_target_follow-up_duration"
+    attributes.delete('study_target_follow-up_duration')
+
+    keys_array = params[:studyhub_resource][:resource_json][:study_design].keys
+
+    begin
+      unless (attributes-keys_array).blank?
+        errors = attributes - keys_array
+        raise ArgumentError, "A POST/PUT request must specify a resource_json:study_design:#{errors.join(',')}"
       end
     rescue ArgumentError => e
       output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
