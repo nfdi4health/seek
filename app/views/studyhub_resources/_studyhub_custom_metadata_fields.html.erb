@@ -9,7 +9,7 @@
 
   <div class="form-group <%= "has-error text-danger" if is_error %>">
     <% unless StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? attribute.title  %>
-      <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? attribute.title  %>
+      <% if StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.values.flatten.include? attribute.title  %>
         <%= render :partial => "multiselect_attribute", :locals => {:attribute => attribute, :resource => resource} -%>
         <small><%= feedback if is_error %></small>
       <% elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.keys.include? attribute.title  %>

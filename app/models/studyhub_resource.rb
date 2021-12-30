@@ -49,7 +49,8 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
-  MULTISELECT_ATTRIBUTES = %w[resource_language study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_biospecimen_retention].freeze
+  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_language],
+                                 'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_biospecimen_retention] }.freeze
 
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
@@ -131,7 +132,7 @@ class StudyhubResource < ApplicationRecord
 
     return if end_date.blank? || start_date.blank?
 
-    errors.add(:study_end_date, "cannot be before the start date") if end_date < start_date
+    errors.add(:study_end_date, 'cannot be before the start date') if end_date < start_date
   end
 
 

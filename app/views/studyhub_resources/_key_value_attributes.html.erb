@@ -3,7 +3,7 @@
     <% hidden_class = resource[attribute.title].blank? ? "item-hidden" : nil %>
     <p class=<%= hidden_class %>>
       <label><%= attribute.label %>: </label>
-      <% if StudyhubResource::MULTISELECT_ATTRIBUTES.include? attribute.title %>
+      <% if StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.values.flatten.include? attribute.title %>
         <% unless resource[attribute.title].blank? %>
           <%= resource[attribute.title].map { |s| SampleControlledVocabTerm.find(s).label }.join(', ')  %>
         <% end %>

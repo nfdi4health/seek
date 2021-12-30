@@ -4,7 +4,9 @@ class StudyhubResourceSerializer < PCSSerializer
     object.studyhub_resource_type.try(:key)
   end
 
-  attributes :resource_json
+  attribute :resource_json do
+    convert_resource_json
+  end
 
   has_many :projects
 
@@ -24,6 +26,20 @@ class StudyhubResourceSerializer < PCSSerializer
       link: "#{base_url}#{path}",
       size: cb.file_size
     }
+  end
+
+  def convert_resource_json
+    hash = StudyhubResource::MULTISELECT_ATTRIBUTES_HASH
+    hash.keys.each do |key|
+      hash[key].each do |attr|
+        object.resource_json[key][attr] = display_labels_for_multi_select_attribute(object.resource_json[key][attr]) unless object.resource_json[key][attr].blank?
+      end
+    end
+    object.resource_json
+  end
+
+  def display_labels_for_multi_select_attribute(array)
+    array.map{|x| SampleControlledVocabTerm.find(x).label}
   end
 
 end
