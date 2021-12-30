@@ -647,6 +647,20 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def convert_label_to_id_for_multi_select_attribute(array)
-    array.map{ |x| SampleControlledVocabTerm.where(label: x).blank? ? x : SampleControlledVocabTerm.where(label: x).first.id.to_s}
+    ids = []
+    begin
+    array.each do |label|
+      if SampleControlledVocabTerm.where(label: label).blank?
+        raise ArgumentError, "#{label} is a wrong value."
+      else
+        ids << SampleControlledVocabTerm.where(label: label).first.id.to_s
+      end
+    end
+    rescue ArgumentError => e
+      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+      render plain: output, status: :unprocessable_entity
+    end
+    ids
   end
+
 end
