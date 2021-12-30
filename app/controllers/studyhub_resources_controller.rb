@@ -10,6 +10,7 @@ class StudyhubResourcesController < ApplicationController
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
   before_action :check_resource_json, only: [:create, :update], if: :json_api_request?
+  before_action :convert_resource_json_label, only: [:create, :update], if: :json_api_request?
 
   api_actions :index, :show, :create, :update, :destroy
 
@@ -635,4 +636,17 @@ class StudyhubResourcesController < ApplicationController
     end
   end
 
+  def convert_resource_json_label
+    resource_json = params[:studyhub_resource][:resource_json]
+    StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
+      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+        params[:studyhub_resource][:resource_json][key][attr] = convert_label_to_id_for_multi_select_attribute(resource_json[key][attr]) unless resource_json[key][attr].blank?
+        Rails.logger.info(params[:studyhub_resource][:resource_json][key][attr].inspect)
+      end
+    end
+  end
+
+  def convert_label_to_id_for_multi_select_attribute(array)
+    array.map{ |x| SampleControlledVocabTerm.where(label: x).blank? ? x : SampleControlledVocabTerm.where(label: x).first.id.to_s}
+  end
 end

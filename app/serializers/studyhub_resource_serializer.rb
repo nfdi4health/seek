@@ -32,12 +32,13 @@ class StudyhubResourceSerializer < PCSSerializer
 
   def convert_resource_json(key)
     StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
-        object.resource_json[key][attr] = display_labels_for_multi_select_attribute(object.resource_json[key][attr]) unless object.resource_json[key][attr].blank?
+        object.resource_json[key][attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[key][attr]) unless object.resource_json[key][attr].blank?
     end
   end
 
-  def display_labels_for_multi_select_attribute(array)
+  def convert_id_to_label_for_multi_select_attribute(array)
     array.map{|x| SampleControlledVocabTerm.find(x).label}
   end
+
 
 end
