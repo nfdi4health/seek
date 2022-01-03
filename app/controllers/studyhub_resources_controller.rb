@@ -266,9 +266,9 @@ class StudyhubResourcesController < ApplicationController
     # parse titles
     if resource_json.key?('resource_titles')
       sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
-       unless sr_params[:resource_json][:resource_titles].blank?
-          params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"]
-       end
+      unless sr_params[:resource_json][:resource_titles].blank?
+        params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"]
+      end
     end
 
     # parse acronyms
@@ -603,14 +603,14 @@ class StudyhubResourcesController < ApplicationController
     keys_array = params[:studyhub_resource][:resource_json][:resource].keys
 
     begin
-        unless (attributes-keys_array).blank?
-          errors = attributes - keys_array
-          raise ArgumentError, "A POST/PUT request must specify a resource_json:resource:#{errors.join(',')}"
-        end
-        rescue ArgumentError => e
-          output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
-          render plain: output, status: :unprocessable_entity
+      unless (attributes-keys_array).blank?
+        errors = attributes - keys_array
+        raise ArgumentError, "A POST/PUT request must specify a resource_json:resource:#{errors.join(',')}"
       end
+    rescue ArgumentError => e
+      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+      render plain: output, status: :unprocessable_entity
+    end
   end
 
 
@@ -638,29 +638,26 @@ class StudyhubResourcesController < ApplicationController
 
   def convert_resource_json_label
     resource_json = params[:studyhub_resource][:resource_json]
-    StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
-      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
-        params[:studyhub_resource][:resource_json][key][attr] = convert_label_to_id_for_multi_select_attribute(resource_json[key][attr]) unless resource_json[key][attr].blank?
-        Rails.logger.info(params[:studyhub_resource][:resource_json][key][attr].inspect)
-      end
-    end
-  end
-
-  def convert_label_to_id_for_multi_select_attribute(array)
-    ids = []
     begin
-    array.each do |label|
-      if SampleControlledVocabTerm.where(label: label).blank?
-        raise ArgumentError, "#{label} is a wrong value."
-      else
-        ids << SampleControlledVocabTerm.where(label: label).first.id.to_s
+      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
+        StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+
+          unless params[:studyhub_resource][:resource_json][key][attr].nil?
+            result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
+
+            if !result.nil? && (result.include? "")
+              raise ArgumentError, "#{key}/#{attr} includes at least one wrong value."
+              break
+            else
+              params[:studyhub_resource][:resource_json][key][attr] = result.nil? ? [] : result
+            end
+          end
+        end
       end
-    end
+
     rescue ArgumentError => e
       output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
       render plain: output, status: :unprocessable_entity
     end
-    ids
   end
-
 end
