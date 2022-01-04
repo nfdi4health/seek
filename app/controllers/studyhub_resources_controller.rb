@@ -642,16 +642,22 @@ class StudyhubResourcesController < ApplicationController
       StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
         StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
 
-          unless params[:studyhub_resource][:resource_json][key][attr].nil?
-            result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
+          next if key == 'study_design' && !(StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type])
 
-            if !result.nil? && (result.include? "")
-              raise ArgumentError, "#{key}/#{attr} includes at least one wrong value."
-              break
-            else
-              params[:studyhub_resource][:resource_json][key][attr] = result.nil? ? [] : result
-            end
+          unless params[:studyhub_resource][:resource_json][key][attr].nil?
+          result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
+
+          if !result.nil? && (result.include? "")
+            raise ArgumentError, "#{key}/#{attr} includes at least one wrong value."
+            break
+          else
+            params[:studyhub_resource][:resource_json][key][attr] = result.nil? ? [] : result
           end
+        end
+
+
+
+
         end
       end
 
