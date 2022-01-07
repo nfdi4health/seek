@@ -1,9 +1,9 @@
-name: tests
+name: Run Tests
 on: [push, pull_request]
 
 jobs:
   tests:
-    name: Tests
+    name: Test
     runs-on: ubuntu-18.04
     env:
       RAILS_ENV: test
