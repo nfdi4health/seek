@@ -386,6 +386,8 @@ module StudyhubResourcesHelper
       role_name = d['role_name_personal_title'] + ' ' + d['role_name_personal_given_name'] + ' ' + d['role_name_personal_family_name']
     when 'Organisational'
       role_name = d['role_name_organisational']
+    else
+      role_name=''
     end
     role_name
   end
