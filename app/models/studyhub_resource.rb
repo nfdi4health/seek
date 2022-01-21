@@ -2,9 +2,7 @@ class StudyhubResource < ApplicationRecord
 
   belongs_to :studyhub_resource_type, inverse_of: :studyhub_resources
 
-
   has_one :content_blob,:as => :asset, :foreign_key => :asset_id
-
 
   has_extended_custom_metadata
   acts_as_asset
@@ -13,10 +11,10 @@ class StudyhubResource < ApplicationRecord
   validate :check_urls, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
-  validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
-  validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
-  validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
-  validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
+  validate :check_id_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
+  validate :check_role_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
+  validate :check_description_presence, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
+  validate :check_required_singular_attributes, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
   validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
 
   validate :final_error_check, on:  [:create, :update]
@@ -24,6 +22,7 @@ class StudyhubResource < ApplicationRecord
   attr_readonly :studyhub_resource_type_id
   attr_accessor :commit_button
   before_save :update_working_stage, on:  [:create, :update]
+
 
   # *****************************************************************************
   #  This section defines constants for "mandatory fields" values
@@ -260,6 +259,10 @@ class StudyhubResource < ApplicationRecord
     commit_button == 'Submit'
   end
 
+  def request_to_publish?
+    commit_button == 'Publish'
+  end
+
   def is_submitted?
     stage == StudyhubResource::SUBMITTED
   end
@@ -271,9 +274,12 @@ class StudyhubResource < ApplicationRecord
   def update_working_stage
     self.stage = if request_to_submit?
                    StudyhubResource::SUBMITTED
+                 elsif request_to_publish?
+                   StudyhubResource::SUBMITTED
                  else
                    StudyhubResource::SAVED
                  end
+
   end
 
   # if the resource type is study or non_study

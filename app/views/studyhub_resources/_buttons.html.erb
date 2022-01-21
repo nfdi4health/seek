@@ -1,5 +1,3 @@
-<% show_publish_button = item.can_publish? && item.stage == StudyhubResource::SUBMITTED %>
-
 <% human_name = text_for_resource(item) %>
 
 <%= render :partial => "subscriptions/subscribe", :locals => {:object => item} %>
