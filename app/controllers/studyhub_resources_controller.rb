@@ -299,6 +299,11 @@ class StudyhubResourcesController < ApplicationController
 
     sr_params[:resource_json] = sr_params[:resource_json].except(:study_design) unless @rt.is_studytype?
 
+    #parse provenance data
+    if resource_json.key?('provenance')
+      sr_params[:resource_json][:provenance] = parse_provenance_data(resource_json[:provenance])
+    end
+
     params[:studyhub_resource][:resource_json] = sr_params[:resource_json]
 
     params.require(:studyhub_resource).permit(:title,:studyhub_resource_type_id, :comment, { resource_json: {} }, \
@@ -524,6 +529,12 @@ class StudyhubResourcesController < ApplicationController
     resource_descriptions
   end
 
+  def parse_provenance_data(params)
+    provenance = {}
+    provenance[:data_source] = params[:data_source]
+    provenance
+  end
+
   def check_studyhub_resource_type
     begin
       type = params[:studyhub_resource][:studyhub_resource_type]
@@ -654,10 +665,6 @@ class StudyhubResourcesController < ApplicationController
             params[:studyhub_resource][:resource_json][key][attr] = result.nil? ? [] : result
           end
         end
-
-
-
-
         end
       end
 

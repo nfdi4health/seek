@@ -14,11 +14,12 @@
     <h3>Step 2: Fill out metadata</h3>
   </div>
   <%= render partial: 'studyhub_basic', locals: { :f => f, :collapsed => collapsed } %>
-  <%= render :partial => 'resource_roles', :locals=> { :f => f,:collapsed => collapsed} %>
-  <%= render :partial => 'resource_ids', :locals=> { :f => f,:collapsed => collapsed} %>
+  <%= render partial: 'resource_roles', locals: { :f => f,:collapsed => collapsed} %>
+  <%= render partial: 'resource_ids',  locals: { :f => f,:collapsed => collapsed} %>
   <% if @studyhub_resource.is_studytype? %>
      <%= render partial: 'studyhub_study_design_input', locals: { :f => f, :collapsed => collapsed } %>
   <% end -%>
+  <%= render partial: 'provenance_data', locals: { :f => f } %>
 </div>
 
 <script type="text/javascript">
