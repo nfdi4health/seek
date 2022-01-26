@@ -72,11 +72,11 @@ module StudyhubResourcesHelper
       <tbody>'
       ids.each do |d|
         html += '<tr>'
-        html += '<td class="id_resource_type_general">' + d['id_resource_type_general'] + '</td>'
-        html += '<td class="id_type">' + d['id_type'] + '</td>'
-        html += '<td class="id_id">' + d['id_id'] + '</td>'
-        html += '<td class="id_date">' + d['id_date'] + '</td>'
-        html += '<td class="id_relation_type">' + (d['id_relation_type'].nil? ? '' : d['id_relation_type'].underscore.humanize) + '</td>'
+        html += '<td class="id_resource_type_general">' + (d['id_resource_type_general'].blank? ? '' : d['id_resource_type_general']) + '</td>'
+        html += '<td class="id_type">' + (d['id_type'].blank? ? '' : d['id_type']) + '</td>'
+        html += '<td class="id_id">' + (d['id_id'].blank? ? '' : d['id_id'])  + '</td>'
+        html += '<td class="id_date">' + (d['id_date'].blank? ? '' : d['id_date'])  + '</td>'
+        html += '<td class="id_relation_type">' + (d['id_relation_type'].blank? ? '' : d['id_relation_type'].underscore.humanize) + '</td>'
         html += '</tr>'
       end
       html += '</tbody></table></div>'
