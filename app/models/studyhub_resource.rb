@@ -141,6 +141,7 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_provenance_data_presence
+    return if resource_json.blank?
     errors.add(:data_source, 'cannot be empty') if resource_json['provenance'].blank?
   end
 
