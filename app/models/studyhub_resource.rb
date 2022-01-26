@@ -9,6 +9,7 @@ class StudyhubResource < ApplicationRecord
 
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
+  validate :check_provenance_data_presence, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
   validate :check_id_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
@@ -139,6 +140,9 @@ class StudyhubResource < ApplicationRecord
     errors.add(:base, "Please add at least one title for the #{studyhub_resource_type_title}.") if title.blank?
   end
 
+  def check_provenance_data_presence
+    errors.add(:data_source, 'cannot be empty') if resource_json['provenance'].blank?
+  end
 
   def check_id_presence
     resource_json['ids']&.each_with_index do |id,index|
