@@ -255,56 +255,51 @@ class StudyhubResourcesController < ApplicationController
 
   def studyhub_resource_params
 
-    sr_params = {}
+    if json_api_request?
 
-    @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
+      Rails.logger.info("The request is sent from API......")
 
-    params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
-    sr_params[:resource_json] = {}
-    resource_json = params[:studyhub_resource][:resource_json]
-
-    # parse titles
-    if resource_json.key?('resource_titles')
-      sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
-      unless sr_params[:resource_json][:resource_titles].blank?
-        params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"]
-      end
-    end
-
-    # parse acronyms
-    if resource_json.key?('resource_acronyms')
-      sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms])
-    end
-
-    # parse descriptions
-    if resource_json.key?('resource_descriptions')
-      sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions])
-    end
-
-
-    # parse IDs
-    sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids]) if resource_json.key?('ids')
-
-    # parse roles
-    sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles]) if resource_json.key?('roles')
-
-
-    #parse resource and study design
-    if params[:studyhub_resource].key?('custom_metadata_attributes')
-      sr_params[:resource_json][:resource], sr_params[:resource_json][:study_design] = parse_custom_metadata_attributes(params[:studyhub_resource])
     else
-      sr_params[:resource_json][:resource] = resource_json[:resource] if resource_json.key?('resource')
-      sr_params[:resource_json][:study_design] = resource_json[:study_design] if resource_json.key?('study_design')
-    end
+      Rails.logger.info("The request is sent from UI......")
 
-    sr_params[:resource_json] = sr_params[:resource_json].except(:study_design) unless @rt.is_studytype?
+      sr_params = {}
+      @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:studyhub_resource_type]).first
 
-    #parse provenance data
-    if resource_json.key?('provenance')
+      params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
+
+      sr_params[:resource_json] = {}
+
+      resource_json = params[:studyhub_resource][:resource_json]
+
+      # parse titles
+      sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
+      params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"] unless sr_params[:resource_json][:resource_titles].blank?
+
+
+      # parse acronyms
+      sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms])
+
+      # parse descriptions
+      sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions])
+
+
+      # parse IDs
+      sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids])
+
+      # parse roles
+      sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles])
+
+
+      #parse resource and study design
+      sr_params[:resource_json][:resource], sr_params[:resource_json][:study_design] = parse_custom_metadata_attributes(params[:studyhub_resource])
+      sr_params[:resource_json] = sr_params[:resource_json].except(:study_design) unless @rt.is_studytype?
+
+      #parse provenance data
       sr_params[:resource_json][:provenance] = parse_provenance_data(resource_json[:provenance])
+      params[:studyhub_resource][:resource_json] = sr_params[:resource_json]
     end
 
-    params[:studyhub_resource][:resource_json] = sr_params[:resource_json]
+
 
     params.require(:studyhub_resource).permit(:title,:studyhub_resource_type_id, :comment, { resource_json: {} }, \
                                             :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, { document_ids: [] },\
@@ -401,130 +396,107 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def parse_roles(params)
+
     roles = []
-    if params.kind_of?(Array)
-      params.each do |value|
-        roles << value
+    params[:role_type].keys.each do |key|
+      next if key == 'row-template'
+      entry = {}
+
+      entry['role_type'] = params[:role_type][key]
+      entry['role_name_type'] = params[:role_name_type][key]
+
+      case entry['role_name_type']
+      when 'Organisational'
+        entry['role_name_organisational'] = params[:role_name_organisational][key]
+      when 'Personal'
+        entry['role_name_personal_title'] = params[:role_name_personal_title][key]
+        entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
+        entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
       end
-    else
-      params[:role_type].keys.each do |key|
-        next if key == 'row-template'
-        entry = {}
-
-        entry['role_type'] = params[:role_type][key]
-        entry['role_name_type'] = params[:role_name_type][key]
-
-        case entry['role_name_type']
-        when 'Organisational'
-          entry['role_name_organisational'] = params[:role_name_organisational][key]
-        when 'Personal'
-          entry['role_name_personal_title'] = params[:role_name_personal_title][key]
-          entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
-          entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
-        end
 
 
-        entry['role_name_identifiers'] = []
-        entry['role_affiliation_identifiers'] = []
+      entry['role_name_identifiers'] = []
+      entry['role_affiliation_identifiers'] = []
 
-        StudyhubResource::ID_TYPE.each do |type|
+      StudyhubResource::ID_TYPE.each do |type|
 
-          params["role_#{type}_identifier".to_sym][key].keys.each do |k2|
-            identifier = {}
-            identifier["role_#{type}_identifier"] = params["role_#{type}_identifier".to_sym][key][k2]
-            identifier["role_#{type}_identifier_scheme"] = params["role_#{type}_identifier_scheme"][key][k2]
-            unless params["role_#{type}_identifier".to_sym][key][k2].blank?
-              entry["role_#{type}_identifiers"] << identifier
-            end
+        params["role_#{type}_identifier".to_sym][key].keys.each do |k2|
+          identifier = {}
+          identifier["role_#{type}_identifier"] = params["role_#{type}_identifier".to_sym][key][k2]
+          identifier["role_#{type}_identifier_scheme"] = params["role_#{type}_identifier_scheme"][key][k2]
+          unless params["role_#{type}_identifier".to_sym][key][k2].blank?
+            entry["role_#{type}_identifiers"] << identifier
           end
-
         end
 
-        entry['role_email'] = params[:role_email][key]
-        entry['role_phone'] = params[:role_phone][key]
-        entry['role_affiliation_name'] = params[:role_affiliation_name][key]
-        entry['role_affiliation_address'] = params[:role_affiliation_address][key]
-        entry['role_affiliation_web_page'] = params[:role_affiliation_web_page][key]
-
-        roles << entry unless entry['role_type'].blank?
-
       end
+
+      entry['role_email'] = params[:role_email][key]
+      entry['role_phone'] = params[:role_phone][key]
+      entry['role_affiliation_name'] = params[:role_affiliation_name][key]
+      entry['role_affiliation_address'] = params[:role_affiliation_address][key]
+      entry['role_affiliation_web_page'] = params[:role_affiliation_web_page][key]
+
+      roles << entry unless entry['role_type'].blank?
     end
     roles
+
   end
 
   def parse_ids(params)
-    ids = []
-    if params.kind_of?(Array)
-      params.each do |value|
-        ids << value
-      end
-    else
-      params[:id_type].keys.each do |key|
-        entry = {}
-        next if key == 'row-template'
 
-        entry['id_type'] = params[:id_type][key]
-        entry['id_id'] = params[:id_id][key]
-        entry['id_date'] = params[:id_date][key]
-        entry['id_relation_type'] = params[:id_relation_type][key]
-        entry['id_resource_type_general'] = params[:id_resource_type_general][key]
-        ids << entry unless entry['id_id'].blank?
-      end
+    ids = []
+    params[:id_type].keys.each do |key|
+      entry = {}
+      next if key == 'row-template'
+      entry['id_type'] = params[:id_type][key]
+      entry['id_id'] = params[:id_id][key]
+      entry['id_date'] = params[:id_date][key]
+      entry['id_relation_type'] = params[:id_relation_type][key]
+      entry['id_resource_type_general'] = params[:id_resource_type_general][key]
+      ids << entry unless entry['id_id'].blank?
     end
     ids
+
   end
 
   def parse_resource_titles(params)
+
     resource_titles = []
-    if params.kind_of?(Array)
-      params.each do |value|
-        resource_titles << value
-      end
-    else
-      params[:title].keys.each do |key|
-        next if key == 'row-template'
-        entry = {}
-        entry['title'] = params[:title][key]
-        entry['title_language'] = params[:title_language][key]
-        resource_titles << entry unless entry['title'].blank?
-      end
+    params[:title].keys.each do |key|
+      next if key == 'row-template'
+      entry = {}
+      entry['title'] = params[:title][key]
+      entry['title_language'] = params[:title_language][key]
+      resource_titles << entry unless entry['title'].blank?
     end
     resource_titles
+
   end
 
   def parse_resource_acronyms(params)
+
     resource_acronyms = []
-    if params.kind_of?(Array)
-      params.each do |value|
-        resource_acronyms << value
-      end
-    else
-      params[:acronym].keys.each do |key|
-        next if key == 'row-template'
-        entry = {}
-        entry['acronym'] = params[:acronym][key]
-        entry['acronym_language'] = params[:acronym_language][key]
-        resource_acronyms << entry unless entry['acronym'].blank?
-      end
+    params[:acronym].keys.each do |key|
+      next if key == 'row-template'
+      entry = {}
+      entry['acronym'] = params[:acronym][key]
+      entry['acronym_language'] = params[:acronym_language][key]
+      resource_acronyms << entry unless entry['acronym'].blank?
     end
     resource_acronyms
+
   end
 
   def parse_resource_descriptions(params)
+
     resource_descriptions = []
-    if params.kind_of?(Array)
-      params.each do |value|
-        resource_descriptions << value
-      end
-    else
-      params[:description].keys.each do |key|
-        next if key == 'row-template'
-        entry = {}
-        entry['description'] = params[:description][key]
-        entry['description_language'] = params[:description_language][key]
-        resource_descriptions << entry unless entry['description'].blank?
-      end
+    params[:description].keys.each do |key|
+      next if key == 'row-template'
+      entry = {}
+      entry['description'] = params[:description][key]
+      entry['description_language'] = params[:description_language][key]
+      resource_descriptions << entry unless entry['description'].blank?
     end
     resource_descriptions
   end
@@ -538,7 +510,7 @@ class StudyhubResourcesController < ApplicationController
   def check_studyhub_resource_type
     begin
       type = params[:studyhub_resource][:studyhub_resource_type]
-      if type.blank? || StudyhubResourceType.where(key:type).first.nil?
+        if type.blank? || StudyhubResourceType.where(key:type).first.nil?
         raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong."
       end
 
@@ -656,15 +628,15 @@ class StudyhubResourcesController < ApplicationController
           next if key == 'study_design' && !(StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type])
 
           unless params[:studyhub_resource][:resource_json][key][attr].nil?
-          result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
+            result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
 
-          if !result.nil? && (result.include? "")
-            raise ArgumentError, "#{key}/#{attr} includes at least one wrong value."
-            break
-          else
-            params[:studyhub_resource][:resource_json][key][attr] = result.nil? ? [] : result
+            if !result.nil? && (result.include? "")
+              raise ArgumentError, "#{key}/#{attr} includes at least one wrong value."
+              break
+            else
+              params[:studyhub_resource][:resource_json][key][attr] = result.nil? ? [] : result
+            end
           end
-        end
         end
       end
 
