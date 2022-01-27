@@ -10,7 +10,6 @@ class StudyhubResourcesController < ApplicationController
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
   # before_action :check_resource_json, only: [:create, :update], if: :json_api_request?
-  before_action :convert_resource_json_label, only: [:create, :update], if: :json_api_request?
 
   api_actions :index, :show, :create, :update, :destroy
 
@@ -514,6 +513,7 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def check_studyhub_resource_type
+    Rails.logger.info("Controller:check_studyhub_resource_type......")
     begin
       raise ArgumentError, 'A POST/PUT request must specify a data:attributes:resource_json.' if params[:studyhub_resource][:resource_json].blank?
       raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource.' if params[:studyhub_resource][:resource_json][:resource].blank?
@@ -626,31 +626,5 @@ class StudyhubResourcesController < ApplicationController
   #   end
   # end
 
-  #@todo move the covertor to the model
-  def convert_resource_json_label
-    resource_json = params[:studyhub_resource][:resource_json]
-    begin
-      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
-        StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
 
-          next if key == 'study_design' && !(StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type])
-
-          unless params[:studyhub_resource][:resource_json][key][attr].nil?
-            result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
-
-            if !result.nil? && (result.include? "")
-              raise ArgumentError, "#{key}/#{attr} includes at least one wrong value."
-              break
-            else
-              params[:studyhub_resource][:resource_json][key][attr] = result.nil? ? [] : result
-            end
-          end
-        end
-      end
-
-    rescue ArgumentError => e
-      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
-      render plain: output, status: :unprocessable_entity
-    end
-  end
 end

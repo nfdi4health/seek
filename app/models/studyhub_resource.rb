@@ -24,6 +24,7 @@ class StudyhubResource < ApplicationRecord
   attr_accessor :commit_button
   before_save :update_working_stage, on:  [:create, :update]
   before_validation :set_resource_titles_to_title
+  after_validation :convert_label_to_id_for_multi_select_attribute
 
 
   # *****************************************************************************
@@ -306,9 +307,29 @@ class StudyhubResource < ApplicationRecord
   end
 
   def set_resource_titles_to_title
-    Rails.logger.info("set_resource_titles_to_title")
-    Rails.logger.info(self.title.inspect)
+    Rails.logger.info("Model:set_resource_titles_to_title")
+    Rails.logger.info("title=>"+ self.title.inspect)
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
+  end
+
+  def convert_label_to_id_for_multi_select_attribute
+
+    #Fixme: if it is a UI call, return. Only check when API call. It is not the best way
+    return if resource_json['resource']['resource_type'].nil?
+
+    hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except("study_design")
+
+    Rails.logger.info("Model:convert_label_to_id_for_multi_select_attribute")
+    hash.keys.each do |key|
+      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+        Rails.logger.info("+++++++++++++++++++++++++")
+        Rails.logger.info("resource_json[#{key}][#{attr}]=>"+resource_json[key][attr].to_s)
+
+        result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
+        self.resource_json[key][attr] = result
+
+      end
+    end
   end
 
   private
