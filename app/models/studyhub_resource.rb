@@ -23,6 +23,7 @@ class StudyhubResource < ApplicationRecord
   attr_readonly :studyhub_resource_type_id
   attr_accessor :commit_button
   before_save :update_working_stage, on:  [:create, :update]
+  before_validation :set_resource_titles_to_title
 
 
   # *****************************************************************************
@@ -74,15 +75,6 @@ class StudyhubResource < ApplicationRecord
 
   INTEGER_ATTRIBUTES =  %w[study_centers_number study_target_sample_size study_obtained_sample_size].freeze
   FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined study_age_max_examined study_target_follow-up_duration].freeze
-
-  def description
-    if resource_json.nil? || resource_json['resource_descriptions'].blank?
-      'Studyhub Resources'
-    else
-      resource_json['resource_descriptions'].first['description']
-    end
-  end
-
 
 
   def check_urls
@@ -311,6 +303,12 @@ class StudyhubResource < ApplicationRecord
     else
       'unknown'
     end
+  end
+
+  def set_resource_titles_to_title
+    Rails.logger.info("set_resource_titles_to_title")
+    Rails.logger.info(self.title.inspect)
+    self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
   end
 
   private

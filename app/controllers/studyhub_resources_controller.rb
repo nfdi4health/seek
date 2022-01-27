@@ -9,7 +9,7 @@ class StudyhubResourcesController < ApplicationController
   before_action :find_assets, only: [:index]
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
-  before_action :check_resource_json, only: [:create, :update], if: :json_api_request?
+  # before_action :check_resource_json, only: [:create, :update], if: :json_api_request?
   before_action :convert_resource_json_label, only: [:create, :update], if: :json_api_request?
 
   api_actions :index, :show, :create, :update, :destroy
@@ -63,13 +63,12 @@ class StudyhubResourcesController < ApplicationController
   end
 
   def create
-
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
-    type =  @studyhub_resource.studyhub_resource_type
+    # @type =  @studyhub_resource.studyhub_resource_type
     update_sharing_policies @studyhub_resource
     update_relationships(@studyhub_resource, params)
 
-    if type.is_studytype?
+    if @rt.is_studytype?
       create_studytype_resource
     else
       create_non_studytype_resource
@@ -206,7 +205,7 @@ class StudyhubResourcesController < ApplicationController
         format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
       else
         flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
-        format.html {render template: 'studyhub_resources/new_resource', locals: { sr_type: type },status: :unprocessable_entity}
+        format.html {render template: 'studyhub_resources/new_resource', locals: { sr_type: @rt },status: :unprocessable_entity}
         format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
       end
     end
@@ -265,6 +264,8 @@ class StudyhubResourcesController < ApplicationController
     if json_api_request?
 
       Rails.logger.info("The request is sent from API......")
+      @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:resource_json][:resource][:resource_type]).first
+      params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
 
     else
       Rails.logger.info("The request is sent from UI......")
@@ -280,8 +281,6 @@ class StudyhubResourcesController < ApplicationController
 
       # parse titles
       sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
-      params[:studyhub_resource][:title]  = sr_params[:resource_json][:resource_titles].first["title"] unless sr_params[:resource_json][:resource_titles].blank?
-
 
       # parse acronyms
       sr_params[:resource_json][:resource_acronyms] = parse_resource_acronyms(resource_json[:resource_acronyms])
@@ -516,69 +515,17 @@ class StudyhubResourcesController < ApplicationController
 
   def check_studyhub_resource_type
     begin
-      type = params[:studyhub_resource][:studyhub_resource_type]
-        if type.blank? || StudyhubResourceType.where(key:type).first.nil?
-        raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong."
-      end
+      raise ArgumentError, 'A POST/PUT request must specify a data:attributes:resource_json.' if params[:studyhub_resource][:resource_json].blank?
+      raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource.' if params[:studyhub_resource][:resource_json][:resource].blank?
+      raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource:resource_type.' if params[:studyhub_resource][:resource_json][:resource][:resource_type].blank?
+
+      type = params[:studyhub_resource][:resource_json][:resource][:resource_type]
+      raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong." if StudyhubResourceType.where(key:type).first.nil?
 
       if params[:action]=='update'
-        unless StudyhubResource.find(params[:id]).studyhub_resource_type.key == params[:studyhub_resource][:studyhub_resource_type]
-          raise ArgumentError, "A PUT request can not change 'studyhub_resource_type'."
+        unless StudyhubResource.find(params[:id]).studyhub_resource_type.key == type
+          raise ArgumentError, "A PUT request can not change 'resource_type'."
         end
-      end
-
-    rescue ArgumentError => e
-      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
-      render plain: output, status: :unprocessable_entity
-    end
-  end
-
-  def check_resource_json
-    begin
-      if params[:studyhub_resource][:resource_json].blank?
-        raise ArgumentError, 'A POST/PUT request must specify a data:attributes:resource_json.'
-      else
-
-        resource_json = params[:studyhub_resource][:resource_json]
-
-        unless resource_json.key?(:ids) && resource_json[:ids].is_a?(Array)
-          raise ArgumentError, 'A POST/PUT request must specify a resource_json:ids and "ids" is an array.'
-        end
-
-        unless resource_json.key?(:roles) && resource_json[:roles].is_a?(Array)
-          raise ArgumentError, 'A POST/PUT request must specify a resource_json:roles and "roles" is an array.'
-        end
-
-        unless resource_json.key?(:resource)
-          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource.'
-        end
-
-        unless resource_json.key?(:resource_titles) && resource_json[:resource_titles].is_a?(Array)
-          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_titles and "resource_titles" is an array.'
-        end
-
-        unless resource_json.key?(:resource_acronyms) && resource_json[:resource_acronyms].is_a?(Array)
-          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_acronyms and "resource_acronyms" is an array.'
-        end
-
-        unless resource_json.key?(:resource_descriptions) && resource_json[:resource_descriptions].is_a?(Array)
-          raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_descriptions and "resource_descriptions" is an array.'
-        end
-
-        if (StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type])  && !resource_json.key?('study_design')
-          raise ArgumentError, "A POST/PUT request must specify a resource_json:study_design for creating a #{params[:studyhub_resource][:studyhub_resource_type]}."
-        end
-
-        unless (StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type]) || params.key?(:content_blobs)
-          raise ArgumentError, "A POST/PUT request must specify a 'content_blobs' for creating a #{params[:studyhub_resource][:studyhub_resource_type]}."
-        end
-
-        check_resource_json_resource
-
-        if StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type]
-          check_resource_json_study_design
-        end
-
       end
     rescue ArgumentError => e
       output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
@@ -586,46 +533,100 @@ class StudyhubResourcesController < ApplicationController
     end
   end
 
-  def check_resource_json_resource
+  # def check_resource_json
+  #   begin
+  #     if params[:studyhub_resource][:resource_json].blank?
+  #       raise ArgumentError, 'A POST/PUT request must specify a data:attributes:resource_json.'
+  #     else
+  #
+  #       resource_json = params[:studyhub_resource][:resource_json]
+  #
+  #       unless resource_json.key?(:ids) && resource_json[:ids].is_a?(Array)
+  #         raise ArgumentError, 'A POST/PUT request must specify a resource_json:ids and "ids" is an array.'
+  #       end
+  #
+  #       unless resource_json.key?(:roles) && resource_json[:roles].is_a?(Array)
+  #         raise ArgumentError, 'A POST/PUT request must specify a resource_json:roles and "roles" is an array.'
+  #       end
+  #
+  #       unless resource_json.key?(:resource)
+  #         raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource.'
+  #       end
+  #
+  #       unless resource_json.key?(:resource_titles) && resource_json[:resource_titles].is_a?(Array)
+  #         raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_titles and "resource_titles" is an array.'
+  #       end
+  #
+  #       unless resource_json.key?(:resource_acronyms) && resource_json[:resource_acronyms].is_a?(Array)
+  #         raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_acronyms and "resource_acronyms" is an array.'
+  #       end
+  #
+  #       unless resource_json.key?(:resource_descriptions) && resource_json[:resource_descriptions].is_a?(Array)
+  #         raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_descriptions and "resource_descriptions" is an array.'
+  #       end
+  #
+  #       if (StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type])  && !resource_json.key?('study_design')
+  #         raise ArgumentError, "A POST/PUT request must specify a resource_json:study_design for creating a #{params[:studyhub_resource][:studyhub_resource_type]}."
+  #       end
+  #
+  #       unless (StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type]) || params.key?(:content_blobs)
+  #         raise ArgumentError, "A POST/PUT request must specify a 'content_blobs' for creating a #{params[:studyhub_resource][:studyhub_resource_type]}."
+  #       end
+  #
+  #       check_resource_json_resource
+  #
+  #       if StudyhubResourceType::STUDY_TYPES.include? params[:studyhub_resource][:studyhub_resource_type]
+  #         check_resource_json_study_design
+  #       end
+  #
+  #     end
+  #   rescue ArgumentError => e
+  #     output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+  #     render plain: output, status: :unprocessable_entity
+  #   end
+  # end
 
-    cmt = CustomMetadataType.where(title:'NFDI4Health Studyhub Resource General').first
-    attributes = cmt.custom_metadata_attributes.map(&:title).reject{|x| StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? x}
-    keys_array = params[:studyhub_resource][:resource_json][:resource].keys
+  # def check_resource_json_resource
+  #
+  #   cmt = CustomMetadataType.where(title:'NFDI4Health Studyhub Resource General').first
+  #   attributes = cmt.custom_metadata_attributes.map(&:title).reject{|x| StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? x}
+  #   keys_array = params[:studyhub_resource][:resource_json][:resource].keys
+  #
+  #   begin
+  #     unless (attributes-keys_array).blank?
+  #       errors = attributes - keys_array
+  #       raise ArgumentError, "A POST/PUT request must specify a resource_json:resource:#{errors.join(',')}"
+  #     end
+  #   rescue ArgumentError => e
+  #     output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+  #     render plain: output, status: :unprocessable_entity
+  #   end
+  # end
 
-    begin
-      unless (attributes-keys_array).blank?
-        errors = attributes - keys_array
-        raise ArgumentError, "A POST/PUT request must specify a resource_json:resource:#{errors.join(',')}"
-      end
-    rescue ArgumentError => e
-      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
-      render plain: output, status: :unprocessable_entity
-    end
-  end
 
+  # def check_resource_json_study_design
+  #
+  #   cm_study_design_attributes = get_study_design_attributes(params[:studyhub_resource])
+  #
+  #   attributes = cm_study_design_attributes.reject{|x| StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? x }
+  #
+  #   #todo: check the weird problem with "study_target_follow-up_duration"
+  #   attributes.delete('study_target_follow-up_duration')
+  #
+  #   keys_array = params[:studyhub_resource][:resource_json][:study_design].keys
+  #
+  #   begin
+  #     unless (attributes-keys_array).blank?
+  #       errors = attributes - keys_array
+  #       raise ArgumentError, "A POST/PUT request must specify a resource_json:study_design:#{errors.join(',')}"
+  #     end
+  #   rescue ArgumentError => e
+  #     output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
+  #     render plain: output, status: :unprocessable_entity
+  #   end
+  # end
 
-  def check_resource_json_study_design
-
-    cm_study_design_attributes = get_study_design_attributes(params[:studyhub_resource])
-
-    attributes = cm_study_design_attributes.reject{|x| StudyhubResource::MULTI_ATTRIBUTE_SKIPPED_FIELDS.include? x }
-
-    #todo: check the weird problem with "study_target_follow-up_duration"
-    attributes.delete('study_target_follow-up_duration')
-
-    keys_array = params[:studyhub_resource][:resource_json][:study_design].keys
-
-    begin
-      unless (attributes-keys_array).blank?
-        errors = attributes - keys_array
-        raise ArgumentError, "A POST/PUT request must specify a resource_json:study_design:#{errors.join(',')}"
-      end
-    rescue ArgumentError => e
-      output = "{\"errors\" : [{\"detail\" : \"#{e.message}\"}]}"
-      render plain: output, status: :unprocessable_entity
-    end
-  end
-
+  #@todo move the covertor to the model
   def convert_resource_json_label
     resource_json = params[:studyhub_resource][:resource_json]
     begin
