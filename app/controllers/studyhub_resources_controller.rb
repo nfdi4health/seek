@@ -70,32 +70,10 @@ class StudyhubResourcesController < ApplicationController
     update_relationships(@studyhub_resource, params)
 
     if type.is_studytype?
-      respond_to do |format|
-        if @studyhub_resource.save
-          flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully saved.<br/>".html_safe
-          flash[:notice] += get_submit_notice if request_to_submit?
-          format.html { redirect_to studyhub_resource_path(@studyhub_resource)}
-          format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
-        else
-          flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
-          format.html {render template: 'studyhub_resources/new_resource', locals: { sr_type: type },status: :unprocessable_entity}
-          format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
-        end
-      end
+      create_studytype_resource
     else
-      if handle_upload_data
-        respond_to do |format|
-          if @studyhub_resource.save
-            format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
-          else
-            format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
-          end
-        end
-      else
-        handle_upload_data_failure
-      end
+      create_non_studytype_resource
     end
-
   end
 
 
@@ -219,6 +197,35 @@ class StudyhubResourcesController < ApplicationController
 
   private
 
+  def create_studytype_resource
+    respond_to do |format|
+      if @studyhub_resource.save
+        flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully saved.<br/>".html_safe
+        flash[:notice] += get_submit_notice if request_to_submit?
+        format.html { redirect_to studyhub_resource_path(@studyhub_resource)}
+        format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
+      else
+        flash.now[:error] = @studyhub_resource.errors.messages[:base].join('<br/>').html_safe
+        format.html {render template: 'studyhub_resources/new_resource', locals: { sr_type: type },status: :unprocessable_entity}
+        format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
+      end
+    end
+  end
+
+
+  def create_non_studytype_resource
+    if handle_upload_data
+      respond_to do |format|
+        if @studyhub_resource.save
+          format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
+        else
+          format.json {render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity}
+        end
+      end
+    else
+      handle_upload_data_failure
+    end
+  end
 
   def request_to_submit?
     (params[:studyhub_resource][:commit_button] == 'Submit') ? true : false
