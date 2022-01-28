@@ -5,6 +5,7 @@ class StudyhubResourceSerializer < PCSSerializer
   # end
 
   attribute :resource_json do
+    object.resource_json['resource']['resource_id'] = object.id.to_s
     object.resource_json['resource']['resource_type'] = object.studyhub_resource_type.try(:key)
     convert_resource_json('resource')
     convert_resource_json('study_design') if object.is_studytype?
