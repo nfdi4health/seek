@@ -153,8 +153,7 @@ module StudyhubResourcesHelper
 
   def studyhub_custom_metadata_form_field_for_attribute(attribute, resource, index = nil)
 
-    base_type = attribute.sample_attribute_type.base_type
-    clz = "custom_metadata_attribute_#{base_type.downcase}"
+    element_class = "custom_metadata_attribute_#{attribute.sample_attribute_type.base_type.downcase}"
 
     if index.nil?
       element_name = "studyhub_resource[custom_metadata_attributes][data][#{attribute.title}]"
@@ -173,27 +172,34 @@ module StudyhubResourcesHelper
 
     placeholder = "e.g. #{attribute.sample_attribute_type.placeholder}" unless attribute.sample_attribute_type.placeholder.blank?
 
-    case base_type
+    case attribute.sample_attribute_type.base_type
     when Seek::Samples::BaseType::TEXT
-      text_area_tag element_name, value, class: "form-control #{clz}"
+      text_area_tag element_name, value, class: "form-control #{element_class}"
     when Seek::Samples::BaseType::DATE_TIME
       content_tag :div, style: 'position:relative' do
-        text_field_tag element_name, value, data: { calendar: 'mixed' }, class: "calendar form-control #{clz}", placeholder: placeholder
+        text_field_tag element_name, value, data: { calendar: 'mixed' }, class: "calendar form-control #{element_class}", placeholder: placeholder
       end
     when Seek::Samples::BaseType::DATE
       content_tag :div, style: 'position:relative' do
-        text_field_tag element_name, value, data: { calendar: true }, class: "calendar form-control #{clz}", placeholder: placeholder
+        text_field_tag element_name, value, data: { calendar: true }, class: "calendar form-control #{element_class}", placeholder: placeholder
       end
     when Seek::Samples::BaseType::BOOLEAN
-      check_box_tag element_name, value, class: clz.to_s
-    when Seek::Samples::BaseType::SEEK_DATA_FILE
-      options = options_from_collection_for_select(DataFile.authorized_for(:view), :id,
-                                                   :title, value.try(:[], 'id'))
-      select_tag(element_name, options, include_blank: !attribute.required?, class: "form-control #{clz}")
+      content_tag :div, class: 'form-check' do
+        unless attribute.required?
+          concat(text_field_tag(element_name, '', class: 'form-check-input', type: :radio, checked: value != true && value != false))
+          concat(label_tag(nil, "Unset", class: 'form-check-label', style: 'padding-left:0.25em;padding-right:1em;'))
+        end
+
+        concat(text_field_tag(element_name, 'true', class: 'form-check-input', type: :radio, checked: value == true))
+        concat(label_tag(nil, "true", class: 'form-check-label', style: 'padding-left:0.25em;padding-right:1em;'))
+
+        concat(text_field_tag(element_name, 'false', class: 'form-check-input', type: :radio, checked: value == false))
+        concat(label_tag(nil, "false", class: 'form-check-label', style: 'padding-left:0.25em;padding-right:1em;'))
+      end
     when Seek::Samples::BaseType::CV
-      controlled_vocab_form_field attribute, element_name, value
+      controlled_vocab_form_field attribute.sample_controlled_vocab, element_name, value
     else
-      text_field_tag element_name, value, class: "form-control #{clz}", placeholder: placeholder
+      text_field_tag element_name, value, class: "form-control #{element_class}", placeholder: placeholder
     end
   end
 
@@ -212,7 +218,7 @@ module StudyhubResourcesHelper
     { 'Study Type' => study, 'Non Study Type' => non_study }
   end
 
-  def controlled_vocab_form_field(attribute, element_name, value)
+  def sh_controlled_vocab_form_field(attribute, element_name, value)
     if attribute.sample_controlled_vocab.sample_controlled_vocab_terms.count < Seek::Config.cv_dropdown_limit
 
       options = options_from_collection_for_select(

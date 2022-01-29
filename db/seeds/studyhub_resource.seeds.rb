@@ -9,6 +9,9 @@ attribute_descriptions = YAML::load_file(configpath)
 configpath = File.join(Rails.root, 'config/default_data', 'studyhub_resource_attribute_heading.yml')
 attribute_headings = YAML::load_file(configpath)
 
+boolean_type = SampleAttributeType.find_or_initialize_by(title: 'Boolean')
+boolean_type.update_attributes(base_type: Seek::Samples::BaseType::BOOLEAN)
+
 int_type = SampleAttributeType.find_or_initialize_by(title: 'Integer')
 int_type.update_attributes(base_type: Seek::Samples::BaseType::INTEGER, placeholder: '1')
 
@@ -76,18 +79,6 @@ disable_authorization_checks do
                                                                                                'All rights reserved',
                                                                                                'Other',
                                                                                                'Not applicable']))
-
-
-  # resource_use_rights_authors_confirmation_cv
-  resource_use_rights_authors_confirmation_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Author Confirmation').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No' ])
-  )
-
-  # resource_use_rights_support_by_licencing_cv
-  resource_use_rights_support_by_licencing_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Use Rights Support By Licencing').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No' ])
-  )
-
   # id_type
   id_type_cv = SampleControlledVocab.where(title: 'NFDI4Health ID Type').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[arXiv bibcode DOI EAN13 EISSN Handle ISBN ISSN ISTC LISSN LSID PMID
@@ -292,10 +283,6 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
                                                                                                'Phase-2-phase-3', 'Phase-3', 'Phase-3a', 'Phase-3b', 'Phase-4', 'Other', 'Not applicable'])
   )
 
-  # study_masking
-  study_masking_cv =SampleControlledVocab.where(title: 'NFDI4Health Study Masking').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[Yes No])
-  )
 
   # study_masking_roles
   study_masking_roles_cv =SampleControlledVocab.where(title: 'NFDI4Health Study Masking Roles').first_or_create!(
@@ -425,28 +412,28 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   resource_use_rights_authors_confirmation_1 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_1')
   resource_use_rights_authors_confirmation_1.update_attributes(
-    title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+    title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: boolean_type,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_1'],
     label: attribute_headings['resource_use_rights_authors_confirmation_1'], pos:11
   )
 
   resource_use_rights_authors_confirmation_2 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_2')
   resource_use_rights_authors_confirmation_2.update_attributes(
-    title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+    title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: boolean_type,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_2'],
     label: attribute_headings['resource_use_rights_authors_confirmation_2'], pos:12
   )
 
   resource_use_rights_authors_confirmation_3 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_3')
   resource_use_rights_authors_confirmation_3.update_attributes(
-    title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_authors_confirmation_cv,
+    title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: boolean_type,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_3'],
     label: attribute_headings['resource_use_rights_authors_confirmation_3'], pos:13
   )
 
   resource_use_rights_support_by_licencing = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_support_by_licencing')
   resource_use_rights_support_by_licencing.update_attributes(
-    title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: resource_use_rights_support_by_licencing_cv,
+    title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: boolean_type,
     description: attribute_descriptions['resource_use_rights_support_by_licencing'],
     label: attribute_headings['resource_use_rights_support_by_licencing'], pos:14
   )
@@ -852,7 +839,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   study_masking = CustomMetadataAttribute.find_or_initialize_by(title: 'study_masking')
   study_masking.update_attributes(
-    title: 'study_masking', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_masking_cv,
+    title: 'study_masking', required: false, sample_attribute_type: boolean_type,
     description: attribute_descriptions['study_masking'], label: attribute_headings['study_masking'], pos:3
   )
 

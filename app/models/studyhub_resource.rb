@@ -24,6 +24,7 @@ class StudyhubResource < ApplicationRecord
   attr_accessor :commit_button
   before_save :update_working_stage, on:  [:create, :update]
   before_validation :set_resource_titles_to_title
+  after_validation :convert_boolean_attributes
   after_validation :convert_label_to_id_for_multi_select_attribute
 
 
@@ -48,6 +49,13 @@ class StudyhubResource < ApplicationRecord
   SUBMITTED  = 1
   WAITING_FOR_APPROVEL = 2
   PUBLISHED = 3
+
+
+  # *****************************************************************************
+  #  This section defines constants for boolean attributes
+  BOOLEAN_ATTRIBUTES_HASH = {'resource' => %w[resource_use_rights_authors_confirmation_1 resource_use_rights_authors_confirmation_2 resource_use_rights_authors_confirmation_3 resource_use_rights_support_by_licencing],
+                                 'study_design' => %w[study_masking] }.freeze
+
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
@@ -318,6 +326,28 @@ class StudyhubResource < ApplicationRecord
     Rails.logger.info("Model:set_resource_titles_to_title")
     Rails.logger.info("title=>"+ self.title.inspect)
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
+  end
+
+  def convert_boolean_attributes
+    return if resource_json['resource'].nil?
+
+    Rails.logger.info('Model:convert_boolean_attributes')
+    Rails.logger.info("resource_json['resource']=>"+ self.title.inspect)
+
+    hash =  self.is_studytype? ? BOOLEAN_ATTRIBUTES_HASH : BOOLEAN_ATTRIBUTES_HASH.except("study_design")
+
+    hash.keys.each do |key|
+      StudyhubResource::BOOLEAN_ATTRIBUTES_HASH[key].each do |attr|
+        Rails.logger.info('+++++++++++++++++++++++++')
+        Rails.logger.info("resource_json[#{key}][#{attr}]=>"+resource_json[key][attr].to_s)
+        case resource_json[key][attr]
+        when 'true'
+          self.resource_json[key][attr]= true
+        when 'false'
+          self.resource_json[key][attr]= false
+        end
+      end
+    end
   end
 
   def convert_label_to_id_for_multi_select_attribute

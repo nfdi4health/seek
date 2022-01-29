@@ -72,25 +72,25 @@ var SR = {
         }
 
         if (check_license.startsWith('CC')) {
-            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().show();
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().show();
+            $j('input:radio[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().parent().show();
+            $j('input:radio[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().parent().show();
         }else {
-            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().hide();
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().hide();
+            $j('input:radio[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().parent().hide();
+            $j('input:radio[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().parent().hide();
         }
     },
 
     setResourceUseRightVisibility: function () {
         check_license = $j(this).val();
         if (check_license.startsWith('CC')) {
-           $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().show();
-           $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().show();
+           $j('input:radio[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().parent().show();
+           $j('input:radio[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().parent().show();
         }
         else{
-            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().hide();
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().hide();
-            $j('select[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').val('');
-            $j('select[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').val('');
+            $j('input:radio[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').parent().parent().hide();
+            $j('input:radio[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').parent().parent().hide();
+            $j('input:radio[name^="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_authors_confirmation"]').prop('checked', false);
+            $j('input:radio[name="studyhub_resource[custom_metadata_attributes][data][resource_use_rights_support_by_licencing]"]').prop('checked', false);
         }
     },
 
