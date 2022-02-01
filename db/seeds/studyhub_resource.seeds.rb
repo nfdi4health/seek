@@ -185,16 +185,8 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
 
   # study_type_interventional
-  study_type_interventional_cv = SampleControlledVocab.where(title: 'NFDI4Health Interventional Study Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Single Group', 'Parallel', 'Crossover', 'Factorial', 'Sequential', 'Other', 'Unknown'])
-  )
-
-  # study_type_non_interventional
-  study_type_non_interventional_cv = SampleControlledVocab.where(title: 'NFDI4Health Non-interventional Study Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Case-control', 'Case-only', 'Case-crossover', 'Ecologic or community studies', 'Family-based',
-                                                                                               'Twin study', 'Cohort', ' Birth cohort', 'Trend', 'Panel',
-                                                                                               'Longitudinal', 'Cross-section', 'Cross-section ad-hoc follow-up', 'Time series',
-                                                                                               'Quality control', 'Other', 'Unknown'])
+  study_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Type').first_or_create!(
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes([])
   )
 
   # study_primary_purpose
@@ -459,16 +451,10 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
     description: attribute_descriptions['study_primary_design'], label: attribute_headings['study_primary_design'], pos:1
   )
 
-  study_type_non_interventional = CustomMetadataAttribute.find_or_initialize_by(title: 'study_type_non_interventional')
-  study_type_non_interventional.update_attributes(
-    title: 'study_type_non_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_non_interventional_cv,
-    description: attribute_descriptions['study_type_non_interventional'], label: attribute_headings['study_type_non_interventional'], pos:2
-  )
-
-  study_type_interventional = CustomMetadataAttribute.find_or_initialize_by(title: 'study_type_interventional')
-  study_type_interventional.update_attributes(
-    title: 'study_type_interventional', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_interventional_cv,
-    description: attribute_descriptions['study_type_interventional'], label: attribute_headings['study_type_interventional'], pos:3
+  study_type = CustomMetadataAttribute.find_or_initialize_by(title: 'study_type')
+  study_type.update_attributes(
+    title: 'study_type', required: true, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_cv,
+    description: attribute_descriptions['study_type'], label: attribute_headings['study_type'], pos:2
   )
 
 
@@ -769,7 +755,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   cmt_studyhub_studydesign_general.update_attributes(
     title: 'NFDI4Health Studyhub Resource StudyDesign General', supported_type: 'StudyhubResource',
     custom_metadata_attributes: [
-      study_primary_design, study_type_non_interventional, study_type_interventional, study_type_description, study_conditions, study_conditions_classification, study_conditions_classification_code,
+      study_primary_design, study_type, study_type_description, study_conditions, study_conditions_classification, study_conditions_classification_code,
       study_ethics_commitee_approval, study_status, study_status_enrolling_by_invitation, study_status_when_intervention, study_status_halted_stage, study_status_halted_reason,
       study_recruitment_status_register, study_start_date, study_end_date, study_centers, study_centers_number, study_subject, study_sampling, study_data_source, study_data_source_description,
       study_eligibility_age_min, study_eligibility_age_min_description, study_eligibility_age_max, study_eligibility_age_max_description, study_eligibility_gender, study_eligibility_inclusion_criteria,

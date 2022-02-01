@@ -126,57 +126,48 @@ var SR = {
     },
 
     intialStudyPrimaryDesignVisibility: function () {
-
-        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
-        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type]"]').parent().hide();
         $j('div[id="study_design_non_interventional"]').parent().parent().hide();
         $j('div[id="study_design_interventional"]').parent().parent().hide();
 
-        study_type = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
-
-        switch (study_type){
-            case 'Interventional':
-                $j('div[id="study_design_interventional"]').parent().parent().show();
-                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().show();
-                $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
-                $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_interventional\')');
-                break;
-
-            case 'Non-interventional':
-                $j('div[id="study_design_non_interventional"]').parent().parent().show();
-                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().show();
-                $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
-                $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_non_interventional\')');
-                break;
-
-
-        }
-
-    },
-
-    setStudyPrimaryDesignVisibility: function () {
-
-        $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
-        $j('div[id="study_design_non_interventional"]').parent().parent().hide();
-        $j('div[id="study_design_interventional"]').parent().parent().hide();
-        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().hide();
-        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().hide();
-
-        design = $j(this).val();
+        design = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
+        options = setStudyTypeOptions(design);
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type]"]').html(options);
 
         switch (design){
             case 'Interventional':
                 $j('div[id="study_design_interventional"]').parent().parent().show();
-                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').parent().show();
-                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').val('');
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type]"]').parent().show();
+                $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
                 $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_interventional\')');
                 break;
 
             case 'Non-interventional':
                 $j('div[id="study_design_non_interventional"]').parent().parent().show();
-                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_non_interventional]"]').parent().show();
-                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type_interventional]"]').val('');
+                $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type]"]').parent().show();
+                $j('button[id="study_primary_design_next_button"]').removeClass('hidden');
                 $j('button[id="study_primary_design_next_button"]').attr('onclick','toggle(\'study_design_non_interventional\')');
+                break;
+        }
+    },
+
+    setStudyPrimaryDesignVisibility: function () {
+
+        $j('div[id="study_design_non_interventional"]').parent().parent().hide();
+        $j('div[id="study_design_interventional"]').parent().parent().hide();
+
+        design = $j(this).val();
+        options = setStudyTypeOptions(design)
+
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type]"]').parent().show();
+        $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type]"]').html(options);
+
+        switch (design){
+            case 'Interventional':
+                $j('div[id="study_design_interventional"]').parent().parent().show();
+                break;
+            case 'Non-interventional':
+                $j('div[id="study_design_non_interventional"]').parent().parent().show();
                 break;
             default:
                 $j('button[id="study_primary_design_next_button"]').addClass('hidden');
@@ -409,6 +400,38 @@ var SR = {
     }
 
 };
+
+
+function setStudyTypeOptions(type) {
+    const interventional_options = ['Single Group', ' Parallel', 'Crossover', 'Factorial', 'Sequential', 'Other', 'Unknown']
+    const non_interventional_options = ['Case-control', 'Case-only', 'Case-crossover', 'Ecologic or community studies', 'Family-based',
+        'Twin study', 'Cohort', ' Birth cohort', 'Trend', 'Panel',
+        'Longitudinal', 'Cross-section', 'Cross-section ad-hoc follow-up', 'Time series',
+        'Quality control', 'Other', 'Unknown']
+
+    if (type == 'Interventional') {
+        study_type_options = interventional_options
+    }
+    else if (type == 'Non-interventional')
+    {
+        study_type_options = non_interventional_options
+    }
+    else{
+        study_type_options = ""
+    }
+
+    var options =  '<option value>Please select...</option>';
+    for (const value of study_type_options ){
+
+        options += '<option value="'+value+'">'+value+'</option>';
+    }
+    return options
+}
+
+
+function setStudyType(type) {
+    $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_type]"]').val(type);
+}
 
 function intialRoleVisibility(index) {
 

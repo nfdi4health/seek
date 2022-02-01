@@ -41,7 +41,7 @@ ID_date: "If known, date of ID assignment. <lb> Please, enter the date in the fo
 ID_resource_type_general: "Type of the related resource referenced by the ID. "
 ID_relation_type: "Type of the relationship of the resource being registered (A) to the related resource (B). "
 study_primary_design: "Primary design of a study. Select between non-interventional and interventional study design. <lb> Non-interventional study design refers to a study that does not aim to alter study outcomes of interest.<br> Interventional study design refers to a study that aims to alter study outcomes of interest. "
-study_type: "In case of an interventional study, the strategy for assigning interventions to participants.<br> <br> In case of a non-interventional study, the primary strategy for participant identification and follow-up. "
+study_type: "In case of an interventional study, the strategy for assigning interventions to participants. In case of a non-interventional study, the primary strategy for participant identification and follow-up. "
 study_type_description: "If needed, additional descriptive information providing more details about the study type. <lb> Generally, the field is not mandatory, but it must be filled out if “Other“ is indicated as study type. "
 study_conditions: "Primary health condition(s) or disease(s) studied in the study, or the focus of the study (e.g., medication(s), food(s), therapy(ies), device(s), etc.) <lb> If possible, enter a term from a controlled terminology (e.g., MeSH, ICD-10, MedDRA, SNOMED CT, or other terminology). Self-assigned (free text) values are also allowed. "
 study_conditions_classification: "If used, controlled terminology. "

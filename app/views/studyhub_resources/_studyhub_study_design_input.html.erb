@@ -32,6 +32,12 @@
     $j(document).ready(function () {
 
         SR.intialStudyPrimaryDesignVisibility();
+
+        <% unless resource.nil?  %>
+        var study_type = '<%= resource['study_type'] %>';
+        setStudyType(study_type);
+        <% end %>
+
         SR.intialStudyDataSharingPlanVisibility();
         SR.intialStudyAttributesVisibility();
         SR.intialRequiredFields();
