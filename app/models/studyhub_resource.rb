@@ -24,7 +24,6 @@ class StudyhubResource < ApplicationRecord
   attr_accessor :commit_button
   before_save :update_working_stage, on:  [:create, :update]
   before_validation :set_resource_titles_to_title
-  after_validation :convert_boolean_attributes
   after_validation :convert_label_to_id_for_multi_select_attribute
 
 
@@ -217,7 +216,7 @@ class StudyhubResource < ApplicationRecord
 
     required_fields ={}
     required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
-    if resource_json['resource']['resource_use_rights_label'].start_with?('CC')
+    if resource_json['resource_use_rights_label'].start_with?('CC')
       required_fields['resource'] += REQUIRED_FIELDS_RESOURCE_USE_RIGHTS
     end
 
@@ -225,7 +224,12 @@ class StudyhubResource < ApplicationRecord
 
     required_fields.each do |type, fields|
       fields.each do |name|
-        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
+        if type == 'resource'
+          errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[name].blank?
+        else
+          errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
+        end
+
       end
     end
   end
@@ -314,32 +318,12 @@ class StudyhubResource < ApplicationRecord
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
   end
 
-  def convert_boolean_attributes
-    return if resource_json['resource'].nil?
 
-    Rails.logger.info('Model:convert_boolean_attributes')
-    Rails.logger.info("resource_json['resource']=>"+ self.title.inspect)
-
-    hash =  self.is_studytype? ? BOOLEAN_ATTRIBUTES_HASH : BOOLEAN_ATTRIBUTES_HASH.except("study_design")
-
-    hash.keys.each do |key|
-      StudyhubResource::BOOLEAN_ATTRIBUTES_HASH[key].each do |attr|
-        Rails.logger.info('+++++++++++++++++++++++++')
-        Rails.logger.info("resource_json[#{key}][#{attr}]=>"+resource_json[key][attr].to_s)
-        case resource_json[key][attr]
-        when 'true'
-          self.resource_json[key][attr]= true
-        when 'false'
-          self.resource_json[key][attr]= false
-        end
-      end
-    end
-  end
 
   def convert_label_to_id_for_multi_select_attribute
 
     #Fixme: if it is a UI call, return. Only check when API call. It is not the best way
-    return if resource_json['resource']['resource_type'].nil?
+    return if resource_json['resource_type'].nil?
 
     hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except("study_design")
 

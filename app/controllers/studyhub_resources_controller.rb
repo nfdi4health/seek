@@ -63,7 +63,6 @@ class StudyhubResourcesController < ApplicationController
 
   def create
     @studyhub_resource = StudyhubResource.new(studyhub_resource_params)
-    # @type =  @studyhub_resource.studyhub_resource_type
     update_sharing_policies @studyhub_resource
     update_relationships(@studyhub_resource, params)
 
@@ -278,6 +277,10 @@ class StudyhubResourcesController < ApplicationController
 
       resource_json = params[:studyhub_resource][:resource_json]
 
+      #parse resource and study design
+      sr_params[:resource_json], sr_params[:resource_json][:study_design] = parse_custom_metadata_attributes(params[:studyhub_resource])
+      sr_params[:resource_json] = sr_params[:resource_json].except(:study_design) unless @rt.is_studytype?
+
       # parse titles
       sr_params[:resource_json][:resource_titles] = parse_resource_titles(resource_json[:resource_titles])
 
@@ -287,17 +290,11 @@ class StudyhubResourcesController < ApplicationController
       # parse descriptions
       sr_params[:resource_json][:resource_descriptions] = parse_resource_descriptions(resource_json[:resource_descriptions])
 
-
       # parse IDs
       sr_params[:resource_json][:ids] = parse_ids(resource_json[:ids])
 
       # parse roles
       sr_params[:resource_json][:roles] = parse_roles(resource_json[:roles])
-
-
-      #parse resource and study design
-      sr_params[:resource_json][:resource], sr_params[:resource_json][:study_design] = parse_custom_metadata_attributes(params[:studyhub_resource])
-      sr_params[:resource_json] = sr_params[:resource_json].except(:study_design) unless @rt.is_studytype?
 
       #parse provenance data
       sr_params[:resource_json][:provenance] = parse_provenance_data(resource_json[:provenance])
@@ -346,6 +343,8 @@ class StudyhubResourcesController < ApplicationController
                   parse_resource_keywords(params[:custom_metadata_attributes][:data][key])
                 elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.include? key
                   parse_multi_attributes(params[:custom_metadata_attributes][:data][key])
+                elsif StudyhubResource::BOOLEAN_ATTRIBUTES_HASH.values.flatten.include? key
+                  convert_string_to_boolean(params[:custom_metadata_attributes][:data][key])
                 else
                   params[:custom_metadata_attributes][:data][key]
                 end
@@ -356,12 +355,17 @@ class StudyhubResourcesController < ApplicationController
           study_design[key] = value
         end
       end
-
-      params[:resource_json][:resource] = resource
-      params[:resource_json][:study_design] = study_design if @rt.is_studytype?
-
     end
-    return resource, study_design
+    [resource, study_design]
+    end
+
+  def convert_string_to_boolean(str)
+    case str
+    when 'true'
+      true
+    when 'false'
+      false
+    end
   end
 
   def  get_custom_metadata_attributes(title)

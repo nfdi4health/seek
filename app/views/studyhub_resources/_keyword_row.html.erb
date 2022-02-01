@@ -4,7 +4,7 @@
 
 <%
   unless studyhub_resource.resource_json.nil?
-    keywords = studyhub_resource.resource_json['resource']['resource_keywords']
+    keywords = studyhub_resource.resource_json['resource_keywords']
     resource_keywords_label = keywords[row_num]["resource_keywords_label"] unless keywords.empty?
     resource_keywords_label_code = keywords[row_num]["resource_keywords_label_code"] unless keywords.empty?
   end

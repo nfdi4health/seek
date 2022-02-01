@@ -1,4 +1,4 @@
-<% inital = @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['resource']['resource_keywords'].blank? %>
+<% inital = @studyhub_resource.resource_json.nil? || @studyhub_resource.resource_json['resource_keywords'].blank? %>
 <% cm_resource_keywords_label = CustomMetadataAttribute.where(title: 'resource_keywords_label').first %>
 <% cm_resource_keywords_label_code = CustomMetadataAttribute.where(title: 'resource_keywords_label_code').first %>
 
@@ -16,7 +16,7 @@
       <%  if inital %>
         <%= render :partial => 'keyword_row', :locals=> {:studyhub_resource=>@studyhub_resource, :f => f, :index => 0} %>
       <% else %>
-        <% @studyhub_resource.resource_json['resource']['resource_keywords'].each_with_index do |id, index| %>
+        <% @studyhub_resource.resource_json['resource_keywords'].each_with_index do |id, index| %>
           <%= render :partial => 'keyword_row', :locals=> {:studyhub_resource=>@studyhub_resource, :f => f, :index => index} %>
         <% end %>
       <% end %>
