@@ -4,9 +4,9 @@ class StudyhubResourceSerializer < PCSSerializer
   #   object.studyhub_resource_type.try(:key)
   # end
 
-  attribute :resource_json do
-    object.resource_json['resource']['resource_id'] = object.id.to_s
-    object.resource_json['resource']['resource_type'] = object.studyhub_resource_type.try(:key)
+  attribute :resource do
+    object.resource_json['resource_id'] = object.id.to_s
+    object.resource_json['resource_type'] = object.studyhub_resource_type.try(:key)
     convert_resource_json('resource')
     convert_resource_json('study_design') if object.is_studytype?
     object.resource_json
@@ -34,7 +34,11 @@ class StudyhubResourceSerializer < PCSSerializer
 
   def convert_resource_json(key)
     StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+      if key == 'resource'
+        object.resource_json[attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[attr]) unless object.resource_json[attr].blank?
+      else
         object.resource_json[key][attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[key][attr]) unless object.resource_json[key][attr].blank?
+      end
     end
   end
 
