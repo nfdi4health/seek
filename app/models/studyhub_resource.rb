@@ -94,7 +94,7 @@ class StudyhubResource < ApplicationRecord
   def check_urls
     return if resource_json.nil?
 
-    unless resource_json['resource'].blank? || validate_url(resource_json['resource']['resource_web_page'].strip)
+    unless validate_url(resource_json['resource_web_page'].strip)
       errors.add('resource_web_page'.to_sym, 'is not a url.')
     end
 
@@ -214,12 +214,14 @@ class StudyhubResource < ApplicationRecord
 
   def check_required_singular_attributes
 
-    required_fields ={}
-    required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
     if resource_json['resource_use_rights_label'].start_with?('CC')
-      required_fields['resource'] += REQUIRED_FIELDS_RESOURCE_USE_RIGHTS
+      REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
+        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[name].nil?
+      end
     end
 
+    required_fields ={}
+    required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
     required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL if is_studytype?
 
     required_fields.each do |type, fields|
@@ -229,7 +231,6 @@ class StudyhubResource < ApplicationRecord
         else
           errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
         end
-
       end
     end
   end
