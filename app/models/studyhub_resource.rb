@@ -93,8 +93,7 @@ class StudyhubResource < ApplicationRecord
 
   def check_urls
     return if resource_json.nil?
-
-    unless validate_url(resource_json['resource_web_page'].strip)
+    unless validate_url(resource_json['resource_web_page']&.strip)
       errors.add('resource_web_page'.to_sym, 'is not a url.')
     end
 
@@ -152,6 +151,7 @@ class StudyhubResource < ApplicationRecord
   end
 
   def check_id_presence
+    return unless self.errors[:resource_json].blank?
     resource_json['ids']&.each_with_index do |id,index|
       unless id['id_id'].blank?
         errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
@@ -214,7 +214,7 @@ class StudyhubResource < ApplicationRecord
 
   def check_required_singular_attributes
 
-    if resource_json['resource_use_rights_label'].start_with?('CC')
+    if resource_json['resource_use_rights_label']&.start_with?('CC')
       REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
         errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[name].nil?
       end
@@ -262,6 +262,10 @@ class StudyhubResource < ApplicationRecord
 
   def request_to_submit?
     commit_button == 'Submit'
+  end
+
+  def is_ui_request?
+    ui_request == 'true'
   end
 
   def request_to_publish?
@@ -323,19 +327,20 @@ class StudyhubResource < ApplicationRecord
 
   def convert_label_to_id_for_multi_select_attribute
 
-    #Fixme: if it is a UI call, return. Only check when API call. It is not the best way
-    return if resource_json['resource_type'].nil?
+    return if is_ui_request?
 
     hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except("study_design")
 
     Rails.logger.info("Model:convert_label_to_id_for_multi_select_attribute")
     hash.keys.each do |key|
       StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
-        Rails.logger.info("+++++++++++++++++++++++++")
-        Rails.logger.info("resource_json[#{key}][#{attr}]=>"+resource_json[key][attr].to_s)
-
-        result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
-        self.resource_json[key][attr] = result
+        if key == 'resource'
+          result = resource_json[attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[attr].blank?
+          self.resource_json[attr] = result
+        else
+          result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
+          self.resource_json[key][attr] = result
+        end
 
       end
     end

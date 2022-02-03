@@ -262,7 +262,7 @@ class StudyhubResourcesController < ApplicationController
     if json_api_request?
 
       Rails.logger.info("The request is sent from API......")
-      @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:resource_json][:resource][:resource_type]).first
+      @rt = StudyhubResourceType.where(key: params[:studyhub_resource][:resource_json][:resource_type]).first
       params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
 
     else
@@ -307,7 +307,7 @@ class StudyhubResourcesController < ApplicationController
                                             :nfdi_person_in_charge, :contact_stage, :data_source,{ project_ids: [] }, { document_ids: [] },\
                                             :comment, :exclusion_mica_reason, :exclusion_seek_reason, \
                                             :exclusion_studyhub_reason, :inclusion_studyhub, :inclusion_seek, \
-                                            :inclusion_mica, :commit_button)
+                                            :inclusion_mica, :commit_button, :ui_request)
   end
 
 
@@ -520,10 +520,9 @@ class StudyhubResourcesController < ApplicationController
     Rails.logger.info("Controller:check_studyhub_resource_type......")
     begin
       raise ArgumentError, 'A POST/PUT request must specify a data:attributes:resource_json.' if params[:studyhub_resource][:resource_json].blank?
-      raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource.' if params[:studyhub_resource][:resource_json][:resource].blank?
-      raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource:resource_type.' if params[:studyhub_resource][:resource_json][:resource][:resource_type].blank?
+      raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_type.' if params[:studyhub_resource][:resource_json][:resource_type].blank?
 
-      type = params[:studyhub_resource][:resource_json][:resource][:resource_type]
+      type = params[:studyhub_resource][:resource_json][:resource_type]
       raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong." if StudyhubResourceType.where(key:type).first.nil?
 
       if params[:action]=='update'

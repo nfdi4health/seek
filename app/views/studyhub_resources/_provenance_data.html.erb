@@ -1,3 +1,4 @@
 <% field_name_prefix = "studyhub_resource[resource_json][provenance]" %>
 <% data_source =  @studyhub_resource.resource_json.nil?? "Manually collected" : @studyhub_resource.resource_json["provenance"]["data_source"] %>
 <%= hidden_field_tag "#{field_name_prefix}[data_source]", data_source %>
+<%= hidden_field_tag "studyhub_resource[ui_request]", true %>
