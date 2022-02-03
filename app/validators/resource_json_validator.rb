@@ -17,8 +17,9 @@ class ResourceJsonValidator < ActiveModel::EachValidator
     rescue JSON::Schema::ValidationError => e
       Rails.logger.info("+++++++++++++++++++++++++")
       Rails.logger.info("e:"+e.message)
-      record.errors.add(:attribute, e.message)
+      record.errors.add(attribute.to_sym, e.message)
     end
+
   end
 
 end
