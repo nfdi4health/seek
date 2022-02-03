@@ -7,6 +7,9 @@ class StudyhubResource < ApplicationRecord
   has_extended_custom_metadata
   acts_as_asset
 
+  validates :resource_json, presence: true, on: %i[create update], unless: :is_ui_request?
+  validates :resource_json, resource_json:true, on:  %i[create update], unless: :is_ui_request?
+
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
   validate :check_provenance_data_presence, on:  [:create, :update]
@@ -22,6 +25,8 @@ class StudyhubResource < ApplicationRecord
 
   attr_readonly :studyhub_resource_type_id
   attr_accessor :commit_button
+  attr_accessor :ui_request
+
   before_save :update_working_stage, on:  [:create, :update]
   before_validation :set_resource_titles_to_title
   after_validation :convert_label_to_id_for_multi_select_attribute
@@ -62,9 +67,12 @@ class StudyhubResource < ApplicationRecord
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
   MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { 'study_conditions' => %w[study_conditions study_conditions_classification study_conditions_classification_code],
-                                         'study_outcomes' => %w[study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame],
-                                         'interventional_study_design_arms' => %w[study_arm_group_label study_arm_group_type study_arm_group_description],
-                                         'interventional_study_design_interventions' => %w[study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label]
+                                         'study_outcomes' => %w[study_outcome_type study_outcome_title 
+study_outcome_description study_outcome_time_frame],
+                                         'interventional_study_design_arms' => %w[study_arm_group_label 
+study_arm_group_type study_arm_group_description],
+                                         'interventional_study_design_interventions' => %w[study_intervention_name 
+study_intervention_type study_intervention_description study_intervention_arm_group_label]
 
   }.freeze
 
@@ -80,7 +88,8 @@ class StudyhubResource < ApplicationRecord
   NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze
 
   INTEGER_ATTRIBUTES =  %w[study_centers_number study_target_sample_size study_obtained_sample_size].freeze
-  FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined study_age_max_examined study_target_follow-up_duration].freeze
+  FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined 
+study_age_max_examined study_target_follow-up_duration].freeze
 
 
   def description
@@ -257,7 +266,10 @@ class StudyhubResource < ApplicationRecord
   end
 
   def final_error_check
-    errors.add(:base, 'Please make sure all required fields are filled in correctly.') unless errors.messages.empty?
+    return unless is_ui_request?
+    unless errors.messages.empty? || errors.messages[:resource_json].empty?
+      errors.add(:base, 'Please make sure all required fields are filled in correctly.')
+    end
   end
 
   def request_to_submit?
@@ -265,7 +277,7 @@ class StudyhubResource < ApplicationRecord
   end
 
   def is_ui_request?
-    ui_request == 'true'
+    ui_request.nil?? false : true
   end
 
   def request_to_publish?
@@ -328,7 +340,6 @@ class StudyhubResource < ApplicationRecord
   def convert_label_to_id_for_multi_select_attribute
 
     return if is_ui_request?
-
     hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except("study_design")
 
     Rails.logger.info("Model:convert_label_to_id_for_multi_select_attribute")

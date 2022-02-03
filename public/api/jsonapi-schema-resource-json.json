@@ -1,0 +1,648 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Studyhub Resource JSON API Schema",
+  "description": "This is a schema for requests in the JSON API format. For more, see http://jsonapi.org",
+  "type": "object",
+  "required": [
+    "resource_type",
+    "resource_type_general",
+    "resource_titles",
+    "resource_acronyms",
+    "resource_descriptions",
+    "resource_keywords",
+    "resource_language",
+    "resource_web_page",
+    "resource_version",
+    "resource_format",
+    "resource_use_rights_label",
+    "resource_use_rights_description",
+    "resource_use_rights_authors_confirmation_1",
+    "resource_use_rights_authors_confirmation_2",
+    "resource_use_rights_authors_confirmation_3",
+    "resource_use_rights_support_by_licencing",
+    "roles",
+    "ids",
+    "study_design",
+    "provenance"
+  ],
+  "properties": {
+    "resource_type": {
+      "type": "string"
+    },
+    "resource_type_general": {
+      "type": "string"
+    },
+    "resource_titles": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "title_language": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "title_language"
+          ]
+        }
+      ]
+    },
+    "resource_acronyms": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "acronym": {
+              "type": "string"
+            },
+            "acronym_language": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "acronym",
+            "acronym_language"
+          ]
+        }
+      ]
+    },
+    "resource_descriptions": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "description_language": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "description",
+            "description_language"
+          ]
+        }
+      ]
+    },
+    "resource_keywords": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "resource_keywords_label": {
+              "type": "string"
+            },
+            "resource_keywords_label_code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "resource_keywords_label",
+            "resource_keywords_label_code"
+          ]
+        }
+      ]
+    },
+    "resource_language": {
+      "type": "array",
+      "items": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "resource_web_page": {
+      "type": "string"
+    },
+    "resource_version": {
+      "type": "string"
+    },
+    "resource_format": {
+      "type": "string"
+    },
+    "resource_use_rights_label": {
+      "type": "string"
+    },
+    "resource_use_rights_description": {
+      "type": "string"
+    },
+    "resource_use_rights_authors_confirmation_1": {
+      "type": "boolean"
+    },
+    "resource_use_rights_authors_confirmation_2": {
+      "type": "boolean"
+    },
+    "resource_use_rights_authors_confirmation_3": {
+      "type": "boolean"
+    },
+    "resource_use_rights_support_by_licencing": {
+      "type": "boolean"
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "role_type": {
+              "type": "string"
+            },
+            "role_name_type": {
+              "type": "string"
+            },
+            "role_name_organisational": {
+              "type": "string"
+            },
+            "role_name_personal_given_name": {
+              "type": "string"
+            },
+            "role_name_personal_family_name": {
+              "type": "string"
+            },
+            "role_name_personal_title": {
+              "type": "string"
+            },
+            "role_name_identifiers": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "role_name_identifier": {
+                      "type": "string"
+                    },
+                    "role_name_identifier_scheme": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "role_name_identifier",
+                    "role_name_identifier_scheme"
+                  ]
+                }
+              ]
+            },
+            "role_email": {
+              "type": "string"
+            },
+            "role_phone": {
+              "type": "string"
+            },
+            "role_affiliation_name": {
+              "type": "string"
+            },
+            "role_affiliation_address": {
+              "type": "string"
+            },
+            "role_affiliation_web_page": {
+              "type": "string"
+            },
+            "role_affiliation_identifiers": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "role_affiliation_identifier": {
+                      "type": "string"
+                    },
+                    "role_affiliation_identifier_scheme": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "role_affiliation_identifier",
+                    "role_affiliation_identifier_scheme"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "role_type",
+            "role_name_type",
+            "role_name_organisational",
+            "role_name_personal_given_name",
+            "role_name_personal_family_name",
+            "role_name_personal_title",
+            "role_name_identifiers",
+            "role_email",
+            "role_phone",
+            "role_affiliation_name",
+            "role_affiliation_address",
+            "role_affiliation_web_page",
+            "role_affiliation_identifiers"
+          ]
+        }
+      ]
+    },
+    "ids": {
+      "$ref": "#/ids"
+    },
+    "study_design": {
+      "type": "object",
+      "properties": {
+        "study_primary_design": {
+          "type": "string"
+        },
+        "study_type": {
+          "type": "string"
+        },
+        "study_type_description": {
+          "type": "string"
+        },
+        "study_conditions": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "study_conditions": {
+                  "type": "string"
+                },
+                "study_conditions_classification": {
+                  "type": "string"
+                },
+                "study_conditions_classification_code": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "study_conditions",
+                "study_conditions_classification",
+                "study_conditions_classification_code"
+              ]
+            }
+          ]
+        },
+        "study_ethics_commitee_approval": {
+          "type": "string"
+        },
+        "study_status": {
+          "type": "string"
+        },
+        "study_status_enrolling_by_invitation": {
+          "type": "string"
+        },
+        "study_status_when_intervention": {
+          "type": "string"
+        },
+        "study_status_halted_stage": {
+          "type": "string"
+        },
+        "study_status_halted_reason": {
+          "type": "string"
+        },
+        "study_recruitment_status_register": {
+          "type": "string"
+        },
+        "study_start_date": {
+          "type": "string"
+        },
+        "study_end_date": {
+          "type": "string"
+        },
+        "study_country": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "study_region": {
+          "type": "string"
+        },
+        "study_centers": {
+          "type": "string"
+        },
+        "study_centers_number": {
+          "type": "string"
+        },
+        "study_subject": {
+          "type": "string"
+        },
+        "study_sampling": {
+          "type": "string"
+        },
+        "study_data_source": {
+          "type": "array",
+          "items": {}
+        },
+        "study_data_source_description": {
+          "type": "string"
+        },
+        "study_eligibility_age_min": {
+          "type": "string"
+        },
+        "study_eligibility_age_min_description": {
+          "type": "string"
+        },
+        "study_eligibility_age_max": {
+          "type": "string"
+        },
+        "study_eligibility_age_max_description": {
+          "type": "string"
+        },
+        "study_eligibility_gender": {
+          "type": "array",
+          "items": {}
+        },
+        "study_eligibility_inclusion_criteria": {
+          "type": "string"
+        },
+        "study_eligibility_exclusion_criteria": {
+          "type": "string"
+        },
+        "study_population": {
+          "type": "string"
+        },
+        "study_target_sample_size": {
+          "type": "string"
+        },
+        "study_obtained_sample_size": {
+          "type": "string"
+        },
+        "study_age_min_examined": {
+          "type": "string"
+        },
+        "study_age_min_examined_description": {
+          "type": "string"
+        },
+        "study_age_max_examined": {
+          "type": "string"
+        },
+        "study_age_max_examined_description": {
+          "type": "string"
+        },
+        "study_hypothesis": {
+          "type": "string"
+        },
+        "study_outcomes": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "study_outcome_type": {
+                  "type": "string"
+                },
+                "study_outcome_title": {
+                  "type": "string"
+                },
+                "study_outcome_description": {
+                  "type": "string"
+                },
+                "study_outcome_time_frame": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "study_outcome_type",
+                "study_outcome_title",
+                "study_outcome_description",
+                "study_outcome_time_frame"
+              ]
+            }
+          ]
+        },
+        "study_design_comment": {
+          "type": "string"
+        },
+        "study_data_sharing_plan_generally": {
+          "type": "string"
+        },
+        "study_data_sharing_plan_description": {
+          "type": "string"
+        },
+        "study_data_sharing_plan_supporting_information": {
+          "type": "array",
+          "items": {}
+        },
+        "study_data_sharing_plan_time_frame": {
+          "type": "string"
+        },
+        "study_data_sharing_plan_access_criteria": {
+          "type": "string"
+        },
+        "study_data_sharing_plan_url": {
+          "type": "string"
+        },
+        "//a": {
+          "type": "string"
+        },
+        "study_time_perspective": {
+          "type": "string"
+        },
+        "study_target_follow-up_duration": {
+          "type": "string"
+        },
+        "study_biospecimen_retention": {
+          "type": "array",
+          "items": {}
+        },
+        "study_biospecomen_description": {
+          "type": "string"
+        },
+        "//b": {
+          "type": "string"
+        },
+        "study_primary_purpose": {
+          "type": "string"
+        },
+        "study_phase": {
+          "type": "string"
+        },
+        "study_masking": {
+          "type": "boolean"
+        },
+        "study_masking_roles": {
+          "type": "array",
+          "items": {}
+        },
+        "study_masking_description": {
+          "type": "string"
+        },
+        "study_allocation": {
+          "type": "string"
+        },
+        "study_off_label_use": {
+          "type": "string"
+        },
+        "interventional_study_design_arms": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "study_arm_group_label": {
+                  "type": "string"
+                },
+                "study_arm_group_type": {
+                  "type": "string"
+                },
+                "study_arm_group_description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "study_arm_group_label",
+                "study_arm_group_type",
+                "study_arm_group_description"
+              ]
+            }
+          ]
+        },
+        "interventional_study_design_interventions": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "study_intervention_name": {
+                  "type": "string"
+                },
+                "study_intervention_type": {
+                  "type": "string"
+                },
+                "study_intervention_description": {
+                  "type": "string"
+                },
+                "study_intervention_arm_group_label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "study_intervention_name",
+                "study_intervention_type",
+                "study_intervention_description",
+                "study_intervention_arm_group_label"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "study_primary_design",
+        "study_type",
+        "study_type_description",
+        "study_conditions",
+        "study_ethics_commitee_approval",
+        "study_status",
+        "study_status_enrolling_by_invitation",
+        "study_status_when_intervention",
+        "study_status_halted_stage",
+        "study_status_halted_reason",
+        "study_recruitment_status_register",
+        "study_start_date",
+        "study_end_date",
+        "study_country",
+        "study_region",
+        "study_centers",
+        "study_centers_number",
+        "study_subject",
+        "study_sampling",
+        "study_data_source",
+        "study_data_source_description",
+        "study_eligibility_age_min",
+        "study_eligibility_age_min_description",
+        "study_eligibility_age_max",
+        "study_eligibility_age_max_description",
+        "study_eligibility_gender",
+        "study_eligibility_inclusion_criteria",
+        "study_eligibility_exclusion_criteria",
+        "study_population",
+        "study_target_sample_size",
+        "study_obtained_sample_size",
+        "study_age_min_examined",
+        "study_age_min_examined_description",
+        "study_age_max_examined",
+        "study_age_max_examined_description",
+        "study_hypothesis",
+        "study_outcomes",
+        "study_design_comment",
+        "study_data_sharing_plan_generally",
+        "study_data_sharing_plan_description",
+        "study_data_sharing_plan_supporting_information",
+        "study_data_sharing_plan_time_frame",
+        "study_data_sharing_plan_access_criteria",
+        "study_data_sharing_plan_url",
+        "//a",
+        "study_time_perspective",
+        "study_target_follow-up_duration",
+        "study_biospecimen_retention",
+        "study_biospecomen_description",
+        "//b",
+        "study_primary_purpose",
+        "study_phase",
+        "study_masking",
+        "study_masking_roles",
+        "study_masking_description",
+        "study_allocation",
+        "study_off_label_use",
+        "interventional_study_design_arms",
+        "interventional_study_design_interventions"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "data_source": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "data_source"
+      ]
+    }
+  },
+  "ids": {
+    "description": "An array of associated identifiers",
+    "type": "array",
+    "items": {
+      "$ref": "#/id"
+    },
+    "uniqueItems": true
+  },
+  "id": {
+    "description": "An identifier (ID)",
+    "type": "object",
+    "required": [
+      "id_id",
+      "id_date",
+      "id_type",
+      "id_relation_type",
+      "id_resource_type_general"
+    ],
+    "properties": {
+      "id_id": {
+        "type": "string"
+      },
+      "id_date": {
+        "type": "string"
+      },
+      "id_type": {
+        "type": "string"
+      },
+      "id_relation_type": {
+        "type": "string"
+      },
+      "id_resource_type_general": {
+        "type": "string"
+      }
+    }
+  }
+}
