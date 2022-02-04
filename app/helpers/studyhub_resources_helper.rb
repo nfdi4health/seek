@@ -116,7 +116,7 @@ module StudyhubResourcesHelper
     identifiers = 'role_' + type + '_identifiers'
     identifier_scheme = 'role_' + type + '_identifier_scheme'
 
-    if role[identifiers].size > 0
+    if !role[identifiers].nil? && role[identifiers].size > 0
       html += '<p class="role_' + type + '_identifiers"><strong>' + (type == 'name' ? 'personal' : type).capitalize + ' ' + 'identifier'.pluralize(role[identifiers].size) + ':</strong></p>'
       role[identifiers].each do |d|
         id = d[identifier]

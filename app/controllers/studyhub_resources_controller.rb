@@ -414,21 +414,11 @@ class StudyhubResourcesController < ApplicationController
       entry['role_type'] = params[:role_type][key]
       entry['role_name_type'] = params[:role_name_type][key]
 
-      case entry['role_name_type']
-      when 'Organisational'
-        entry['role_name_organisational'] = params[:role_name_organisational][key]
-      when 'Personal'
-        entry['role_name_personal_title'] = params[:role_name_personal_title][key]
-        entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
-        entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
-      end
-
 
       entry['role_name_identifiers'] = []
       entry['role_affiliation_identifiers'] = []
 
       StudyhubResource::ID_TYPE.each do |type|
-
         params["role_#{type}_identifier".to_sym][key].keys.each do |k2|
           identifier = {}
           identifier["role_#{type}_identifier"] = params["role_#{type}_identifier".to_sym][key][k2]
@@ -437,7 +427,16 @@ class StudyhubResourcesController < ApplicationController
             entry["role_#{type}_identifiers"] << identifier
           end
         end
+      end
 
+      case entry['role_name_type']
+      when 'Organisational'
+        entry['role_name_organisational'] = params[:role_name_organisational][key]
+        entry = entry.except('role_name_identifiers')
+      when 'Personal'
+        entry['role_name_personal_title'] = params[:role_name_personal_title][key]
+        entry['role_name_personal_given_name'] = params[:role_name_personal_given_name][key]
+        entry['role_name_personal_family_name'] = params[:role_name_personal_family_name][key]
       end
 
       entry['role_email'] = params[:role_email][key]
@@ -448,6 +447,7 @@ class StudyhubResourcesController < ApplicationController
 
       roles << entry unless entry['role_type'].blank?
     end
+
     roles
 
   end
