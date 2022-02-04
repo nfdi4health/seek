@@ -12,8 +12,7 @@ class ResourceJsonValidator < ActiveModel::EachValidator
     Rails.logger.info('Validator:starting to check resource_json............')
 
     begin
-      JSON::Validator.validate!(JSONAPI_SCHEMA_FILE_PATH, value, strict: true)
-      # JSON::Validator.validate!(JSONAPI_SCHEMA_FILE_PATH, value)
+      JSON::Validator.validate!(JSONAPI_SCHEMA_FILE_PATH, value)
     rescue JSON::Schema::ValidationError => e
       Rails.logger.info("+++++++++++++++++++++++++")
       Rails.logger.info("e:"+e.message)

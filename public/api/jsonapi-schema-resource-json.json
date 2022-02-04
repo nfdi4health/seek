@@ -1,6 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Studyhub Resource JSON API Schema",
+  "definitions": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "emptyString": {
+      "type": "string",
+      "minLength": 0
+    }
+  },
   "description": "This is a schema for requests in the JSON API format. For more, see http://jsonapi.org",
   "type": "object",
   "required": [
@@ -16,10 +26,6 @@
     "resource_format",
     "resource_use_rights_label",
     "resource_use_rights_description",
-    "resource_use_rights_authors_confirmation_1",
-    "resource_use_rights_authors_confirmation_2",
-    "resource_use_rights_authors_confirmation_3",
-    "resource_use_rights_support_by_licencing",
     "roles",
     "ids",
     "study_design",
@@ -133,7 +139,16 @@
       "type": "string"
     },
     "resource_use_rights_label": {
-      "type": "string"
+      "enum": [
+        "CC0 1.0 (Creative Commons Zero v1.0 Universal)",
+        "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
+        "CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)",
+        "CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)",
+        "CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)",
+        "All rights reserved",
+        "Other",
+        "Not applicable"
+      ]
     },
     "resource_use_rights_description": {
       "type": "string"
@@ -345,9 +360,6 @@
         "study_data_sharing_plan_url": {
           "type": "string"
         },
-        "//a": {
-          "type": "string"
-        },
         "study_time_perspective": {
           "type": "string"
         },
@@ -361,9 +373,6 @@
         "study_biospecomen_description": {
           "type": "string"
         },
-        "//b": {
-          "type": "string"
-        },
         "study_primary_purpose": {
           "type": "string"
         },
@@ -371,7 +380,7 @@
           "type": "string"
         },
         "study_masking": {
-          "type": "boolean"
+          "type": ["boolean", "null"]
         },
         "study_masking_roles": {
           "type": "array",
@@ -484,12 +493,12 @@
         "study_data_sharing_plan_time_frame",
         "study_data_sharing_plan_access_criteria",
         "study_data_sharing_plan_url",
-        "//a",
+
         "study_time_perspective",
         "study_target_follow-up_duration",
         "study_biospecimen_retention",
         "study_biospecomen_description",
-        "//b",
+
         "study_primary_purpose",
         "study_phase",
         "study_masking",
@@ -642,8 +651,7 @@
     "type": "object",
     "properties": {
       "role_name_identifier": {
-        "type": "string",
-        "minLength": 1
+        "$ref": "#/definitions/nonEmptyString"
       },
       "role_name_identifier_scheme": {
         "enum": ["ORCID","ROR","GRID","ISNI"]
@@ -658,8 +666,7 @@
     "type": "object",
     "properties": {
       "role_affiliation_identifier": {
-        "type": "string",
-        "minLength": 1
+        "$ref": "#/definitions/nonEmptyString"
       },
       "role_affiliation_identifier_scheme": {
         "enum": ["ROR","GRID","ISNI"]

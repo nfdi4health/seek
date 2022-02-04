@@ -15,6 +15,7 @@ class StudyhubResource < ApplicationRecord
   validate :check_provenance_data_presence, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
+  validate :check_resource_use_rights, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
   validate :check_id_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
   validate :check_role_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
   validate :check_description_presence, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
@@ -97,6 +98,18 @@ study_age_max_examined study_target_follow-up_duration].freeze
       'No description specified'
     else
       resource_json['resource_descriptions'].first['description']
+    end
+  end
+
+  def check_resource_use_rights
+    if resource_json['resource_use_rights_label']&.start_with?('CC')
+      REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
+        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[name].nil?
+      end
+    else
+      REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
+        errors.add(name.to_sym, "When the value of 'resource_use_rights_label' is '#{resource_json['resource_use_rights_label']}', '#{name}' is not needed.") if resource_json.has_key? name
+      end
     end
   end
 
@@ -222,12 +235,6 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_required_singular_attributes
-
-    if resource_json['resource_use_rights_label']&.start_with?('CC')
-      REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
-        errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[name].nil?
-      end
-    end
 
     required_fields ={}
     required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
