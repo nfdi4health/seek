@@ -8,7 +8,150 @@
     },
     "emptyString": {
       "type": "string",
-      "minLength": 0
+      "minLength": 0,
+      "maxLength": 0
+    },
+    "resourceTypeGeneral": {
+      "enum": [
+        "Audiovisual", "Book", "Book chapter", "Collection", "Computational notebook", "Conference paper", "Conference proceeding", "Data paper", "Dataset",
+        "Dissertation", "Event", "Image", "Interactive resource", "Journal", "Journal article", "Model", "Output management plan", "Peer review", "Physical object", "Preprint",
+        "Report", "Service", "Software", "Sound", "Standard", "Text", "Workflow", "Other"
+      ]
+    },
+    "resourceLanguage": {
+      "enum": ["EN","DE","FR","ES","Other"]
+    },
+    "resourceUseRightsLabel": {
+      "enum": [
+        "CC0 1.0 (Creative Commons Zero v1.0 Universal)",
+        "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
+        "CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)",
+        "CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)",
+        "CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)",
+        "All rights reserved",
+        "Other",
+        "Not applicable"
+      ]
+    },
+    "roleType": {
+      "enum": [
+        "Contact person", "Principal investigator", "Creator/Author", "Funder(public)", "Funder(private)",
+        "Sponsor (primary)", "Sponsor (secondary)", "Sponsor-Investigator", "Data collector", "Data curator",
+        "Data manager", "Distributor", "Editor", "Hosting institution", "Producer", "Project leader", "Project manager",
+        "Project member", "Publisher", "Registration agency", "Registration authority", "Related person", "Researcher",
+        "Research group", "Rights holder", "Supervisor", "Work package leader", "Other"
+      ]
+    },
+    "roleNameType": {
+      "enum": ["Personal","Organisational"]
+    },
+    "roleNamePersonalTitle": {
+      "enum": ["Mr.", "Ms.", "Dr.", "Prof. Dr.", "Other"]
+    },
+    "idType": {
+      "enum": ["arXiv", "bibcode", "DOI", "EAN13", "EISSN", "Handle", "ISBN", "ISSN", "ISTC", "LISSN", "LSID", "PMID",
+        "PURL", "URL", "URN", "w3id", "DRKS", "UTN", "ISRCTN", "EudraCT", "EUDAMED", "NCT(ClinicalTrials.gov)", "NFDI4Health","Other"]
+    },
+    "idResourceTypeGeneral": {
+      "enum": ["Audiovisual", "Book", "Book chapter", "Collection", "Computational notebook", "Conference paper",
+        "Conference proceeding", "Data paper", "Dataset", "Dissertation", "Event", "Image", "Interactive resource",
+        "Journal", "Journal article", "Model", "Output management plan", "Peer review", "Physical object", "Preprint",
+        "Report", "Service", "Software", "Sound", "Standard", "Text", "Workflow", "Other"]
+    },
+    "idRelationType": {
+      "enum": ["is cited by", "cites", "is supplement to", "is supplemented by", "is continued by", "continues", "is described by",
+        "describes", "has metadata", "is metadata for", "has version", "is version of", "is new version of", "is previous version of",
+        "is part of", "has part", "is referenced by", "references", "is documented by", "documents", "is compiled by", "compiles",
+        "is variant form of", "is original form of", "is identical to", "is reviewed by", "reviews", "is derived from", "is source of",
+        "is required by", "requires", "is obsoleted by", "obsoletes", "has grant number", "has alternate ID"]
+    },
+    "studyPrimaryDesign": {
+      "enum": ["Non-interventional", "Interventional"]
+    },
+    "studyConditionsClassification": {
+      "enum": ["MeSH", "ICD-10", "MedDRA", "SNOMED CT",
+        "Other vocabulary", "Free text"]
+    },
+    "studyEthicsCommiteeApproval": {
+      "enum": ["Request for approval not yet submitted", "Request submitted, approval pending",
+        "Request submitted, approval granted", "Request submitted, exempt granted",
+        "Request submitted, approval denied", "Approval not required", "Study withdrawn prior to decision on approval",
+        "Unknown"]
+    },
+    "studyStatus": {
+      "enum": ["At the planning stage",
+        "Ongoing (I): Recruitment ongoing, but data collection not yet started",
+        "Ongoing (II): Recruitment and data collection ongoing",
+        "Ongoing (III): Recruitment completed, but data collection ongoing",
+        "Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing",
+        "Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume",
+        "Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resume",
+        "Completed: Recruitment, data collection, and data quality management completed normally",
+        "Other"]
+    },
+    "studyStatusEnrollingByInvitation": {
+      "enum": ["Yes", "No", "Not applicable",""]
+    },
+    "studyStatusWhenIntervention": {
+      "enum": ["Intervention ongoing", "Intervention completed", "Follow-up ongoing",""]
+    },
+    "studyStatusHaltedStage": {
+      "enum": ["At the planning stage",
+        "Ongoing (I): Recruitment ongoing, but data collection not yet started",
+        "Ongoing (II): Recruitment and data collection ongoing",
+        "Ongoing (III): Recruitment completed, but data collection ongoing",
+        "Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing",""]
+    },
+    "studyRecruitmentStatusRegister": {
+      "enum": ["Not yet recruiting", "Recruiting", "Enrolling by invitation", "Active, not recruiting", "Completed",
+        "Suspended", "Terminated", "Withdrawn", "Other",""]
+    },
+    "studyCenters":{
+      "enum": ["Monocentric", "Multicentric",""]
+    },
+    "studySubject":{
+      "enum": ["Person",  "Animal", "Practitioner", "Device", "Medication", "Substance", "Organization", "Family",
+        "Household", "Event/Process", "Geographic unit", "Time unit", "Text unit", "Group", "Object", "Pathogens", "Twins",
+        "Other", "Unknown"]
+    },
+    "studySampling": {
+      "enum": ["Total universe/Complete enumeration", "Probability", "Probability (Simple random)", "Probability (Systematic random)", "Probability (Stratified)",
+        "Probability (Stratified: Proportional)", "Probability (Stratified: Disproportional)", "Probability (Cluster)", "Probability (Cluster: Simple random)",
+        "Probability (Cluster: Stratified random)", "Probability (Multistage)", "Non-probability", "Non-probability (Availability)", "Non-probability (Purposive)", "Non-probability (Quota)",
+        "Non-probability (Respondent-assisted)", "Mixed probability and non-probability", "Other", "Unknown", "Not applicable",""]
+    },
+    "studyOutcomeType": {
+      "enum": ["Primary", " Secondary", "Other",""]
+    },
+    "studyDataSharingPlanGenerally": {
+      "enum": ["Yes, there is a plan to make data available.",
+        "No, there is no plan to make data available.",
+        "Undecided, it is not yet known if data will be made available."]
+    },
+    "studyPrimaryPurpose": {
+      "enum": ["Treatment", "Prevention", "Prognostic", "Diagnostic", "Supportive Care", "Screening", "Health Services Research",
+        "Basic Science/Physiological study", "Device Feasibility", "Pharmacogenetics", "Pharmacogenomics", "Health Economics", "Other",""]
+    },
+    "studyPhase": {
+      "enum": ["Early-phase-1", "Phase-1", "Phase-1-phase-2", "Phase-2", "Phase-2a", "Phase-2b",
+        "Phase-2-phase-3", "Phase-3", "Phase-3a", "Phase-3b", "Phase-4", "Other", "Not applicable",""]
+    },
+    "studyAllocation": {
+      "enum": ["Randomized", "Nonrandomized", " Not applicable (for single-arm trials)",""]
+    },
+      "studyOffLabelUse": {
+      "enum": ["Yes", "No", "Not applicable",""]
+    },
+    "studyArmGroupType": {
+      "enum": ["Experimental", "Active comparator", "Placebo comparator",
+        "Sham comparator", "No intervention", "Other",""]
+    },
+    "studyInterventionType": {
+      "enum": ["Drug (including placebo)", "Device (including sham)", "Biological/Vaccine", "Procedure/Surgery",
+        "Radiation", "Behavioral (e.g., psychotherapy, lifestyle counseling)", "Genetic (including gene transfer, stem cell and recombinant DNA)",
+        "Dietary supplement (e.g., vitamins, minerals)",
+        "Combination product (combining a drug and device, a biological product and device; a drug and biological product; or a drug, biological product, and device)",
+        "Diagnostic test (e.g., imaging, in-vitro)", "Other",""]
     }
   },
   "description": "This is a schema for requests in the JSON API format. For more, see http://jsonapi.org",
@@ -36,7 +179,7 @@
       "type": "string"
     },
     "resource_type_general": {
-      "type": "string"
+      "$ref": "#/definitions/resourceTypeGeneral"
     },
     "resource_titles": {
       "type": "array",
@@ -48,7 +191,7 @@
               "type": "string"
             },
             "title_language": {
-              "type": "string"
+              "$ref": "#/definitions/resourceLanguage"
             }
           },
           "required": [
@@ -68,7 +211,7 @@
               "type": "string"
             },
             "acronym_language": {
-              "type": "string"
+              "$ref": "#/definitions/resourceLanguage"
             }
           },
           "required": [
@@ -88,7 +231,7 @@
               "type": "string"
             },
             "description_language": {
-              "type": "string"
+              "$ref": "#/definitions/resourceLanguage"
             }
           },
           "required": [
@@ -123,9 +266,6 @@
       "items": [
         {
           "type": "string"
-        },
-        {
-          "type": "string"
         }
       ]
     },
@@ -139,16 +279,7 @@
       "type": "string"
     },
     "resource_use_rights_label": {
-      "enum": [
-        "CC0 1.0 (Creative Commons Zero v1.0 Universal)",
-        "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
-        "CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)",
-        "CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)",
-        "CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)",
-        "All rights reserved",
-        "Other",
-        "Not applicable"
-      ]
+      "$ref": "#/definitions/resourceUseRightsLabel"
     },
     "resource_use_rights_description": {
       "type": "string"
@@ -175,7 +306,7 @@
       "type": "object",
       "properties": {
         "study_primary_design": {
-          "type": "string"
+          "$ref": "#/definitions/studyPrimaryDesign"
         },
         "study_type": {
           "type": "string"
@@ -193,7 +324,7 @@
                   "type": "string"
                 },
                 "study_conditions_classification": {
-                  "type": "string"
+                  "$ref": "#/definitions/studyConditionsClassification"
                 },
                 "study_conditions_classification_code": {
                   "type": "string"
@@ -208,25 +339,25 @@
           ]
         },
         "study_ethics_commitee_approval": {
-          "type": "string"
+          "$ref": "#/definitions/studyEthicsCommiteeApproval"
         },
         "study_status": {
-          "type": "string"
+          "$ref": "#/definitions/studyStatus"
         },
         "study_status_enrolling_by_invitation": {
-          "type": "string"
+          "$ref": "#/definitions/studyStatusEnrollingByInvitation"
         },
         "study_status_when_intervention": {
-          "type": "string"
+          "$ref": "#/definitions/studyStatusWhenIntervention"
         },
         "study_status_halted_stage": {
-          "type": "string"
+          "$ref": "#/definitions/studyStatusHaltedStage"
         },
         "study_status_halted_reason": {
           "type": "string"
         },
         "study_recruitment_status_register": {
-          "type": "string"
+          "$ref": "#/definitions/studyRecruitmentStatusRegister"
         },
         "study_start_date": {
           "type": "string"
@@ -246,20 +377,22 @@
           "type": "string"
         },
         "study_centers": {
-          "type": "string"
+          "$ref": "#/definitions/studyCenters"
         },
         "study_centers_number": {
-          "type": "string"
+          "type": ["integer", "null"]
         },
         "study_subject": {
-          "type": "string"
+          "$ref": "#/definitions/studySubject"
         },
         "study_sampling": {
-          "type": "string"
+          "$ref": "#/definitions/studySampling"
         },
         "study_data_source": {
           "type": "array",
-          "items": {}
+          "items": {
+            "type": "string"
+          }
         },
         "study_data_source_description": {
           "type": "string"
@@ -317,7 +450,7 @@
               "type": "object",
               "properties": {
                 "study_outcome_type": {
-                  "type": "string"
+                  "$ref": "#/definitions/studyOutcomeType"
                 },
                 "study_outcome_title": {
                   "type": "string"
@@ -342,7 +475,7 @@
           "type": "string"
         },
         "study_data_sharing_plan_generally": {
-          "type": "string"
+          "$ref": "#/definitions/studyDataSharingPlanGenerally"
         },
         "study_data_sharing_plan_description": {
           "type": "string"
@@ -374,10 +507,10 @@
           "type": "string"
         },
         "study_primary_purpose": {
-          "type": "string"
+          "$ref": "#/definitions/studyPrimaryPurpose"
         },
         "study_phase": {
-          "type": "string"
+          "$ref": "#/definitions/studyPhase"
         },
         "study_masking": {
           "type": ["boolean", "null"]
@@ -390,10 +523,10 @@
           "type": "string"
         },
         "study_allocation": {
-          "type": "string"
+          "$ref": "#/definitions/studyAllocation"
         },
         "study_off_label_use": {
-          "type": "string"
+          "$ref": "#/definitions/studyOffLabelUse"
         },
         "interventional_study_design_arms": {
           "type": "array",
@@ -405,7 +538,7 @@
                   "type": "string"
                 },
                 "study_arm_group_type": {
-                  "type": "string"
+                  "$ref": "#/definitions/studyArmGroupType"
                 },
                 "study_arm_group_description": {
                   "type": "string"
@@ -429,7 +562,7 @@
                   "type": "string"
                 },
                 "study_intervention_type": {
-                  "type": "string"
+                  "$ref": "#/definitions/studyInterventionType"
                 },
                 "study_intervention_description": {
                   "type": "string"
@@ -544,10 +677,10 @@
     "type": "object",
     "properties": {
       "role_type": {
-        "type": "string"
+        "$ref": "#/definitions/roleType"
       },
       "role_name_type": {
-        "type": "string"
+        "$ref": "#/definitions/roleNameType"
       },
       "role_name_personal_given_name": {
         "type": "string"
@@ -556,7 +689,7 @@
         "type": "string"
       },
       "role_name_personal_title": {
-        "type": "string"
+        "$ref": "#/definitions/roleNamePersonalTitle"
       },
       "role_name_identifiers": {
         "type": "array",
@@ -605,10 +738,10 @@
     "type": "object",
     "properties": {
       "role_type": {
-        "type": "string"
+        "$ref": "#/definitions/roleType"
       },
       "role_name_type": {
-        "type": "string"
+        "$ref": "#/definitions/roleNameType"
       },
       "role_name_organisational": {
         "type": "string"
@@ -701,13 +834,13 @@
         "type": "string"
       },
       "id_type": {
-        "type": "string"
+        "$ref": "#/definitions/idType"
       },
       "id_relation_type": {
-        "type": "string"
+        "$ref": "#/definitions/idRelationType"
       },
       "id_resource_type_general": {
-        "type": "string"
+        "$ref": "#/definitions/idResourceTypeGeneral"
       }
     }
   }
