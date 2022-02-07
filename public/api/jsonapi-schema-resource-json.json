@@ -398,13 +398,14 @@
           "type": "string"
         },
         "study_eligibility_age_min": {
-          "type": "string"
+          "type": ["number", "null"]
+
         },
         "study_eligibility_age_min_description": {
           "type": "string"
         },
         "study_eligibility_age_max": {
-          "type": "string"
+          "type": ["number", "null"]
         },
         "study_eligibility_age_max_description": {
           "type": "string"
@@ -423,19 +424,19 @@
           "type": "string"
         },
         "study_target_sample_size": {
-          "type": "string"
+          "type": ["integer", "null"]
         },
         "study_obtained_sample_size": {
-          "type": "string"
+          "type": ["integer", "null"]
         },
         "study_age_min_examined": {
-          "type": "string"
+          "type": ["number", "null"]
         },
         "study_age_min_examined_description": {
           "type": "string"
         },
         "study_age_max_examined": {
-          "type": "string"
+          "type": ["number","null"]
         },
         "study_age_max_examined_description": {
           "type": "string"
@@ -497,7 +498,7 @@
           "type": "string"
         },
         "study_target_follow-up_duration": {
-          "type": "string"
+          "type": ["number","null"]
         },
         "study_biospecimen_retention": {
           "type": "array",
