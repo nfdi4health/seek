@@ -315,7 +315,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   # study_biospecimen_retention
   study_biospecimen_retention_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Biospecimen Retention').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ['None retained', 'Samples with DNA', ' Samples without DNA'])
+      ['None retained', 'Samples with DNA', 'Samples without DNA'])
   )
 
   # ************************ study design related CV end ***********************

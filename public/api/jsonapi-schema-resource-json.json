@@ -139,7 +139,7 @@
     "studyAllocation": {
       "enum": ["Randomized", "Nonrandomized", " Not applicable (for single-arm trials)",""]
     },
-      "studyOffLabelUse": {
+    "studyOffLabelUse": {
       "enum": ["Yes", "No", "Not applicable",""]
     },
     "studyArmGroupType": {
@@ -152,6 +152,29 @@
         "Dietary supplement (e.g., vitamins, minerals)",
         "Combination product (combining a drug and device, a biological product and device; a drug and biological product; or a drug, biological product, and device)",
         "Diagnostic test (e.g., imaging, in-vitro)", "Other",""]
+    },
+    "studyDataSource":{
+      "enum": ["Blood", "Buccal cells", "Cord blood", "DNA", "Faeces", "Hair", "Immortalized cell lines", "Isolated pathogen", "Nail", "Plasma", "RNA", "Saliva", "Serum", "Tissue (Frozen)", "Tissue (FFPE)",
+        "Urine", "Other biological samples", "Administrative databases", "Cognitive measurements", "Genealogical records", "Imaging data (ultrasound)", "Imaging data (MRI)", "Imaging data (MRI, radiography)",
+        "Imaging data (CT)", "Other imaging data", "Medical records", "Registries", "Interview", "Questionnaire", "Physiological/Biochemical measurements", "Genomics", "Metabolomics", "Transcriptomics",
+        "Proteomics", "Other omics technology", "Other"]
+    },
+    "studyDataSharingPlanSupportingInformation": {
+      "enum": ["Data dictionary", "Study protocol", "Protocol amendment", "Statistical analysis plan",
+        "Analytic code", "Informed consent form", "Clinical study report", "Manual of operations (SOP)",
+        "Case report form (template)", "Questionnaire (template)", "Code book", "Other"]
+    },
+    "studyEligibilityGender": {
+      "enum": ["Male", "Female", "Diverse", "Not applicable"]
+    },
+    "studyMaskingRoles": {
+      "enum": ["Participant", "Care Provider", "Investigator", "Outcomes Assessor"]
+    },
+    "studyBiospecimenRetention": {
+      "enum": ["None retained", "Samples with DNA", "Samples without DNA"]
+    },
+    "studyCountry": {
+      "enum": ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua And Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia And Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, Democratic Republic", "Cook Islands", "Costa Rica", "Cote D'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard Island & Mcdonald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic Of", "Iraq", "Ireland", "Isle Of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States Of", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory, Occupied", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Barthelemy", "Saint Helena", "Saint Kitts And Nevis", "Saint Lucia", "Saint Martin", "Saint Pierre And Miquelon", "Saint Vincent And Grenadines", "Samoa", "San Marino", "Sao Tome And Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia And Sandwich Isl.", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard And Jan Mayen", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad And Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks And Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Viet Nam", "Virgin Islands, British", "Virgin Islands, U.S.", "Wallis And Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"]
     }
   },
   "description": "This is a schema for requests in the JSON API format. For more, see http://jsonapi.org",
@@ -183,6 +206,7 @@
     },
     "resource_titles": {
       "type": "array",
+      "uniqueItems": true,
       "items": [
         {
           "type": "object",
@@ -203,6 +227,7 @@
     },
     "resource_acronyms": {
       "type": "array",
+      "uniqueItems": true,
       "items": [
         {
           "type": "object",
@@ -223,6 +248,7 @@
     },
     "resource_descriptions": {
       "type": "array",
+      "uniqueItems": true,
       "items": [
         {
           "type": "object",
@@ -243,6 +269,7 @@
     },
     "resource_keywords": {
       "type": "array",
+      "uniqueItems": true,
       "items": [
         {
           "type": "object",
@@ -263,11 +290,10 @@
     },
     "resource_language": {
       "type": "array",
-      "items": [
-        {
-          "type": "string"
-        }
-      ]
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/resourceLanguage"
+      }
     },
     "resource_web_page": {
       "type": "string"
@@ -316,6 +342,7 @@
         },
         "study_conditions": {
           "type": "array",
+          "uniqueItems": true,
           "items": [
             {
               "type": "object",
@@ -367,9 +394,10 @@
         },
         "study_country": {
           "type": "array",
+          "uniqueItems": true,
           "items": [
             {
-              "type": "string"
+              "$ref": "#/definitions/studyCountry"
             }
           ]
         },
@@ -390,8 +418,9 @@
         },
         "study_data_source": {
           "type": "array",
+          "uniqueItems": true,
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/studyDataSource"
           }
         },
         "study_data_source_description": {
@@ -412,7 +441,10 @@
         },
         "study_eligibility_gender": {
           "type": "array",
-          "items": {}
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/studyEligibilityGender"
+          }
         },
         "study_eligibility_inclusion_criteria": {
           "type": "string"
@@ -446,6 +478,7 @@
         },
         "study_outcomes": {
           "type": "array",
+          "uniqueItems": true,
           "items": [
             {
               "type": "object",
@@ -483,7 +516,10 @@
         },
         "study_data_sharing_plan_supporting_information": {
           "type": "array",
-          "items": {}
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/studyDataSharingPlanSupportingInformation"
+          }
         },
         "study_data_sharing_plan_time_frame": {
           "type": "string"
@@ -502,7 +538,10 @@
         },
         "study_biospecimen_retention": {
           "type": "array",
-          "items": {}
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/studyBiospecimenRetention"
+          }
         },
         "study_biospecomen_description": {
           "type": "string"
@@ -518,7 +557,10 @@
         },
         "study_masking_roles": {
           "type": "array",
-          "items": {}
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/studyMaskingRoles"
+          }
         },
         "study_masking_description": {
           "type": "string"
@@ -531,6 +573,7 @@
         },
         "interventional_study_design_arms": {
           "type": "array",
+          "uniqueItems": true,
           "items": [
             {
               "type": "object",
@@ -555,6 +598,7 @@
         },
         "interventional_study_design_interventions": {
           "type": "array",
+          "uniqueItems": true,
           "items": [
             {
               "type": "object",
@@ -658,11 +702,11 @@
   },
   "roles": {
     "type": "array",
+    "uniqueItems": true,
     "minItems": 1,
     "items": {
       "$ref": "#/role"
-    },
-    "uniqueItems": true
+    }
   },
   "role": {
     "oneOf": [
@@ -694,6 +738,7 @@
       },
       "role_name_identifiers": {
         "type": "array",
+        "uniqueItems": true,
         "items": {
           "$ref": "#/role_name_identifier"
         }
@@ -715,6 +760,7 @@
       },
       "role_affiliation_identifiers": {
         "type": "array",
+        "uniqueItems": true,
         "items": {
           "$ref": "#/role_affiliation_identifier"
         }
@@ -764,6 +810,7 @@
       },
       "role_affiliation_identifiers": {
         "type": "array",
+        "uniqueItems": true,
         "items": {
           "$ref": "#/role_affiliation_identifier"
         }
@@ -813,10 +860,10 @@
   },
   "ids": {
     "type": "array",
+    "uniqueItems": true,
     "items": {
       "$ref": "#/id"
-    },
-    "uniqueItems": true
+    }
   },
   "id": {
     "type": "object",
