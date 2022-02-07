@@ -135,17 +135,30 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def check_numericality
     unless resource_json.nil? || resource_json['study_design'].blank?
-      INTEGER_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
-        Integer(resource_json['study_design'][value])
-      rescue ArgumentError, TypeError
-        errors.add(value.to_sym, 'The value must be an integer.')
+      INTEGER_ATTRIBUTES.each do |value|
+        if resource_json['study_design'][value].blank?
+          resource_json['study_design'][value] = nil
+        else
+          begin
+            resource_json['study_design'][value] = Integer(resource_json['study_design'][value])
+          rescue ArgumentError, TypeError
+            errors.add(value.to_sym, 'The value must be an integer.')
+          end
+        end
       end
 
-      FLOAT_ATTRIBUTES.reject {|x| resource_json['study_design'][x].blank?}.each do |value|
-        Float(resource_json['study_design'][value])
-      rescue ArgumentError, TypeError
-        errors.add(value.to_sym, 'The value must be a float.')
+      FLOAT_ATTRIBUTES.each do |value|
+        if resource_json['study_design'][value].blank?
+          resource_json['study_design'][value] = nil
+        else
+          begin
+            resource_json['study_design'][value] = Float(resource_json['study_design'][value])
+          rescue ArgumentError, TypeError
+            errors.add(value.to_sym, 'The value must be an float.')
+          end
+        end
       end
+
     end
   end
 
