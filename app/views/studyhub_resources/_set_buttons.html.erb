@@ -3,55 +3,35 @@
   submit_button_help_text = 'By clicking on the button “Submit”, you confirm the correctness of the data entered and apply for registration of your resource in the NFDI4Health Task Force COVID-19 system.
   Please note, your request will be reviewed by our data quality managers.
   If the data have been entered correctly, your application will be approved and the resource will be published. If some inaccuracies are found, we will notify you of the needed changes.'
-%>
-<%
-   if @studyhub_resource.id.nil?
-     submit_button_disabled = true
-   elsif @studyhub_resource.content_blob.nil?
-       submit_button_disabled = true
-   else
-         submit_button_disabled = false
-   end
+
+  button_disabled =   @studyhub_resource.id.nil? ?  true : false
 %>
 
 
-<%= submit_tag('Save',  title: save_button_help_text, class: 'btn btn-primary', name:'studyhub_resource[commit_button]', id: 'save-button',
-               disabled: false) %>
+<%= submit_tag('Save',  title: save_button_help_text, class: 'btn btn-primary', name:'studyhub_resource[commit_button]', id: 'save-button', disabled: button_disabled) %>
 
 <%= submit_tag('Submit', title: submit_button_help_text,
-               class: 'btn btn-primary', name: 'studyhub_resource[commit_button]', id: 'studyhub_resource_submit_btn', disabled: false
+               class: 'btn btn-primary', name: 'studyhub_resource[commit_button]', id: 'studyhub_resource_submit_btn', disabled: button_disabled
                # :onclick => "return previewStages();"
     ) %>
 
-<%= image_tag("ajax-loader.gif", :id => 'permissions_spinner', :style => 'display: none') -%>
-<div id="permissions-preview-wrapper"></div>
+
+<script>
+    $j(document).ready(function(){
+        $j('input[name="studyhub_resource[resource_json][resource_titles][title][0]').keyup(function(){
+            if($j(this).val().length !=0){
+                $j('#save-button').attr('disabled', false);
+                $j('#studyhub_resource_submit_btn').attr('disabled', false);
+            }
+            else {
+                $j('#save-button').attr('disabled',true);
+                $j('#studyhub_resource_submit_btn').attr('disabled',true);
+            }
+        })
+    });
+</script>
 
 
-
-<!--<script type="text/javascript">-->
-
-<!--    function previewStages() {-->
-<!--            $j('#permissions_spinner').show();-->
-<!--            $j.ajax({-->
-<!--                type: "POST",-->
-<!--            url: '<%#= preview_stages_studyhub_resources_path -%>',-->
-<!--                data: {id: <%#= @studyhub_resource.id %>},-->
-<!--                success: function (result) {-->
-<!--                    $j('#permissions-preview-wrapper').html(result);-->
-<!--                    $j('#preview_permissions').modal('show');-->
-<!--                    //this is to prevent other modal boxes being closes, if this is the child of another-->
-<!--                    $j('#preview_permissions').on('click', '[data-dismiss="modal"]', function (e) { e.stopPropagation(); });-->
-<!--           },-->
-<!--                error: function () {-->
-<!--                alert('Sorry, an error has occurred.');-->
-<!--              },-->
-<!--         complete: function () {-->
-<!--               $j('#permissions_spinner').hide();-->
-<!--            }-->
-<!--          });-->
-<!--      return false;-->
-<!--   }-->
-<!--</script>-->
 
 
 
