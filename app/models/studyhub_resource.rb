@@ -360,19 +360,15 @@ study_age_max_examined study_target_follow-up_duration].freeze
   def convert_label_to_id_for_multi_select_attribute
 
     return if is_ui_request?
-    hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except("study_design")
+    hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except('study_design')
 
-    Rails.logger.info("Model:convert_label_to_id_for_multi_select_attribute")
     hash.keys.each do |key|
       StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
         if key == 'resource'
-          result = resource_json[attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[attr].blank?
-          self.resource_json[attr] = result
+          self.resource_json[attr] = resource_json[attr].blank? ? [] : resource_json[attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
         else
-          result = resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s} unless resource_json[key][attr].blank?
-          self.resource_json[key][attr] = result
+          self.resource_json[key][attr] = resource_json[key][attr].blank? ? []: resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
         end
-
       end
     end
   end
