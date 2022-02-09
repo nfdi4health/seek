@@ -114,7 +114,6 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_urls
-    return if resource_json.nil?
     unless validate_url(resource_json['resource_web_page']&.strip)
       errors.add('resource_web_page'.to_sym, 'is not a url.')
     end
@@ -134,7 +133,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_numericality
-    unless resource_json.nil? || resource_json['study_design'].blank?
+    unless resource_json['study_design'].blank?
       INTEGER_ATTRIBUTES.each do |value|
         if resource_json['study_design'][value].blank?
           resource_json['study_design'][value] = nil
@@ -164,9 +163,6 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
 
   def end_date_is_after_start_date
-
-    return if resource_json.blank?
-
     start_date = resource_json['study_design']['study_start_date']
     end_date = resource_json['study_design']['study_end_date']
 
