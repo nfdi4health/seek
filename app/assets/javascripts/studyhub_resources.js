@@ -40,14 +40,6 @@ var SR = {
         row.remove();
     },
 
-    addCalendar: function () {
-        var showTime = $j(this).data('calendar') === 'mixed';
-        $j(this).datetimepicker({
-            format: showTime ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD',
-            sideBySide: showTime
-        });
-    },
-
     enableNextButton: function () {
         if ($j(this).val() == '') {
             $j('#select_sr_type_button').prop('disabled', true);

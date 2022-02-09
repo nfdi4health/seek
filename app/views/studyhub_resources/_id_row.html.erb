@@ -49,7 +49,7 @@
   <td>
     <div class="form-group">
       <div style="position:relative">
-        <%= f.text_field "#{field_name_prefix}[id_date][#{index}]", data: { calendar: true }, :class =>"calendar form-control", :value => id_date %>
+        <%= f.text_field "#{field_name_prefix}[id_date][#{index}]", :type => 'date', :class =>"calendar form-control", :value => id_date %>
       </div>
     </div>
   </td>
@@ -83,7 +83,6 @@
 
 <script>
 
-    $j(document).on('click', '[data-calendar]', SR.addCalendar);
     $j('input[name^="<%= field_name_prefix %>[id_id]').change(SR.addAddtionalRequiredIDFields);
 
 </script>

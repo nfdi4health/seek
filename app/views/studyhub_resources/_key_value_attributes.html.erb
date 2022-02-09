@@ -13,6 +13,8 @@
         <%= display_array_attribute_fields(resource[attribute.title]) %>
       <% elsif StudyhubResource::URL_FIELDS.include? attribute.title %>
         <%= link_to resource[attribute.title].truncate(100), resource[attribute.title], target: :_blank %>
+      <% elsif StudyhubResource::DATE_TYPE.include? attribute.title %>
+        <%= resource[attribute.title].blank?? '': convert_date_type_format(resource[attribute.title]) %>
       <% else %>
         <%= resource[attribute.title] %>
       <% end %>

@@ -44,6 +44,7 @@ class StudyhubResource < ApplicationRecord
   URL_FIELDS = %w[resource_web_page study_data_sharing_plan_url].freeze
   RESOURCE_KEYWORDS = 'resource_keywords'.freeze
   ID_TYPE = %w[name affiliation].freeze
+  DATE_TYPE = %w[study_start_date study_end_date].freeze
 
   # *****************************************************************************
   #  This section defines constants for "working stages" values
@@ -163,9 +164,9 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
 
   def end_date_is_after_start_date
+
     start_date = resource_json['study_design']['study_start_date']
     end_date = resource_json['study_design']['study_end_date']
-
     return if end_date.blank? || start_date.blank?
 
     errors.add(:study_end_date, 'cannot be before the start date') if end_date < start_date
@@ -350,6 +351,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
     Rails.logger.info("title=>"+ self.title.inspect)
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
   end
+
 
 
 
