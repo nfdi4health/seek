@@ -76,7 +76,7 @@ module StudyhubResourcesHelper
         html += '<td class="id_resource_type_general">' + (d['id_resource_type_general'].blank? ? '' : d['id_resource_type_general']) + '</td>'
         html += '<td class="id_type">' + (d['id_type'].blank? ? '' : d['id_type']) + '</td>'
         html += '<td class="id_id">' + (d['id_id'].blank? ? '' : d['id_id'])  + '</td>'
-        html += '<td class="id_date">' + (d['id_date'].blank? ? '' : convert_date_type_format(d['id_date']))  + '</td>'
+        html += '<td class="id_date">' + (d['id_date'].blank? ? '' : d['id_date'])  + '</td>'
         html += '<td class="id_relation_type">' + (d['id_relation_type'].blank? ? '' : d['id_relation_type'].underscore.humanize) + '</td>'
         html += '</tr>'
       end
@@ -181,6 +181,7 @@ module StudyhubResourcesHelper
         text_field_tag element_name, value, data: { calendar: 'mixed' }, class: "calendar form-control #{element_class}", placeholder: placeholder
       end
     when Seek::Samples::BaseType::DATE
+      value = value.blank?? '': Date.parse(value).strftime('%Y-%m-%d')
       content_tag :div, style: 'position:relative' do
         text_field_tag element_name, value, type:'date', class: "calendar form-control #{element_class}", placeholder: placeholder
       end
@@ -397,11 +398,6 @@ module StudyhubResourcesHelper
       role_name=''
     end
     role_name
-  end
-
-
-  def convert_date_type_format(date)
-    Date.parse(date).strftime("%d.%m.%Y")
   end
 
 end

@@ -9,7 +9,6 @@ class StudyhubResourceSerializer < PCSSerializer
     object.resource_json['resource_type'] = object.studyhub_resource_type.try(:key)
     convert_resource_json('resource')
     convert_resource_json('study_design') if object.is_studytype?
-    convert_date_type_format
     object.resource_json
   end
 
@@ -43,22 +42,9 @@ class StudyhubResourceSerializer < PCSSerializer
     end
   end
 
-  def convert_date_type_format
-    object.resource_json['ids'].each_with_index do |id,index|
-      object.resource_json['ids'][index]['id_date'] = convert_date_format(id['id_date']) unless id['id_date'].blank?
-    end
-
-    StudyhubResource::DATE_TYPE.each do |attr|
-      object.resource_json['study_design'][attr] = convert_date_format(object.resource_json['study_design'][attr]) unless object.resource_json['study_design'][attr].blank?
-    end
-  end
 
   def convert_id_to_label_for_multi_select_attribute(array)
     array.map{|x| SampleControlledVocabTerm.find(x).label}
-  end
-
-  def convert_date_format(date)
-    Date.parse(date).strftime("%d.%m.%Y")
   end
 
 end

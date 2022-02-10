@@ -29,6 +29,7 @@ class StudyhubResource < ApplicationRecord
   attr_accessor :ui_request
 
   before_save :update_working_stage, on:  [:create, :update]
+  before_save :covert_to_mds_date_format, on:  [:create, :update], if: :is_ui_request?
   before_validation :set_resource_titles_to_title
   after_validation :convert_label_to_id_for_multi_select_attribute
 
@@ -167,7 +168,13 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
     start_date = resource_json['study_design']['study_start_date']
     end_date = resource_json['study_design']['study_end_date']
+
     return if end_date.blank? || start_date.blank?
+
+    unless is_ui_request?
+      start_date = Date.parse(start_date).strftime('%Y-%m-%d') unless start_date.blank?
+      end_date = Date.parse(end_date).strftime('%Y-%m-%d') unless start_date.blank?
+    end
 
     errors.add(:study_end_date, 'cannot be before the start date') if end_date < start_date
   end
@@ -348,11 +355,24 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def set_resource_titles_to_title
     Rails.logger.info("Model:set_resource_titles_to_title")
-    Rails.logger.info("title=>"+ self.title.inspect)
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
   end
 
+  def covert_to_mds_date_format
 
+    Rails.logger.info("Model:covert_to_mds_date_type")
+    self.resource_json['ids'].each_with_index do |id,index|
+      self.resource_json['ids'][index]['id_date'] = convert_date_format(id['id_date']) unless id['id_date'].blank?
+    end
+
+    StudyhubResource::DATE_TYPE.each do |attr|
+      self.resource_json['study_design'][attr] = convert_date_format(self.resource_json['study_design'][attr]) unless self.resource_json['study_design'][attr].blank?
+    end
+  end
+
+  def convert_date_format(date)
+    Date.parse(date).strftime("%d.%m.%Y")
+  end
 
 
   def convert_label_to_id_for_multi_select_attribute

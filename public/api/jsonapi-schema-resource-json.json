@@ -6,6 +6,17 @@
       "type": "string",
       "minLength": 1
     },
+    "date_type": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/emptyString"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\d{2}\\.\\d{2}\\.\\d{4}$"
+        }
+      ]
+    },
     "emptyString": {
       "type": "string",
       "minLength": 0,
@@ -387,10 +398,10 @@
           "$ref": "#/definitions/studyRecruitmentStatusRegister"
         },
         "study_start_date": {
-          "type": "string"
+          "$ref": "#/definitions/date_type"
         },
         "study_end_date": {
-          "type": "string"
+          "$ref": "#/definitions/date_type"
         },
         "study_country": {
           "type": "array",
@@ -879,7 +890,7 @@
         "type": "string"
       },
       "id_date": {
-        "type": "string"
+        "$ref": "#/definitions/date_type"
       },
       "id_type": {
         "$ref": "#/definitions/idType"
