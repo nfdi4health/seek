@@ -15,7 +15,7 @@ class StudyhubResource < ApplicationRecord
   validate :check_provenance_data_presence, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
-  validate :check_resource_use_rights, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
+  validate :check_resource_use_rights, on:  [:create, :update]
   validate :check_id_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
   validate :check_role_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
   validate :check_description_presence, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
