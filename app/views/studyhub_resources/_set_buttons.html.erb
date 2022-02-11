@@ -4,7 +4,7 @@
   Please note, your request will be reviewed by our data quality managers.
   If the data have been entered correctly, your application will be approved and the resource will be published. If some inaccuracies are found, we will notify you of the needed changes.'
 
-  button_disabled =   @studyhub_resource.id.nil? ?  true : false
+  button_disabled =  @studyhub_resource.id.nil? && @studyhub_resource.title.blank? ?  true : false
 %>
 
 
