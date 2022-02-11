@@ -84,7 +84,7 @@ max_studyhub_study_json_text = '{
           {
             "id_id": "https://osf.io/d6wgr/",
             "id_type": "URL",
-            "id_date": "2020-09-18",
+            "id_date": "18.09.2022",
             "id_resource_type_general": "Preprint",
             "id_relation_type": "is described by"
           }
@@ -107,8 +107,8 @@ max_studyhub_study_json_text = '{
           "study_status_halted_stage": "",
           "study_status_halted_reason": "",
           "study_recruitment_status_register": "",
-          "study_start_date": "2020-11-06",
-          "study_end_date": "2025-11-01",
+          "study_start_date": "06.11.2020",
+          "study_end_date": "01.01.2025",
           "study_country": ["Germany","China"
           ],
           "study_region": "Freiburg, Heidelberg, Munich, Frankfurt, Giessen, Hannover, Cologne, Kiel, Lübeck, Jena, Berlin",
