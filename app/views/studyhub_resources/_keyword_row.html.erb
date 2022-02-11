@@ -2,6 +2,8 @@
 <% index ||= 'row-template' %>
 <% row_num = index.to_i %>
 
+<%  keyword_error = (defined? index).nil? ? {} : process_keyword_error_messags(index) %>
+
 <%
   unless studyhub_resource.resource_json.nil?
     keywords = studyhub_resource.resource_json['resource_keywords']
@@ -21,10 +23,10 @@
     </div>
   </td>
 
-
   <td>
-    <div class="form-group">
+    <div class="form-group <%= "has-error text-danger" if keyword_error.include? "resource_keywords_label_code" %>">
       <%= f.text_field "studyhub_resource[custom_metadata_attributes][data][resource_keywords][resource_keywords_label_code][#{index}]", :class =>'form-control', :value => resource_keywords_label_code %>
+      <small><%= keyword_error["resource_keywords_label_code"] if keyword_error.include? "resource_keywords_label_code" %></small>
     </div>
   </td>
 

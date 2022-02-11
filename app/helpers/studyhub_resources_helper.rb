@@ -351,6 +351,16 @@ module StudyhubResourcesHelper
 
   end
 
+  def process_keyword_error_messags(index)
+
+    keyword = {}
+    if (@error_keys.include? "resource_keywords[#{index}]['resource_keywords_label_code']")
+      keyword['resource_keywords_label_code'] = @studyhub_resource.errors.messages["resource_keywords[#{index}]['resource_keywords_label_code']".to_sym].first
+    end
+    
+    keyword
+  end
+
   def process_id_error_messags(index)
 
     id = {}

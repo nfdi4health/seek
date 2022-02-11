@@ -46,7 +46,7 @@ class StudyhubResource < ApplicationRecord
   RESOURCE_KEYWORDS = 'resource_keywords'.freeze
   ID_TYPE = %w[name affiliation].freeze
   DATE_TYPE = %w[study_start_date study_end_date].freeze
-
+  IRI_TYPE = %w[resource_keywords_label_code study_conditions_classification_code].freeze
   # *****************************************************************************
   #  This section defines constants for "working stages" values
 
@@ -87,7 +87,6 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
                                     study_arm_group_label study_arm_group_type study_arm_group_description
                                     study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label study_recruitment_status_register].freeze
 
-
   NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze
 
   INTEGER_ATTRIBUTES =  %w[study_centers_number study_target_sample_size study_obtained_sample_size].freeze
@@ -116,6 +115,14 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_urls
+
+    resource_json['resource_keywords'].each_with_index do |keyword,index|
+      keyword['resource_keywords_label_code']
+      unless validate_url(keyword['resource_keywords_label_code']&.strip)
+        errors.add("resource_keywords[#{index}]['resource_keywords_label_code']".to_sym, 'is not a url.')
+      end
+    end
+
     unless validate_url(resource_json['resource_web_page']&.strip)
       errors.add('resource_web_page'.to_sym, 'is not a url.')
     end
