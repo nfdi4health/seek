@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_09_112856) do
+ActiveRecord::Schema.define(version: 2022_02_11_083725) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -1931,7 +1931,7 @@ ActiveRecord::Schema.define(version: 2021_12_09_112856) do
     t.integer "policy_id"
     t.string "uuid"
     t.string "first_letter", limit: 1
-    t.string "title"
+    t.text "title"
     t.integer "stage"
     t.datetime "last_used_at"
     t.index ["assay_id"], name: "index_studyhub_resources_on_assay_id"

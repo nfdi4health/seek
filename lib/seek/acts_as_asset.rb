@@ -40,7 +40,7 @@ module Seek
         does_not_require_can_edit :last_used_at
 
         validates :title, presence: true
-        validates :title, length: { maximum: 255 }, unless: -> { is_a?(Publication) }
+        validates :title, length: { maximum: 255 }, unless: -> { is_a?(Publication) || is_a?(StudyhubResource)}
         validates :description, length: { maximum: 65_535 }, if: -> { respond_to?(:description) }
         validates :license, license:true, allow_blank: true, if: -> { respond_to?(:license) }
 
