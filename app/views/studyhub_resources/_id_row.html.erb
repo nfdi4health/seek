@@ -13,7 +13,7 @@
   unless studyhub_resource.resource_json.nil?
     ids = studyhub_resource.resource_json['ids']
     id_id = ids[row_num]["id_id"] unless ids.empty?
-    id_date = ids[row_num]["id_date"].empty?? '' : Date.parse(ids[row_num]["id_date"]).strftime('%Y-%m-%d')
+    id_date = (ids.empty? || ids[row_num]["id_date"].empty?) ? '' : Date.parse(ids[row_num]["id_date"]).strftime('%Y-%m-%d')
     id_type = ids[row_num]["id_type"] unless ids.empty?
     id_relation_type = ids[row_num]["id_relation_type"] unless ids.empty?
     id_resource_type_general = ids[row_num]["id_resource_type_general"] unless ids.empty?
