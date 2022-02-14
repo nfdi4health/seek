@@ -403,33 +403,29 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   )
 
   resource_use_rights_authors_confirmation_1 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_1')
-  resource_use_rights_authors_confirmation_1.sample_controlled_vocab = nil
   resource_use_rights_authors_confirmation_1.update_attributes(
-    title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: boolean_type,
+    title: 'resource_use_rights_authors_confirmation_1', required: true, sample_attribute_type: boolean_type,sample_controlled_vocab_id:nil,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_1'],
     label: attribute_headings['resource_use_rights_authors_confirmation_1'], pos:11
   )
 
   resource_use_rights_authors_confirmation_2 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_2')
-  resource_use_rights_authors_confirmation_2.sample_controlled_vocab = nil
   resource_use_rights_authors_confirmation_2.update_attributes(
-    title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: boolean_type,
+    title: 'resource_use_rights_authors_confirmation_2', required: true, sample_attribute_type: boolean_type,sample_controlled_vocab_id:nil,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_2'],
     label: attribute_headings['resource_use_rights_authors_confirmation_2'], pos:12
   )
 
   resource_use_rights_authors_confirmation_3 = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_authors_confirmation_3')
-  resource_use_rights_authors_confirmation_3.sample_controlled_vocab = nil
   resource_use_rights_authors_confirmation_3.update_attributes(
-    title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: boolean_type,
+    title: 'resource_use_rights_authors_confirmation_3', required: true, sample_attribute_type: boolean_type,sample_controlled_vocab_id:nil,
     description: attribute_descriptions['resource_use_rights_authors_confirmation_3'],
     label: attribute_headings['resource_use_rights_authors_confirmation_3'], pos:13
   )
 
   resource_use_rights_support_by_licencing = CustomMetadataAttribute.find_or_initialize_by(title: 'resource_use_rights_support_by_licencing')
-  resource_use_rights_support_by_licencing.sample_controlled_vocab = nil
   resource_use_rights_support_by_licencing.update_attributes(
-    title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: boolean_type,
+    title: 'resource_use_rights_support_by_licencing', required: true, sample_attribute_type: boolean_type,sample_controlled_vocab_id:nil,
     description: attribute_descriptions['resource_use_rights_support_by_licencing'],
     label: attribute_headings['resource_use_rights_support_by_licencing'], pos:14
   )
@@ -828,9 +824,8 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   )
 
   study_masking = CustomMetadataAttribute.find_or_initialize_by(title: 'study_masking')
-  study_masking.sample_controlled_vocab = nil
   study_masking.update_attributes(
-    title: 'study_masking', required: false, sample_attribute_type: boolean_type,
+    title: 'study_masking', required: false, sample_attribute_type: boolean_type,sample_controlled_vocab_id:nil,
     description: attribute_descriptions['study_masking'], label: attribute_headings['study_masking'], pos:3
   )
 
