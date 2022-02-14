@@ -377,8 +377,10 @@ study_age_max_examined study_target_follow-up_duration].freeze
       self.resource_json['ids'][index]['id_date'] = convert_date_format(id['id_date']) unless id['id_date'].blank?
     end
 
-    StudyhubResource::DATE_TYPE.each do |attr|
-      self.resource_json['study_design'][attr] = convert_date_format(self.resource_json['study_design'][attr]) unless self.resource_json['study_design'][attr].blank?
+    if self.is_studytype?
+      StudyhubResource::DATE_TYPE.each do |attr|
+        self.resource_json['study_design'][attr] = convert_date_format(self.resource_json['study_design'][attr]) unless self.resource_json['study_design'][attr].blank?
+      end
     end
   end
 
