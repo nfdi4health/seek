@@ -1,6 +1,187 @@
 require 'json'
 namespace :seek_dev_nfdi4health do
 
+
+  task :update_policy_permission_a_contributor, [:path] => [:environment] do |t, args|
+    user_id = args.path
+    puts "You want to grant user ID =  #{user_id} the manage right..."
+    puts 'Update policy and permission for Studyhub Resource ... '
+    StudyhubResource.all.map(&:id).each do |id|
+      permission =  StudyhubResource.find(id).policy.permissions.where(contributor_type: "Person", contributor_id: user_id).first_or_initialize
+      pp permission
+      permission.update_attributes(access_type:4)
+    end
+  end
+
+  task(update_resource_json: :environment) do
+
+    puts 'Update resource_json ... '
+
+    StudyhubResource.all.each do |sr|
+      puts 'id='+sr.id.to_s+'('+sr.studyhub_resource_type.title+'):'
+      json = sr.resource_json
+
+
+    puts ' ----------------------------------------- '
+    puts 'step 1: move resource properties one level up ...'
+      if json.key?('resource')
+        json['resource'].keys.each do |key|
+          json[key] = json['resource'][key]
+        end
+        json.delete('resource')
+      end
+
+    puts ' ----------------------------------------- '
+    puts 'step 2: add provenance properties...'
+      unless json.key?('provenance')
+        json['provenance']={}
+        json['provenance']['data_source'] = 'Manually collected'
+      end
+
+    puts ' ----------------------------------------- '
+    puts 'step 3: update user right related properties...'
+    # puts 'resource_use_rights_label:'+json['resource_use_rights_label']
+      unless json['resource_use_rights_label']&.start_with?('CC')
+        StudyhubResource::REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
+          if json.key?(name)
+            json.delete(name)
+          end
+        end
+      end
+
+
+    puts ' ----------------------------------------- '
+    puts 'step 4: merge merge "study_type_interventional" and "study_type_non_interventional" into "study_type" ...'
+
+      if (sr.is_studytype?)
+        json['study_design']['study_type'] = if !json['study_design']['study_type_non_interventional'].blank?
+                                               json['study_design']['study_type_non_interventional']
+        elsif !json['study_design']['study_type_interventional'].blank?
+          json['study_design']['study_type_interventional']
+        else
+          ''
+                                             end
+        # pp json['study_design']['study_type']
+        json['study_design'].delete('study_type_non_interventional')
+        json['study_design'].delete('study_type_interventional')
+      end
+
+
+    puts ' ----------------------------------------- '
+    puts 'step 5:  remove "role_name_identifiers" when the "role_name_type" = "Organisational" ...'
+      json['roles'].each do |role|
+        if role['role_name_type'] == 'Organisational'
+          # pp "role_name_personal_title" if role.has_key? ('role_name_personal_title')
+          # pp "role_name_personal_given_name" if role.has_key? ('role_name_personal_given_name')
+          # pp "role_name_personal_family_name" if role.has_key? ('role_name_personal_family_name')
+          # pp "role_name_identifiers" if role.has_key? ('role_name_identifiers')
+
+          role.delete('role_name_personal_title') if role.key? ('role_name_personal_title')
+          role.delete('role_name_personal_given_name') if role.key? ('role_name_personal_given_name')
+          role.delete('role_name_personal_family_name') if role.key? ('role_name_personal_family_name')
+          role.delete('role_name_identifiers') if role.key? ('role_name_identifiers')
+
+        end
+
+        if role['role_name_type'] == 'Personal'
+          # pp "role_name_organisational" if role.has_key? ('role_name_organisational')
+          role.delete('role_name_organisational') if role.key? ('role_name_organisational')
+        end
+      end
+
+
+    puts ' ----------------------------------------- '
+    puts 'step 6:  id_date format update...'
+    #   pp json['ids'].size
+      unless json['ids'].empty?
+        json['ids'].each do |id|
+          id['id_date'] = if id['id_date'].blank?
+                            nil
+          else
+            Date.parse(id['id_date']).strftime("%d.%m.%Y") end
+          # pp "after:id_date:"+id['id_date'].inspect
+        end
+      end
+
+    puts ' ----------------------------------------- '
+    puts 'step 7:  study_start_date and study_end_date format update...'
+
+      if sr.is_studytype?
+        json['study_design']['study_start_date'] = json['study_design']['study_start_date'].blank? ? nil : Date.parse(json['study_design']['study_start_date']).strftime("%d.%m.%Y")
+        json['study_design']['study_end_date'] = json['study_design']['study_end_date'].blank? ? nil : Date.parse(json['study_design']['study_end_date']).strftime("%d.%m.%Y")
+        # pp 'after: study_start_date:'+ json['study_design']['study_start_date'].inspect
+        # pp 'after: study_end_date:'+ json['study_design']['study_end_date'].inspect
+      end
+
+
+    puts ' ----------------------------------------- '
+    puts 'step 8:  update boolean type properties...'
+
+      StudyhubResource::BOOLEAN_ATTRIBUTES_HASH['resource'].each do |attr|
+        if json.key?(attr)
+          # pp json[attr].inspect
+          json[attr] = case json[attr]
+                       when 'Yes'
+                         true
+                       when 'No'
+                         false
+          end
+        end
+      end
+
+      if sr.is_studytype? && json['study_design'].key?('study_masking')
+        # pp json['study_design']['study_masking'].inspect
+        json['study_design']['study_masking'] = case json['study_design']['study_masking']
+                                                when 'Yes'
+                                                  true
+                                                when 'No'
+                                                  false
+        end
+      end
+
+
+    puts ' ----------------------------------------- '
+    puts 'step 9:  update Integer and Float type properties...'
+
+      if sr.is_studytype?
+
+        StudyhubResource::INTEGER_ATTRIBUTES.each do |attr|
+          if json['study_design'].key? attr
+            # pp attr
+            json['study_design'][attr] = if json['study_design'][attr].blank?
+                                           nil
+                                         else
+                                           Integer(json['study_design'][attr])
+                                         end
+
+            # pp json['study_design'][attr]
+          end
+        end
+
+        StudyhubResource::FLOAT_ATTRIBUTES.each do |attr|
+          if json['study_design'].key? attr
+            # pp attr
+            json['study_design'][attr] = if json['study_design'][attr].blank?
+                                           nil
+                                         else
+                                             Float(json['study_design'][attr])
+                                         end
+            # pp json['study_design'][attr]
+          end
+        end
+        json['study_design'].delete('study_target_follow-up_duration') if json['study_design']['study_primary_design'] == "Interventional"
+
+      end
+
+
+      sr.update_column(:resource_json, json)
+
+    end
+
+  end
+
+
+
   task(update_attribute_types: :environment) do
 
     StudyhubResource.all.each do |sr|
@@ -8,7 +189,7 @@ namespace :seek_dev_nfdi4health do
       puts 'id='+sr.id.to_s+'('+sr.studyhub_resource_type.title+'):'
       json = sr.resource_json
 
-      unless json['resource'].has_key?('resource_keywords')
+      unless json['resource'].key?('resource_keywords')
         puts 'Convert resource keywords ...'
         json['resource']['resource_keywords'] = []
         resource_keyword = {}
@@ -20,7 +201,7 @@ namespace :seek_dev_nfdi4health do
       end
 
       json['roles'].each do |role|
-        unless role.has_key?('role_name_identifiers')
+        unless role.key?('role_name_identifiers')
           puts 'Convert role name identifiers ...'
           role['role_name_identifiers'] =[]
           hash = {}
@@ -31,7 +212,7 @@ namespace :seek_dev_nfdi4health do
           role.delete('role_name_identifier_scheme')
         end
 
-        unless role.has_key?('role_affiliation_identifiers')
+        unless role.key?('role_affiliation_identifiers')
           puts 'Convert role affiliation identifiers ...'
           role['role_affiliation_identifiers'] =[]
           hash = {}
@@ -46,7 +227,7 @@ namespace :seek_dev_nfdi4health do
       sd = json['study_design']
 
       unless sd.nil?
-        if sd.has_key?('study_conditions_classification')
+        if sd.key?('study_conditions_classification')
           puts 'Convert resource study conditions ...'
           study_conditions = sd['study_conditions']
           study_conditions_classification= sd['study_conditions_classification']
@@ -65,7 +246,7 @@ namespace :seek_dev_nfdi4health do
         end
 
 
-        unless sd.has_key?('study_outcomes')
+        unless sd.key?('study_outcomes')
           puts 'Convert resource study outcomes ...'
           sd['study_outcomes'] = []
 
@@ -82,7 +263,7 @@ namespace :seek_dev_nfdi4health do
           sd.delete('study_outcome_description')
         end
 
-        unless sd.has_key?('interventional_study_design_arms')
+        unless sd.key?('interventional_study_design_arms')
           puts 'Convert interventional study design arms ...'
           sd['interventional_study_design_arms'] = []
           hash = {}
@@ -97,7 +278,7 @@ namespace :seek_dev_nfdi4health do
           sd.delete('study_arm_group_description')
         end
 
-        unless sd.has_key?('interventional_study_design_interventions')
+        unless sd.key?('interventional_study_design_interventions')
           puts 'Convert interventional study design interventions ...'
           sd['interventional_study_design_interventions'] = []
           hash = {}
