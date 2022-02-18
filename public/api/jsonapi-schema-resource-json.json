@@ -61,7 +61,7 @@
     },
     "idType": {
       "enum": ["arXiv", "bibcode", "DOI", "EAN13", "EISSN", "Handle", "ISBN", "ISSN", "ISTC", "LISSN", "LSID", "PMID",
-        "PURL", "URL", "URN", "w3id", "DRKS", "UTN", "ISRCTN", "EudraCT", "EUDAMED", "NCT(ClinicalTrials.gov)", "NFDI4Health","Other"]
+        "PURL", "URL", "URN", "w3id", "DRKS", "UTN", "ISRCTN", "EudraCT", "EUDAMED", "NCT(ClinicalTrials.gov)", "NFDI4Health","Other",""]
     },
     "idResourceTypeGeneral": {
       "enum": ["Audiovisual", "Book", "Book chapter", "Collection", "Computational notebook", "Conference paper",
@@ -77,17 +77,21 @@
         "is required by", "requires", "is obsoleted by", "obsoletes", "has grant number", "has alternate ID"]
     },
     "studyPrimaryDesign": {
-      "enum": ["Non-interventional", "Interventional"]
+      "enum": ["Non-interventional", "Interventional",""]
+    },
+    "studyType": {
+      "enum": ["Single Group", " Parallel", "Crossover", "Factorial", "Sequential", "Other", "Unknown", "Case-control", "Case-only", "Case-crossover", "Ecologic or community studies", "Family-based",
+        "Twin study", "Cohort", " Birth cohort", "Trend", "Panel", "Longitudinal", "Cross-section", "Cross-section ad-hoc follow-up", "Time series", "Quality control",""]
     },
     "studyConditionsClassification": {
       "enum": ["MeSH", "ICD-10", "MedDRA", "SNOMED CT",
-        "Other vocabulary", "Free text"]
+        "Other vocabulary", "Free text",""]
     },
     "studyEthicsCommiteeApproval": {
       "enum": ["Request for approval not yet submitted", "Request submitted, approval pending",
         "Request submitted, approval granted", "Request submitted, exempt granted",
         "Request submitted, approval denied", "Approval not required", "Study withdrawn prior to decision on approval",
-        "Unknown"]
+        "Unknown",""]
     },
     "studyStatus": {
       "enum": ["At the planning stage",
@@ -98,7 +102,7 @@
         "Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume",
         "Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resume",
         "Completed: Recruitment, data collection, and data quality management completed normally",
-        "Other"]
+        "Other",""]
     },
     "studyStatusEnrollingByInvitation": {
       "enum": ["Yes", "No", "Not applicable",""]
@@ -123,7 +127,7 @@
     "studySubject":{
       "enum": ["Person",  "Animal", "Practitioner", "Device", "Medication", "Substance", "Organization", "Family",
         "Household", "Event/Process", "Geographic unit", "Time unit", "Text unit", "Group", "Object", "Pathogens", "Twins",
-        "Other", "Unknown"]
+        "Other", "Unknown",""]
     },
     "studySampling": {
       "enum": ["Total universe/Complete enumeration", "Probability", "Probability (Simple random)", "Probability (Systematic random)", "Probability (Stratified)",
@@ -137,7 +141,7 @@
     "studyDataSharingPlanGenerally": {
       "enum": ["Yes, there is a plan to make data available.",
         "No, there is no plan to make data available.",
-        "Undecided, it is not yet known if data will be made available."]
+        "Undecided, it is not yet known if data will be made available.",""]
     },
     "studyPrimaryPurpose": {
       "enum": ["Treatment", "Prevention", "Prognostic", "Diagnostic", "Supportive Care", "Screening", "Health Services Research",
@@ -168,24 +172,24 @@
       "enum": ["Blood", "Buccal cells", "Cord blood", "DNA", "Faeces", "Hair", "Immortalized cell lines", "Isolated pathogen", "Nail", "Plasma", "RNA", "Saliva", "Serum", "Tissue (Frozen)", "Tissue (FFPE)",
         "Urine", "Other biological samples", "Administrative databases", "Cognitive measurements", "Genealogical records", "Imaging data (ultrasound)", "Imaging data (MRI)", "Imaging data (MRI, radiography)",
         "Imaging data (CT)", "Other imaging data", "Medical records", "Registries", "Interview", "Questionnaire", "Physiological/Biochemical measurements", "Genomics", "Metabolomics", "Transcriptomics",
-        "Proteomics", "Other omics technology", "Other"]
+        "Proteomics", "Other omics technology", "Other",""]
     },
     "studyDataSharingPlanSupportingInformation": {
       "enum": ["Data dictionary", "Study protocol", "Protocol amendment", "Statistical analysis plan",
         "Analytic code", "Informed consent form", "Clinical study report", "Manual of operations (SOP)",
-        "Case report form (template)", "Questionnaire (template)", "Code book", "Other"]
+        "Case report form (template)", "Questionnaire (template)", "Code book", "Other",""]
     },
     "studyEligibilityGender": {
-      "enum": ["Male", "Female", "Diverse", "Not applicable"]
+      "enum": ["Male", "Female", "Diverse", "Not applicable",""]
     },
     "studyMaskingRoles": {
-      "enum": ["Participant", "Care Provider", "Investigator", "Outcomes Assessor"]
+      "enum": ["Participant", "Care Provider", "Investigator", "Outcomes Assessor",""]
     },
     "studyBiospecimenRetention": {
-      "enum": ["None retained", "Samples with DNA", "Samples without DNA"]
+      "enum": ["None retained", "Samples with DNA", "Samples without DNA",""]
     },
     "studyCountry": {
-      "enum": ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua And Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia And Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, Democratic Republic", "Cook Islands", "Costa Rica", "Cote D'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard Island & Mcdonald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic Of", "Iraq", "Ireland", "Isle Of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States Of", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory, Occupied", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Barthelemy", "Saint Helena", "Saint Kitts And Nevis", "Saint Lucia", "Saint Martin", "Saint Pierre And Miquelon", "Saint Vincent And Grenadines", "Samoa", "San Marino", "Sao Tome And Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia And Sandwich Isl.", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard And Jan Mayen", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad And Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks And Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Viet Nam", "Virgin Islands, British", "Virgin Islands, U.S.", "Wallis And Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"]
+      "enum": ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua And Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia And Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, Democratic Republic", "Cook Islands", "Costa Rica", "Cote D'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard Island & Mcdonald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic Of", "Iraq", "Ireland", "Isle Of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States Of", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory, Occupied", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Barthelemy", "Saint Helena", "Saint Kitts And Nevis", "Saint Lucia", "Saint Martin", "Saint Pierre And Miquelon", "Saint Vincent And Grenadines", "Samoa", "San Marino", "Sao Tome And Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia And Sandwich Isl.", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard And Jan Mayen", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad And Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks And Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Viet Nam", "Virgin Islands, British", "Virgin Islands, U.S.", "Wallis And Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe",""]
     }
   },
   "description": "This is a schema for requests in the JSON API format. For more, see http://jsonapi.org",
@@ -346,7 +350,7 @@
           "$ref": "#/definitions/studyPrimaryDesign"
         },
         "study_type": {
-          "type": "string"
+          "$ref": "#/definitions/studyType"
         },
         "study_type_description": {
           "type": "string"

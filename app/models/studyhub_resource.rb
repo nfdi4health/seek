@@ -112,6 +112,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_resource_use_rights
+    return unless is_ui_request?  || self.errors.messages.blank?
     unless resource_json['resource_use_rights_label']&.start_with?('CC')
       REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
         errors.add(name.to_sym, "When the value of 'resource_use_rights_label' is '#{resource_json['resource_use_rights_label']}', '#{name}' is not needed.") if resource_json.has_key? name
@@ -121,7 +122,8 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def check_urls
 
-    resource_json['resource_keywords'].each_with_index do |keyword,index|
+    return unless is_ui_request?  || self.errors.messages.blank?
+    resource_json['resource_keywords']&.each_with_index do |keyword,index|
       keyword['resource_keywords_label_code']
       unless validate_url(keyword['resource_keywords_label_code']&.strip)
         errors.add("resource_keywords[#{index}]['resource_keywords_label_code']".to_sym, 'is not a url.')
@@ -147,6 +149,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_numericality
+    return unless is_ui_request?  || self.errors.messages.blank?
     unless resource_json['study_design'].blank?
       INTEGER_ATTRIBUTES.each do |value|
         if resource_json['study_design'][value].blank?
@@ -177,7 +180,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
 
   def end_date_is_after_start_date
-
+    return unless is_ui_request?  || self.errors.messages.blank?
     start_date = resource_json['study_design']['study_start_date']
     end_date = resource_json['study_design']['study_end_date']
 
@@ -264,7 +267,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_required_singular_attributes
-
+    return unless is_ui_request?  || self.errors.messages.blank?
     required_fields ={}
     required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
     required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL if is_studytype?
@@ -281,6 +284,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_required_multi_attributes
+    return unless is_ui_request?  || self.errors.messages.blank?
     resource_json['study_design']['study_conditions']&.each_with_index  do |condition, index|
       if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
         errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
@@ -372,8 +376,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def covert_to_mds_date_format
 
-    Rails.logger.info("Model:covert_to_mds_date_type")
-    self.resource_json['ids'].each_with_index do |id,index|
+    self.resource_json['ids']&.each_with_index do |id,index|
       self.resource_json['ids'][index]['id_date'] = convert_date_format(id['id_date']) unless id['id_date'].blank?
     end
 
