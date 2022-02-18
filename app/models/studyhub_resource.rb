@@ -32,7 +32,7 @@ class StudyhubResource < ApplicationRecord
   before_save :update_working_stage, on:  [:create, :update]
   before_save :covert_to_mds_date_format, on:  [:create, :update], if: :is_ui_request?
   before_validation :set_resource_titles_to_title
-  after_validation :convert_label_to_id_for_multi_select_attribute
+  after_validation :convert_label_to_id_for_multi_select_attribute, unless: :is_ui_request?
 
 
   # *****************************************************************************

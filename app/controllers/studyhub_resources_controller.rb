@@ -9,7 +9,6 @@ class StudyhubResourcesController < ApplicationController
   before_action :find_assets, only: [:index]
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
-  # before_action :check_resource_json, only: [:create, :update], if: :json_api_request?
 
   api_actions :index, :show, :create, :update, :destroy
 
@@ -124,14 +123,11 @@ class StudyhubResourcesController < ApplicationController
 
   # PUT /studyhub_resources/1
   def update
-
-    @studyhub_resource.update_attributes(studyhub_resource_params)
     update_sharing_policies @studyhub_resource
     update_relationships(@studyhub_resource,params)
 
     respond_to do |format|
-
-      if @studyhub_resource.save
+      if  @studyhub_resource.update_attributes(studyhub_resource_params)
         flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully updated.<br/>".html_safe
         flash[:notice] += get_submit_notice if request_to_submit?
 
