@@ -6,23 +6,23 @@ max_studyhub_study_json_text = '{
         "resource_titles": [
           {
             "title": "National Pandemic Cohort Network - High-resolution Platform (HAP) Analysis of the Pathophysiology and Pathology of Coronavirus Disease 2019 (COVID-19), Including Chronic Morbidity",
-            "title_language": "EN"
+            "title_language": "EN (English)"
           }
         ],
         "resource_acronyms": [
           {
             "acronym": "Not existing",
-            "acronym_language": "EN"
+            "acronym_language": "EN (English)"
           }
         ],
         "resource_descriptions": [
           {
             "description": "This is a description",
-            "description_language": "EN"
+            "description_language": "EN (English)"
           },
           {
             "description": "This is a description1",
-            "description_language": "EN"
+            "description_language": "EN (English)"
           }
         ],
         "resource_keywords": [
@@ -35,8 +35,7 @@ max_studyhub_study_json_text = '{
             "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D000086382"
           }
         ],
-        "resource_language": [
-        ],
+        "resource_language": ["EN (English)", "DE (German)"],
         "resource_web_page": "https://napkon.de/1",
         "resource_version": "",
         "resource_format": "",
