@@ -21,6 +21,10 @@ namespace :seek_dev_nfdi4health do
     SampleControlledVocabTerm.where(label: 'DE').first.update_attributes(label:'DE (German)') unless SampleControlledVocabTerm.where(label: 'EN').blank?
     SampleControlledVocabTerm.where(label: 'ES').first.update_attributes(label:'ES (Spanish)') unless SampleControlledVocabTerm.where(label: 'EN').blank?
     SampleControlledVocabTerm.where(label: 'FR').first.update_attributes(label:'FR (French)') unless SampleControlledVocabTerm.where(label: 'EN').blank?
+    puts 'Update NFDI4Health Study Status When Intervention ... '
+    SampleControlledVocabTerm.where(label: 'Follow-up ongoing').first.update_attributes(label:'follow-up ongoing') unless SampleControlledVocabTerm.where(label: 'Follow-up ongoing').blank?
+
+
   end
 
   task(update_resource_json: :environment) do
@@ -198,6 +202,14 @@ namespace :seek_dev_nfdi4health do
       json['resource_descriptions'].each do |description|
         # pp description['description_language']
         description['description_language'] = update_language_text(description['description_language'])
+      end
+
+
+      puts ' ----------------------------------------- '
+      puts 'step 11:  update Integer and Float type properties...'
+
+      if sr.is_studytype?
+        json['study_design']['study_status_when_intervention'] = 'follow-up ongoing' if json['study_design']['study_status_when_intervention'] == 'Follow-up ongoing'
       end
 
 
