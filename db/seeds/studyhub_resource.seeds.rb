@@ -66,7 +66,7 @@ disable_authorization_checks do
 
   # resource_language
   resource_language_cv = SampleControlledVocab.where(title: 'NFDI4Health Resource Language').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(%w[EN DE FR ES Other])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['EN (English)', 'DE (German)','ES (Spanish)','FR (French)','Other'])
   )
 
   # resource_use_rights_label

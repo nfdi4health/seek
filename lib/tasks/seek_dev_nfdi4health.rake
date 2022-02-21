@@ -13,6 +13,16 @@ namespace :seek_dev_nfdi4health do
     end
   end
 
+  task(update_studyhub_resource_seeds: :environment) do
+
+    puts 'Update studyhub resource seeds ... '
+    puts 'Update NFDI4Health Resource Language ... '
+    SampleControlledVocabTerm.where(label: 'EN').first.update_attributes(label:'EN (English)')
+    SampleControlledVocabTerm.where(label: 'DE').first.update_attributes(label:'DE (German)')
+    SampleControlledVocabTerm.where(label: 'ES').first.update_attributes(label:'ES (Spanish)')
+    SampleControlledVocabTerm.where(label: 'FR').first.update_attributes(label:'FR (French)')
+  end
+
   task(update_resource_json: :environment) do
 
     puts 'Update resource_json ... '
@@ -170,7 +180,24 @@ namespace :seek_dev_nfdi4health do
           end
         end
         json['study_design'].delete('study_target_follow-up_duration') if json['study_design']['study_primary_design'] == "Interventional"
+      end
 
+      puts ' ----------------------------------------- '
+      puts 'step 10: update the label texts for language...'
+
+      json['resource_titles'].each do |title|
+        # pp title['title_language']
+        title['title_language']= update_language_text(title['title_language'])
+      end
+
+      json['resource_acronyms'].each do |acronym|
+        # pp acronym['acronym_language']
+        acronym['acronym_language'] = update_language_text(acronym['acronym_language'])
+      end
+
+      json['resource_descriptions'].each do |description|
+        # pp description['description_language']
+        description['description_language'] = update_language_text(description['description_language'])
       end
 
 
@@ -303,3 +330,16 @@ namespace :seek_dev_nfdi4health do
   end
 end
 
+def update_language_text(language)
+  case language[0, 2]
+  when 'EN'
+    language = 'EN (English)'
+  when 'DE'
+    language = 'DE (German)'
+  when 'ES'
+    language = 'ES (Spanish)'
+  when 'FR'
+    language = 'FR (French)'
+  end
+  language
+end
