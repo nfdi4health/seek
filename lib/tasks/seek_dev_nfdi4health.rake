@@ -17,10 +17,10 @@ namespace :seek_dev_nfdi4health do
 
     puts 'Update studyhub resource seeds ... '
     puts 'Update NFDI4Health Resource Language ... '
-    SampleControlledVocabTerm.where(label: 'EN').first.update_attributes(label:'EN (English)')
-    SampleControlledVocabTerm.where(label: 'DE').first.update_attributes(label:'DE (German)')
-    SampleControlledVocabTerm.where(label: 'ES').first.update_attributes(label:'ES (Spanish)')
-    SampleControlledVocabTerm.where(label: 'FR').first.update_attributes(label:'FR (French)')
+    SampleControlledVocabTerm.where(label: 'EN').first.update_attributes(label:'EN (English)') unless SampleControlledVocabTerm.where(label: 'EN').blank?
+    SampleControlledVocabTerm.where(label: 'DE').first.update_attributes(label:'DE (German)') unless SampleControlledVocabTerm.where(label: 'EN').blank?
+    SampleControlledVocabTerm.where(label: 'ES').first.update_attributes(label:'ES (Spanish)') unless SampleControlledVocabTerm.where(label: 'EN').blank?
+    SampleControlledVocabTerm.where(label: 'FR').first.update_attributes(label:'FR (French)') unless SampleControlledVocabTerm.where(label: 'EN').blank?
   end
 
   task(update_resource_json: :environment) do
