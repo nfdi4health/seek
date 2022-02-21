@@ -30,7 +30,7 @@
       ]
     },
     "resourceLanguage": {
-      "enum": ["EN","DE","FR","ES","Other"]
+      "enum": ["EN (English)", "DE (German)","ES (Spanish)","FR (French)","Other"]
     },
     "resourceUseRightsLabel": {
       "enum": [
