@@ -13,7 +13,7 @@
                       :help_text => " In case of a non-interventional study, the primary strategy for participant identification and follow-up.") do %>
 
     <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign Non Interventional Study",supported_type:@studyhub_resource.class.name).first %>
-    <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource['non_interventional_study_design'],:f => f,  collapsed: collapsed } %>
+    <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource.nil? ? nil : resource['non_interventional_study_design'] ,:f => f,  collapsed: collapsed } %>
   <% end %>
 
 
@@ -21,7 +21,7 @@
                     :help_text => "In case of an interventional study, the strategy for assigning interventions to participants.") do %>
 
     <% cmt = CustomMetadataType.where(title:"NFDI4Health Studyhub Resource StudyDesign Interventional Study",supported_type:@studyhub_resource.class.name).first %>
-    <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource['interventional_study_design'], :f => f,  collapsed: collapsed } %>
+    <%= render partial: 'studyhub_resources/studyhub_custom_metadata_fields', locals: { custom_metadata_type: cmt, resource: resource.nil? ? nil : resource['interventional_study_design'], :f => f,  collapsed: collapsed } %>
   <% end %>
 
 
