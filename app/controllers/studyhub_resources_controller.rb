@@ -325,12 +325,17 @@ class StudyhubResourcesController < ApplicationController
   def parse_custom_metadata_attributes(params)
 
     cm_resource_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource General')
-    cm_study_design_attributes = get_study_design_attributes(params)
+    cm_study_design_general_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign General')
+    cm_study_design_non_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Non Interventional Study')
+    cm_study_design_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Interventional Study')
 
     unless params[:custom_metadata_attributes].nil?
 
       resource = {}
       study_design = {}
+
+      study_design['non_interventional_study_design'] = {}
+      study_design['interventional_study_design'] = {}
 
       params[:custom_metadata_attributes][:data].keys.each do |key|
         value = if StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.values.flatten.include? key
@@ -347,10 +352,26 @@ class StudyhubResourcesController < ApplicationController
 
         if cm_resource_attributes.include? key
           resource[key] = value
-        elsif cm_study_design_attributes.include? key
+        elsif cm_study_design_general_attributes.include? key
           study_design[key] = value
+        elsif cm_study_design_non_interventional_attributes.include? key
+          study_design['non_interventional_study_design'][key] = value
+        elsif cm_study_design_interventional_attributes.include? key
+          study_design['interventional_study_design'][key] = value
         end
       end
+
+      if @rt.is_studytype?
+        study_design = case study_design['study_primary_design']
+                       when 'Non-interventional'
+                         study_design.except('interventional_study_design')
+                       when 'Interventional'
+                         study_design.except('non_interventional_study_design')
+                       else
+                         study_design.except('interventional_study_design').except('non_interventional_study_design')
+                       end
+      end
+
     end
     [resource, study_design]
     end
@@ -366,23 +387,6 @@ class StudyhubResourcesController < ApplicationController
 
   def  get_custom_metadata_attributes(title)
     CustomMetadataType.where(title:title).first.custom_metadata_attributes.map(&:title)
-  end
-
-  def get_study_design_attributes(params)
-
-    cm_study_design_general_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign General')
-    cm_study_design_non_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Non Interventional Study')
-    cm_study_design_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Interventional Study')
-
-    cm_study_design_attributes = cm_study_design_general_attributes
-    type = json_api_request? ? params[:resource_json][:study_design]['study_primary_design'] : params[:custom_metadata_attributes][:data]['study_primary_design']
-    case type
-    when StudyhubResource::INTERVENTIONAL
-      cm_study_design_attributes += cm_study_design_interventional_attributes
-    when StudyhubResource::NON_INTERVENTIONAL
-      cm_study_design_attributes += cm_study_design_non_interventional_attributes
-    end
-    cm_study_design_attributes
   end
 
   def parse_resource_keywords(params)
@@ -522,7 +526,7 @@ class StudyhubResourcesController < ApplicationController
       type = params[:studyhub_resource][:resource_json][:resource_type]
       raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong." if StudyhubResourceType.where(key:type).first.nil?
 
-      if params[:action]=='update'
+      if params[:action] == 'update'
         unless StudyhubResource.find(params[:id]).studyhub_resource_type.key == type
           raise ArgumentError, "A PUT request can not change 'resource_type'."
         end
