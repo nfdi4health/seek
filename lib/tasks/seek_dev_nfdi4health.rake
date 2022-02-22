@@ -213,6 +213,23 @@ namespace :seek_dev_nfdi4health do
       end
 
 
+      puts ' ----------------------------------------- '
+      puts 'step 12:  update the property "study_time_perspective" ...'
+
+      if sr.is_studytype?
+
+        if (json['study_design'].key? 'study_time_perspective') && (json['study_design']['study_time_perspective'].is_a? String)
+          json['study_design']['study_time_perspective'] = if json['study_design']['study_time_perspective'].blank?
+                                                             []
+                                                           else
+                                                             [SampleControlledVocabTerm.where(label: json['study_design']['study_time_perspective'] ).first.id.to_s]
+                                                           end
+
+        end
+        # pp json['study_design']['study_time_perspective'] if json['study_design'].key? 'study_time_perspective'
+      end
+
+
       sr.update_column(:resource_json, json)
 
     end

@@ -66,7 +66,7 @@ class StudyhubResource < ApplicationRecord
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
   MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_language],
-                                 'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_biospecimen_retention] }.freeze
+                                 'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_biospecimen_retention study_time_perspective] }.freeze
 
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
