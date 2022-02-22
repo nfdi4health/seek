@@ -8,12 +8,12 @@
 
 <% if resource['study_primary_design'] == 'Interventional' %>
 <div id="study_design_general_interventional" >
-  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt_interventional, resource: resource['interventional_study_design'] } %>
+  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt_interventional, resource: resource } %>
 </div>
 <% end %>
 
 <% if resource['study_primary_design'] == 'Non-interventional' %>
 <div id="study_design_general_non_interventional" >
-  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt_non_interventional, resource: resource['non_interventional_study_design'] } %>
+  <%= render partial: 'studyhub_resources/key_value_attributes', locals: { custom_metadata_type: cmt_non_interventional, resource: resource } %>
 </div>
 <% end %>
