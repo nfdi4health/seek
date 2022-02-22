@@ -1,6 +1,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require_relative '../lib/rack/catch_json_parse_errors'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -54,6 +55,7 @@ module SEEK
                           include: %w(text/html application/xml application/json text/css application/javascript)
     config.middleware.use Rack::Attack
     config.middleware.use I18n::JS::Middleware
+    config.middleware.insert_before Rack::Head, CatchJsonParseErrors
 
     config.exceptions_app = self.routes
 
