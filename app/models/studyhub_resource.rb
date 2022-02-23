@@ -394,7 +394,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def convert_label_to_id_for_multi_select_attribute
 
-    return if is_ui_request?
+    return unless errors.messages[:resource_json].empty?
     hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except('study_design')
 
     hash.keys.each do |key|
