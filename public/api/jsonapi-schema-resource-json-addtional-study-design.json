@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Studyhub Resource JSON API Schema for the Properties of Study Design",
   "definitions": {
     "nonEmptyString": {
@@ -139,6 +139,134 @@
     },
     "studyTimePerspective": {
       "enum": ["Retrospective", "Prospective", "Cross-sectional", "Other",""]
+    },
+    "nonInterventionalStudyDesign": {
+      "type": "object",
+      "properties": {
+        "study_time_perspective": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": [
+            {
+              "$ref": "#/definitions/studyTimePerspective"
+            }
+          ]
+        },
+        "study_target_follow-up_duration": {
+          "type": ["number","null"]
+        },
+        "study_biospecimen_retention": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/studyBiospecimenRetention"
+          }
+        },
+        "study_biospecomen_description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "study_time_perspective",
+        "study_target_follow-up_duration",
+        "study_biospecimen_retention",
+        "study_biospecomen_description"
+      ]
+    },
+    "interventionalStudyDesign": {
+      "type": "object",
+      "properties": {
+        "study_primary_purpose": {
+          "$ref": "#/definitions/studyPrimaryPurpose"
+        },
+        "study_phase": {
+          "$ref": "#/definitions/studyPhase"
+        },
+        "study_masking": {
+          "type": ["boolean", "null"]
+        },
+        "study_masking_roles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/studyMaskingRoles"
+          }
+        },
+        "study_masking_description": {
+          "type": "string"
+        },
+        "study_allocation": {
+          "$ref": "#/definitions/studyAllocation"
+        },
+        "study_off_label_use": {
+          "$ref": "#/definitions/studyOffLabelUse"
+        },
+        "interventional_study_design_arms": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "study_arm_group_label": {
+                  "type": "string"
+                },
+                "study_arm_group_type": {
+                  "$ref": "#/definitions/studyArmGroupType"
+                },
+                "study_arm_group_description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "study_arm_group_label",
+                "study_arm_group_type",
+                "study_arm_group_description"
+              ]
+            }
+          ]
+        },
+        "interventional_study_design_interventions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "study_intervention_name": {
+                  "type": "string"
+                },
+                "study_intervention_type": {
+                  "$ref": "#/definitions/studyInterventionType"
+                },
+                "study_intervention_description": {
+                  "type": "string"
+                },
+                "study_intervention_arm_group_label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "study_intervention_name",
+                "study_intervention_type",
+                "study_intervention_description",
+                "study_intervention_arm_group_label"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "study_primary_purpose",
+        "study_phase",
+        "study_masking",
+        "study_masking_roles",
+        "study_masking_description",
+        "study_allocation",
+        "study_off_label_use",
+        "interventional_study_design_arms",
+        "interventional_study_design_interventions"
+      ]
     }
   },
   "description": "This is a schema for requests in the JSON API format. For more, see http://jsonapi.org",
@@ -173,9 +301,18 @@
                   "$ref": "#/definitions/studyConditionsClassification"
                 },
                 "study_conditions_classification_code": {
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "iri"
+                    },
+                    {
+                      "$ref": "#/definitions/emptyString"
+                    }
+                  ]
                 }
               },
+              "additionalProperties": false,
               "required": [
                 "study_conditions",
                 "study_conditions_classification",
@@ -315,6 +452,7 @@
                   "type": "string"
                 }
               },
+              "additionalProperties": false,
               "required": [
                 "study_outcome_type",
                 "study_outcome_title",
@@ -349,108 +487,69 @@
         "study_data_sharing_plan_url": {
           "type": "string"
         },
-        "study_time_perspective": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": [
-            {
-              "$ref": "#/definitions/studyTimePerspective"
-            }
-          ]
+
+        "non_interventional_study_design": {
+          "$ref": "#/definitions/nonInterventionalStudyDesign"
         },
-        "study_target_follow-up_duration": {
-          "type": ["number","null"]
-        },
-        "study_biospecimen_retention": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/definitions/studyBiospecimenRetention"
-          }
-        },
-        "study_biospecomen_description": {
-          "type": "string"
-        },
-        "study_primary_purpose": {
-          "$ref": "#/definitions/studyPrimaryPurpose"
-        },
-        "study_phase": {
-          "$ref": "#/definitions/studyPhase"
-        },
-        "study_masking": {
-          "type": ["boolean", "null"]
-        },
-        "study_masking_roles": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/definitions/studyMaskingRoles"
-          }
-        },
-        "study_masking_description": {
-          "type": "string"
-        },
-        "study_allocation": {
-          "$ref": "#/definitions/studyAllocation"
-        },
-        "study_off_label_use": {
-          "$ref": "#/definitions/studyOffLabelUse"
-        },
-        "interventional_study_design_arms": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": [
-            {
-              "type": "object",
-              "properties": {
-                "study_arm_group_label": {
-                  "type": "string"
-                },
-                "study_arm_group_type": {
-                  "$ref": "#/definitions/studyArmGroupType"
-                },
-                "study_arm_group_description": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "study_arm_group_label",
-                "study_arm_group_type",
-                "study_arm_group_description"
-              ]
-            }
-          ]
-        },
-        "interventional_study_design_interventions": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": [
-            {
-              "type": "object",
-              "properties": {
-                "study_intervention_name": {
-                  "type": "string"
-                },
-                "study_intervention_type": {
-                  "$ref": "#/definitions/studyInterventionType"
-                },
-                "study_intervention_description": {
-                  "type": "string"
-                },
-                "study_intervention_arm_group_label": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "study_intervention_name",
-                "study_intervention_type",
-                "study_intervention_description",
-                "study_intervention_arm_group_label"
-              ]
-            }
-          ]
+
+        "interventional_study_design": {
+          "$ref": "#/definitions/interventionalStudyDesign"
         }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "study_primary_design": { "const": "Interventional" } }
+          },
+          "then": {
+            "required": [
+              "interventional_study_design"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": ["interventional_study_design"]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "study_primary_design": { "const": "Non-interventional" } }
+          },
+          "then": {
+            "required": [
+              "non_interventional_study_design"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": ["non_interventional_study_design"]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "study_primary_design": { "const": "" } }
+          },
+          "then": {
+            "allOf": [
+              {
+                "not": {
+                  "required": [
+                    "non_interventional_study_design"
+                  ]
+                },
+                "not": {
+                  "required": [
+                    "interventional_study_design"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false,
       "required": [
         "study_primary_design",
         "study_type",
@@ -495,23 +594,9 @@
         "study_data_sharing_plan_supporting_information",
         "study_data_sharing_plan_time_frame",
         "study_data_sharing_plan_access_criteria",
-        "study_data_sharing_plan_url",
-
-        "study_time_perspective",
-        "study_target_follow-up_duration",
-        "study_biospecimen_retention",
-        "study_biospecomen_description",
-
-        "study_primary_purpose",
-        "study_phase",
-        "study_masking",
-        "study_masking_roles",
-        "study_masking_description",
-        "study_allocation",
-        "study_off_label_use",
-        "interventional_study_design_arms",
-        "interventional_study_design_interventions"
+        "study_data_sharing_plan_url"
       ]
     }
   }
+
 }

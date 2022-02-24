@@ -37,6 +37,8 @@ gem 'jbuilder'
 gem 'jbuilder-json_api'
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'json-schema'
+gem 'json_schemer'
+
 gem 'json-diff'
 gem 'rubyzip'
 

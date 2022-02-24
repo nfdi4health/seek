@@ -89,7 +89,7 @@ max_studyhub_study_json_text = '{
           }
         ],
         "study_design": {
-          "study_primary_design": "Non-interventional",
+          "study_primary_design": "Interventional",
           "study_type": "Cohort",
           "study_type_description": "No additional information is provided.",
           "study_conditions": [
@@ -147,32 +147,30 @@ max_studyhub_study_json_text = '{
           "study_data_sharing_plan_time_frame": "Information is not provided.",
           "study_data_sharing_plan_access_criteria": "Information is not provided.",
           "study_data_sharing_plan_url": "",
-          "study_time_perspective": ["1149"],
-          "study_target_follow-up_duration": null,
-          "study_biospecimen_retention": [],
-          "study_biospecomen_description": "Saliva, Urin, Oropharyngeal / Nasopharyngeal swab / Bronchoalveolar lavage (BAL) / Endotracheal aspirate (ENTA), whole blood",
-          "study_primary_purpose": "Treatment",
-          "study_phase": "",
-          "study_masking": null,
-          "study_masking_roles": [],
-          "study_masking_description": "",
-          "study_allocation": "",
-          "study_off_label_use": "",
-          "interventional_study_design_arms": [
-            {
-              "study_arm_group_label": "Name of the arm",
-              "study_arm_group_type": "Active comparator",
-              "study_arm_group_description": "Additional information about the arm"
-            }
-          ],
-          "interventional_study_design_interventions": [
-            {
-              "study_intervention_name": "Name of the intervention",
-              "study_intervention_type": "Biological/Vaccine",
-              "study_intervention_description": "Additional information about the intervention",
-              "study_intervention_arm_group_label": "Associated arm"
-            }
-          ]
+          "interventional_study_design":{
+            "study_primary_purpose": "Treatment",
+            "study_phase": "",
+            "study_masking": null,
+            "study_masking_roles": [],
+            "study_masking_description": "",
+            "study_allocation": "",
+            "study_off_label_use": "",
+            "interventional_study_design_arms": [
+              {
+                "study_arm_group_label": "Name of the arm",
+                "study_arm_group_type": "Active comparator",
+                "study_arm_group_description": "Additional information about the arm"
+              }
+            ],
+            "interventional_study_design_interventions": [
+              {
+                "study_intervention_name": "Name of the intervention",
+                "study_intervention_type": "Biological/Vaccine",
+                "study_intervention_description": "Additional information about the intervention",
+                "study_intervention_arm_group_label": "Associated arm"
+              }
+            ]
+          }
         },
         "provenance": {
           "data_source": "ICTRP"

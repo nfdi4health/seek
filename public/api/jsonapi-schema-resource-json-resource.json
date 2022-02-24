@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Studyhub Resource JSON API Schema for the Properties of Resource",
   "definitions": {
     "nonEmptyString": {
@@ -50,14 +50,14 @@
         "Sponsor (primary)", "Sponsor (secondary)", "Sponsor-Investigator", "Data collector", "Data curator",
         "Data manager", "Distributor", "Editor", "Hosting institution", "Producer", "Project leader", "Project manager",
         "Project member", "Publisher", "Registration agency", "Registration authority", "Related person", "Researcher",
-        "Research group", "Rights holder", "Supervisor", "Work package leader", "Other"
+        "Research group", "Rights holder", "Supervisor", "Work package leader", "Other",""
       ]
     },
     "roleNameType": {
       "enum": ["Personal","Organisational"]
     },
     "roleNamePersonalTitle": {
-      "enum": ["Mr.", "Ms.", "Dr.", "Prof. Dr.", "Other"]
+      "enum": ["Mr.", "Ms.", "Dr.", "Prof. Dr.", "Other",""]
     },
     "idType": {
       "enum": ["arXiv", "bibcode", "DOI", "EAN13", "EISSN", "Handle", "ISBN", "ISSN", "ISTC", "LISSN", "LSID", "PMID",
@@ -74,7 +74,7 @@
         "describes", "has metadata", "is metadata for", "has version", "is version of", "is new version of", "is previous version of",
         "is part of", "has part", "is referenced by", "references", "is documented by", "documents", "is compiled by", "compiles",
         "is variant form of", "is original form of", "is identical to", "is reviewed by", "reviews", "is derived from", "is source of",
-        "is required by", "requires", "is obsoleted by", "obsoletes", "has grant number", "has alternate ID"]
+        "is required by", "requires", "is obsoleted by", "obsoletes", "has grant number", "has alternate ID",""]
     }
   },
   "description": "This is a schema for requests in the JSON API format. For more, see http://jsonapi.org",
@@ -98,7 +98,11 @@
   ],
   "properties": {
     "resource_type": {
-      "type": "string"
+      "enum": ["Study", "Substudy/Data collection event", "Dataset", "Study protocol", "Protocol amendment", "Data dictionary", "Informed consent form", "Patient information sheet", "Manual of operations (SOPs)", "Statistical analysis plan",
+        "Data management plan", "Case report form", "Code book", "Questionnaire", "Interview scheme and themes",
+        "Observation guide", "Discussion guide", "Participant tasks", "Other data collection instrument",
+        "Other study document",
+        "Other"]
     },
     "resource_type_general": {
       "$ref": "#/definitions/resourceTypeGeneral"
@@ -117,6 +121,7 @@
               "$ref": "#/definitions/resourceLanguage"
             }
           },
+          "additionalProperties": false,
           "required": [
             "title",
             "title_language"
@@ -138,6 +143,7 @@
               "$ref": "#/definitions/resourceLanguage"
             }
           },
+          "additionalProperties": false,
           "required": [
             "acronym",
             "acronym_language"
@@ -159,6 +165,7 @@
               "$ref": "#/definitions/resourceLanguage"
             }
           },
+          "additionalProperties": false,
           "required": [
             "description",
             "description_language"
@@ -177,9 +184,18 @@
               "type": "string"
             },
             "resource_keywords_label_code": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "iri"
+                },
+                {
+                  "$ref": "#/definitions/emptyString"
+                }
+              ]
             }
           },
+          "additionalProperties": false,
           "required": [
             "resource_keywords_label",
             "resource_keywords_label_code"
@@ -195,7 +211,15 @@
       }
     },
     "resource_web_page": {
-      "type": "string"
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "$ref": "#/definitions/emptyString"
+        }
+      ]
     },
     "resource_version": {
       "type": "string"
@@ -234,6 +258,7 @@
           "type": "string"
         }
       },
+      "additionalProperties": false,
       "required": [
         "data_source"
       ]
@@ -247,16 +272,6 @@
     }
   },
   "role": {
-    "oneOf": [
-      {
-        "$ref": "#/role_name_type_personal"
-      },
-      {
-        "$ref": "#/role_name_type_organisational"
-      }
-    ]
-  },
-  "role_name_type_personal": {
     "type": "object",
     "properties": {
       "role_type": {
@@ -264,6 +279,44 @@
       },
       "role_name_type": {
         "$ref": "#/definitions/roleNameType"
+      },
+      "role_email": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "$ref": "#/definitions/emptyString"
+          }
+        ]
+      },
+      "role_phone": {
+        "type": "string"
+      },
+      "role_affiliation_name": {
+        "type": "string"
+      },
+      "role_affiliation_address": {
+        "type": "string"
+      },
+      "role_affiliation_web_page": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "uri"
+          },
+          {
+            "$ref": "#/definitions/emptyString"
+          }
+        ]
+      },
+      "role_affiliation_identifiers": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/role_affiliation_identifier"
+        }
       },
       "role_name_personal_given_name": {
         "type": "string"
@@ -281,91 +334,93 @@
           "$ref": "#/role_name_identifier"
         }
       },
-      "role_email": {
-        "type": "string"
-      },
-      "role_phone": {
-        "type": "string"
-      },
-      "role_affiliation_name": {
-        "type": "string"
-      },
-      "role_affiliation_address": {
-        "type": "string"
-      },
-      "role_affiliation_web_page": {
-        "type": "string"
-      },
-      "role_affiliation_identifiers": {
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-          "$ref": "#/role_affiliation_identifier"
-        }
-      }
-    },
-    "required": [
-      "role_type",
-      "role_name_type",
-      "role_name_personal_given_name",
-      "role_name_personal_family_name",
-      "role_name_personal_title",
-      "role_name_identifiers",
-      "role_email",
-      "role_phone",
-      "role_affiliation_name",
-      "role_affiliation_address",
-      "role_affiliation_web_page",
-      "role_affiliation_identifiers"
-    ]
-  },
-  "role_name_type_organisational": {
-    "type": "object",
-    "properties": {
-      "role_type": {
-        "$ref": "#/definitions/roleType"
-      },
-      "role_name_type": {
-        "$ref": "#/definitions/roleNameType"
-      },
       "role_name_organisational": {
         "type": "string"
-      },
-      "role_email": {
-        "type": "string"
-      },
-      "role_phone": {
-        "type": "string"
-      },
-      "role_affiliation_name": {
-        "type": "string"
-      },
-      "role_affiliation_address": {
-        "type": "string"
-      },
-      "role_affiliation_web_page": {
-        "type": "string"
-      },
-      "role_affiliation_identifiers": {
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-          "$ref": "#/role_affiliation_identifier"
-        }
       }
     },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "role_name_type": { "const": "Personal" } }
+        },
+        "then": {
+          "allOf":[
+            {
+              "required": [
+                "role_name_personal_given_name",
+                "role_name_personal_family_name",
+                "role_name_personal_title",
+                "role_name_identifiers"
+              ]
+            },
+            {
+              "not": {
+                "required": [
+                  "role_name_organisational"
+                ]
+              }
+            }
+          ]
+        },
+        "else": {
+        }
+      },
+      {
+        "if": {
+          "properties": { "role_name_type": { "const": "Organisational" } }
+        },
+        "then": {
+          "allOf": [
+            {
+              "required": ["role_name_organisational"]
+            },
+            {
+              "not": {
+                "required": [
+                  "role_name_personal_title"
+                ]
+              }
+            },
+            {
+              "not": {
+                "required": [
+                  "role_name_personal_given_name"
+                ]
+              }
+            },
+            {
+              "not": {
+                "required": [
+                  "role_name_personal_family_name"
+                ]
+              }
+            },
+            {
+              "not": {
+                "required": [
+                  "role_name_identifiers"
+                ]
+              }
+            }
+          ]
+        },
+        "else": {
+        }
+      }
+    ],
     "required": [
       "role_type",
       "role_name_type",
-      "role_name_organisational",
       "role_email",
       "role_phone",
       "role_affiliation_name",
       "role_affiliation_address",
       "role_affiliation_web_page",
       "role_affiliation_identifiers"
-    ]
+    ],
+    "additionalProperties": false
   },
+
   "role_name_identifier": {
     "type": "object",
     "properties": {
@@ -376,6 +431,7 @@
         "enum": ["ORCID","ROR","GRID","ISNI"]
       }
     },
+    "additionalProperties": false,
     "required": [
       "role_name_identifier",
       "role_name_identifier_scheme"
@@ -391,6 +447,7 @@
         "enum": ["ROR","GRID","ISNI"]
       }
     },
+    "additionalProperties": false,
     "required": [
       "role_affiliation_identifier",
       "role_affiliation_identifier_scheme"
@@ -412,6 +469,7 @@
       "id_relation_type",
       "id_resource_type_general"
     ],
+    "additionalProperties": false,
     "properties": {
       "id_id": {
         "type": "string"

@@ -1,4 +1,4 @@
-require 'json-schema'
+require 'json_schemer'
 
 class ResourceJsonValidator < ActiveModel::EachValidator
 
@@ -11,25 +11,39 @@ class ResourceJsonValidator < ActiveModel::EachValidator
     # value => {"resource_titles"=>[{"title"=>"National Pandemic Cohort Network ns, echocardiography, external laboratory data).
 
     Rails.logger.info('Validator:starting to check resource_json............')
+    schema = JSONSchemer.schema(File.read(JSONAPI_SCHEMA_FILE_PATH))
 
-    begin
-      Rails.logger.info('Validator:starting to check resource............')
-      JSON::Validator.validate!(JSONAPI_SCHEMA_FILE_PATH, value)
-    rescue JSON::Schema::ValidationError => e
-      Rails.logger.info("+++++++++++++++++++++++++")
-      Rails.logger.info("e:"+e.message)
-      record.errors.add(attribute.to_sym, e.message)
+    unless schema.valid?(value)
+      schema.validate(value).each do |v|
+        Rails.logger.info("- #{nice_error v}")
+        record.errors.add(attribute.to_sym, (nice_error v))
+      end
     end
 
     if record.is_studytype?
-      begin
-        Rails.logger.info('Validator:starting to check study design............')
-        JSON::Validator.validate!(JSONAPI_SCHEMA_STUDY_DESIGN_FILE_PATH, value)
-      rescue JSON::Schema::ValidationError => e
-        Rails.logger.info("+++++++++++++++++++++++++")
-        Rails.logger.info("e:"+e.message)
-        record.errors.add(attribute.to_sym, e.message)
+      Rails.logger.info('Validator:starting to check study design............')
+      schema = JSONSchemer.schema(File.read(JSONAPI_SCHEMA_STUDY_DESIGN_FILE_PATH))
+
+      unless schema.valid?(value)
+        schema.validate(value).each do |v|
+          Rails.logger.info("- #{nice_error v}")
+          record.errors.add(attribute.to_sym, (nice_error v))
+        end
       end
+    end
+  end
+
+
+  def nice_error verr
+    case verr['type']
+    when 'required'
+      "Path '#{verr["data_pointer"]}' is missing keys: #{verr["details"]["missing_keys"].join ', '}"
+    when 'format'
+      "Path '#{verr["data_pointer"]}' is not in required format (#{verr["schema"]["format"]})"
+    when 'minLength'
+      "Path '#{verr["data_pointer"]}' is not long enough (min #{verr["schema"]["minLength"]})"
+    else
+      "There is a problem with path '#{verr["data_pointer"]}'. Please check your input."
     end
   end
 
