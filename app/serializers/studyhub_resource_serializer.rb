@@ -6,7 +6,7 @@ class StudyhubResourceSerializer < PCSSerializer
 
   attribute :resource do
     object.resource_json['resource_id'] = object.id.to_s
-    object.resource_json['resource_type'] = object.studyhub_resource_type.try(:key)
+    object.resource_json['resource_type'] = object.studyhub_resource_type.try(:title)
     convert_multiselect_attributes('resource')
     convert_multiselect_attributes('study_design') if object.is_studytype?
     wrap_study_primary_design if object.is_studytype? && !object.resource_json['study_design']['study_primary_design'].blank?
