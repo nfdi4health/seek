@@ -1,7 +1,7 @@
 require 'json'
 
 max_studyhub_study_json_text = '{
-        "resource_type": "study",
+        "resource_type": "Study",
         "resource_type_general": "Other",
         "resource_titles": [
           {
