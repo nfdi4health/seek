@@ -363,9 +363,9 @@ class StudyhubResourcesController < ApplicationController
 
       if @rt.is_studytype?
         study_design = case study_design['study_primary_design']
-                       when 'Non-interventional'
+                       when StudyhubResource::NON_INTERVENTIONAL
                          study_design.except('interventional_study_design')
-                       when 'Interventional'
+                       when StudyhubResource::INTERVENTIONAL
                          study_design.except('non_interventional_study_design')
                        else
                          study_design.except('interventional_study_design').except('non_interventional_study_design')
