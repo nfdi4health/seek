@@ -66,7 +66,10 @@ class StudyhubResource < ApplicationRecord
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
   MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_language],
-                                 'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender study_masking_roles study_biospecimen_retention study_time_perspective] }.freeze
+                                 'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender],
+                                 'interventional_study_design' => %w[study_masking_roles],
+                                 'non_interventional_study_design' => %w[study_time_perspective study_biospecimen_retention]}.freeze
+
 
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
@@ -348,6 +351,14 @@ study_age_max_examined study_target_follow-up_duration].freeze
     self.studyhub_resource_type.is_studytype?
   end
 
+  def get_study_primary_design_type
+      if self.resource_json['study_design'].key? 'study_primary_design'
+        self.resource_json['study_design']['study_primary_design']
+      else
+        nil
+      end
+  end
+
   # if the resource type is study or substudy
   def get_study_primary_design_type
     resource_json['study_design']['study_primary_design']
@@ -395,14 +406,23 @@ study_age_max_examined study_target_follow-up_duration].freeze
   def convert_label_to_id_for_multi_select_attribute
 
     return unless errors.messages[:resource_json].empty?
-    hash =  self.is_studytype? ? MULTISELECT_ATTRIBUTES_HASH : MULTISELECT_ATTRIBUTES_HASH.except('study_design')
 
-    hash.keys.each do |key|
+
+    StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
       StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+
         if key == 'resource'
           self.resource_json[attr] = resource_json[attr].blank? ? [] : resource_json[attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
-        else
-          self.resource_json[key][attr] = resource_json[key][attr].blank? ? []: resource_json[key][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
+        end
+
+        if self.is_studytype?
+          self.resource_json['study_design'][attr] = resource_json['study_design'][attr].blank? ? []: resource_json['study_design'][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
+          case self.get_study_primary_design_type
+          when StudyhubResource::INTERVENTIONAL
+            self.resource_json['study_design']['interventional_study_design'][attr] = resource_json['study_design']['interventional_study_design'][attr].blank? ? []: resource_json['study_design']['interventional_study_design'][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
+          when StudyhubResource::NON_INTERVENTIONAL
+            self.resource_json['study_design']['non_interventional_study_design'][attr] = resource_json['study_design']['non_interventional_study_design'][attr].blank? ? []: resource_json['study_design']['non_interventional_study_design'][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
+          end
         end
       end
     end

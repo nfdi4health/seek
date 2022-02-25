@@ -338,8 +338,13 @@ class StudyhubResourcesController < ApplicationController
       study_design['interventional_study_design'] = {}
 
       params[:custom_metadata_attributes][:data].keys.each do |key|
+
         value = if StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.values.flatten.include? key
+
                   params[:custom_metadata_attributes][:data][key].reject{|x| x.blank?}
+
+
+
                 elsif key == StudyhubResource::RESOURCE_KEYWORDS
                   parse_resource_keywords(params[:custom_metadata_attributes][:data][key])
                 elsif StudyhubResource::MULTI_ATTRIBUTE_FIELDS_LIST_STYLE.include? key

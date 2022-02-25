@@ -7,8 +7,7 @@ class StudyhubResourceSerializer < PCSSerializer
   attribute :resource do
     object.resource_json['resource_id'] = object.id.to_s
     object.resource_json['resource_type'] = object.studyhub_resource_type.try(:title)
-    convert_resource_json('resource')
-    convert_resource_json('study_design') if object.is_studytype?
+    convert_multi_select_attr
     object.resource_json
   end
 
@@ -32,15 +31,33 @@ class StudyhubResourceSerializer < PCSSerializer
     }
   end
 
-  def convert_resource_json(key)
-    StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
-      if key == 'resource'
-        object.resource_json[attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[attr]) unless object.resource_json[attr].blank?
-      else
-        object.resource_json[key][attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[key][attr]) unless object.resource_json[key][attr].blank?
+
+  def convert_multi_select_attr
+      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
+        StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+
+          if key == 'resource'
+            object.resource_json[attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[attr]) unless object.resource_json[attr].blank?
+          end
+
+          if object.is_studytype?
+
+            object.resource_json['study_design'][attr] =
+              convert_id_to_label_for_multi_select_attribute(object.resource_json['study_design'][attr]) unless object.resource_json['study_design'][attr].blank?
+
+            case object.get_study_primary_design_type
+            when StudyhubResource::INTERVENTIONAL
+              object.resource_json['study_design']['interventional_study_design'][attr] =
+  convert_id_to_label_for_multi_select_attribute(object.resource_json['study_design']['interventional_study_design'][attr]) unless object.resource_json['study_design']['interventional_study_design'][attr].blank?
+            when StudyhubResource::NON_INTERVENTIONAL
+              object.resource_json['study_design']['non_interventional_study_design'][attr] =
+                convert_id_to_label_for_multi_select_attribute(object.resource_json['study_design']['non_interventional_study_design'][attr]) unless object.resource_json['study_design']['non_interventional_study_design'][attr].blank?
+          end
+
+          end
+        end
       end
     end
-  end
 
 
   def convert_id_to_label_for_multi_select_attribute(array)
