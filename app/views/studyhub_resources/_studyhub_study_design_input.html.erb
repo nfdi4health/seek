@@ -44,7 +44,7 @@
 
         $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]', SR.setStudyAttributesVisibility);
         $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_status]"]', SR.setStudyAttributesVisibility);
-        $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]', SR.setStudyAttributesVisibility);
+        $j('#studyhub_resource_study_design').on('change', 'input[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]', SR.setStudyAttributesVisibility);
 
         $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]', SR.setStudyPrimaryDesignVisibility);
         $j('#studyhub_resource_study_design').on('change', 'select[name="studyhub_resource[custom_metadata_attributes][data][study_data_sharing_plan_generally]"]', SR.setStudyDataSharingPlanVisibility);

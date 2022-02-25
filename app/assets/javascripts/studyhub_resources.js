@@ -172,8 +172,7 @@ var SR = {
 
         study_primary_design = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
         study_status = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status]"]').val();
-        study_masking = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').val();
-
+        study_masking = $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]:checked').val();
 
         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().hide();
         $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_stage]"]').parent().hide();
@@ -191,7 +190,7 @@ var SR = {
         }
 
 
-        if  (study_masking=="Yes") {
+        if  (study_masking == "true") {
             $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().show();
         }
 
@@ -201,7 +200,8 @@ var SR = {
 
         study_primary_design = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_primary_design]"]').val();
         study_status = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status]"]').val();
-        study_masking = $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]').val();
+        study_masking = $j('input[name="studyhub_resource[custom_metadata_attributes][data][study_masking]"]:checked').val();
+
 
         if  (study_primary_design=="Interventional" && (study_status == "At the planning stage" || study_status.startsWith('Ongoing'))) {
             $j('select[name="studyhub_resource[custom_metadata_attributes][data][study_status_when_intervention]"]').parent().show();
@@ -221,7 +221,7 @@ var SR = {
             $j('textarea[name="studyhub_resource[custom_metadata_attributes][data][study_status_halted_reason]"]').val('');
         }
 
-        if  (study_masking=="Yes") {
+        if  (study_masking =="true") {
             $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().show();
         }else{
             $j('div[name="studyhub_resource[custom_metadata_attributes][data][study_masking_roles]"]').parent().hide();
