@@ -206,7 +206,7 @@ namespace :seek_dev_nfdi4health do
 
 
       puts ' ----------------------------------------- '
-      puts 'step 11:  update Integer and Float type properties...'
+      puts 'step 11:  update study_status_when_intervention value...'
 
       if sr.is_studytype?
         json['study_design']['study_status_when_intervention'] = 'follow-up ongoing' if json['study_design']['study_status_when_intervention'] == 'Follow-up ongoing'
@@ -228,6 +228,57 @@ namespace :seek_dev_nfdi4health do
         end
         # pp json['study_design']['study_time_perspective'] if json['study_design'].key? 'study_time_perspective'
       end
+
+
+      puts ' ----------------------------------------- '
+      puts 'step 13:  restructure the property "non_interventional_study_design" and "interventional_study_design" ...'
+
+      if sr.is_studytype?
+
+        cm_study_design_non_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Non Interventional Study')
+        cm_study_design_interventional_attributes = get_custom_metadata_attributes('NFDI4Health Studyhub Resource StudyDesign Interventional Study')
+
+        study_design = sr.resource_json['study_design']
+
+        case sr.get_study_primary_design_type
+
+        when StudyhubResource::INTERVENTIONAL
+
+          study_design['interventional_study_design']={}
+
+          cm_study_design_interventional_attributes.each do |attr|
+            if study_design.key? attr
+              study_design['interventional_study_design'][attr] = study_design[attr]
+              study_design.delete(attr)
+            end
+          end
+
+
+        when StudyhubResource::NON_INTERVENTIONAL
+          
+          study_design['non_interventional_study_design']={}
+
+          cm_study_design_non_interventional_attributes.each do |attr|
+            if study_design.key? attr
+              study_design['non_interventional_study_design'][attr] = study_design[attr]
+              study_design.delete(attr)
+            end
+          end
+          study_design.delete('interventional_study_design_arms')
+          study_design.delete('interventional_study_design_interventions')
+
+        else
+          delete_cm_attr = cm_study_design_non_interventional_attributes + cm_study_design_interventional_attributes
+          delete_cm_attr.each do |attr|
+            if study_design.key? attr
+              study_design.delete(attr)
+            end
+          end
+        end
+
+      end
+
+
 
 
       sr.update_column(:resource_json, json)
@@ -371,4 +422,8 @@ def update_language_text(language)
     language = 'FR (French)'
   end
   language
+end
+
+def  get_custom_metadata_attributes(title)
+  CustomMetadataType.where(title:title).first.custom_metadata_attributes.map(&:title)
 end
