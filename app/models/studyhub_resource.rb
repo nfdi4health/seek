@@ -318,7 +318,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
       end
     end
 
-    resource_json['study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
+    resource_json['study_design']['interventional_study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
       if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
         errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
       end
