@@ -45,10 +45,9 @@ module StudyhubResourcesHelper
       <tbody>'
       ids.each do |d|
         html += '<tr>'
-        html += '<td class="id_resource_type">' + StudyhubResource.find(d['id_id']).studyhub_resource_type.title + '</td>'
-        html += '<td class="id_id">' + 'NFDI4Health-' + d['id_id'] + '</td>'
-        # html += '<td class="id_title">' + StudyhubResource.find(d["id_id"]).title + '</td>'
-        html += '<td class="id_title">' + (link_to StudyhubResource.find(d['id_id']).title, show_resource_path(StudyhubResource.find(d['id_id']))).to_s + '</td>'
+        html += '<td class="id_resource_type">' + StudyhubResource.find(d['id_identifier']).studyhub_resource_type.title + '</td>'
+        html += '<td class="id_identifier">' + 'NFDI4Health-' + d['id_identifier'] + '</td>'
+        html += '<td class="id_title">' + (link_to StudyhubResource.find(d['id_identifier']).title, show_resource_path(StudyhubResource.find(d['id_identifier']))).to_s + '</td>'
         html += '</tr>'
       end
       html += '</tbody></table></div>'
@@ -75,7 +74,7 @@ module StudyhubResourcesHelper
         html += '<tr>'
         html += '<td class="id_resource_type_general">' + (d['id_resource_type_general'].blank? ? '' : d['id_resource_type_general']) + '</td>'
         html += '<td class="id_type">' + (d['id_type'].blank? ? '' : d['id_type']) + '</td>'
-        html += '<td class="id_id">' + (d['id_id'].blank? ? '' : d['id_id'])  + '</td>'
+        html += '<td class="id_identifier">' + (d['id_identifier'].blank? ? '' : d['id_identifier'])  + '</td>'
         html += '<td class="id_date">' + (d['id_date'].blank? ? '' : d['id_date'])  + '</td>'
         html += '<td class="id_relation_type">' + (d['id_relation_type'].blank? ? '' : d['id_relation_type'].underscore.humanize) + '</td>'
         html += '</tr>'

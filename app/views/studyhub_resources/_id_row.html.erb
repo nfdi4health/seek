@@ -12,16 +12,16 @@
 
   unless studyhub_resource.resource_json.nil?
     ids = studyhub_resource.resource_json['ids']
-    id_id = ids[row_num]["id_id"] unless ids.empty?
-    id_date = (ids.empty? || ids[row_num]["id_date"].nil? || ids[row_num]["id_date"].empty?) ? '' : Date.parse(ids[row_num]["id_date"]).strftime('%Y-%m-%d')
-    id_type = ids[row_num]["id_type"] unless ids.empty?
-    id_relation_type = ids[row_num]["id_relation_type"] unless ids.empty?
-    id_resource_type_general = ids[row_num]["id_resource_type_general"] unless ids.empty?
+    id_identifier = ids[row_num]['id_identifier'] unless ids.empty?
+    id_date = (ids.empty? || ids[row_num]['id_date'].nil? || ids[row_num]['id_date'].empty?) ? '' : Date.parse(ids[row_num]['id_date']).strftime('%Y-%m-%d')
+    id_type = ids[row_num]['id_type'] unless ids.empty?
+    id_relation_type = ids[row_num]['id_relation_type'] unless ids.empty?
+    id_resource_type_general = ids[row_num]['id_resource_type_general'] unless ids.empty?
   end
 
 %>
 
-<% field_name_prefix = "studyhub_resource[resource_json][ids]" %>
+<% field_name_prefix = 'studyhub_resource[resource_json][ids]' %>
 <% allow_row_removal = (index == 0 ? false : true ) %>
 
 <tr class="id-id" data-index="<%= index-%>">
@@ -42,7 +42,7 @@
 
   <td>
     <div class="form-group">
-      <%= f.text_field "#{field_name_prefix}[id_id][#{index}]", :class => "form-control",:value => id_id %>
+      <%= f.text_field "#{field_name_prefix}[id_identifier][#{index}]", :class => "form-control",:value => id_identifier %>
     </div>
   </td>
 
@@ -83,6 +83,6 @@
 
 <script>
 
-    $j('input[name^="<%= field_name_prefix %>[id_id]').change(SR.addAddtionalRequiredIDFields);
+    $j('input[name^="<%= field_name_prefix %>[id_identifier]').change(SR.addAddtionalRequiredIDFields);
 
 </script>

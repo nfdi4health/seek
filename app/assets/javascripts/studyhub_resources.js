@@ -299,7 +299,7 @@ var SR = {
 
         i = 0;
 
-        $j('input[name^="studyhub_resource[resource_json][ids][id_id]').each( function( index, element ){
+        $j('input[name^="studyhub_resource[resource_json][ids][id_identifier]').each( function( index, element ){
             if($j(this).val() != '') {
                 i++;
             }

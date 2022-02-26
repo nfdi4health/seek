@@ -234,7 +234,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
     return unless self.errors[:resource_json].blank?
 
     resource_json['ids']&.each_with_index do |id,index|
-      unless id['id_id'].blank?
+      unless id['id_identifier'].blank?
         errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
         errors.add("ids[#{index}]['id_relation_type']".to_sym, "can't be blank")  if id['id_relation_type'].blank?
       end

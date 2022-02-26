@@ -85,12 +85,11 @@
             });
 
             index++;
-            console.log(index);
             newRow = newRow.replace(/row-template/g, index);
 
             $j('#id-id-table #id-row').before($j(newRow));
             $j('select[name="studyhub_resource[resource_json][ids][id_type]['+index+']"]').val('');
-            $j('input[name="studyhub_resource[resource_json][ids][id_id]['+index+']"]').val('');
+            $j('input[name="studyhub_resource[resource_json][ids][id_identifier]['+index+']"]').val('');
             $j('input[name="studyhub_resource[resource_json][ids][id_date]['+index+']"]').val('');
             $j('select[name="studyhub_resource[resource_json][ids][id_relation_type]['+index+']"]').val('');
 
