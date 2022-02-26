@@ -23,7 +23,7 @@ class StudyhubResource < ApplicationRecord
   validate :check_required_singular_attributes, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
   validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
 
-  validate :final_error_check, on:  [:create, :update]
+  validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
 
   attr_readonly :studyhub_resource_type_id
   attr_accessor :commit_button
@@ -116,6 +116,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def check_resource_use_rights
     return unless is_ui_request?  || self.errors.messages.blank?
+
     unless resource_json['resource_use_rights_label']&.start_with?('CC')
       REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
         errors.add(name.to_sym, "When the value of 'resource_use_rights_label' is '#{resource_json['resource_use_rights_label']}', '#{name}' is not needed.") if resource_json.has_key? name
@@ -126,6 +127,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   def check_urls
 
     return unless is_ui_request?  || self.errors.messages.blank?
+
     resource_json['resource_keywords']&.each_with_index do |keyword,index|
       keyword['resource_keywords_label_code']
       unless validate_url(keyword['resource_keywords_label_code']&.strip)
@@ -153,6 +155,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def check_numericality
     return unless is_ui_request?  || self.errors.messages.blank?
+
     unless resource_json['study_design'].blank?
       INTEGER_ATTRIBUTES.each do |value|
         if resource_json['study_design'][value].blank?
@@ -184,6 +187,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def end_date_is_after_start_date
     return unless is_ui_request?  || self.errors.messages.blank?
+
     start_date = resource_json['study_design']['study_start_date']
     end_date = resource_json['study_design']['study_end_date']
 
@@ -204,11 +208,13 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def check_provenance_data_presence
     return if resource_json.blank?
+
     errors.add(:data_source, 'cannot be empty') if resource_json['provenance'].blank?
   end
 
   def check_id_presence
     return unless self.errors[:resource_json].blank?
+
     resource_json['ids']&.each_with_index do |id,index|
       unless id['id_id'].blank?
         errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
@@ -281,6 +287,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def check_required_singular_attributes
     return unless is_ui_request?  || self.errors.messages.blank?
+
     required_fields ={}
     required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
     required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL if is_studytype?
@@ -298,6 +305,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def check_required_multi_attributes
     return unless is_ui_request?  || self.errors.messages.blank?
+
     resource_json['study_design']['study_conditions']&.each_with_index  do |condition, index|
       if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
         errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
@@ -319,8 +327,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def final_error_check
-    return unless is_ui_request?
-    unless errors.messages.empty? || errors.messages[:resource_json].empty?
+    unless errors.messages.except(:resource_json).empty?
       errors.add(:base, 'Please make sure all required fields are filled in correctly.')
     end
   end
