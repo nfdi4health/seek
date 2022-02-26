@@ -74,11 +74,11 @@ class StudyhubResource < ApplicationRecord
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
   MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { 'study_conditions' => %w[study_conditions study_conditions_classification study_conditions_classification_code],
-                                         'study_outcomes' => %w[study_outcome_type study_outcome_title 
+                                         'study_outcomes' => %w[study_outcome_type study_outcome_title
 study_outcome_description study_outcome_time_frame],
-                                         'interventional_study_design_arms' => %w[study_arm_group_label 
+                                         'interventional_study_design_arms' => %w[study_arm_group_label
 study_arm_group_type study_arm_group_description],
-                                         'interventional_study_design_interventions' => %w[study_intervention_name 
+                                         'interventional_study_design_interventions' => %w[study_intervention_name
 study_intervention_type study_intervention_description study_intervention_arm_group_label]
 
   }.freeze
@@ -94,7 +94,7 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
   NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze
 
   INTEGER_ATTRIBUTES =  %w[study_centers_number study_target_sample_size study_obtained_sample_size].freeze
-  FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined 
+  FLOAT_ATTRIBUTES =  %w[study_eligibility_age_min study_eligibility_age_max study_age_min_examined
 study_age_max_examined study_target_follow-up_duration].freeze
 
 
@@ -105,7 +105,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
       resource_json['resource_descriptions'].first['description']
     end
   end
-  
+
   def check_mandatory_resource_use_rights
     if resource_json['resource_use_rights_label']&.start_with?('CC')
       REQUIRED_FIELDS_RESOURCE_USE_RIGHTS.each do |name|
@@ -220,6 +220,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   def check_role_presence
 
     return unless resource_json.has_key?('roles')
+
     if resource_json['roles'].blank?
       errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
       errors.add("roles[0]['role_type']".to_sym, "can't be blank")
@@ -243,13 +244,13 @@ study_age_max_examined study_target_follow-up_duration].freeze
             errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
           end
 
-          ID_TYPE.each do |type|
-            role["role_#{type}_identifiers"]&.each_with_index do |id,id_index|
-              if !id["role_#{type}_identifier"].blank? && id["role_#{type}_identifier_scheme"].blank?
-                errors.add("roles[#{index}]['role_#{type}_identifier_scheme'][#{id_index}]".to_sym, 'Please select the identifier scheme.')
-              end
+          role['role_name_identifiers']&.each_with_index do |id,id_index|
+            if !id['role_name_identifier'].blank? && id['role_name_identifier_scheme'].blank?
+              errors.add("roles[#{index}]['role_name_identifier_scheme'][#{id_index}]".to_sym, 
+                         'Please select the name identifier scheme.')
             end
           end
+
         end
 
         if role['role_name_type'] == 'Organisational'
@@ -257,6 +258,15 @@ study_age_max_examined study_target_follow-up_duration].freeze
             errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
           end
         end
+
+        role['role_affiliation_identifiers']&.each_with_index do |id,id_index|
+          if !id['role_affiliation_identifier'].blank? && id['role_affiliation_identifier_scheme'].blank?
+            errors.add("roles[#{index}]['role_affiliation_identifier_scheme'][#{id_index}]".to_sym,
+                       'Please select the affiliation identifier scheme.')
+
+          end
+        end
+
       end
 
       if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
