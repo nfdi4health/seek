@@ -463,7 +463,7 @@
   "id": {
     "type": "object",
     "required": [
-      "id_id",
+      "id_identifier",
       "id_date",
       "id_type",
       "id_relation_type",
@@ -471,7 +471,7 @@
     ],
     "additionalProperties": false,
     "properties": {
-      "id_id": {
+      "id_identifier": {
         "type": "string"
       },
       "id_date": {
