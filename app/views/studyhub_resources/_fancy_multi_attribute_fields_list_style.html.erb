@@ -1,5 +1,13 @@
 <% key = attribute.title  %>
-<%  rows = @studyhub_resource.resource_json['study_design'][key] unless @studyhub_resource.resource_json.nil? %>
+<%
+  unless @studyhub_resource.resource_json.nil?
+    if %w[interventional_study_design_arms interventional_study_design_interventions].include? key
+      rows = @studyhub_resource.resource_json['study_design']['interventional_study_design'][key]
+    else
+      rows = @studyhub_resource.resource_json['study_design'][key]
+    end
+  end
+%>
 <%= folding_panel(attribute.label, collapsed, :body_options => {:id => key }) do %>
 <div id="<%= key %>">
   <div class="table" id="<%= key.singularize %>-table">
