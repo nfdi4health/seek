@@ -2,7 +2,7 @@
 <%
   unless @studyhub_resource.resource_json.nil?
     if %w[interventional_study_design_arms interventional_study_design_interventions].include? key
-      rows = @studyhub_resource.resource_json['study_design']['interventional_study_design'][key]
+      rows = @studyhub_resource.resource_json['study_design']['interventional_study_design'][key] if @studyhub_resource.get_study_primary_design_type == StudyhubResource::INTERVENTIONAL
     else
       rows = @studyhub_resource.resource_json['study_design'][key]
     end

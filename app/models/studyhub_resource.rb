@@ -156,13 +156,15 @@ study_age_max_examined study_target_follow-up_duration].freeze
   def check_numericality
     return unless is_ui_request?  || self.errors.messages.blank?
 
-    unless resource_json['study_design'].blank?
+    study_design = resource_json['study_design']
+
+    unless study_design.blank?
       INTEGER_ATTRIBUTES.each do |value|
         if resource_json['study_design'][value].blank?
           resource_json['study_design'][value] = nil
         else
           begin
-            resource_json['study_design'][value] = Integer(resource_json['study_design'][value])
+            resource_json['study_design'][value] = Integer(study_design[value])
           rescue ArgumentError, TypeError
             errors.add(value.to_sym, 'The value must be an integer.')
           end
@@ -170,13 +172,29 @@ study_age_max_examined study_target_follow-up_duration].freeze
       end
 
       FLOAT_ATTRIBUTES.each do |value|
-        if resource_json['study_design'][value].blank?
-          resource_json['study_design'][value] = nil
+        #@todo refactoring code, too long and not optimal
+        if value == 'study_target_follow-up_duration'
+          if study_design.key? 'non_interventional_study_design'
+            duration = resource_json['study_design']['non_interventional_study_design'][value]
+            if duration.blank?
+              resource_json['study_design']['non_interventional_study_design'][value] = nil
+            else
+              begin
+                resource_json['study_design']['non_interventional_study_design'][value] = Float(duration)
+              rescue ArgumentError, TypeError
+                errors.add(value.to_sym, 'The value must be an float.')
+              end
+            end
+          end
         else
-          begin
-            resource_json['study_design'][value] = Float(resource_json['study_design'][value])
-          rescue ArgumentError, TypeError
-            errors.add(value.to_sym, 'The value must be an float.')
+          if study_design[value].blank?
+            resource_json['study_design'][value] = nil
+          else
+            begin
+              resource_json['study_design'][value] = Float(resource_json['study_design'][value])
+            rescue ArgumentError, TypeError
+              errors.add(value.to_sym, 'The value must be an float.')
+            end
           end
         end
       end
@@ -318,10 +336,12 @@ study_age_max_examined study_target_follow-up_duration].freeze
       end
     end
 
+    if  self.get_study_primary_design_type == StudyhubResource::INTERVENTIONAL
     resource_json['study_design']['interventional_study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
       if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
         errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
       end
+    end
     end
 
   end
