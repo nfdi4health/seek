@@ -7,7 +7,7 @@ namespace :seek_dev_nfdi4health do
     puts "You want to grant user ID =  #{user_id} the manage right..."
     puts 'Update policy and permission for Studyhub Resource ... '
     StudyhubResource.all.map(&:id).each do |id|
-      permission =  StudyhubResource.find(id).policy.permissions.where(contributor_type: "Person", contributor_id: user_id).first_or_initialize
+      permission =  StudyhubResource.find(id).policy.permissions.where(contributor_type: 'Person', contributor_id: user_id).first_or_initialize
       pp permission
       permission.update_attributes(access_type:4)
     end
@@ -255,7 +255,7 @@ namespace :seek_dev_nfdi4health do
 
 
         when StudyhubResource::NON_INTERVENTIONAL
-          
+
           study_design['non_interventional_study_design']={}
 
           cm_study_design_non_interventional_attributes.each do |attr|
@@ -279,8 +279,17 @@ namespace :seek_dev_nfdi4health do
       end
 
 
+      puts ' ----------------------------------------- '
+      puts 'step 14:  update "id_id" to "id_identifer" ...'
 
-
+      ids = sr.resource_json['ids']
+      unless ids.blank?
+        ids.each do |id|
+          id['id_identifier'] = id['id_id'] if id.key? 'id_id'
+          id.delete('id_id')
+        end
+      end
+      pp ids
       sr.update_column(:resource_json, json)
 
     end
