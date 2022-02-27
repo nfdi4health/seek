@@ -81,7 +81,7 @@ max_studyhub_study_json_text = '{
         ],
         "ids": [
           {
-            "id_id": "https://osf.io/d6wgr/",
+            "id_identifier": "https://osf.io/d6wgr/",
             "id_type": "URL",
             "id_date": "18.09.2022",
             "id_resource_type_general": "Preprint",
