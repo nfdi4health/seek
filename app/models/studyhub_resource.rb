@@ -16,11 +16,11 @@ class StudyhubResource < ApplicationRecord
   validate :check_provenance_data_presence, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
-  validate :check_mandatory_resource_use_rights, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
-  validate :check_id_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
-  validate :check_role_presence, on: [:create, :update], if: ->{request_to_submit? || request_to_publish?}
-  validate :check_description_presence, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
-  validate :check_required_singular_attributes, on:  [:create, :update], if: ->{request_to_submit? || request_to_publish?}
+  validate :check_mandatory_resource_use_rights, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_id_presence, on: [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_role_presence, on: [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_description_presence, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_required_singular_attributes, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
   validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
 
   validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
@@ -300,29 +300,23 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def check_description_presence
-    errors.add(:description, "can't be blank") if resource_json['resource_descriptions'].blank?
+    errors.add(:description, "can't be blank") if resource_json['resource_descriptions'].blank? || resource_json['resource_descriptions'].reject {|desc| desc['description'].blank?}.blank?
   end
 
   def check_required_singular_attributes
-    return unless is_ui_request?  || self.errors.messages.blank?
 
-    required_fields ={}
-    required_fields['resource'] = REQUIRED_FIELDS_RESOURCE_BASIC
-    required_fields['study_design'] =  REQUIRED_FIELDS_STUDY_DESIGN_GENERAL if is_studytype?
-
-    required_fields.each do |type, fields|
-      fields.each do |name|
-        if type == 'resource'
-          errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[name].blank?
-        else
-          errors.add(name.to_sym, "Please enter the #{name.humanize.downcase}.") if resource_json[type][name].blank?
-        end
+    REQUIRED_FIELDS_RESOURCE_BASIC.each do |attr|
+      errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json[attr].blank?
+    end
+    if is_studytype?
+      REQUIRED_FIELDS_STUDY_DESIGN_GENERAL.each do |attr|
+        errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json['study_design'][attr].blank?
       end
     end
   end
 
   def check_required_multi_attributes
-    return unless is_ui_request?  || self.errors.messages.blank?
+    return unless errors.messages[:resource_json].blank?
 
     resource_json['study_design']['study_conditions']&.each_with_index  do |condition, index|
       if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
@@ -418,7 +412,6 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def set_resource_titles_to_title
-    Rails.logger.info("Model:set_resource_titles_to_title")
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
   end
 
@@ -469,7 +462,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   private
 
   def covert_label_to_id(labels)
-    ids = labels.map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
+    ids = labels.map {|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
     ids
   end
 
