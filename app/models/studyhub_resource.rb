@@ -337,11 +337,11 @@ study_age_max_examined study_target_follow-up_duration].freeze
     end
 
     if  self.get_study_primary_design_type == StudyhubResource::INTERVENTIONAL
-    resource_json['study_design']['interventional_study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
-      if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
-        errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
+      resource_json['study_design']['interventional_study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
+        if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
+          errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
+        end
       end
-    end
     end
 
   end
@@ -389,11 +389,11 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def get_study_primary_design_type
-      if self.resource_json['study_design'].key? 'study_primary_design'
-        self.resource_json['study_design']['study_primary_design']
-      else
-        nil
-      end
+    if self.resource_json['study_design'].key? 'study_primary_design'
+      self.resource_json['study_design']['study_primary_design']
+    else
+      nil
+    end
   end
 
   # if the resource type is study or substudy
@@ -443,29 +443,35 @@ study_age_max_examined study_target_follow-up_duration].freeze
   def convert_label_to_id_for_multi_select_attribute
 
     return unless errors.messages[:resource_json].empty?
+    self.resource_json['resource_language'] = resource_json['resource_language'].blank? ? [] : covert_label_to_id(resource_json['resource_language'])
 
+    if self.is_studytype?
 
-    StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
-      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH['study_design'].each do |attr|
+        self.resource_json['study_design'][attr] = resource_json['study_design'][attr].blank? ? []: covert_label_to_id(resource_json['study_design'][attr])
+      end
 
-        if key == 'resource'
-          self.resource_json[attr] = resource_json[attr].blank? ? [] : resource_json[attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
+      case self.get_study_primary_design_type
+
+      when StudyhubResource::INTERVENTIONAL
+        StudyhubResource::MULTISELECT_ATTRIBUTES_HASH['interventional_study_design'].each do |attr|
+          self.resource_json['study_design']['interventional_study_design'][attr] = resource_json['study_design']['interventional_study_design'][attr].blank? ? []: covert_label_to_id(resource_json['study_design']['interventional_study_design'][attr])
         end
 
-        if self.is_studytype?
-          self.resource_json['study_design'][attr] = resource_json['study_design'][attr].blank? ? []: resource_json['study_design'][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
-          case self.get_study_primary_design_type
-          when StudyhubResource::INTERVENTIONAL
-            self.resource_json['study_design']['interventional_study_design'][attr] = resource_json['study_design']['interventional_study_design'][attr].blank? ? []: resource_json['study_design']['interventional_study_design'][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
-          when StudyhubResource::NON_INTERVENTIONAL
-            self.resource_json['study_design']['non_interventional_study_design'][attr] = resource_json['study_design']['non_interventional_study_design'][attr].blank? ? []: resource_json['study_design']['non_interventional_study_design'][attr].map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
-          end
+      when StudyhubResource::NON_INTERVENTIONAL
+        StudyhubResource::MULTISELECT_ATTRIBUTES_HASH['non_interventional_study_design'].each do |attr|
+          self.resource_json['study_design']['non_interventional_study_design'][attr] = resource_json['study_design']['non_interventional_study_design'][attr].blank? ? []: covert_label_to_id(resource_json['study_design']['non_interventional_study_design'][attr])
         end
       end
     end
   end
 
   private
+
+  def covert_label_to_id(labels)
+    ids = labels.map{|label| SampleControlledVocabTerm.where(label: label).first.try(:id).to_s}
+    ids
+  end
 
   def is_integer?
     self.to_i.to_s == self
