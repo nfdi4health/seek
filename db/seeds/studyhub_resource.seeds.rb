@@ -309,7 +309,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   # study_outcome_type
   study_outcome_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Outcome Type').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ['Primary', ' Secondary', 'Other'])
+      ['Primary', 'Secondary', 'Other'])
   )
 
   # study_biospecimen_retention

@@ -23,8 +23,8 @@ namespace :seek_dev_nfdi4health do
     SampleControlledVocabTerm.where(label: 'FR').first.update_attributes(label:'FR (French)') unless SampleControlledVocabTerm.where(label: 'FR').blank?
     puts 'Update NFDI4Health Study Status When Intervention ... '
     SampleControlledVocabTerm.where(label: 'Follow-up ongoing').first.update_attributes(label:'follow-up ongoing') unless SampleControlledVocabTerm.where(label: 'Follow-up ongoing').blank?
-
-
+    puts 'Update NFDI4Health Study Outcome Type ... '
+    SampleControlledVocabTerm.where(label: ' Secondary').first.update_attributes(label:'Secondary') unless SampleControlledVocabTerm.where(label: ' Secondary').blank?
   end
 
   task(update_resource_json: :environment) do
@@ -289,7 +289,21 @@ namespace :seek_dev_nfdi4health do
           id.delete('id_id')
         end
       end
-      pp ids
+
+
+      puts ' ----------------------------------------- '
+      puts 'step 15:  Update NFDI4Health Study Outcome Type ... ...'
+
+      SampleControlledVocabTerm.where(label: ' Secondary').first.update_attributes(label:'Secondary') unless SampleControlledVocabTerm.where(label: ' Secondary').blank?
+
+      if sr.is_studytype?
+        json['study_design']['study_outcomes']&.each do |outcome|
+          outcome['study_outcome_type'] = 'Secondary' if outcome['study_outcome_type'] == ' Secondary'
+        end
+      end
+
+
+
       sr.update_column(:resource_json, json)
 
     end

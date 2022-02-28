@@ -82,7 +82,7 @@
         "Non-probability (Respondent-assisted)", "Mixed probability and non-probability", "Other", "Unknown", "Not applicable",""]
     },
     "studyOutcomeType": {
-      "enum": ["Primary", " Secondary", "Other",""]
+      "enum": ["Primary", "Secondary", "Other",""]
     },
     "studyDataSharingPlanGenerally": {
       "enum": ["Yes, there is a plan to make data available.",
