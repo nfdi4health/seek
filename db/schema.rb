@@ -583,8 +583,8 @@ ActiveRecord::Schema.define(version: 2022_02_11_083725) do
   end
 
   create_table "documents_workflows", id: false,  force: :cascade do |t|
-    t.bigint "workflow_id", null: false
-    t.bigint "document_id", null: false
+    t.integer "workflow_id", null: false
+    t.integer "document_id", null: false
     t.index ["document_id", "workflow_id"], name: "index_documents_workflows_on_doc_workflow"
     t.index ["workflow_id", "document_id"], name: "index_documents_workflows_on_workflow_doc"
   end
@@ -1292,8 +1292,8 @@ ActiveRecord::Schema.define(version: 2022_02_11_083725) do
   end
 
   create_table "presentations_workflows", id: false,  force: :cascade do |t|
-    t.bigint "workflow_id", null: false
-    t.bigint "presentation_id", null: false
+    t.integer "workflow_id", null: false
+    t.integer "presentation_id", null: false
     t.index ["presentation_id", "workflow_id"], name: "index_presentations_workflows_on_pres_workflow"
     t.index ["workflow_id", "presentation_id"], name: "index_presentations_workflows_on_workflow_pres"
   end
