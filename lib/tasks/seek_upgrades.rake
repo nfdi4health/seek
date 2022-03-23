@@ -31,6 +31,7 @@ namespace :seek do
     puts 'Starting upgrade ...'
     puts '... trimming old session data ...'
     Rake::Task['db:sessions:trim'].invoke
+
     puts '... migrating database ...'
     Rake::Task['db:migrate'].invoke
     Rake::Task['tmp:clear'].invoke

@@ -7,7 +7,7 @@
 <%= render :partial => "general/item_title",:locals => {:item=>@studyhub_resource, :buttons_partial => 'studyhub_resources/buttons'} %>
 
 <div class="row">
-  <div class="col-md-9 col-sm-8 box_about_actor">
+  <div class="col-md-12 col-sm-12 box_about_actor">
     <%#= show_resource_stage(@studyhub_resource) %>
     <%= persistent_resource_id(@studyhub_resource) %>
     <%= render :partial => 'projects/show_project_relationship', :locals => {:resource => @studyhub_resource}%>
@@ -59,10 +59,10 @@
     <% end %>
   </div>
 
-  <div class="col-md-3 col-sm-4">
-    <%= render :partial=>"assets/resource_main_content_right",:locals => { :resource => @studyhub_resource } %>
-  </div>
+<!--  <div class="col-md-3 col-sm-4">-->
+    <%#= render :partial=>"assets/resource_main_content_right",:locals => { :resource => @studyhub_resource } %>
+<!--  </div>-->
 </div>
 
 
-<%= render :partial=>"general/items_related_to", :object => @studyhub_resource %>
+<%#= render :partial=>"general/items_related_to", :object => @studyhub_resource %>

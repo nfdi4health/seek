@@ -3,7 +3,7 @@ class HomesController < ApplicationController
 
   before_action :redirect_to_sign_up_when_no_user
   before_action :login_required, only: %i[feedback send_feedback create_or_join_project report_issue]
-  before_action :redirect_to_create_or_join_if_no_member, only: %i[index]
+  #before_action :redirect_to_create_or_join_if_no_member, only: %i[index]
 
   respond_to :html, only: [:index]
 

@@ -9,10 +9,11 @@
     <% if permissions.can_edit -%>
       <%= button_link_to 'Edit', 'edit', edit_resource_path(resource), class: 'btn-xs' -%>
     <% end -%>
-
-    <% if permissions.can_manage -%>
-        <%= button_link_to 'Manage', 'manage', manage_resource_path(resource), class: 'btn-xs' -%>
-    <% end %>
+    <% if admin_logged_in? %>
+      <% if permissions.can_manage -%>
+          <%= button_link_to 'Manage', 'manage', manage_resource_path(resource), class: 'btn-xs' -%>
+      <% end %>
+    <% end -%>
 
     <% if permissions.can_delete -%>
         <%= button_link_to 'Delete', 'destroy', polymorphic_path(resource, return_to: 'my_items'),

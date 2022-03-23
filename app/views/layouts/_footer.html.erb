@@ -1,57 +1,25 @@
-<% logged_in?? cache_name = 'footer' : cache_name = 'footer1' %>
-
-
-    <div id="ft">
-      <div class="container">
-        <div id="seek-credit">
-          <a href="http://www.seek4science.org" target="_blank" class="powered-by">
-            Powered by<br/>
-            <%= image(:seek_logo, width: 64, height: 64) %>
-          </a>
-          <span class="subtle"><%= version_text -%></span>
-        </div>
-        <% cache cache_name, skip_digest: true do -%>
-          <div class="ft-info">
-            <% if (Seek::Config.instance_admins_link != Seek::Config.instance_link) && (Seek::Config.instance_admins_name != Seek::Config.instance_name) %>
-                <%= link_to "About #{Seek::Config.instance_admins_name}", Seek::Config.instance_admins_link, :target => '_blank' %> |
-            <% end %>
-            <%= link_to "About #{Seek::Config.instance_name}", Seek::Config.instance_link, :target => '_blank' %> |
-            <% if logged_in_and_registered? %>
-                <%= link_to 'Provide feedback', feedback_home_path -%> |
-            <% end %>
-            <%= link_to 'Funding and Programmes', funding_home_path -%> | 
-            <% if !Seek::Config.funding_link.blank? %>
-              <a href="<%=Seek::Config.funding_link%>" target="_blank">
-                <%=Seek::Config.funding_link%>
-              </a> |
-            <% end %>
-            <%= link_to 'Credits', Seek::Help::HelpDictionary.instance.help_link(:credits), :target => '_blank' -%>
-            <% if Seek::Config.terms_enabled %>
-                | <%= link_to("Terms & Conditions", terms_home_path) %>
-            <% end %>
-            <% if Seek::Config.privacy_enabled %>
-                | <%= link_to("Privacy Policy", privacy_home_path) %>
-            <% end %>
-            <% if Seek::Config.imprint_enabled %>
-                | <%= link_to("Imprint", imprint_home_path) %>
-            <% end %>
-            <% if !Seek::Config.cite_link.blank? %>
-              | <%= link_to "Cite us", Seek::Config.cite_link, :target => '_blank' -%>
-            <% end %>
-            <% if !Seek::Config.contact_link.blank? %>
-              | <%= link_to "Contact us", Seek::Config.contact_link, :target => '_blank' -%>
-            <% end %>
-
-          </div>
-          <div class="ft-info">
-            Copyright &copy; 2008 - 2021
-            <%= link_to "The University of Manchester", "http://www.manchester.ac.uk/", :target => '_blank' %> and
-            <%= link_to "HITS gGmbH", "http://www.h-its.org/", :target => '_blank' %>
-            <% if Seek::Config.copyright_addendum_enabled  %>
-                <br/><%= Seek::Config.copyright_addendum_content.html_safe%>
-            <% end %>
-          </div>
-        <% end -%>
-      </div>
+<div id="ft">
+  <div class="row">
+    <span class="subtle">Based on <a href="https://github.com/seek4science/seek" target="_blank">SEEK Software</a>, version <%= version_text -%>, created by The University of Manchester and HITS gGmbH licensed under <a href="https://github.com/seek4science/seek/blob/master/BSD-LICENSE" target="_blank">BSD 3-Clause Revised License</a> Copyright (c) 2009-2021,  <a href="https://www.manchester.ac.uk" target="_blank">University of Manchester</a> and  <a href="https://hits.de" target="_blank">HITS gGmbH</a>. Modifications Copyright (c) 2021,  <a href="https://hits.de" target="_blank">HITS gGmbH</a> and <a href="https://zbmed.de" target="_blank">ZB MED</a>.</span>
+  </div>
+  <div class="row">
+  </div>
+  <%# cache cache_name, skip_digest: true do -%>
+  <div class="row">
+    <div class="col-md-4">
+      <%= image_tag 'nfdi/dfg_logo_schriftzug_blau_foerderung_en.svg', style: 'height: 70px;' -%>
     </div>
-
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+      <%= image_tag 'nfdi/NFDI4Health_Logo_cmyk_RZ.svg', style: 'height: 70px;' -%>
+    </div>
+  </div>
+  <div class="row">
+  </div>
+  <%# end -%>
+  <div class="row">
+    <span class="subtle">This service is developed in the project NFDI4Health Task Force COVID-19 which is a part of NFDI4Health. NFDI4Health is one of the funded consortia of the National Research Data Infrastructure programme of the DFG. (Project identifier 451265285).</span>
+  </div>
+</div>
+</div>
