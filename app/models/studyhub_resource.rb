@@ -16,11 +16,11 @@ class StudyhubResource < ApplicationRecord
   validate :check_provenance_data_presence, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
-  validate :check_mandatory_resource_use_rights, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
-  validate :check_id_presence, on: [:create, :update], if: -> {request_to_submit? || request_to_publish?}
-  validate :check_role_presence, on: [:create, :update], if: -> {request_to_submit? || request_to_publish?}
-  validate :check_description_presence, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
-  validate :check_required_singular_attributes, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_mandatory_resource_use_rights, on:  [:create, :update], if: :request_to_submit?
+  validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
+  validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
+  validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
+  validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
   validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
 
   validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
@@ -354,9 +354,6 @@ study_age_max_examined study_target_follow-up_duration].freeze
     ui_request.nil?? false : true
   end
 
-  def request_to_publish?
-    commit_button == 'Publish'
-  end
 
   def is_submitted?
     stage == StudyhubResource::SUBMITTED
@@ -368,8 +365,6 @@ study_age_max_examined study_target_follow-up_duration].freeze
 
   def update_working_stage
     self.stage = if request_to_submit?
-                   StudyhubResource::SUBMITTED
-                 elsif request_to_publish?
                    StudyhubResource::SUBMITTED
                  else
                    StudyhubResource::SAVED
