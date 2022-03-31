@@ -29,7 +29,7 @@ class StudyhubResource < ApplicationRecord
   attr_accessor :commit_button
   attr_accessor :ui_request
 
-  before_save :update_working_stage, on:  [:create, :update]
+  before_save :save_stage, on:  [:create, :update]
   before_save :covert_to_mds_date_format, on:  [:create, :update], if: :is_ui_request?
   before_validation :set_resource_titles_to_title
   after_validation :convert_label_to_id_for_multi_select_attribute, unless: :is_ui_request?
@@ -48,13 +48,11 @@ class StudyhubResource < ApplicationRecord
   ID_TYPE = %w[name affiliation].freeze
   DATE_TYPE = %w[study_start_date study_end_date].freeze
   IRI_TYPE = %w[resource_keywords_label_code study_conditions_classification_code].freeze
+
   # *****************************************************************************
   #  This section defines constants for "working stages" values
-
   SAVED = 0
   SUBMITTED  = 1
-  WAITING_FOR_APPROVEL = 2
-  PUBLISHED = 3
 
 
   # *****************************************************************************
@@ -363,7 +361,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
     StudyhubResourceType.find(studyhub_resource_type_id).title.downcase
   end
 
-  def update_working_stage
+  def save_stage
     self.stage = if request_to_submit?
                    StudyhubResource::SUBMITTED
                  else
@@ -390,22 +388,6 @@ study_age_max_examined study_target_follow-up_duration].freeze
     resource_json['study_design']['study_primary_design']
   end
 
-  # translates stage codes into human-readable form
-  def self.get_stage_wording(stage)
-    case stage
-    when StudyhubResource::SAVED
-      'saved'
-    when StudyhubResource::SUBMITTED
-      'submitted'
-    when StudyhubResource::WAITING_FOR_APPROVEL
-      'waiting for approval'
-    when StudyhubResource::PUBLISHED
-      'published'
-    else
-      'unknown'
-    end
-  end
-
   def set_resource_titles_to_title
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
   end
@@ -424,7 +406,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def convert_date_format(date)
-    Date.parse(date).strftime("%d.%m.%Y")
+    Date.parse(date).strftime('%d.%m.%Y')
   end
 
 
