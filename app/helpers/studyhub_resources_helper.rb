@@ -31,19 +31,16 @@ module StudyhubResourcesHelper
 
   # translates stage codes into human-readable form
   def get_stage_wording(resource)
-    case resource.stage
-    when StudyhubResource::SAVED
+    if resource.is_published?
+      'Published'
+    elsif resource.is_waiting_approval?(User.current_user)
+      'Waiting for approval'
+    elsif resource.is_rejected?
+      'Rejected'
+    elsif resource.stage == StudyhubResource::SUBMITTED
+      'Submitted'
+    elsif resource.stage == StudyhubResource::SAVED
       'Saved'
-    when StudyhubResource::SUBMITTED
-      if resource.is_waiting_approval?(User.current_user)
-        'Waiting for approval'
-      elsif resource.is_rejected?
-        'Rejected'
-      elsif resource.is_published?
-        'Published'
-      else
-        'Submitted'
-      end
     else
       'Unknown'
     end
