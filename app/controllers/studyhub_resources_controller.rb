@@ -130,8 +130,7 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
       if  @studyhub_resource.update_attributes(studyhub_resource_params)
         flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully updated.<br/>".html_safe
-        flash[:notice] += get_submit_notice if request_to_submit?
-
+        flash[:notice] += get_submit_notice if request_to_submit? && !@studyhub_resource.is_published?
         if @studyhub_resource.is_studytype? || !@studyhub_resource.content_blob.nil?
           format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
         else
@@ -215,7 +214,7 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
       if @studyhub_resource.save
         flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully saved.<br/>".html_safe
-        flash[:notice] += get_submit_notice if request_to_submit?
+        flash[:notice] += get_submit_notice if request_to_submit? && !@studyhub_resource.is_published?
         format.html { redirect_to studyhub_resource_path(@studyhub_resource)}
         format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
       else
