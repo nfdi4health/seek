@@ -261,6 +261,8 @@ def load_seek_config_defaults!
   Seek::Config.default :sorting, {}
   Seek::Config.default :life_monitor_enabled, false
 
+  Seek::Config.default :custom_metadata_enabled, true
+
   # nfid4health
   Seek::Config.default :nfdi_studyhub_enabled, true
   Seek::Config.default :nfdi_other_studyhub_resource_id, nil
