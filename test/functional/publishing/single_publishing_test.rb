@@ -213,7 +213,7 @@ class SinglePublishingTest < ActionController::TestCase
     params[:publish][df.class.name] ||= {}
     params[:publish][df.class.name][df.id.to_s] = '1'
 
-    assert_difference('ResourcePublishLog.count', 2) do
+    assert_difference('ResourcePublishLog.count', 1) do
       post :publish, params: params.merge(id: df.id)
     end
 
@@ -223,6 +223,9 @@ class SinglePublishingTest < ActionController::TestCase
 
     df.reload
     assert df.is_published?, 'The data file should be published after doing single_publish'
+    refute df.is_waiting_approval?(User.current_user), 'The data file should not be waiting for approval after doing single_publish'
+    refute df.is_rejected?, 'The data file should not be be rejected after doing single_publish'
+
   end
 
   test "sending publishing request when doing publish for asset that need gatekeeper's approval" do

@@ -88,6 +88,15 @@ Kernel.class_eval do
     yield
     Seek::Config.send("#{config}=", oldval)
   end
+
+  def with_relative_root(root)
+    oldval = Rails.application.config.relative_url_root
+    Rails.application.config.relative_url_root = root
+    Rails.application.default_url_options = Seek::Config.site_url_options
+    yield
+    Rails.application.config.relative_url_root = oldval
+    Rails.application.default_url_options = Seek::Config.site_url_options
+  end
 end
 
 class ActiveSupport::TestCase
@@ -99,12 +108,6 @@ class ActiveSupport::TestCase
 
   def file_for_upload
     fixture_file_upload('files/little_file_v2.txt', 'text/plain')
-  end
-
-  def check_for_soffice
-    unless Seek::Config.soffice_available?(true)
-      skip("soffice is not available on port #{ConvertOffice::ConvertOfficeConfig.options[:soffice_port]}, skipping test")
-    end
   end
 
   def skip_rest_schema_check?

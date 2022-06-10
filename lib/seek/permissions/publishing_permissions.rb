@@ -26,11 +26,20 @@ module Seek
       def state_allows_publish?(user = User.current_user)
         if new_record?
           return true unless gatekeeper_required?
-          !is_waiting_approval?(user) && !is_rejected?
+          !is_waiting_approval?(user)
         else
           return false if is_published?
           return true unless gatekeeper_required?
-          !is_waiting_approval?(user) && !is_rejected?
+          return true if user.person.is_asset_gatekeeper_of?(self)
+          return false if is_waiting_approval?(user)
+           if is_rejected?
+             if is_updated_since_be_rejected?
+               return true
+             else
+               return false
+             end
+           end
+          return true
         end
       end
 
@@ -46,9 +55,6 @@ module Seek
             resource_publish_logs.create(publish_state: ResourcePublishLog::PUBLISHED,
                                          user: User.current_user,
                                          comment: comment)
-
-            resource_publish_logs.find_or_initialize_by(publish_state: ResourcePublishLog::WAITING_FOR_APPROVAL, resource_id: self.id, user_id: self.contributor.id)
-                                 .update(publish_state:ResourcePublishLog::PUBLISHED, comment:comment)
             touch
           end
         else
@@ -60,9 +66,6 @@ module Seek
         resource_publish_logs.create(publish_state: ResourcePublishLog::REJECTED,
                                      user: User.current_user,
                                      comment: comment)
-
-        resource_publish_logs.find_or_initialize_by(publish_state: ResourcePublishLog::WAITING_FOR_APPROVAL, resource_id: self.id, user_id: self.contributor.id)
-                             .update(publish_state:ResourcePublishLog::REJECTED, comment:comment)
       end
 
       def is_published?
@@ -73,16 +76,16 @@ module Seek
         end
       end
 
-      def is_rejected?(time = ResourcePublishLog::CONSIDERING_TIME.ago)
-        resource_publish_logs.where(publish_state: ResourcePublishLog::REJECTED).where('created_at > ?', time).any?
+      def is_rejected?
+        resource_publish_logs.where(publish_state: ResourcePublishLog::REJECTED).any? && resource_publish_logs.last.publish_state == ResourcePublishLog::REJECTED
       end
 
-      def is_waiting_approval?(user = nil, time = ResourcePublishLog::CONSIDERING_TIME.ago)
-        if user
-          resource_publish_logs.where(publish_state: ResourcePublishLog::WAITING_FOR_APPROVAL, user_id: user.id).where('created_at > ?', time).any?
-        else
-          resource_publish_logs.where(publish_state: ResourcePublishLog::WAITING_FOR_APPROVAL).where('created_at > ?', time).any?
-        end
+      def is_waiting_approval?(user = nil)
+        resource_publish_logs.where(publish_state: ResourcePublishLog::WAITING_FOR_APPROVAL).any? && resource_publish_logs.last.publish_state == ResourcePublishLog::WAITING_FOR_APPROVAL
+      end
+
+      def is_updated_since_be_rejected?
+        is_rejected? && resource_publish_logs.where(publish_state: ResourcePublishLog::REJECTED).where('created_at > ?', updated_at).none?
       end
 
       def gatekeeper_required?
@@ -90,7 +93,7 @@ module Seek
       end
 
       def asset_gatekeeper_can_publish?
-        is_waiting_approval?(nil, self.class.publishing_embargo_period.ago)
+        is_waiting_approval?(nil)
       end
 
       def asset_gatekeepers

@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_11_083725) do
+
+ActiveRecord::Schema.define(version: 2022_03_08_102056) do
 
   create_table "activity_logs", id: :integer,  force: :cascade do |t|
     t.string "action"
@@ -112,7 +113,6 @@ ActiveRecord::Schema.define(version: 2022_02_11_083725) do
 
   create_table "application_status",  force: :cascade do |t|
     t.integer "running_jobs"
-    t.boolean "soffice_running"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -582,9 +582,11 @@ ActiveRecord::Schema.define(version: 2022_02_11_083725) do
     t.index ["studyhub_resource_id"], name: "index_documents_studyhub_resources_on_studyhub_resource_id"
   end
 
+
   create_table "documents_workflows", id: false,  force: :cascade do |t|
-    t.integer "workflow_id", null: false
-    t.integer "document_id", null: false
+    t.bigint "workflow_id", null: false
+    t.bigint "document_id", null: false
+
     t.index ["document_id", "workflow_id"], name: "index_documents_workflows_on_doc_workflow"
     t.index ["workflow_id", "document_id"], name: "index_documents_workflows_on_workflow_doc"
   end
@@ -1292,8 +1294,8 @@ ActiveRecord::Schema.define(version: 2022_02_11_083725) do
   end
 
   create_table "presentations_workflows", id: false,  force: :cascade do |t|
-    t.integer "workflow_id", null: false
-    t.integer "presentation_id", null: false
+    t.bigint "workflow_id", null: false
+    t.bigint "presentation_id", null: false
     t.index ["presentation_id", "workflow_id"], name: "index_presentations_workflows_on_pres_workflow"
     t.index ["workflow_id", "presentation_id"], name: "index_presentations_workflows_on_workflow_pres"
   end

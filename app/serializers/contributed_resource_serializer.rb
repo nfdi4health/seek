@@ -6,16 +6,18 @@ class ContributedResourceSerializer < PCSSerializer
   attribute :version, key: :latest_version, if: -> { object.respond_to?(:version) }
 
   attribute :tags do
-    serialize_annotations(object)
+    serialize_annotations(object, context ='tag')
   end
 
   attribute :versions, if: -> { object.respond_to?(:versions) } do
     versions_data = []
     object.visible_versions.each do |v|
-      path = polymorphic_path(object, version: v.version)
-      versions_data.append(version: v.version,
-                           revision_comments: v.revision_comments.presence,
-                           url: "#{base_url}#{path}")
+      url = polymorphic_url(object, version: v.version)
+      data = {version: v.version,
+              revision_comments: v.revision_comments.presence,
+              url: url}
+      data[:doi]=v.doi if v.respond_to?(:doi)
+      versions_data.append(data)
     end
     versions_data
   end
@@ -33,6 +35,10 @@ class ContributedResourceSerializer < PCSSerializer
   end
   attribute :updated_at do
     get_version.updated_at
+  end
+
+  attribute :doi, if: -> { object.supports_doi? } do
+    get_version.doi
   end
 
   attribute :content_blobs, if: -> { object.respond_to?(:content_blobs) || object.respond_to?(:content_blob) } do
@@ -56,14 +62,13 @@ class ContributedResourceSerializer < PCSSerializer
   attribute :other_creators
 
   def convert_content_blob_to_json(cb)
-    path = polymorphic_path([cb.asset, cb])
     {
       original_filename: cb.original_filename,
       url: cb.url,
       md5sum: cb.md5sum,
       sha1sum: cb.sha1sum,
       content_type: cb.content_type,
-      link: "#{base_url}#{path}",
+      link: polymorphic_url([cb.asset, cb]),
       size: cb.file_size
     }
   end
@@ -84,5 +89,15 @@ class ContributedResourceSerializer < PCSSerializer
 
   def version_number
     @scope.try(:[],:requested_version) || object.try(:version)
+  end
+
+  def edam_annotations(property)
+    terms = object.annotations_with_attribute(property, true).collect(&:value).sort_by(&:label)
+    terms.collect do |term|
+      {
+        label: term.label,
+        identifier: term.iri
+      }
+    end
   end
 end
