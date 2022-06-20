@@ -12,7 +12,7 @@ namespace :seek do
     db:seed:012_edam_operations
     db:seed:013_workflow_data_file_relationships
     rename_branding_settings
-    remove_orphaned_versionss
+    remove_orphaned_versions
     db:seed:studyhub_resource
     db:seed:country_codes
     create_seek_sample_multi
