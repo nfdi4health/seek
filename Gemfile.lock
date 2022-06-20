@@ -20,7 +20,6 @@ GIT
 GIT
   remote: https://github.com/seek4science/DOI-query-tool.git
   revision: 7c2ba934885ad404d964cd371e236d3348efb63c
-
   specs:
     doi_query_tool (1.0.1)
       libxml-ruby (>= 2.6.0)
@@ -293,7 +292,7 @@ GEM
       rdf (~> 3.0)
     json-schema (2.8.0)
       addressable (>= 2.4)
-    json_schemer (0.2.19)
+    json_schemer (0.2.21)
       ecma-re-validator (~> 0.3)
       hana (~> 1.3)
       regexp_parser (~> 2.0)
@@ -483,7 +482,6 @@ GEM
     rack (2.2.3)
     rack-attack (6.6.0)
       rack (>= 1.0, < 3)
-
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-oauth2 (1.19.0)
@@ -862,7 +860,7 @@ DEPENDENCIES
   json-schema
   json_schemer
   libreconv
-  libxml-ruby (~>s 2.9.0)
+  libxml-ruby (~> 2.9.0)
   linkeddata
   lograge
   loofah
