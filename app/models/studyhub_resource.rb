@@ -4,6 +4,12 @@ class StudyhubResource < ApplicationRecord
 
   has_one :content_blob,:as => :asset, :foreign_key => :asset_id
 
+  has_filter studyhub_resource_type: Seek::Filtering::Filter.new(
+    value_field: 'studyhub_resource_types.key',
+    label_field: 'studyhub_resource_types.title',
+    joins: [:studyhub_resource_type]
+  )
+
   has_extended_custom_metadata
   acts_as_asset
 
@@ -63,7 +69,7 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
-  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_language],
+  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_languagnfdi4health-studyhub-UI-merge-seek-1.12e],
                                  'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender],
                                  'interventional_study_design' => %w[study_masking_roles],
                                  'non_interventional_study_design' => %w[study_time_perspective study_biospecimen_retention]}.freeze
