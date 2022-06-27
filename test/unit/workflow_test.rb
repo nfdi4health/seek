@@ -74,8 +74,8 @@ class WorkflowTest < ActiveSupport::TestCase
     # assert_includes authors, 'John Smith'
     # assert_includes authors, 'Jane Smith'
     # assert crate.author.detect { |a| a['identifier'] == URI.join(Seek::Config.site_base_host, "people/#{creator.id}").to_s }
-
-    assert_equal URI.join(Seek::Config.site_base_host, "projects/#{workflow.projects.first.id}").to_s, crate.main_workflow['producer']['@id']
+    assert_equal Seek::Util.routes.project_url(workflow.projects.first.id),
+                 crate.main_workflow['producer']['@id']
   end
 
   test 'generates fresh RO-Crate for workflow/diagram/abstract workflow' do
@@ -340,5 +340,24 @@ class WorkflowTest < ActiveSupport::TestCase
     assert_nil workflow.reload.test_status
     assert_equal :all_failing, v1.reload.test_status
     assert_nil v2.reload.test_status
+  end
+
+  test 'tags and edam in json api' do
+    Factory(:edam_topics_controlled_vocab) unless SampleControlledVocab::SystemVocabs.edam_topics_controlled_vocab
+    Factory(:edam_operations_controlled_vocab) unless SampleControlledVocab::SystemVocabs.edam_operations_controlled_vocab
+
+    user = Factory(:user)
+
+    workflow = User.with_current_user(user) do
+      Factory(:max_workflow, contributor: user.person)
+    end
+
+    json = WorkflowSerializer.new(workflow).as_json
+
+    assert_equal ['blue','green','red'], json[:tags]
+
+    assert_equal [{label:'Clustering', identifier: 'http://edamontology.org/operation_3432'}], json[:edam_operations]
+    assert_equal [{label:'Chemistry', identifier: 'http://edamontology.org/topic_3314'}], json[:edam_topics]
+
   end
 end

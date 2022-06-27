@@ -8,10 +8,10 @@
     <li role="presentation" class="dropdown-header visible-md">Create</li>
 
     <%= render_menu_group(t('menu.yellow_pages'), [
-      [t('programme'), new_programme_path, can_create_programmes?],
-      [t('project'), guided_create_projects_path, true],
-      [t('institution'), new_institution_path, can_create_institutions?],
-      [t('profile'), new_person_path, can_create_profiles?]
+        [t('programme'), new_programme_path, can_create_programmes?],
+        [t('project'), guided_create_projects_path, true],
+        [t('institution'), new_institution_path, can_create_institutions?],
+        [t('person'), new_person_path, can_create_profiles?]
     ]) %>
 
     <% if can_create_new_items? %>

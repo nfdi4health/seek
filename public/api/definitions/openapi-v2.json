@@ -6117,6 +6117,91 @@
                             },
                             "url": {
                                 "$ref": "#/definitions/uriString"
+                            },
+                            "doi": {
+                                "$ref": "#/definitions/nullableNonEmptyString"
+                            }
+                        },
+                        "required": [
+                            "version",
+                            "revision_comments",
+                            "url"
+                        ],
+                        "additionalProperties": false
+                    }
+                },
+                "version": {
+                    "type": "number"
+                },
+                "revision_comments": {
+                    "$ref": "#/definitions/nullableNonEmptyString"
+                },
+                "doi": {
+                    "$ref": "#/definitions/nullableNonEmptyString"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/dateTimeString"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/dateTimeString"
+                },
+                "content_blobs": {
+                    "$ref": "#/definitions/contentBlobsList"
+                },
+                "policy": {
+                    "$ref": "#/definitions/policy"
+                },
+                "other_creators": {
+                    "$ref": "#/definitions/nullableOtherCreatorsString"
+                },
+                "creators": {
+                    "$ref": "#/definitions/assetsCreatorsList"
+                }
+            },
+            "required": [
+                "title",
+                "license",
+                "latest_version",
+                "versions",
+                "version",
+                "created_at",
+                "updated_at",
+                "content_blobs"
+            ],
+            "additionalProperties": false
+        },
+        "presentationAttributes": {
+            "type": "object",
+            "properties": {
+                "tags": {
+                    "$ref": "#/definitions/tagsType"
+                },
+                "title": {
+                    "$ref": "#/definitions/nonEmptyString"
+                },
+                "description": {
+                    "$ref": "#/definitions/nullableNonEmptyString"
+                },
+                "license": {
+                    "$ref": "#/definitions/nullableLicense"
+                },
+                "latest_version": {
+                    "type": "number"
+                },
+                "versions": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                        "properties": {
+                            "version": {
+                                "type": "number"
+                            },
+                            "revision_comments": {
+                                "$ref": "#/definitions/nullableNonEmptyString"
+                            },
+                            "url": {
+                                "$ref": "#/definitions/uriString"
                             }
                         },
                         "required": [
@@ -6164,6 +6249,39 @@
             ],
             "additionalProperties": false
         },
+        "collectionAttributes": {
+            "type": "object",
+            "properties": {
+                "tags": {
+                    "$ref": "#/definitions/tagsType"
+                },
+                "title": {
+                    "$ref": "#/definitions/nonEmptyString"
+                },
+                "description": {
+                    "$ref": "#/definitions/nullableNonEmptyString"
+                },
+                "license": {
+                    "$ref": "#/definitions/nullableLicense"
+                },
+                "policy": {
+                    "$ref": "#/definitions/policy"
+                },
+                "other_creators": {
+                    "$ref": "#/definitions/nullableOtherCreatorsString"
+                },
+                "creators": {
+                    "$ref": "#/definitions/assetsCreatorsList"
+                }
+            },
+            "required": [
+                "title",
+                "license",
+                "created_at",
+                "updated_at"
+            ],
+            "additionalProperties": false
+        },
         "modelAttributes": {
             "type": "object",
             "properties": {
@@ -6196,6 +6314,9 @@
                             },
                             "url": {
                                 "$ref": "#/definitions/uriString"
+                            },
+                            "doi": {
+                                "$ref": "#/definitions/nullableNonEmptyString"
                             }
                         },
                         "required": [
@@ -6210,6 +6331,9 @@
                     "type": "number"
                 },
                 "revision_comments": {
+                    "$ref": "#/definitions/nullableNonEmptyString"
+                },
+                "doi": {
                     "$ref": "#/definitions/nullableNonEmptyString"
                 },
                 "created_at": {
@@ -7095,6 +7219,28 @@
         },
         "tagsType": {
             "$ref": "#/definitions/nonEmptyStringList"
+        },
+        "ontologyTermsList": {
+            "type": "array",
+            "minItems": 0,
+            "uniqueItems": true,
+            "items": {
+                "$ref": "#/definitions/ontologyTerm"
+            }
+        },
+        "ontologyTerm": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "$ref": "#/definitions/nullableNonEmptyString"
+                },
+                "identifier": {
+                    "$ref": "#/definitions/uriString"
+                }
+            },
+            "required": [
+                "identifier"
+            ]
         },
         "anySkeleton": {
             "properties": {
@@ -8501,6 +8647,9 @@
                                 },
                                 "events": {
                                     "$ref": "#/definitions/eventReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -8512,7 +8661,8 @@
                                 "studies",
                                 "assays",
                                 "publications",
-                                "events"
+                                "events",
+                                "workflows"
                             ],
                             "additionalProperties": false
                         },
@@ -8603,6 +8753,9 @@
                                 },
                                 "events": {
                                     "$ref": "#/definitions/eventReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -8683,6 +8836,9 @@
                                 },
                                 "events": {
                                     "$ref": "#/definitions/eventReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "additionalProperties": false
@@ -8744,6 +8900,9 @@
                                 },
                                 "publications": {
                                     "$ref": "#/definitions/publicationReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -8754,7 +8913,8 @@
                                 "investigations",
                                 "studies",
                                 "assays",
-                                "publications"
+                                "publications",
+                                "workflows"
                             ],
                             "additionalProperties": false
                         },
@@ -8839,6 +8999,9 @@
                                 },
                                 "assays": {
                                     "$ref": "#/definitions/assayReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -8913,6 +9076,9 @@
                                 },
                                 "assays": {
                                     "$ref": "#/definitions/assayReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "additionalProperties": false
@@ -10028,6 +10194,9 @@
                                 },
                                 "project_positions": {
                                     "$ref": "#/definitions/projectPositionsList"
+                                },
+                                "login": {
+                                    "$ref": "#/definitions/nullableNonEmptyString"
                                 }
                             },
                             "required": [
@@ -10266,7 +10435,7 @@
                             "$ref": "#/definitions/presentationType"
                         },
                         "attributes": {
-                            "$ref": "#/definitions/contributedTypeAttributes"
+                            "$ref": "#/definitions/presentationAttributes"
                         },
                         "relationships": {
                             "type": "object",
@@ -10297,6 +10466,9 @@
                                 },
                                 "events": {
                                     "$ref": "#/definitions/eventReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -10308,7 +10480,8 @@
                                 "studies",
                                 "assays",
                                 "publications",
-                                "events"
+                                "events",
+                                "workflows"
                             ],
                             "additionalProperties": false
                         },
@@ -10396,6 +10569,9 @@
                                 },
                                 "events": {
                                     "$ref": "#/definitions/eventReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -10473,6 +10649,9 @@
                                 },
                                 "events": {
                                     "$ref": "#/definitions/eventReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "additionalProperties": false
@@ -11112,7 +11291,8 @@
                                 "models",
                                 "publications",
                                 "presentations",
-                                "events"
+                                "events",
+                                "workflows"
                             ],
                             "additionalProperties": false
                         },
@@ -11184,6 +11364,9 @@
                                 },
                                 "publications": {
                                     "$ref": "#/definitions/publicationReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -11194,7 +11377,8 @@
                                 "investigations",
                                 "studies",
                                 "assays",
-                                "publications"
+                                "publications",
+                                "workflows"
                             ],
                             "additionalProperties": false
                         },
@@ -11279,6 +11463,9 @@
                                 },
                                 "assays": {
                                     "$ref": "#/definitions/assayReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "required": [
@@ -11353,6 +11540,9 @@
                                 },
                                 "assays": {
                                     "$ref": "#/definitions/assayReferencesList"
+                                },
+                                "workflows": {
+                                    "$ref": "#/definitions/workflowReferencesList"
                                 }
                             },
                             "additionalProperties": false
@@ -11650,6 +11840,12 @@
                                 "tags": {
                                     "$ref": "#/definitions/tagsType"
                                 },
+                                "edam_topics": {
+                                    "$ref": "#/definitions/ontologyTermsList"
+                                },
+                                "edam_operations": {
+                                    "$ref": "#/definitions/ontologyTermsList"
+                                },
                                 "title": {
                                     "$ref": "#/definitions/nonEmptyString"
                                 },
@@ -11695,6 +11891,9 @@
                                             },
                                             "url": {
                                                 "$ref": "#/definitions/uriString"
+                                            },
+                                            "doi": {
+                                                "$ref": "#/definitions/nullableNonEmptyString"
                                             }
                                         },
                                         "required": [
@@ -11709,6 +11908,9 @@
                                     "type": "number"
                                 },
                                 "revision_comments": {
+                                    "$ref": "#/definitions/nullableNonEmptyString"
+                                },
+                                "doi": {
                                     "$ref": "#/definitions/nullableNonEmptyString"
                                 },
                                 "created_at": {
@@ -11795,6 +11997,15 @@
                                 },
                                 "sops": {
                                     "$ref": "#/definitions/sopReferencesList"
+                                },
+                                "presentations": {
+                                    "$ref": "#/definitions/presentationReferencesList"
+                                },
+                                "data_files": {
+                                    "$ref": "#/definitions/dataFileReferencesList"
+                                },
+                                "documents": {
+                                    "$ref": "#/definitions/documentReferencesList"
                                 }
                             },
                             "required": [
@@ -11806,7 +12017,10 @@
                                 "studies",
                                 "assays",
                                 "publications",
-                                "sops"
+                                "sops",
+                                "presentations",
+                                "data_files",
+                                "documents"
                             ],
                             "additionalProperties": false
                         },
@@ -11864,6 +12078,12 @@
                                 "tags": {
                                     "$ref": "#/definitions/tagsType"
                                 },
+                                "edam_topics": {
+                                    "$ref": "#/definitions/ontologyTermsList"
+                                },
+                                "edam_operations": {
+                                    "$ref": "#/definitions/ontologyTermsList"
+                                },
                                 "title": {
                                     "$ref": "#/definitions/nonEmptyString"
                                 },
@@ -11920,6 +12140,15 @@
                                 },
                                 "sops": {
                                     "$ref": "#/definitions/sopReferencesList"
+                                },
+                                "presentations": {
+                                    "$ref": "#/definitions/presentationReferencesList"
+                                },
+                                "data_files": {
+                                    "$ref": "#/definitions/dataFileReferencesList"
+                                },
+                                "documents": {
+                                    "$ref": "#/definitions/documentReferencesList"
                                 }
                             },
                             "required": [
@@ -11961,6 +12190,12 @@
                             "properties": {
                                 "tags": {
                                     "$ref": "#/definitions/tagsType"
+                                },
+                                "edam_topics": {
+                                    "$ref": "#/definitions/ontologyTermsList"
+                                },
+                                "edam_operations": {
+                                    "$ref": "#/definitions/ontologyTermsList"
                                 },
                                 "title": {
                                     "$ref": "#/definitions/nonEmptyString"
@@ -12011,6 +12246,15 @@
                                 },
                                 "sops": {
                                     "$ref": "#/definitions/sopReferencesList"
+                                },
+                                "presentations": {
+                                    "$ref": "#/definitions/presentationReferencesList"
+                                },
+                                "data_files": {
+                                    "$ref": "#/definitions/dataFileReferencesList"
+                                },
+                                "documents": {
+                                    "$ref": "#/definitions/documentReferencesList"
                                 }
                             },
                             "additionalProperties": false
@@ -12130,7 +12374,7 @@
                             "$ref": "#/definitions/collectionType"
                         },
                         "attributes": {
-                            "$ref": "#/definitions/contributedTypeAttributes"
+                            "$ref": "#/definitions/collectionAttributes"
                         },
                         "relationships": {
                             "type": "object",
