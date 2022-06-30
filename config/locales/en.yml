@@ -5,7 +5,7 @@ en:
   seek_id: "SEEK ID"
 
   login:
-    elixir_aai: 'ELIXIR AAI'
+    elixir_aai: 'LS Login'
     ldap: 'LDAP'
     github: 'GitHub'
 
@@ -36,6 +36,8 @@ en:
   presentation: "Presentation"
   event: "Event"
   collection: "Collection"
+  collections:
+    info_text: "A collection is a group of items that are conceptually related to each other."
 
   sample: "Sample"
   sample_type: "Sample type"
@@ -48,9 +50,11 @@ en:
   project: "Project"
   institution: "Institution"
   programme: "Programme"
-  profile: "Profile"
   avatar: "Avatar"
   private_asset: 'Hidden item'
+
+  samples:
+    pid_info_text: 'The identifier assigns a unique and unequivocal meaning to the attribute name.'
 
   gadget:
     new_heading: "New or upload"
@@ -103,6 +107,7 @@ en:
   project_administrator: 'Project administrator'
   pal: 'PAL'
   programme_administrator: 'Programme administrator'
+  admin: 'Admin'
 
   contributor: 'submitter' # A person who submitted the resource to SEEK
   contribution: 'submission'
@@ -112,6 +117,10 @@ en:
   deleted_contributor_name: 'Deleted submitter'
 
   null_license: 'No license - no permission to use unless the owner grants a licence'
+
+  licenses:
+    other: 'Other'
+    recommended: 'Suggested'
 
   attributes: # Applies to attributes for any model
     other_creators: Additional credit
@@ -170,7 +179,6 @@ you can choose to have a %{project} linked to a site managed %{programme} instea
   Alternatively, if you are unable to use the %{issue_tracker_link}, or the issue is of a private nature, then you can use the %{feedback_link}.
   <p>'
 
-
   studyhub_resource: 'NFDI4Health Resource'
   studyhub_resources:
     studyhub_resource: 'NFDI4Health Resource'
@@ -179,3 +187,6 @@ you can choose to have a %{project} linked to a site managed %{programme} instea
     substudy: 'Substudy'
     instrument: 'Instrument'
     document: 'Document'
+
+  controlled_vocabs:
+    add_new_term_disabled_reason: "You are unable to add new terms when linked to an Ontology"

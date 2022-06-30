@@ -139,6 +139,7 @@ class ContentBlobsControllerTest < ActionController::TestCase
   test 'examine url forbidden' do
     # forbidden
     stub_request(:head, 'http://unauth.com/file.pdf').to_return(status: 403, headers: { 'Content-Type' => 'application/pdf' })
+    stub_request(:get, 'http://unauth.com/file.pdf').to_return(status: 403, headers: { 'Content-Type' => 'application/pdf' })
     get :examine_url, xhr: true, params: { data_url: 'http://unauth.com/file.pdf' }
     assert_response 200
     assert_equal 403, assigns(:info)[:code]
@@ -150,6 +151,7 @@ class ContentBlobsControllerTest < ActionController::TestCase
   test 'examine url unauthorized' do
     # unauthorized
     stub_request(:head, 'http://unauth.com/file.pdf').to_return(status: 401, headers: { 'Content-Type' => 'application/pdf' })
+    stub_request(:get, 'http://unauth.com/file.pdf').to_return(status: 401, headers: { 'Content-Type' => 'application/pdf' })
     get :examine_url, xhr: true, params: { data_url: 'http://unauth.com/file.pdf' }
     assert_response :success
     assert @response.body.include?('Access to this link is unauthorized')
@@ -295,7 +297,6 @@ class ContentBlobsControllerTest < ActionController::TestCase
   end
 
   test 'get_pdf' do
-    check_for_soffice
     ms_word_sop = Factory(:doc_sop, policy: Factory(:all_sysmo_downloadable_policy))
     pdf_path = ms_word_sop.content_blob.filepath('pdf')
     FileUtils.rm pdf_path if File.exist?(pdf_path)
@@ -312,21 +313,6 @@ class ContentBlobsControllerTest < ActionController::TestCase
 
     assert File.exist?(ms_word_sop.content_blob.filepath)
     assert File.exist?(pdf_path)
-  end
-
-  test 'get_pdf raises exception if soffice not running and conversion is needed' do
-    check_for_soffice
-    ms_word_sop = Factory(:doc_sop, policy: Factory(:all_sysmo_downloadable_policy))
-    pdf_path = ms_word_sop.content_blob.filepath('pdf')
-    FileUtils.rm pdf_path if File.exist?(pdf_path)
-    assert !File.exist?(pdf_path)
-    assert ms_word_sop.can_download?
-
-    Seek::Config.stub(:soffice_available?, false) do
-      assert_raises(RuntimeError) do
-        get :get_pdf, params: { sop_id: ms_word_sop.id, id: ms_word_sop.content_blob.id }
-      end
-    end
   end
 
   test 'get_pdf from url' do
@@ -358,7 +344,6 @@ class ContentBlobsControllerTest < ActionController::TestCase
   end
 
   test 'get_pdf of a doc file from url' do
-    check_for_soffice
     mock_remote_file "#{Rails.root}/test/fixtures/files/ms_word_test.doc",
                      'http://somewhere.com/piccy.doc',
                      'Content-Type' => 'application/pdf',
