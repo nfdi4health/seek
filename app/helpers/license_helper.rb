@@ -78,7 +78,7 @@ module LicenseHelper
   def grouped_license_options(opts = {})
     grouped_licenses = sort_grouped_licenses(group_licenses(opts))
 
-    grouped_licenses.each do |g, licenses|
+    grouped_licenses.each do |_, licenses|
       licenses.map! { |value| [value['title'], value['id'], { 'data-url' => value['url'] }] }
     end
 
@@ -86,29 +86,27 @@ module LicenseHelper
   end
 
   def sort_grouped_licenses(licenses)
-    s = licenses.sort_by do |pair|
+    licenses.sort_by do |pair|
       case pair[0]
-      when 'recommended'
+      when 'Recommended'
         0
-#      when 'Generic'
-#        2
+      when 'Generic'
+        1
       else
-        3
+        2
       end
     end
-    s.each do |pair|
-      pair[0] = "#{t('licenses.' + pair[0])}"
-    end
-    s
   end
 
   def group_licenses(opts)
-
+    
     grouped = license_values(opts).group_by do |l|
       if opts[:recommended]&.include?(l['id'])
-        'recommended'
+        'Recommended'
+      elsif l.key?('is_generic') && l['is_generic']
+        'Generic'
       else
-        'other'
+        'Other'
       end
     end.to_a
   end

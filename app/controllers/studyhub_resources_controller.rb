@@ -9,7 +9,6 @@ class StudyhubResourcesController < ApplicationController
   before_action :find_assets, only: [:index]
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
-  before_action :check_can_publish, only: [:publish], if: :json_api_request?
 
   api_actions :index, :show, :create, :update, :destroy
 
@@ -130,7 +129,8 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
       if  @studyhub_resource.update_attributes(studyhub_resource_params)
         flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully updated.<br/>".html_safe
-        flash[:notice] += get_submit_notice if request_to_submit? && !@studyhub_resource.is_published?
+        flash[:notice] += get_submit_notice if request_to_submit?
+
         if @studyhub_resource.is_studytype? || !@studyhub_resource.content_blob.nil?
           format.html { redirect_to studyhub_resource_path(@studyhub_resource) }
         else
@@ -145,26 +145,6 @@ class StudyhubResourcesController < ApplicationController
         format.json { render json: json_api_errors(@studyhub_resource), status: :unprocessable_entity }
       end
     end
-  end
-
-  def publish
-    pp 'studyhub_resources_controller:publish...'
-    publish_requested_items
-    respond_to do |format|
-      flash[:notice] = 'Publishing complete.'
-      format.html do
-        redirect_to action: :published,
-                    published_items: params_for_published_items(@published_items),
-                    notified_items: params_for_published_items(@notified_items),
-                    waiting_for_publish_items: params_for_published_items(@waiting_for_publish_items)
-      end
-      format.json do
-        if @asset.gatekeeper_required?
-          flash[:notice] += ' The item requires approval from one of the reviewers.'
-        end
-        render json: flash[:notice], status: 200
-      end
-      end
   end
 
 
@@ -214,7 +194,7 @@ class StudyhubResourcesController < ApplicationController
     respond_to do |format|
       if @studyhub_resource.save
         flash[:notice] = "The metadata of #{@studyhub_resource.studyhub_resource_type.title.downcase} was successfully saved.<br/>".html_safe
-        flash[:notice] += get_submit_notice if request_to_submit? && !@studyhub_resource.is_published?
+        flash[:notice] += get_submit_notice if request_to_submit?
         format.html { redirect_to studyhub_resource_path(@studyhub_resource)}
         format.json  { render json: @studyhub_resource, status: :created, location: @studyhub_resource }
       else
@@ -539,14 +519,6 @@ class StudyhubResourcesController < ApplicationController
     provenance = {}
     provenance[:data_source] = params[:data_source]
     provenance
-  end
-
-  def check_can_publish
-    pp 'studyhub_resources_controller:check_can_publish...'
-    unless @asset.is_submitted?
-     error('You are not permitted to perform this action', 'The item is not submitted.')
-      return false
-    end
   end
 
   def check_studyhub_resource_type

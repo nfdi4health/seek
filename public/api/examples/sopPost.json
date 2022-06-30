@@ -53,14 +53,6 @@
                         "type": "assays"
                     }
                 ]
-            },
-            "workflows": {
-                "data": [
-                    {
-                        "id": "12",
-                        "type": "workflows"
-                    }
-                ]
             }
         }
     }

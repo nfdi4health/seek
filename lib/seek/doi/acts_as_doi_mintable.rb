@@ -21,7 +21,7 @@ module Seek
 
           include Seek::Doi::ActsAsDoiMintable::InstanceMethods
 
-          include Seek::Util.routes # For URL generation
+          include Rails.application.routes.url_helpers # For URL generation
         end
       end
 
@@ -100,7 +100,7 @@ module Seek
         end
 
         def can_mint_doi?
-          Seek::Config.doi_minting_enabled && !doi_time_locked? && !has_doi? && visible?(nil)
+          Seek::Config.doi_minting_enabled && !doi_time_locked? && !has_doi?
         end
 
         def doi_time_locked?
@@ -122,7 +122,9 @@ module Seek
         end
 
         def doi_target_url
-          polymorphic_url(self, **Seek::Config.site_url_options)
+          polymorphic_url(self,
+                          host: Seek::Config.host_with_port,
+                          protocol: Seek::Config.host_scheme)
         end
 
         def doi_resource_type

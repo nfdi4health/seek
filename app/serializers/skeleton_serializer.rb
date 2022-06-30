@@ -1,5 +1,5 @@
 class SkeletonSerializer < ActiveModel::Serializer
-  include Seek::Util.routes
+  include Rails.application.routes.url_helpers
 
   attribute :title
 

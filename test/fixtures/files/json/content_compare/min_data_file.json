@@ -17,13 +17,11 @@
         {
           "version": 1,
           "revision_comments": null,
-          "url": "http://localhost:3000/data_files/883654268?version=1",
-          "doi": null
+          "url": "http://localhost:3000/data_files/883654268?version=1"
         }
       ],
       "version": 1,
       "revision_comments": null,
-      "doi": null,
       "created_at": "2017-10-06T09:53:31.000Z",
       "updated_at": "2017-10-06T09:53:31.000Z",
       "content_blobs": [
@@ -82,9 +80,6 @@
         "data": []
       },
       "events": {
-        "data": []
-      },
-      "workflows": {
         "data": []
       }
     },

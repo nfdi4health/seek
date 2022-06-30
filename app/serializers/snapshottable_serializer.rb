@@ -3,9 +3,9 @@ class SnapshottableSerializer  < PCSSerializer
   attribute :snapshots do
     snapshots_data = []
     object.snapshots.each do |v|
-      url = polymorphic_url([object, v])
+      path = polymorphic_path([object, v])
       snapshots_data.append(snapshot: v.snapshot_number,
-                            url: url)
+                            url: "#{base_url}#{path}")
     end
     snapshots_data
   end

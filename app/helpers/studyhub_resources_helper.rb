@@ -23,28 +23,12 @@ module StudyhubResourcesHelper
   end
 
   def show_resource_stage(resource)
-    html = '<p class="stage alert alert-info"><strong>Resource State : </strong>'
-    html += get_stage_wording(resource)
+    html = '<p class="stage alert alert-info"><strong>Working stage: </strong>'
+    html += StudyhubResource.get_stage_wording(resource.stage)
     html += '</p>'
     html.html_safe
   end
 
-  # translates stage codes into human-readable form
-  def get_stage_wording(resource)
-    if resource.is_published?
-      'Published'
-    elsif resource.is_waiting_approval?(User.current_user)
-      'Waiting for approval'
-    elsif resource.is_rejected?
-      'Rejected'
-    elsif resource.stage == StudyhubResource::SUBMITTED
-      'Submitted'
-    elsif resource.stage == StudyhubResource::SAVED
-      'Saved'
-    else
-      'Unknown'
-    end
-  end
 
   def studyhub_resource_nfdi_ids (ids)
     html = ''

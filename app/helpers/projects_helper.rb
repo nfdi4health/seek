@@ -61,7 +61,6 @@ module ProjectsHelper
     end
   end
 
-  # whether you have permission to create a project without being approved
   def can_create_projects?
     Project.can_create?
   end
@@ -135,6 +134,7 @@ module ProjectsHelper
 
   # whether the request membership button should be shown
   def request_join_project_button_enabled?(project)
+    Seek::Config.email_enabled &&
       project.allow_request_membership?
   end
 

@@ -2,7 +2,7 @@ class BaseSerializer < SimpleBaseSerializer
   include ApiHelper
   include PolicyHelper
   include RelatedItemsHelper
-  include Seek::Util.routes
+  include Rails.application.routes.url_helpers
 
   attribute :policy, if: :show_policy?
 

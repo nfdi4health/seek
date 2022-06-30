@@ -215,6 +215,7 @@ Seek::Config.home_description = '<p style="text-align:center;font-size:larger;fo
 Seek::Config.solr_enabled = true
 Seek::Config.programmes_enabled = true
 Seek::Config.programme_user_creation_enabled = true
+Seek::Config.front_page_buttons_enabled = true
 Seek::Config.noreply_sender = 'no-reply@fair-dom.org'
 Seek::Config.instance_name = 'SEEK SANDBOX'
 Seek::Config.application_name = 'FAIRDOM-SEEK'

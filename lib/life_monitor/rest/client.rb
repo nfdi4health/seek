@@ -4,7 +4,7 @@ require 'uri'
 module LifeMonitor
   module Rest
     class Client
-      include Seek::Util.routes
+      include Rails.application.routes.url_helpers
 
       attr_reader :base, :access_token
 
@@ -26,7 +26,9 @@ module LifeMonitor
                 body: {
                     uuid: workflow_version.workflow.uuid,
                     version: workflow_version.version.to_s,
-                    roc_link: ro_crate_workflow_url(workflow_version.workflow, version: workflow_version.version),
+                    roc_link: ro_crate_workflow_url(workflow_version.workflow, version: workflow_version.version,
+                                                    host: Seek::Config.host_with_port,
+                                                    protocol: Seek::Config.host_scheme),
                     name: workflow_version.workflow.title,
                     submitter_id: workflow_version.contributor.id.to_s
                 })
@@ -39,7 +41,9 @@ module LifeMonitor
                 body: {
                     uuid: workflow_version.workflow.uuid,
                     version: workflow_version.version.to_s,
-                    roc_link: ro_crate_workflow_url(workflow_version.workflow, version: workflow_version.version),
+                    roc_link: ro_crate_workflow_url(workflow_version.workflow, version: workflow_version.version,
+                                                    host: Seek::Config.host_with_port,
+                                                    protocol: Seek::Config.host_scheme),
                     name: workflow_version.workflow.title,
                     submitter_id: workflow_version.contributor.id.to_s
                 })

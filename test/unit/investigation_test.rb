@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class InvestigationTest < ActiveSupport::TestCase
+
+  require "isatab_converter"
+  include IsaTabConverter
+
   fixtures :investigations, :projects, :studies, :assays, :assay_assets, :permissions, :policies
 
   test 'associations' do
@@ -65,7 +69,7 @@ class InvestigationTest < ActiveSupport::TestCase
       assay.save!
     end
 
-    the_hash = IsaTabConverter.convert_investigation(object)
+    the_hash = convert_investigation(object)
     json = JSON.pretty_generate(the_hash)
 
     # write out to a temporary file
@@ -220,5 +224,4 @@ class InvestigationTest < ActiveSupport::TestCase
     )
     assert_equal ['James','25'].sort, item.custom_metadata_attribute_values_for_search.sort
   end
-
 end

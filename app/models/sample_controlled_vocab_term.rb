@@ -7,8 +7,6 @@ class SampleControlledVocabTerm < ApplicationRecord
 
   acts_as_annotation_value content_field: :iri
 
-  delegate :ontology_based?, to: :sample_controlled_vocab, allow_nil: true
-
   private
 
   def truncate_label

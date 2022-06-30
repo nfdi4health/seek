@@ -1,12 +1,10 @@
 # noinspection ALL
-class IsaTabConverter
-  include Seek::Util.routes
+module IsaTabConverter
 
   JERM_ONTOLOGY_URL = 'http://jermontology.org/ontology/JERMOntology'
 
   OBJECT_MAP = Hash.new
 
-  class << self
   def convert_investigation (investigation)
     if OBJECT_MAP.has_key? (investigation)
       return OBJECT_MAP[investigation]
@@ -28,7 +26,7 @@ class IsaTabConverter
          :name => 'jerm_ontology',
          :version => '1.0',
          :description => ''},
-        {:file => Addressable::URI.escape(Seek::Config.site_base_url.join('ontologies/ad_hoc_ontology')),
+        {:file => URI.encode("#{Seek::Config.site_base_host}/ontologies/ad_hoc_ontology"),
          :name => 'ad_hoc_ontology',
          :version => '1.0',
          :description => ''}
@@ -201,7 +199,7 @@ class IsaTabConverter
       process = {}
       # name is not mapped
       #
-      process['@id'] = assay_url(assay)
+      process['@id'] = URI.join(Seek::Config.site_base_host + '/assays/', assay.id.to_s).to_s
       process[:executesProtocol] = {}
       process[:executesProtocol]['@id'] = OBJECT_MAP[sop]['@id']
       process[:parameterValues] = []
@@ -295,7 +293,7 @@ class IsaTabConverter
     end
 
     isa_sample = {}
-    isa_sample['@id'] = sample_url(sample)
+    isa_sample['@id'] = URI.join(Seek::Config.site_base_host + '/samples/', sample.id.to_s).to_s
     isa_sample[:name] = sample.title
     isa_sample[:characteristics] = []
     sample.sample_type.sample_attributes.each do |attribute|
@@ -333,7 +331,7 @@ class IsaTabConverter
     end
 
     isa_material_attribute = {}
-    isa_material_attribute['@id'] = Addressable::URI.escape(Seek::Config.site_base_url.join("sample_types/#{sa.sample_type.id.to_s}/#{sa.title}"))
+    isa_material_attribute['@id'] = URI.encode("#{Seek::Config.site_base_host}/sample_types/#{sa.sample_type.id.to_s}/#{sa.title}")
     isa_material_attribute['characteristicType'] = {}
     isa_material_attribute['characteristicType']["$ref"] = 'ontology_annotation_schema.json#'
     if ["Float", "Integer"].include? sa.sample_attribute_type.base_type
@@ -342,7 +340,7 @@ class IsaTabConverter
       isa_material_attribute['characteristicType']['annotationValue'] = {'type' => 'string'}
     end
     isa_material_attribute['characteristicType']['termSource'] = 'ad_hoc_ontology'
-    isa_material_attribute['characteristicType']['termAccession'] = Addressable::URI.escape(sa.title)
+    isa_material_attribute['characteristicType']['termAccession'] = URI.encode("#{sa.title}")
 
     OBJECT_MAP[sa] = isa_material_attribute
     return isa_material_attribute
@@ -356,7 +354,7 @@ class IsaTabConverter
 
     isa_protocol = {}
 
-    isa_protocol['@id'] = sop_url(sop)
+    isa_protocol['@id'] = URI.join(Seek::Config.site_base_host + '/sops/', sop.id.to_s).to_s
 
     # comments are not mapped
 
@@ -393,7 +391,7 @@ class IsaTabConverter
     if data_file.content_blob.url
       isa_data_file['@id'] = data_file.content_blob.url
     else
-      isa_data_file['@id'] = data_file_url(data_file)
+      isa_data_file['@id'] = URI.join(Seek::Config.site_base_host + '/data_files/', data_file.id.to_s).to_s
     end
 
     # comments are not mapped
@@ -407,5 +405,5 @@ class IsaTabConverter
 
     return isa_data_file
   end
-  end
+
 end

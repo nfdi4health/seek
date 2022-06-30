@@ -7,16 +7,4 @@ class SampleControlledVocabTermTest < ActiveSupport::TestCase
     term.label = 'fish'
     assert term.valid?
   end
-
-  test 'ontology_based?' do
-    term = Factory(:apples_sample_controlled_vocab).sample_controlled_vocab_terms.first
-    refute term.ontology_based?
-
-    term = Factory(:edam_topics_controlled_vocab).sample_controlled_vocab_terms.first
-    assert term.ontology_based?
-
-    term = SampleControlledVocabTerm.new
-    refute term.ontology_based?
-  end
-
 end

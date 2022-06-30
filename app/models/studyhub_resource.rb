@@ -4,12 +4,6 @@ class StudyhubResource < ApplicationRecord
 
   has_one :content_blob,:as => :asset, :foreign_key => :asset_id
 
-  has_filter studyhub_resource_type: Seek::Filtering::Filter.new(
-    value_field: 'studyhub_resource_types.key',
-    label_field: 'studyhub_resource_types.title',
-    joins: [:studyhub_resource_type]
-  )
-
   has_extended_custom_metadata
   acts_as_asset
 
@@ -22,11 +16,11 @@ class StudyhubResource < ApplicationRecord
   validate :check_provenance_data_presence, on:  [:create, :update]
   validate :check_numericality, on:  [:create, :update], if: :is_studytype?
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
-  validate :check_mandatory_resource_use_rights, on:  [:create, :update], if: :request_to_submit?
-  validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
-  validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
-  validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
-  validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
+  validate :check_mandatory_resource_use_rights, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_id_presence, on: [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_role_presence, on: [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_description_presence, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
+  validate :check_required_singular_attributes, on:  [:create, :update], if: -> {request_to_submit? || request_to_publish?}
   validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
 
   validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
@@ -35,7 +29,7 @@ class StudyhubResource < ApplicationRecord
   attr_accessor :commit_button
   attr_accessor :ui_request
 
-  before_save :save_stage, on:  [:create, :update]
+  before_save :update_working_stage, on:  [:create, :update]
   before_save :covert_to_mds_date_format, on:  [:create, :update], if: :is_ui_request?
   before_validation :set_resource_titles_to_title
   after_validation :convert_label_to_id_for_multi_select_attribute, unless: :is_ui_request?
@@ -54,11 +48,13 @@ class StudyhubResource < ApplicationRecord
   ID_TYPE = %w[name affiliation].freeze
   DATE_TYPE = %w[study_start_date study_end_date].freeze
   IRI_TYPE = %w[resource_keywords_label_code study_conditions_classification_code].freeze
-
   # *****************************************************************************
   #  This section defines constants for "working stages" values
+
   SAVED = 0
   SUBMITTED  = 1
+  WAITING_FOR_APPROVEL = 2
+  PUBLISHED = 3
 
 
   # *****************************************************************************
@@ -69,7 +65,7 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
-  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_languagnfdi4health-studyhub-UI-merge-seek-1.12e],
+  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_language],
                                  'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender],
                                  'interventional_study_design' => %w[study_masking_roles],
                                  'non_interventional_study_design' => %w[study_time_perspective study_biospecimen_retention]}.freeze
@@ -358,6 +354,9 @@ study_age_max_examined study_target_follow-up_duration].freeze
     ui_request.nil?? false : true
   end
 
+  def request_to_publish?
+    commit_button == 'Publish'
+  end
 
   def is_submitted?
     stage == StudyhubResource::SUBMITTED
@@ -367,8 +366,10 @@ study_age_max_examined study_target_follow-up_duration].freeze
     StudyhubResourceType.find(studyhub_resource_type_id).title.downcase
   end
 
-  def save_stage
+  def update_working_stage
     self.stage = if request_to_submit?
+                   StudyhubResource::SUBMITTED
+                 elsif request_to_publish?
                    StudyhubResource::SUBMITTED
                  else
                    StudyhubResource::SAVED
@@ -394,6 +395,22 @@ study_age_max_examined study_target_follow-up_duration].freeze
     resource_json['study_design']['study_primary_design']
   end
 
+  # translates stage codes into human-readable form
+  def self.get_stage_wording(stage)
+    case stage
+    when StudyhubResource::SAVED
+      'saved'
+    when StudyhubResource::SUBMITTED
+      'submitted'
+    when StudyhubResource::WAITING_FOR_APPROVEL
+      'waiting for approval'
+    when StudyhubResource::PUBLISHED
+      'published'
+    else
+      'unknown'
+    end
+  end
+
   def set_resource_titles_to_title
     self.title = resource_json['resource_titles']&.first.blank?? nil : resource_json['resource_titles']&.first['title']
   end
@@ -412,7 +429,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
   end
 
   def convert_date_format(date)
-    Date.parse(date).strftime('%d.%m.%Y')
+    Date.parse(date).strftime("%d.%m.%Y")
   end
 
 

@@ -1,5 +1,5 @@
 class CollectionItemSerializer < SimpleBaseSerializer
-  include Seek::Util.routes
+  include Rails.application.routes.url_helpers
 
   belongs_to :collection
   has_one :asset, polymorphic: true, if: -> { object.asset.can_view? } do

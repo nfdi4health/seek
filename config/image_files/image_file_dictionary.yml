@@ -37,7 +37,6 @@ edit: 'famfamfam_silk/page_white_edit.png'
 edit_off: 'stop_edit.png'
 eosc-life-logo: 'logos/eosc-life.svg'
 elixir_aai_login: 'logos/elixir-aai-login-button-blue-small.png'
-ls_aai_login: 'logos/ls-login-small.png'
 embl: 'famfamfam_silk/script_go.png'
 endnote: 'famfamfam_silk/script_go.png'
 enw: 'famfamfam_silk/script_go.png'
@@ -227,20 +226,6 @@ asset_gatekeeper: 'roles/role-asset-gatekeeper.png'
 asset_housekeeper: 'roles/role-asset-housekeeper.png'
 admin: 'roles/role-admin.png'
 pal: 'roles/role-pal.png'
-
-# front page
-front_page_feature_organise: 'front_page/home_feature_organise.svg'
-front_page_feature_collaborate: 'front_page/home_feature_collaborate.svg'
-front_page_feature_standardise: 'front_page/home_feature_standardise.svg'
-front_page_feature_publish: 'front_page/home_feature_publish.svg'
-front_page_integrations: 'front_page/integrations.svg'
-
-front_page_integration_ls_aai: 'front_page/integrations-ls-login.png'
-front_page_integration_datacite: 'front_page/integrations-datacite-widex120.png'
-front_page_integration_ols: 'front_page/integrations-olsx120.png'
-front_page_integration_zenodo: 'front_page/integrations-zenodo.svg'
-front_page_integration_json_api: 'front_page/integrations-json-apix120.png'
-front_page_integration_bioschemas: 'front_page/integrations-bioschemas.svg'
 
 #images for mime types
 #general mime type

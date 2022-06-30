@@ -97,10 +97,6 @@ class Project < ApplicationRecord
     data_files | sops | models | publications | presentations | documents | workflows | nodes | collections
   end
 
-  def project_assets
-    assets.select { |a| a.investigations.empty? }
-  end
-  
   def institutions=(new_institutions)
     new_institutions = Array(new_institutions).map do |i|
       i.is_a?(Institution) ? i : Institution.find(i)
@@ -142,9 +138,8 @@ class Project < ApplicationRecord
   def columns_default
     super + ['web_page']
   end
-
   def columns_allowed
-    columns_default + ['start_date','end_date']
+    columns_default + ['wiki_page','start_date','end_date']
   end
 
   # returns people belong to the admin defined seek 'role' for this project

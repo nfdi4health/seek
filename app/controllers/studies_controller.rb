@@ -53,17 +53,15 @@ class StudiesController < ApplicationController
 
   def update
     @study = Study.find(params[:id])
-    if params[:study]&.[](:ordered_assay_ids)
+    if params[:study][:ordered_assay_ids]
       a1 = params[:study][:ordered_assay_ids]
       a1.permit!
       pos = 0
       a1.each_pair do |key, value |
-        disable_authorization_checks {
-          assay = Assay.find (value)
-          assay.position = pos
-          pos += 1
-          assay.save!
-        }
+        assay = Assay.find (value)
+        assay.position = pos
+        pos += 1
+        assay.save!
       end
       respond_to do |format|
          format.html { redirect_to(@study) }

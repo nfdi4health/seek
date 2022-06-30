@@ -10,7 +10,7 @@ class StudiesHelperTest < ActionView::TestCase
     Factory(:study_custom_metadata_type_for_MIAPPE, title: 'Not MIAPPE')
     refute show_batch_miappe_button?
 
-    Factory(:study_custom_metadata_type_for_MIAPPE, title: 'MIAPPE metadata v1.1')
+    Factory(:study_custom_metadata_type_for_MIAPPE, title: 'MIAPPE metadata')
     assert show_batch_miappe_button?
   end
 end

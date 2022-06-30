@@ -23,11 +23,11 @@ module Seek
         def image
           return unless resource.diagram_exists?
 
-          diagram_workflow_url(resource, version: resource.version, **Seek::Config.site_url_options)
+          diagram_workflow_url(resource, version: resource.version, host: Seek::Config.site_base_host)
         end
 
         def schema_type
-          %w[SoftwareSourceCode ComputationalWorkflow]
+          %w[File SoftwareSourceCode ComputationalWorkflow]
         end
 
         def programming_language

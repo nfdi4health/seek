@@ -7,7 +7,7 @@ module Seek
       INVALID_SCHEMES = %w(file)
 
       def valid_scheme?(url)
-        uri = Addressable::URI.escape((url || '').strip)
+        uri = URI.encode((url || '').strip)
         scheme = URI.parse(uri).scheme
         !INVALID_SCHEMES.include?(scheme)
       end

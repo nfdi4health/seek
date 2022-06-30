@@ -29,7 +29,10 @@ module Seek
   # Convention for creating a new propagator is to add a method named <setting_name>_propagate
   module Propagators
     def site_base_host_propagate
-      Rails.application.default_url_options = site_url_options
+      script_name = (SEEK::Application.config.relative_url_root || '/')
+      ActionMailer::Base.default_url_options = { host: host_with_port,
+                                                 protocol: host_scheme,
+                                                 script_name: script_name }
     end
 
     def smtp_propagate
@@ -96,7 +99,7 @@ module Seek
         SEEK::Application.config.middleware.use ExceptionNotification::Rack,
                                                 email: {
                                                   sender_address: [noreply_sender],
-                                                  email_prefix: "[ #{instance_name} ERROR ] ",
+                                                  email_prefix: "[ #{application_name} ERROR ] ",
                                                   exception_recipients: exception_notification_recipients.nil? ? [] : exception_notification_recipients.split(/[, ]/)
                                                 }
       else
@@ -261,24 +264,6 @@ module Seek
       URI(Seek::Config.site_base_host).scheme
     end
 
-    # Includes trailing slash so it can be used to safely append subpaths, e.g.
-    # `Seek::Config.site_base_url.join('data_files')`
-    def site_base_url
-      uri = Addressable::URI.parse(Seek::Config.site_base_host)
-      uri.path = (Rails.application.config.relative_url_root || '').chomp('/') + '/'
-      uri
-    end
-
-    def site_url_options
-      u = URI.parse(site_base_host)
-      {
-        host: u.host,
-        port: u.port,
-        protocol: u.scheme,
-        script_name: (SEEK::Application.config.relative_url_root || '/')
-      }
-    end
-
     def write_attr_encrypted_key
       File.open(attr_encrypted_key_path, 'wb') do |f|
         f << SecureRandom.random_bytes(32)
@@ -288,6 +273,18 @@ module Seek
     def write_secret_key_base
       File.open(secret_key_base_path, 'w') do |f|
         f << SecureRandom.hex(64)
+      end
+    end
+
+    def soffice_available?(cached=false)
+      @@soffice_available = nil unless cached
+      begin
+        port = ConvertOffice::ConvertOfficeConfig.options[:soffice_port]
+        soc = TCPSocket.new('localhost', port)
+        soc.close
+        true
+      rescue
+        false
       end
     end
 
@@ -304,11 +301,10 @@ module Seek
     end
 
     def omniauth_elixir_aai_config
-      # Cannot use url helpers here because routes are not loaded at this point :( -Finn
-      callback_path = 'identities/auth/elixir_aai/callback'
+      callback_path = '/identities/auth/elixir_aai/callback'
 
       {
-          callback_path: "#{Rails.application.config.relative_url_root}/#{callback_path}",
+          callback_path: callback_path,
           name: :elixir_aai,
           scope: [:openid, :email],
           response_type: 'code',
@@ -321,7 +317,7 @@ module Seek
           client_options: {
               identifier: omniauth_elixir_aai_client_id,
               secret: omniauth_elixir_aai_secret,
-              redirect_uri: site_base_url.join(callback_path).to_s,
+              redirect_uri: "#{site_base_host.chomp('/')}#{callback_path}",
               scheme: 'https',
               host: 'login.elixir-czech.org',
               port: 443,
@@ -420,7 +416,7 @@ module Seek
     # transfers a setting value from the old_name to the new_name setting value, for use when renaming a setting.
     # Creates a new record for the new setting (if set), and cleans up and removes the old record. Ignores any defaults that are set
     def transfer_value(old_name, new_name)
-      if old_value = Settings.global.get(old_name)
+      if old_value = Settings.global.get(:old_name)
         set_value(new_name,old_value)
         Settings.destroy(old_name)
       end

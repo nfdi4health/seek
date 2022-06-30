@@ -22,7 +22,6 @@ module Seek
       queues << QueueNames::AUTH_LOOKUP if Seek::Config.auth_lookup_enabled
       queues << QueueNames::REMOTE_CONTENT if Seek::Config.cache_remote_files
       queues << QueueNames::SAMPLES if Seek::Config.samples_enabled
-      queues << QueueNames::INDEXING if Seek::Config.solr_enabled
       queues.each do |queue_name|
         commands << command(queue_name, 1, action)
       end

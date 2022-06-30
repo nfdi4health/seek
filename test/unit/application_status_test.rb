@@ -7,13 +7,16 @@ class ApplicationStatusTest < ActiveSupport::TestCase
   end
 
   test 'validation' do
-    app = ApplicationStatus.new(running_jobs:5)
+    app = ApplicationStatus.new(running_jobs:5,soffice_running:false)
     assert app.valid?
 
-    app = ApplicationStatus.new(running_jobs:5)
+    app = ApplicationStatus.new(running_jobs:5,soffice_running:true)
     assert app.valid?
 
-    app = ApplicationStatus.new(running_jobs:nil)
+    app = ApplicationStatus.new(running_jobs:5,soffice_running:nil)
+    refute app.valid?
+
+    app = ApplicationStatus.new(running_jobs:nil,soffice_running:true)
     refute app.valid?
   end
 
@@ -33,6 +36,7 @@ class ApplicationStatusTest < ActiveSupport::TestCase
     app.refresh
     app.reload
     assert_equal Seek::Util.delayed_job_pids.count, app.running_jobs
+    assert_equal Seek::Config.soffice_available?(false), app.soffice_running
     assert_equal Seek::Config.solr_enabled, app.search_enabled
   end
 
@@ -48,7 +52,7 @@ class ApplicationStatusTest < ActiveSupport::TestCase
   test 'validate_singleton' do
     app = ApplicationStatus.instance
     assert_raise RuntimeError do
-      ApplicationStatus.create(running_jobs:5)
+      ApplicationStatus.create(running_jobs:5, soffice_running:true)
     end
   end
 

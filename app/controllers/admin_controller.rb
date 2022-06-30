@@ -165,7 +165,8 @@ class AdminController < ApplicationController
     Seek::Config.news_number_of_entries = entries if is_entries_integer
 
     Seek::Config.home_description = params[:home_description]
-    Seek::Config.home_description_position = params[:home_description_position]
+
+    #    Seek::Config.front_page_buttons_enabled = params[:front_page_buttons_enabled]
 
     Seek::Config.home_show_features = string_to_boolean params[:home_show_features]
     Seek::Config.home_show_quickstart = string_to_boolean params[:home_show_quickstart]
@@ -188,8 +189,6 @@ class AdminController < ApplicationController
     Seek::Config.tag_cloud_enabled = string_to_boolean params[:tag_cloud_enabled]
     Seek::Config.workflow_class_list_enabled = string_to_boolean params[:workflow_class_list_enabled]
 
-    expire_annotation_fragments
-
     update_redirect_to (is_entries_integer && (only_integer tag_threshold, 'tag threshold') && (only_positive_integer max_visible_tags, 'maximum visible tags')), 'home_settings'
   end
 
@@ -210,6 +209,7 @@ class AdminController < ApplicationController
     Seek::Config.issue_tracker = params[:issue_tracker]
 
     Seek::Config.header_image_enabled = string_to_boolean params[:header_image_enabled]
+    Seek::Config.header_image_link = params[:header_image_link]
     Seek::Config.header_image_title = params[:header_image_title]
     header_image_file
 
@@ -262,11 +262,7 @@ class AdminController < ApplicationController
     if Seek::Config.tag_threshold.to_s != params[:tag_threshold] || Seek::Config.max_visible_tags.to_s != params[:max_visible_tags]
       expire_annotation_fragments
     end
-    unless params[:site_base_host].nil?
-      u = URI.parse(params[:site_base_host])
-      u.path = ''
-      Seek::Config.site_base_host = u.to_s
-    end
+    Seek::Config.site_base_host = params[:site_base_host].chomp('/') unless params[:site_base_host].nil?
     # check valid email
     pubmed_email = params[:pubmed_api_email]
     pubmed_email_valid = check_valid_email(pubmed_email, 'pubmed API email address')
@@ -274,13 +270,6 @@ class AdminController < ApplicationController
     crossref_email_valid = check_valid_email(crossref_email, 'crossref API email address')
     Seek::Config.pubmed_api_email = pubmed_email if pubmed_email == '' || pubmed_email_valid
     Seek::Config.crossref_api_email = crossref_email if crossref_email == '' || crossref_email_valid
-
-    if params[:session_store_timeout]
-      mins = params[:session_store_timeout].to_i
-      if mins >= 1
-        Seek::Config.session_store_timeout = mins.minutes
-      end
-    end
 
     Seek::Config.bioportal_api_key = params[:bioportal_api_key]
     Seek::Config.sabiork_ws_base_url = params[:sabiork_ws_base_url] unless params[:sabiork_ws_base_url].nil?

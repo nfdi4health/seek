@@ -36,7 +36,7 @@ module Seek
       end
 
       def url
-        Seek::Util.routes.root_url.chomp('/')
+        Seek::Config.site_base_host
       end
 
       def schema_org_supported?

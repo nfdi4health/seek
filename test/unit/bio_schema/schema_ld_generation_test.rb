@@ -433,7 +433,6 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
       workflow.assets_creators.create!(creator: creator2, pos: 2)
       workflow.assets_creators.create!(given_name: 'Fred', family_name: 'Bloggs', pos: 3)
       workflow.assets_creators.create!(given_name: 'Steve', family_name: 'Smith', orcid: 'https://orcid.org/0000-0002-1694-233X', pos: 4)
-      workflow.assets_creators.create!(given_name: 'Bob', family_name: 'Colon:', pos: 5)
 
       workflow.internals = workflow.extractor.metadata[:internals]
 
@@ -445,7 +444,7 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
     expected_wf_prefix = workflow.title.downcase.gsub(/[^0-9a-z]/i, '_')
 
     expected = { '@context' => Seek::BioSchema::Serializer::SCHEMA_ORG,
-                 '@type' => %w[SoftwareSourceCode ComputationalWorkflow],
+                 '@type' => %w[File SoftwareSourceCode ComputationalWorkflow],
                  '@id' => "http://localhost:3000/workflows/#{workflow.id}",
                  'dct:conformsTo' => Seek::BioSchema::ResourceDecorators::Workflow::WORKFLOW_PROFILE,
                  'description' => 'This is a test workflow for bioschema generation',
@@ -465,10 +464,7 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
                        'name' => 'Fred Bloggs' },
                      { '@type' => 'Person',
                        '@id' => "https://orcid.org/0000-0002-1694-233X",
-                       'name' => 'Steve Smith' },
-                     { '@type' => 'Person',
-                       '@id' => "#Bob%20Colon:",
-                       'name' => 'Bob Colon:' }],
+                       'name' => 'Steve Smith' }],
                  'producer' =>
                     [{ '@type' => %w[Project Organization],
                        '@id' => "http://localhost:3000/projects/#{@project.id}",

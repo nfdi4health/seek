@@ -78,10 +78,10 @@ module ApplicationHelper
     # FIXME: this contains some duplication of Seek::Rdf::RdfGeneration#rdf_resource - however not every model includes that Module at this time.
     # ... its also a bit messy handling the version
     url = if resource.class.name.include?('::Version')
-            polymorphic_url(resource.parent, version: resource.version, **Seek::Config.site_url_options)
+            URI.join(Seek::Config.site_base_host + '/', "#{resource.parent.class.name.tableize}/", "#{resource.parent.id}?version=#{resource.version}").to_s
           else
-            polymorphic_url(resource, **Seek::Config.site_url_options)
-          end
+            URI.join(Seek::Config.site_base_host + '/', "#{resource.class.name.tableize}/", resource.id.to_s).to_s
+    end
 
     content_tag :p, class: :id do
       content_tag(:strong) do
@@ -225,9 +225,7 @@ module ApplicationHelper
       res = white_list(res)
       res = truncate_without_splitting_words(res, options[:length]) if options[:length]
       if options[:markdown]
-        # Convert `&gt;` etc. back to `>` so markdown blockquotes can be used.
-        # The markdown renderer will cope with rogue `>`s that are not part of quotes.
-        res = render_markdown(CGI::unescapeHTML(res))
+        res = render_markdown(res)
       elsif options[:description] || options[:address]
         res = simple_format(res, {}, sanitize: false).html_safe
       end
@@ -526,12 +524,6 @@ module ApplicationHelper
                   'publications' => 'Publications', 'investigations' => I18n.t('investigation').pluralize, 'studies' => I18n.t('study').pluralize,
                   'samples' => 'Samples', 'strains' => 'Strains', 'organisms' => 'Organisms', 'human_disease' => 'Human Diseases', 'biosamples' => 'Biosamples', 'sample_types' => 'Sample Types',
                   'presentations' => I18n.t('presentation').pluralize, 'programmes' => I18n.t('programme').pluralize, 'events' => I18n.t('event').pluralize, 'help_documents' => 'Help' }.freeze
-
-  def show_page_tab
-    return 'overview' unless params.key?(:tab)
-
-    params[:tab]
-  end
 end
 
 class ApplicationFormBuilder < ActionView::Helpers::FormBuilder

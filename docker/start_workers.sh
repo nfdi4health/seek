@@ -7,6 +7,9 @@ use_mysql_db
 wait_for_mysql
 wait_for_database
 
+# Soffice service
+start_soffice
+
 # Search
 start_search
 

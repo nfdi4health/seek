@@ -29,7 +29,6 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'linkeddata'
 gem 'rdf'
-gem 'indefinite_article'
 
 gem 'openseek-api'
 # for fancy content escaping in openbis integration
@@ -37,7 +36,10 @@ gem 'loofah'
 gem 'jbuilder'
 gem 'jbuilder-json_api'
 gem 'active_model_serializers', '~> 0.10.2'
+gem 'json-schema'
 gem 'json_schemer'
+
+gem 'json-diff'
 gem 'rubyzip'
 
 gem 'equivalent-xml'
@@ -53,14 +55,13 @@ gem 'will_paginate', '~> 3.1'
 gem 'yaml_db'
 gem 'rails_autolink'
 gem 'rfc-822'
-gem 'nokogiri', '~> 1.13.4'
+gem 'nokogiri', '~> 1.12.5'
 gem 'rdf-virtuoso', '>= 0.2.0'
 gem 'terrapin'
 gem 'lograge'
 gem 'psych'
 gem 'validate_url'
 gem "attr_encrypted", "~> 3.0.0"
-gem 'libreconv'
 
 # gem for BiVeS and BudHat
 gem 'bives', "~> 2.0"
@@ -69,6 +70,7 @@ gem 'bives', "~> 2.0"
 gem 'my_responds_to_parent', git: 'https://github.com/SysMO-DB/my_responds_to_parent.git'
 gem 'bioportal', '>=3.0', git: 'https://github.com/SysMO-DB/bioportal.git'
 gem 'doi_query_tool', git: 'https://github.com/seek4science/DOI-query-tool.git'
+gem 'convert_office', git: 'https://github.com/SysMO-DB/convert_office.git', ref: '753f2567dbd625bc89071e1150404efbb562e130'
 gem 'fleximage', git: 'https://github.com/SysMO-DB/fleximage.git', ref: 'bb1182f2716a9bf1b5d85e186d8bb7eec436797b'
 
 gem 'jquery-rails', '~> 4.2.2'
@@ -83,7 +85,7 @@ gem 'bootstrap-sass', '>=3.4.1'
 gem 'sass-rails', '~> 5.0'
 gem 'sprockets-rails'
 
-gem 'ro-bundle', '~> 0.3.0'
+gem 'ro-bundle', '~> 0.2.5'
 gem 'handlebars_assets'
 gem 'zenodo-client', git: 'https://github.com/seek4science/zenodo-client.git'
 
@@ -92,8 +94,9 @@ gem 'seedbank'
 
 gem 'rspec-rails','~> 3.6'
 
-gem 'citeproc-ruby', '~> 2.0.0'
-gem 'csl-styles', '~> 2.0.0'
+gem 'citeproc-ruby', '~> 1.1.4'
+gem 'citeproc', '~> 1.0.4'
+gem 'csl-styles', '~> 1.0.1.11'
 gem 'bibtex-ruby', '~> 5.1.0'
 
 gem 'omniauth', '~> 1.3.1'
@@ -111,7 +114,7 @@ gem 'activerecord-session_store'
 gem 'rails-observers'
 gem 'responders'
 
-gem 'rack-attack', '~> 6.6.0'
+gem 'rack-attack', '~> 5.0.1'
 
 gem 'private_address_check'
 
@@ -131,7 +134,7 @@ gem 'request_store'
 
 gem 'bundler', '>= 1.8.4'
 
-gem 'ro-crate', '~> 0.4.16'
+gem 'ro-crate', '~> 0.4.14'
 
 gem 'git'
 gem 'i18n-js'
@@ -140,8 +143,6 @@ gem 'dotenv-rails', '~> 2.7.6'
 gem 'commonmarker'
 
 gem 'rack-cors', require: 'rack/cors'
-
-gem 'addressable', '~> 2.8.0'
 
 group :production do
   gem 'passenger'
@@ -171,8 +172,6 @@ group :test do
   gem 'rails-controller-testing'
   gem 'simplecov'
   gem 'whenever-test'
-  gem 'json-schema'
-  gem 'json-diff'
 end
 
 group :test, :development do

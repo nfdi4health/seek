@@ -4,13 +4,8 @@ class CollectionItem < ApplicationRecord
   validates :asset_id, uniqueness: { scope: %i[asset_type collection_id], message: 'already included in collection' }
   validates :asset, presence: true
   validate do |item|
-
     if item.asset == collection
       errors.add(:asset, 'cannot be the collection itself!')
-    end
-
-    if item.asset_type == "Collection"
-      errors.add(:asset, 'cannot be another collection!')
     end
   end
   before_create :set_order

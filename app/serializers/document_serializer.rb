@@ -5,5 +5,4 @@ class DocumentSerializer < ContributedResourceSerializer
   has_many :studies
   has_many :assays
   has_many :publications
-  has_many :workflows
 end

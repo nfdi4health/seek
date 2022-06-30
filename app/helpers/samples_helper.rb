@@ -43,17 +43,12 @@ module SamplesHelper
     authorised_assets(Sample, projects)
   end
 
-  def sample_attribute_display_title(attribute)
+  def sample_attribute_title_and_unit(attribute)
     title = attribute.title
     if (unit = attribute.unit) && !unit.dimensionless?
       title += " ( #{unit} )"
     end
-    unless attribute.pid.blank?
-      title += content_tag(:small, 'data-tooltip'=>attribute.pid) do
-        " [ "+attribute.short_pid+ " ]"
-      end.html_safe
-    end
-    title.html_safe
+    title
   end
 
   def display_attribute(sample, attribute, options = {})

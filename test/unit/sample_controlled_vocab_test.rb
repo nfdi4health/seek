@@ -241,12 +241,4 @@ class SampleControlledVocabTest < ActiveSupport::TestCase
       cv.save
     end
   end
-
-  test 'ontology based?' do
-    vocab = Factory(:apples_sample_controlled_vocab)
-    refute vocab.ontology_based?
-
-    vocab = Factory(:edam_topics_controlled_vocab)
-    assert vocab.ontology_based?
-  end
 end

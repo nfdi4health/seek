@@ -55,8 +55,10 @@ module Seek
       end
 
       def set_content_blobs(new_version = false)
+
         asset = instance_variable_get("@#{controller_name.downcase.singularize}")
-        version = asset.respond_to?(:version) ? asset.version : nil
+
+       version = asset.respond_to?(:version) ? asset.version : nil
         version += 1 if new_version
 
         unless model_image_present? && params[:content_blobs].blank?

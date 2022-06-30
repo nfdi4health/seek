@@ -13,5 +13,4 @@ then
 fi
 
 echo "stopping seek-search container"
-docker stop seek-search > /dev/null
-echo "stopped"
+docker stop seek-search

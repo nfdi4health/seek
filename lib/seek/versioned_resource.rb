@@ -99,7 +99,9 @@ module Seek #:nodoc:
 
       # For acts_as_doi_mintable...
       def doi_target_url
-        polymorphic_url(parent, version: version, **Seek::Config.site_url_options)
+        polymorphic_url(parent, version: version,
+                                host: Seek::Config.host_with_port,
+                                protocol: Seek::Config.host_scheme)
       end
     end
   end

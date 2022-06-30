@@ -1257,13 +1257,13 @@ class PeopleControllerTest < ActionController::TestCase
     with_config_value(:results_per_page, { 'people' => 3 }) do
       get :index, params: { view: 'table',table_cols:'created_at,first_name,last_name,description,email' }
       assert_response :success
-      assert_select '.list_items_container #resource-table-view thead th', count: 4 #only title, first_name, last_name allowed (plus th for options)
+      assert_select '.list_items_container thead th', count: 7
     end
     # When no columns are specified, resort to default, so it's never empty
     with_config_value(:results_per_page, { 'people' => 3 }) do
       get :index, params: { view: 'table',table_cols:'' }
       assert_response :success
-      assert_select '.list_items_container #resource-table-view thead th',  minimum: 3
+      assert_select '.list_items_container thead th',  minimum: 3
     end
     # Reset the view parameter
     session.delete(:view)
@@ -1299,36 +1299,6 @@ class PeopleControllerTest < ActionController::TestCase
         end
       end
     end
-  end
-
-  test 'admin can see user login through API' do
-    login_as(Factory(:admin))
-
-    get :show, format: :json, params: { id: Factory(:user, login: 'dave1234').person }
-
-    assert_response :success
-    h = JSON.parse(response.body)
-    assert_equal 'dave1234', h['data']['attributes']['login']
-  end
-
-  test 'admin cannot see user login through API if no registered person' do
-    login_as(Factory(:admin))
-
-    get :show, format: :json, params: { id: Factory(:brand_new_person) }
-
-    assert_response :success
-    h = JSON.parse(response.body)
-    refute h['data']['attributes']['login'].present?
-  end
-
-  test 'non-admin cannot see user login through API' do
-    login_as(Factory(:person))
-
-    get :show, format: :json, params: { id: Factory(:user, login: 'dave1234').person }
-
-    assert_response :success
-    h = JSON.parse(response.body)
-    refute h['data']['attributes'].key?('login')
   end
 
   def edit_max_object(person)

@@ -46,11 +46,6 @@ class SampleAttribute < ApplicationRecord
     { title.to_s => controlled_vocab_labels }
   end
 
-  def short_pid
-    return '' unless pid.present?
-    URI.parse(pid).fragment || pid.gsub(/.*\//,'') || pid
-  end
-
   private
 
   def store_accessor_name

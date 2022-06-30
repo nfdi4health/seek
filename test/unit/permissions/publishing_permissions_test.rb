@@ -6,29 +6,12 @@ class PublishingPermissionsTest < ActiveSupport::TestCase
     df = Factory(:data_file)
     assert !df.is_rejected?
 
-    ResourcePublishLog.add_log(ResourcePublishLog::REJECTED, df)
+    log = ResourcePublishLog.add_log(ResourcePublishLog::REJECTED, df)
     assert df.is_rejected?
 
-  end
-
-  test 'is_updated_since_be_rejected?' do
-    person = Factory(:person, project:Factory(:asset_gatekeeper).projects.first)
-
-    User.with_current_user person.user do
-      df = Factory(:data_file, contributor: person, projects: person.projects)
-      assert !df.is_rejected?
-
-      ResourcePublishLog.add_log(ResourcePublishLog::REJECTED, df)
-      assert df.is_rejected?
-
-      df.title = 'new title'
-      df.updated_at = Time.now + 1.day
-      df.save!
-
-      assert df.is_updated_since_be_rejected?
-      assert df.can_publish?
-    end
-
+    log.created_at = 4.months.ago
+    assert log.save
+    assert !df.is_rejected?
   end
 
   test 'is_waiting_approval?' do
@@ -41,6 +24,9 @@ class PublishingPermissionsTest < ActiveSupport::TestCase
       assert df.is_waiting_approval?
       assert df.is_waiting_approval?(User.current_user)
 
+      log.created_at = 4.months.ago
+      assert log.save
+      assert !df.is_waiting_approval?
     end
   end
 
@@ -146,21 +132,18 @@ class PublishingPermissionsTest < ActiveSupport::TestCase
     end
   end
 
-  test 'not publishable when item was rejected and but publishable again when item was updated' do
+  test 'not publishable when item was rejected' do
     person = Factory(:person,project:Factory(:asset_gatekeeper).projects.first)
-    df = Factory(:data_file, contributor: person, projects:person.projects )
     User.with_current_user person.user do
+      df = Factory(:data_file, contributor: person, projects:person.projects )
       df.resource_publish_logs.create(publish_state: ResourcePublishLog::REJECTED)
       assert df.can_manage?, 'This item must be manageable for the test to be meaningful'
       refute df.is_published?, 'This item must be not published for the test to be meaningful'
       assert df.gatekeeper_required?, 'This item must require gatekeeper for the test to succeed'
       refute df.is_waiting_approval?(User.current_user), 'This item must be waiting for approval for the test to be meaningful'
       assert df.is_rejected?, 'This item must not be rejected for the test to succeed'
-      df.title = 'new title'
-      df.updated_at = Time.now + 1.day
-      df.save!
-      assert df.is_updated_since_be_rejected?
-      assert df.can_publish?, 'This item should be publishable after update'
+
+      refute df.can_publish?, 'This item should not be publishable'
     end
   end
 

@@ -26,7 +26,6 @@ require 'seek/search/common_fields'
 require 'seek/project_hierarchies/project_extension'
 require 'mimemagic'
 require 'private_address_check_monkeypatch'
-require 'libreconv'
 
 SEEK::Application.configure do
   ASSET_ORDER = ['Person', 'Programme', 'Project', 'Institution', 'Investigation', 'Study', 'Assay', 'Strain', 'DataFile', 'Model', 'Sop', 'Publication', 'Presentation','SavedSearch', 'Organism', 'HumanDisease', 'Event']
@@ -89,5 +88,13 @@ SEEK::Application.configure do
     Rails.logger.error "Error creating default delayed jobs - #{e.message}"
   end
 
+  ConvertOffice::ConvertOfficeConfig.options =
+      {
+          :java_bin=>"java",
+          :soffice_port=>8100,
+          :nailgun=>false,
+          :verbose=>false,
+          :asynchronous=>false
+      }
 
 end
