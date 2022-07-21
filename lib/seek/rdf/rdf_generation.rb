@@ -95,11 +95,13 @@ module Seek
       # the hash of namespace prefixes to pass to the RDF::Writer when generating the RDF
       def ns_prefixes
         {
-          'jerm' => JERMVocab.to_uri.to_s,
+          'jerm'    => JERMVocab.to_uri.to_s,
           'dcterms' => RDF::Vocab::DC.to_uri.to_s,
-          'owl' => RDF::Vocab::OWL.to_uri.to_s,
-          'foaf' => RDF::Vocab::FOAF.to_uri.to_s,
-          'sioc' => RDF::Vocab::SIOC.to_uri.to_s
+          'owl'     => RDF::Vocab::OWL.to_uri.to_s,
+          'foaf'    => RDF::Vocab::FOAF.to_uri.to_s,
+          'sioc'    => RDF::Vocab::SIOC.to_uri.to_s,
+          'dcat'    => RDF::Vocab::DCAT.to_uri.to_s,
+          'prov'    => RDF::Vocab::PROV.to_uri.to_s
         }
       end
 
