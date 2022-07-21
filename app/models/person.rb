@@ -106,6 +106,8 @@ class Person < ApplicationRecord
 
   if Seek::Config.solr_enabled
     searchable(auto_index: false) do
+      text :expertise
+      text :tools
       text :project_positions
       text :disciplines do
         disciplines.map(&:title)
@@ -140,7 +142,7 @@ class Person < ApplicationRecord
     super + ['first_name','last_name']
   end
   def columns_allowed
-    columns_default + ['email','phone','skype_name','web_page','orcid']
+    columns_default + ['orcid']
   end
 
   # not registered profiles that match this email
@@ -172,7 +174,7 @@ class Person < ApplicationRecord
   end
 
   def email_uri
-    URI.escape('mailto:' + email)
+    "mailto:#{Addressable::URI.escape(email)}"
   end
 
   def mbox_sha1sum

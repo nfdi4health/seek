@@ -4,6 +4,8 @@ module Seek
       def self.included(base)
         base.before_action :set_gatekeeper, only: [:requested_approval_assets, :gatekeeper_decide]
         base.before_action :gatekeeper_auth, only: [:requested_approval_assets, :gatekeeper_decide]
+        base.before_action :gatekeeper_validate_json_params, only: [:gatekeeper_decide], if: :json_api_request?
+        base.before_action :gatekeeper_convert_json_params, only: [:gatekeeper_decide], if: :json_api_request?
       end
 
       def requested_approval_assets
@@ -27,6 +29,12 @@ module Seek
         respond_to do |format|
           flash[:notice] = 'Decision making complete!'
           format.html { render template: 'assets/publishing/gatekeeper_decision_result' }
+
+          json_response =  'approved_ids:'+ (@approve_items - @problematic_items).map(&:id).to_s
+          json_response += 'rejected_ids:'+ @reject_items.map(&:id).to_s
+          format.json do
+            render json: json_response, status: 200
+          end
         end
       end
 
@@ -116,6 +124,47 @@ module Seek
         @reject_items.uniq!
         @decide_later_items.uniq!
       end
+
+      def gatekeeper_validate_json_params
+        params['data'].each do |data|
+          id = data['resource']['id']
+         StudyhubResource.find(id)
+        rescue ActiveRecord::RecordNotFound
+           error("The resource #{id} is not found", 'not found resource')
+           break
+        end
+      end
+
+      def gatekeeper_convert_json_params
+
+        params['gatekeeper_decide'] = {}
+        params['gatekeeper_decide']['StudyhubResource'] = {}
+
+        resources = {}
+        params['data'].each do |data|
+          id = data['resource']['id']
+          resources[id] ={}
+          resources[id]['decision']= convert_decision_action(data['action'])
+          resources[id]['comment']= data['comment']
+        end
+
+        params['gatekeeper_decide']['StudyhubResource'] = resources
+        params.delete(:data)
+      end
+
+      def convert_decision_action(action)
+        case action
+        when 'approve'
+          1
+        when 'reject'
+          0
+        when 'decide_later'
+          -1
+        else
+          'wrong'
+        end
+      end
+
     end
   end
 end

@@ -18,10 +18,13 @@
     tableview_columns = requiredColView + defaultColView
   end
 
+  tableview_columns = tableview_columns & (resource.columns_allowed + requiredColView)
+
   # Prepare available columns for this particular resource type
   # First show the shown columns in order, and then the available ones. Required columns are never given as an option
   availableColView = tableview_columns + (resource.columns_allowed - tableview_columns) - requiredColView
-  # availableColView = resource.columns_allowed
+
+
 
 %>
 
@@ -71,7 +74,7 @@
               <% end %>
             <% end -%>
             <th>
-              <div id="tableview-colselector" class="dropdown">
+              <div id="tableview-colselector" class="dropdown pull-right">
                   <a href="#" class="dropdown-toggle"><span class="glyphicon glyphicon-cog"></span></a>
                   <div id="sortable-colselector" class="dropdown-menu" style="padding:0px;">
                     <% for column in availableColView -%>
@@ -117,6 +120,7 @@
   /* Removing data-toggle="dropdown" from 'tableview-colselector a' we can prevent it from closing */
   $j('#tableview-colselector a').on('click', function (event) {
       $j(this).parent().toggleClass('open');
+      return false;
   });
 
   $j('#view_tabs a').click(function () {

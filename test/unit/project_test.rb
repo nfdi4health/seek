@@ -208,6 +208,8 @@ class ProjectTest < ActiveSupport::TestCase
     assert project.publications.include?(publications(:taverna_paper_pubmed))
   end
 
+
+
   def test_can_be_edited_by
     u = Factory(:project_administrator).user
     p = u.person.projects.first
@@ -905,7 +907,29 @@ class ProjectTest < ActiveSupport::TestCase
       proj.update_attribute(:funding_codes,'a,b')
       assert_equal ['a','b'],proj.funding_codes.sort
     end
+  end
 
+  test 'project assets' do
+
+    disable_authorization_checks do
+      assay = Factory(:assay)
+      project = assay.projects.first
+      df = Factory(:data_file, projects:[project])
+      assay.data_files << df
+      assay.save!
+
+      assert project.assets.include? df
+      refute project.project_assets.include? df
+
+      unused_df = Factory(:data_file, projects:[project])
+      assert unused_df.investigations.empty?
+
+      project.reload
+
+      assert project.assets.include? unused_df
+      assert project.project_assets.include? unused_df
+    end
 
   end
+  
 end
