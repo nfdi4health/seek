@@ -341,6 +341,10 @@ class StudiesController < ApplicationController
 
   end
 
+  def publish_to_csh
+
+  end
+
   private
 
   def study_params

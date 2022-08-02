@@ -15,6 +15,7 @@
 
   <% if item.can_manage? -%>
     <li><%= image_tag_for_key('manage', manage_study_path(item), "Manage #{t('study')}", nil, "Manage #{t('study')}") -%></li>
+    <li><%= image_tag_for_key('publish', publish_to_csh_study_path(item), "Publish to NFDI4Health Central Search Hub", nil, "Publish to NFDI4Health Central Search Hub") -%></li>
     <%= render :partial => 'snapshots/new_snapshot_link', :locals => { :item => item } %>
   <% end -%>
 
