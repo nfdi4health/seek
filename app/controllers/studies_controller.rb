@@ -342,7 +342,10 @@ class StudiesController < ApplicationController
   end
 
   def publish_to_csh
-
+    @study = Study.find(params[:id])
+    respond_to do |format|
+      format.html { render(params[:only_content] ? { layout: false } : {})}
+    end
   end
 
   private
