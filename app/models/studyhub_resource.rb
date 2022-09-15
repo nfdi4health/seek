@@ -69,7 +69,7 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
-  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_languagnfdi4health-studyhub-UI-merge-seek-1.12e],
+  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_language],
                                  'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender],
                                  'interventional_study_design' => %w[study_masking_roles],
                                  'non_interventional_study_design' => %w[study_time_perspective study_biospecimen_retention]}.freeze
