@@ -1,4 +1,6 @@
 require 'nfdi4health/csh_client'
+require 'seek/util'
+
 class StudiesController < ApplicationController
   include Seek::IndexPager
   include Seek::AssetsCommon
@@ -344,7 +346,8 @@ class StudiesController < ApplicationController
 
   def publish_to_csh
     @study = Study.find(params[:id])
-    endpoint = Nfdi4Health::Client.new
+    url = Seek::Config.n4h_url.blank? ? nil : Seek::Config.n4h_url
+    endpoint = Nfdi4Health::Client.new(url)
     endpoint.publish_study(@study.to_json)
   end
 

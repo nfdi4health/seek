@@ -250,3 +250,7 @@ cv_dropdown_limit:
 tag_cloud_enabled:
 workflow_class_list_enabled:
 home_description_position:
+n4h_enabled:
+n4h_username:
+n4h_password:
+n4h_url:

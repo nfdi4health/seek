@@ -261,11 +261,13 @@ def load_seek_config_defaults!
   Seek::Config.default :sorting, {}
   Seek::Config.default :life_monitor_enabled, false
 
-  #nfid4health
+  # nfid4health
   Seek::Config.default :nfdi_studyhub_enabled, true
   Seek::Config.default :nfdi_other_studyhub_resource_id, nil
   Seek::Config.default :nfdi_default_project_id, 1
 
+  # NFDI4Health publish
+  Seek::Config.default :n4h_url, 'https://fea2cb92-c178-442f-a62d-856736138128.mock.pstmn.io'
 
   load_seek_testing_defaults! if Rails.env.test?
 end

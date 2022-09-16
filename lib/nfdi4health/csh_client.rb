@@ -4,10 +4,7 @@ module Nfdi4Health
 
   class Client
 
-    ENDPOINT = 'https://fea2cb92-c178-442f-a62d-856736138128.mock.pstmn.io'.freeze
-
-    def initialize(endpoint = nil)
-      endpoint ||= ENDPOINT
+    def initialize(endpoint)
       @endpoint = RestClient::Resource.new(endpoint)
     end
 
