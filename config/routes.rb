@@ -433,6 +433,7 @@ SEEK::Application.routes.draw do
       get :manage
       get :order_assays
       patch :manage_update
+      get :publish_to_csh
     end
     resources :people, :programmes, :projects, :assays, :investigations, :models, :sops, :workflows, :nodes, :data_files, :publications, :documents, only: [:index]
   end

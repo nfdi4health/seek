@@ -1,0 +1,10 @@
+<% if item.permitted_for_research_object? %>
+    <li><%= image_tag_for_key('publish', publish_to_csh_study_path(item), "Publish to NFDI4Health Central Search Hub", nil, "Publish to NFDI4Health Central Search Hub") -%></li>
+<% else %>
+    <% explanation = "You may only publish publicly accessible #{text_for_resource(item).pluralize.downcase}." %>
+    <li>
+      <span class='disabled_icon disabled' onclick='alert("<%= explanation-%>")' data-tooltip='<%= tooltip(explanation) -%>'>
+          <%= image('publish', {:alt=>"Publish", :class=>"disabled"}) %> Publish
+      </span>
+    </li>
+<% end %>
