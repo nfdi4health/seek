@@ -388,6 +388,10 @@ module StudyhubResourcesHelper
       id['id_type'] = @studyhub_resource.errors.messages["ids[#{index}]['id_type']".to_sym].first
     end
 
+    if (@error_keys.include? "ids[#{index}]['id_identifier']")
+      id['id_identifier'] = @studyhub_resource.errors.messages["ids[#{index}]['id_identifier']".to_sym].first
+    end
+
     id
   end
 
