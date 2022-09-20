@@ -349,6 +349,11 @@ class StudiesController < ApplicationController
     url = Seek::Config.n4h_url.blank? ? nil : Seek::Config.n4h_url
     endpoint = Nfdi4Health::Client.new(url)
     endpoint.publish_study(@study.to_json)
+
+    respond_to do |format|
+      flash[:notice] = "#{t('study')} was successfully published."
+      format.html { redirect_to(@study) }
+    end
   end
 
   private
