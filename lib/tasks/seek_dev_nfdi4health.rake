@@ -304,6 +304,20 @@ namespace :seek_dev_nfdi4health do
 
 
 
+      puts ' ----------------------------------------- '
+      puts 'step 16:  Update NFDI4Health Study Language... ...'
+      if (json['resource_language'].is_a? String)
+
+
+        json['resource_language'] = if json['resource_language'].blank?
+                                      []
+        else
+          [SampleControlledVocabTerm.where(label: json['resource_language']).first.id.to_s]
+                                    end
+
+      end
+      puts ' ----------------------------------------- '
+
       sr.update_column(:resource_json, json)
 
     end
@@ -431,6 +445,8 @@ namespace :seek_dev_nfdi4health do
       # puts JSON.pretty_generate(json)
     end
   end
+
+
 end
 
 def update_language_text(language)
