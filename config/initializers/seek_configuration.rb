@@ -99,18 +99,18 @@ def load_seek_config_defaults!
 #time in minutes that the feeds on the front page are cached for
   Seek::Config.default :home_feeds_cache_timeout,30
 # Branding
-  Seek::Config.default :instance_name,'FAIRDOM'
-  Seek::Config.default :instance_link,'http://www.fair-dom.org'
+  Seek::Config.default :instance_name,'NFDI4Health'
+  Seek::Config.default :instance_link,'https://www.nfdi4health.de/'
 
-  Seek::Config.default :instance_admins_name,"FAIRDOM"
-  Seek::Config.default :instance_admins_link,"http://www.fair-dom.org"
+  Seek::Config.default :instance_admins_name,"NFDI4Health"
+  Seek::Config.default :instance_admins_link,"https://www.nfdi4health.de/"
 
   Seek::Config.default :header_image_enabled,true
-  Seek::Config.default :header_image_title, "FAIRDOM"
-  Seek::Config.default :header_image_link,"http://www.fair-dom.org"
+  Seek::Config.default :header_image_title, "NFDI4Health LAP"
+  Seek::Config.default :header_image_link,"https://www.nfdi4health.de/"
   Seek::Config.default :copyright_addendum_enabled,false
   Seek::Config.default :copyright_addendum_content,'Additions copyright ...'
-  Seek::Config.default :issue_tracker, 'https://fair-dom.org/issues'
+  Seek::Config.default :issue_tracker, 'https://github.com/nfdi4health/seek/issues'
 
   Seek::Config.fixed :application_name,"FAIRDOM-SEEK"
 
