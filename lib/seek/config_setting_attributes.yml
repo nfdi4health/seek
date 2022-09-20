@@ -56,7 +56,6 @@ jws_enabled:
 copasi_enabled:
 nfdi_studyhub_enabled:
 nfdi_other_studyhub_resource_id:
-nfdi_default_project_id:
 external_search_enabled:
 piwik_analytics_enabled:
 piwik_analytics_tracking_notice:
