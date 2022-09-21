@@ -12,6 +12,8 @@
         <% end %>
         <%= render :partial=> "form", :locals => {:f => f, :collapsed => collapsed } %>
         <% if @studyhub_resource.can_manage? %>
+          <% # for now set up a default project for nfdi, and can be configure with Seek::Config.nfdi_default_project_id in rails c %>
+          <% @studyhub_resource.projects << Project.find(Seek::Config.nfdi_default_project_id) if @studyhub_resource.projects.size == 0 %>
           <%= render :partial => "projects/project_selector", :locals => { :resource => @studyhub_resource } -%>
         <% end %>
         <%= render :partial=> "set_buttons" %>

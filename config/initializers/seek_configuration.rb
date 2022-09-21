@@ -264,7 +264,7 @@ def load_seek_config_defaults!
   #nfid4health
   Seek::Config.default :nfdi_studyhub_enabled, true
   Seek::Config.default :nfdi_other_studyhub_resource_id, nil
-
+  Seek::Config.default :nfdi_default_project_id, 1
 
   load_seek_testing_defaults! if Rails.env.test?
 end
