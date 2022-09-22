@@ -29,6 +29,7 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'linkeddata'
 gem 'rdf'
+gem 'rdf-vocab', '~> 3.2.1'
 gem 'indefinite_article'
 
 gem 'openseek-api'
