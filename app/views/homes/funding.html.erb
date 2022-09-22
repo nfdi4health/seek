@@ -1,145 +1,124 @@
 <style>
-    .funder-row {
-        padding: 1em;
+    .funders img {
+        max-width: 100%;
     }
-    .funder-logo {width: 160px}
 </style>
 
-<h1>FAIRDOM-SEEK Projects and Funding details</h1>
-
-
-<div class="container">
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'eosc-life-logo',:class=>'funder-logo' %>
+<div class="funders">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Partner</h1>
+    </div>
   </div>
-  <div class="col-md-10">
-    <%= link_to "EOSC-Life", "https://www.eosc-life.eu/", target:'_blank' %>
-     brings together the 13 Life Science ‘ESFRI’ research infrastructures (LS RIs) to create an open, digital and collaborative space for biological and medical research.
-    The project will publish ‘FAIR’ data and a catalogue of services provided by participating RIs for the management, storage and reuse of data in the European Open Science Cloud (EOSC).
-  </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'ibisba-logo',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'IBISBA', 'https://www.ibisba.eu/',target:'_blank' %>
-     is a European distributed Research Infrastructure that promotes Industrial Biotechnology as a cornerstone of the bioeconomy. Driven by a coordinated network of leading research organisations, it enables academia and industry to access integrated experimental and in silico services to accelerate bio-based manufacturing processes.
-  </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'fairdom-logo',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'FAIRDOM', 'https://www.fair-dom.org/',target:'_blank' %>
-     is a joint action of ERA-Net ERASysAPP and European Research Infrastructure ISBE to establish a data and model management service facility for Systems Biology.  Our prime mission is to support researchers, students, trainers, funders and publishers by enabling Systems Biology projects to make their Data, Operating procedures and Models, Findable, Accessible, Interoperable and Reusable (FAIR).
-  </div>
-</div>
-
-<h2>Funding agencies</h2>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'funder-eu-h2020',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'European Union Horizon 2020 Programme', 'https://ec.europa.eu/programmes/horizon2020/', target:'_blank' %>
-    is the biggest EU Research and Innovation programme ever with nearly €80 billion of funding available over 7 years (2014 to 2020)
-    – in addition to the private investment that this money will attract.
-  </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-  <%= image 'funder-bbsrc',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'Biotechnology and Biological Sciences Research Council (BBSRC)', 'http://www.bbsrc.ac.uk/', target:'_blank' %>
-    is a UK Research Council and non-departmental public
-    body. Being the largest UK public funder of non-medical bioscience, the organization funds scientific research
-    institutes and university research departments in the UK.
-  </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'funder-bmbf',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'The Federal Ministry of Education and Research (Bundesministerium für Bildung und Forschung – BMBF)', 'https://www.bmbf.de/en/', target:'_blank' %>
-    , is a
-    cabinet-level ministry of the Federal Republic of Germany. The Ministry provides funding for research projects and
-    institutions and sets general educational policy
-  </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'funder-nwo',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'The Netherlands Organization for Scientific Research (Nederlandse Organisatie voor Wetenschappelijk Onderzoek)', 'http://www.nwo.nl/en', target:'_blank' %>
-    is
-    the national research council of the Netherlands. Promoting quality and innovation in science, the organization
-    funds
-    thousands of top researchers at universities/institutes inside the country.
-  </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'funder-systemsx',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'SystemsX (SystemsX.ch)', 'http://www.systemsx.ch/', target:'_blank' %> is the largest public
-    research
-    initiative in Switzerland. It focuses on a broad topical area
-    of basic research with major specialization in systems biology.
+  <div class="row">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.zbmed.de/">
+        <%= image_tag "logos/funders/zbmed.svg", { :alt => "ZB MED", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.bips-institut.de/home.html">
+        <%= image_tag "logos/funders/bips.svg", { :alt => "BIPS", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.dife.de/">
+        <%= image_tag "logos/funders/dife.svg", { :alt => "DIFE", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.fraunhofer.de/">
+        <%= image_tag "logos/funders/fraunhofer.svg", { :alt => "Fraunhofer", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.h-its.org/de/">
+        <%= image_tag "logos/funders/hits.svg", { :alt => "HITS", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.kks-netzwerk.de/index.php">
+        <%= image_tag "logos/funders/kksn.svg", { :alt => "KKSN", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.mdc-berlin.de/de">
+        <%= image_tag "logos/funders/mdc.svg", { :alt => "MDC", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.rki.de/DE/Home/homepage_node.html">
+        <%= image_tag "logos/funders/rki.gif", { :alt => "RKI", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.tmf-ev.de/Home.aspx">
+        <%= image_tag "logos/funders/tmf.svg", { :alt => "TMF", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.ernaehrungsepidemiologie.uni-bonn.de/">
+        <%= image_tag "logos/funders/uni_bonn.svg", { :alt => "Universität Bonn", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.uni-bremen.de/jura/fachbereich-6-rechtswissenschaft/">
+        <%= image_tag "logos/funders/uni_bremen.png", { :alt => "Uni Bremen", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.imise.uni-leipzig.de/homepage">
+        <%= image_tag "logos/funders/uni_leipzig.svg", { :alt => "Universität Leipzig", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.cb.hs-mittweida.de/">
+        <%= image_tag "logos/funders/hs_mw.svg", { :alt => "HS Mittweida", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.umg.eu/">
+        <%= image_tag "logos/funders/um_goettingen.svg", { :alt => "Universitätsmedizin Göttingen", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="http://www2.medizin.uni-greifswald.de/icm/index.php?id=20">
+        <%= image_tag "logos/funders/um_greifswald.svg", { :alt => "Unimedizin Greifswald", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.bihealth.org/">
+        <%= image_tag "logos/funders/bih.svg", { :alt => "BIH", :loading => "lazy" } -%>
+      </a>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <a target="_blank" rel="noopener noreferrer" href="https://www.ub.uni-koeln.de/index.html">
+        <%= image_tag "logos/funders/ub_koeln.svg", { :alt => "USB Köln", :loading => "lazy" } -%>
+      </a>
+    </div>
   </div>
 </div>
 
-<p>
-  SEEK development is funded until 2023. The <%= link_to 'FAIRDOMHub','https://fairdomhub.org', target:'_blank' %> is guaranteed to run until 2027.
-</p>
-
-<h2>Programmes</h2>
-
-<br/>
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'programme-erasysapp',:class=>'funder-logo' %>
+<div class="funders">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Funding</h1>
+    </div>
   </div>
-  <div class="col-md-10">
-    <%= link_to 'ERANET proposal Systems Biology Applications (ERASysAPP)', 'https://www.erasysapp.eu', target:'_blank' %>
-    - The main objective of ERASysAPP is to promote multidimensional and complementary European systems biology projects, programmes and research initiatives on a number of selected research topics.
+  <div class="row">
+    <div class="col-md-8">
+      <p>The partners of the NFDI consortium NFDI4Health are funded by the
+        <a href="https://www.dfg.de/en/" target="_blank" rel="noopener noreferrer">German Research
+          Foundation (DFG)</a> within the framework of the “Agreement between the Federal Government and the
+        Länder Concerning the Establishment and Funding of a
+        <a href="https://www.nfdi.de/" target="_blank" rel="noopener noreferrer">National Research Data
+          Infrastructure</a>” of 26 November 2018. To coordinate the activities, the partners of NFDI4Health
+        participate as far as possible as members in the National Research Data Infrastructure (NFDI) e. V.
+        association and participate in the various bodies and other structures of the association in
+        accordance with its statutes.</p>
+    </div>
+    <div class="col-md-4">
+      <%= image_tag "logos/funders/dfg.svg", { :alt => "DFG", :loading => "lazy" } -%>
+    </div>
   </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'programme-isbe',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'European Research Infrastructure (ISBE)', 'http://project.isbe.eu/', target:'_blank' %>
-    - Creating a European research infrastructure that empowers scientists to understand how living organisms function to a level that allows rational and effective intervention in how biological systems operate.
-    This allows life science researchers to deliver solutions that address societal grand challenges in health and quality of life, bio-economy and sustainability.
-  </div>
-</div>
-
-<div class='row funder-row'>
-  <div class='col-md-2'>
-    <%= image 'programme-denbi',:class=>'funder-logo' %>
-  </div>
-  <div class="col-md-10">
-    <%= link_to 'German Network for Bioinformatics Infrastructure – de.NBI', 'https://www.denbi.de/', target:'_blank' %>
-    - A national, academic and non-profit infrastructure supported by the Federal Ministry of Education and Research providing bioinformatics services to users in life sciences research and biomedicine
-    in Germany and Europe. The partners organize training events, courses and summer schools on tools, standards and compute services provided by de.NBI to assist researchers to more effectively exploit their data.
-
-
-  </div>
-</div>
 </div>

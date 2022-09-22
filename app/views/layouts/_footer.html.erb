@@ -3,6 +3,11 @@
 
     <div id="ft">
       <div class="container">
+        <div style="float: left">
+          <a href="https://gepris.dfg.de/gepris/projekt/442326535" target="_blank">
+            <%= image_tag 'logos/funders/dfg.svg', style: 'height: 90px;' -%>
+          </a>
+        </div>
         <div id="seek-credit">
           <a href="http://www.seek4science.org" target="_blank" class="powered-by">
             Powered by<br/>
@@ -19,7 +24,7 @@
             <% if logged_in_and_registered? %>
                 <%= link_to 'Provide feedback', feedback_home_path -%> |
             <% end %>
-            <%= link_to 'Funding and Programmes', funding_home_path -%> | 
+            <%= link_to 'Partners and Funding', funding_home_path -%> |
             <% if !Seek::Config.funding_link.blank? %>
               <a href="<%=Seek::Config.funding_link%>" target="_blank">
                 <%=Seek::Config.funding_link%>
