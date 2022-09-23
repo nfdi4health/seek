@@ -357,7 +357,7 @@ study_age_max_examined study_target_follow-up_duration].freeze
       end
     end
 
-    if  self.get_study_primary_design_type == StudyhubResource::INTERVENTIONAL
+    if  self.is_interventional_study?
       resource_json['study_design']['interventional_study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
         if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
           errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
@@ -404,16 +404,17 @@ study_age_max_examined study_target_follow-up_duration].freeze
     self.studyhub_resource_type.is_studytype?
   end
 
-  def get_study_primary_design_type
-    if self.resource_json['study_design'].key? 'study_primary_design'
-      self.resource_json['study_design']['study_primary_design']
-    else
-      nil
-    end
+  def is_interventional_study?
+     self.get_study_primary_design_type == 'Interventional'
+  end
+
+  def is_non_interventional_study?
+    self.get_study_primary_design_type == 'Non-interventional'
   end
 
   # if the resource type is study or substudy
   def get_study_primary_design_type
+    return nil unless is_studytype?
     resource_json['study_design']['study_primary_design']
   end
 
