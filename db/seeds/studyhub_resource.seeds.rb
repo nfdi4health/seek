@@ -246,7 +246,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
       ['Blood', 'Buccal cells', 'Cord blood', 'DNA', 'Faeces', 'Hair', 'Immortalized cell lines', 'Isolated pathogen', 'Nail', 'Plasma', 'RNA', 'Saliva', 'Serum', 'Tissue (Frozen)', 'Tissue (FFPE)',
        'Urine', 'Other biological samples', 'Administrative databases', 'Cognitive measurements', 'Genealogical records', 'Imaging data (ultrasound)', 'Imaging data (MRI)', 'Imaging data (MRI, radiography)',
        'Imaging data (CT)', 'Other imaging data', 'Medical records', 'Registries', 'Interview', 'Questionnaire', 'Physiological/Biochemical measurements', 'Genomics', 'Metabolomics', 'Transcriptomics',
-       'Proteomics', 'Other omics technology', 'Other'])
+       'Proteomics', 'Other omics technology', 'Other','Biological samples', 'Imaging data', 'Omics technology'])
   )
 
   # study_data_sharing_plan_generally
