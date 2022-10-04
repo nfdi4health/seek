@@ -76,6 +76,15 @@ class StudyhubResource < ApplicationRecord
                                  'non_interventional_study_design' => %w[study_time_perspective study_biospecimen_retention]}.freeze
 
 
+  MULTISELECT_ATTRIBUTES_HASH_2_1 = {'resource' => %w[resource_languages],
+                                 'study_design' => %w[study_countries],
+                                 'study_data_source' => %w[study_data_sources_general study_data_sources_biosamples study_data_sources_imaging study_data_sources_omics],
+                                 'study_eligibility_criteria' => %w[study_eligibility_genders],
+                                 'study_data_sharing_plan' => %w[study_data_sharing_plan_supporting_information],
+                                 'study_masking' => %w[study_masking_roles],
+                                 'study_design_non_interventional' => %w[study_time_perspectives study_biospecimen_retention]}.freeze
+
+
   # *****************************************************************************
   #  This section defines attributes which have 0-n relationship
   MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { 'study_conditions' => %w[study_conditions study_conditions_classification study_conditions_classification_code],
