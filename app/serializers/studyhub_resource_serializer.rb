@@ -5,7 +5,7 @@ class StudyhubResourceSerializer < PCSSerializer
   # end
 
   attribute :resource do
-    object.resource_json['resource_id'] = object.id.to_s
+    object.resource_json['resource_identifier'] = object.id.to_s
     object.resource_json['resource_type'] = object.studyhub_resource_type.try(:title)
     convert_multi_select_attr
     object.resource_json
@@ -33,31 +33,54 @@ class StudyhubResourceSerializer < PCSSerializer
 
 
   def convert_multi_select_attr
-      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH.keys.each do |key|
-        StudyhubResource::MULTISELECT_ATTRIBUTES_HASH[key].each do |attr|
+    StudyhubResource::MULTISELECT_ATTRIBUTES_HASH_2_1.keys.each do |key|
+      StudyhubResource::MULTISELECT_ATTRIBUTES_HASH_2_1[key].each do |attr|
 
-          if key == 'resource'
-            object.resource_json[attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[attr]) unless object.resource_json[attr].blank?
+        if key == 'resource'
+          object.resource_json[attr] = convert_id_to_label_for_multi_select_attribute(object.resource_json[attr]) unless object.resource_json[attr].blank?
+        end
+
+
+        if object.is_studytype?
+
+          study_design = object.resource_json['study_design']
+
+          study_design[attr] =
+            convert_id_to_label_for_multi_select_attribute(study_design[attr]) unless study_design[attr].blank?
+
+
+          if key == 'study_data_source'
+            study_design['study_data_source'][attr] =
+              convert_id_to_label_for_multi_select_attribute(study_design['study_data_source'][attr]) unless study_design['study_data_source'][attr].blank?
           end
 
-          if object.is_studytype?
-
-            object.resource_json['study_design'][attr] =
-              convert_id_to_label_for_multi_select_attribute(object.resource_json['study_design'][attr]) unless object.resource_json['study_design'][attr].blank?
-
-            case object.get_study_primary_design_type
-            when StudyhubResource::INTERVENTIONAL
-              object.resource_json['study_design']['interventional_study_design'][attr] =
-  convert_id_to_label_for_multi_select_attribute(object.resource_json['study_design']['interventional_study_design'][attr]) unless object.resource_json['study_design']['interventional_study_design'][attr].blank?
-            when StudyhubResource::NON_INTERVENTIONAL
-              object.resource_json['study_design']['non_interventional_study_design'][attr] =
-                convert_id_to_label_for_multi_select_attribute(object.resource_json['study_design']['non_interventional_study_design'][attr]) unless object.resource_json['study_design']['non_interventional_study_design'][attr].blank?
+          if key == 'study_eligibility_criteria'
+            study_design['study_eligibility_criteria'][attr] =
+              convert_id_to_label_for_multi_select_attribute(study_design['study_eligibility_criteria'][attr]) unless study_design['study_eligibility_criteria'][attr].blank?
           end
 
+          if key == 'study_data_sharing_plan'
+            study_design['study_data_sharing_plan'][attr] =
+              convert_id_to_label_for_multi_select_attribute(study_design['study_data_sharing_plan'][attr]) unless study_design['study_data_sharing_plan'][attr].blank?
+          end
+
+          if object.is_non_interventional_study? && key == 'study_design_non_interventional'
+            study_design['study_design_non_interventional'][attr] =
+              convert_id_to_label_for_multi_select_attribute(study_design['study_design_non_interventional'][attr]) unless study_design['study_design_non_interventional'][attr].blank?
+          end
+
+          if object.is_interventional_study? && key == 'study_masking'
+            unless object.resource_json['study_design']['study_design_interventional']['study_masking'][attr].blank?
+              study_design['study_design_interventional']['study_masking'][attr]= convert_id_to_label_for_multi_select_attribute(study_design['study_design_interventional']['study_masking'][attr])
+            end
           end
         end
       end
     end
+  end
+
+
+
 
 
   def convert_id_to_label_for_multi_select_attribute(array)
