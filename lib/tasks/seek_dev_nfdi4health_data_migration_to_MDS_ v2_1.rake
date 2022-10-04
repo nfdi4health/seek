@@ -12,35 +12,38 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
   task(data_migration_to_MDS_2_1: :environment) do
 
-
-    STUDY_TEMPLATE_FILE_PATH = File.join(Rails.root, 'public', 'api', 'nfdi4health-mds-2.1-study-interventional.json')
-    template = JSON.load (File.read(STUDY_TEMPLATE_FILE_PATH))
-
-    # sr = StudyhubResource.find(8)
-
     # the changes for all resources
     StudyhubResource.all.each do |sr|
+
       json = sr.resource_json
       new_json = {}
 
-      # pp json.keys
-      # pp "____________from "+sr.id.to_s+" _________________"
-      # pp json['study_design']['study_conditions']
-      # pp "____________to___________________"
-      # pp template['study_design']
-
-
-      # 1.['ids']
+      # 1.['ids'] + ['ids_alternative'] + ['ids_nfdi4health']
 
       new_json['ids'] = []
+      new_json['ids_alternative'] = []
+      new_json['ids_nfdi4health'] = []
+
       json['ids'].each do |id|
-        new_id = {}
-        new_id['identifier'] = id['id_identifier']
-        new_id['type'] = id['id_type']
-        new_id['date'] = id['id_date']
-        new_id['relation_type'] = id['id_relation_type']
-        new_id['resource_type_general'] = id['id_resource_type_general']
-        new_json['ids'] << new_id
+        if (id['id_relation_type'] == 'has alternate ID')
+          new_alt_id = {}
+          new_alt_id['identifier'] = id['id_identifier']
+          new_alt_id['type'] = id['id_type']
+          new_json['ids_alternative'] << new_alt_id
+        elsif id['id_type'] == 'NFDI4Health'
+          nfdi_id = {}
+          nfdi_id['identifier'] = id['id_identifier']
+          nfdi_id['relation_type'] = id['id_relation_type']
+          new_json['ids_nfdi4health'] << nfdi_id
+        else
+          new_id = {}
+          new_id['identifier'] = id['id_identifier']
+          new_id['type'] = id['id_type']
+          new_id['date'] = id['id_date']
+          new_id['relation_type'] = id['id_relation_type']
+          new_id['resource_type_general'] = id['id_resource_type_general']
+          new_json['ids'] << new_id
+        end
       end
 
 
@@ -183,7 +186,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       new_json['resource_keywords'] = json['resource_keywords']
 
 
-      pp "##################non_study#####################"
+      ###################non_study#####################
 
       unless sr.is_studytype?
 
@@ -223,7 +226,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_primary_design'] = sd['study_primary_design']
 
         # ['study_design']['study_type']
-        new_json['study_design']['study_type'] = sd['study_type']
+        new_json['study_design']['study_type'] = [sd['study_type']]
 
         # ['study_design']['study_conditions']
         new_json['study_design']['study_conditions'] = []
@@ -248,9 +251,24 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
                                                                         sd['study_ethics_commitee_approval']
                                                                       end
 
-        #todo ['study_design']['study_status']
-        # new_json['study_design']['study_status'] = sd['study_status']
-        # new_json['study_design']['study_status_enrolling_by_invitation']
+
+        #todo ['study_design']['study_status'], https://github.com/nfdi4health/metadataschema/issues/206
+        new_json['study_design']['study_status'] = sd['study_status']
+
+        if sr.is_interventional_study?
+          if (sd['study_status'].start_with? 'Ongoing') || (sd['study_status'].start_with? 'At')
+            new_json['study_design']['study_status_when_intervention'] = sd['study_status_when_intervention']
+          end
+        end
+
+
+
+        if (sd['study_status'].start_with? 'Suspended') || (sd['study_status'].start_with? 'Terminated')
+          new_json['study_design']['study_status_halted_stage'] = sd['study_status_halted_stage']
+          new_json['study_design']['study_status_halted_reason'] = sd['study_status_halted_reason']
+        end
+
+        new_json['study_design']['study_status_enrolling_by_invitation'] = sd['study_status_enrolling_by_invitation']
 
 
 
@@ -472,9 +490,8 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         end
 
 
+        #['study_design']['study_design_interventional']
         if sr.is_interventional_study?
-          # pp "_________________interventional: "+sr.id.to_s+" _________________"
-          #['study_design']['study_design_interventional']
           new_json['study_design']['study_design_interventional'] = {}
           new_json['study_design']['study_design_interventional']['study_phase'] = sd['interventional_study_design']['study_phase']
           new_json['study_design']['study_design_interventional']['study_masking'] = {}
@@ -486,45 +503,29 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_json['study_design']['study_design_interventional']['study_off_label_use'] = sd['interventional_study_design']['study_off_label_use']
         end
 
-
+        #['study_design']['study_design_non_interventional']
         if sr.is_non_interventional_study?
-          # pp "_________________non_interventional: "+sr.id.to_s+" _________________"
-          #['study_design']['study_design_non_interventional']
           new_json['study_design']['study_design_non_interventional'] = {}
           new_json['study_design']['study_design_non_interventional']['study_time_perspectives'] = sd['non_interventional_study_design']['study_time_perspective']
           new_json['study_design']['study_design_non_interventional']['study_target_followup_duration'] = sd['non_interventional_study_design']['study_target_follow-up_duration']
           new_json['study_design']['study_design_non_interventional']['study_biospecimen_retention'] = sd['non_interventional_study_design']['study_biospecimen_retention']
           new_json['study_design']['study_design_non_interventional']['study_biospecimen_description'] = sd['non_interventional_study_design']['study_biospecomen_description']
         end
-
-
-        #
-        #
-        #
-        #
-        # # 0..1, if study_primary_degin == "Interventional" AND study_status == ("At the planning stage" OR "Ongoing (I): Recruitment ongoing, but data collection not yet started" OR "Ongoing (II): Recruitment and data collection ongoing" OR "Ongoing (III): Recruitment completed, but data collection ongoing" OR "Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing"); otherwise 0..0
-        # new_json['study_design']['study_status_when_intervention']
-        #
-        # # 0..1, if study_status == ("Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume" OR "Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resume"); otherwise 0..0
-        # new_json['study_design']['study_status_halted_stage']
-        #
-        # # 0..1, if study_status == ("Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume" OR "Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resume"); otherwise 0..0
-        # new_json['study_design']['study_status_halted_reason']
       end
 
 
       # at the very end to print new_json and update the resource_json
 
       # unless new_json.blank?
+      #   pp "________________: "+sr.id.to_s+" _________________"
+      #   # if sr.is_interventional_study?
       #   pp '____________new_json___________________'
       #   pp new_json
+      #   # end
       # end
 
-      # sr.update_column(:resource_json, json)
-
-      #
+      sr.update_column(:resource_json, new_json)
     end
-
   end
 
 end
