@@ -10,6 +10,7 @@ class StudyhubResourcesController < ApplicationController
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
   before_action :check_can_publish, only: [:publish], if: :json_api_request?
+  before_action :redirect_to_only_api,  unless: :json_api_request?
 
   api_actions :index, :show, :create, :update, :destroy
 
@@ -541,8 +542,11 @@ class StudyhubResourcesController < ApplicationController
     provenance
   end
 
+  def redirect_to_only_api
+    render :template => "studyhub_resources/api_only"
+  end
+
   def check_can_publish
-    pp 'studyhub_resources_controller:check_can_publish...'
     unless @asset.is_submitted?
      error('You are not permitted to perform this action', 'The item is not submitted.')
       return false
