@@ -251,9 +251,9 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # study_data_sharing_plan_generally
   study_data_sharing_plan_generally_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Data Sharing Plan Generally').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes, there is a plan to make data available.',
-                                                                                                'No, there is no plan to make data available.',
-                                                                                                'Undecided, it is not yet known if data will be made available.'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes, there is a plan to make data available',
+                                                                                                'No, there is no plan to make data available',
+                                                                                                'Undecided, it is not yet known if data will be made available'])
   )
 
 
