@@ -302,9 +302,6 @@
           },
           "type": "array"
         },
-        "resource_identifier": {
-          "type": "string"
-        },
         "resource_keywords": {
           "items": {
             "additionalProperties": false,
@@ -434,7 +431,6 @@
         "provenance",
         "resource_classification",
         "resource_description_english",
-        "resource_identifier",
         "resource_non_study_details",
         "resource_titles",
         "roles"
@@ -897,9 +893,6 @@
           },
           "type": "array"
         },
-        "resource_identifier": {
-          "type": "string"
-        },
         "resource_keywords": {
           "items": {
             "additionalProperties": false,
@@ -971,7 +964,6 @@
         "provenance",
         "resource_classification",
         "resource_description_english",
-        "resource_identifier",
         "resource_titles",
         "roles",
         "study_design"
