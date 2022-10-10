@@ -10,6 +10,15 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.save!
   end
 
+  task(update_allowed_values_of_relation_type: :environment) do
+    scv= SampleControlledVocab.where(title:  'NFDI4Health ID Relation Type').first
+    scv.sample_controlled_vocab_terms.each do |term|
+      term.update_attributes label: 'A '+term.label+' B'
+    end
+    scv.save!
+  end
+
+
   task(data_migration_to_MDS_2_1: :environment) do
 
     # the changes for all resources
@@ -34,13 +43,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           nfdi_id = {}
           nfdi_id['identifier'] = id['id_identifier']
           nfdi_id['relation_type'] = id['id_relation_type']
+          nfdi_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A '+id['id_relation_type']+ ' B'
           new_json['ids_nfdi4health'] << nfdi_id
         else
           new_id = {}
           new_id['identifier'] = id['id_identifier']
           new_id['type'] = id['id_type']
           new_id['date'] = id['id_date']
-          new_id['relation_type'] = id['id_relation_type']
+          new_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A '+id['id_relation_type']+ ' B'
           new_id['resource_type_general'] = id['id_resource_type_general']
           new_json['ids'] << new_id
         end
