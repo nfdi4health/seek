@@ -2,12 +2,31 @@
   "$ref": "#/definitions/Resource",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date_type": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/emptyString"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\d{2}\\.\\d{2}\\.\\d{4}$"
+        }
+      ]
+    },
+    "emptyString": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 0
+    },
     "ID": {
       "additionalProperties": false,
       "properties": {
         "date": {
-          "format": "date-time",
-          "type": "string"
+          "$ref": "#/definitions/date_type"
         },
         "identifier": {
           "type": "string"
@@ -120,6 +139,59 @@
       ],
       "type": "object"
     },
+    "provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "data_source": {
+          "enum": [
+            "Automatically uploaded: ClinicalTrials.gov",
+            "Automatically uploaded: DRKS",
+            "Automatically uploaded: ICTRP",
+            "Automatically uploaded: MDM Portal",
+            "Automatically uploaded: Other",
+            "Manually collected"
+          ],
+          "type": "string"
+        },
+        "resource_version": {
+          "type": "string"
+        },
+        "verification_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "verification_date_user": {
+          "type": "string"
+        },
+        "last_update_posted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "last_update_posted_user": {
+          "type": "string"
+        },
+        "last_update_submitted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "last_update_submitted_user": {
+          "type": "string"
+        },
+        "resource_first_posted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "resource_first_posted_user": {
+          "type": "string"
+        },
+        "resource_first_submitted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "resource_first_submitted_user": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "data_source"
+      ],
+      "type": "object"
+    },
     "NonStudyResource": {
       "additionalProperties": false,
       "properties": {
@@ -142,24 +214,7 @@
           "type": "array"
         },
         "provenance": {
-          "additionalProperties": false,
-          "properties": {
-            "data_source": {
-              "enum": [
-                "Automatically uploaded: ClinicalTrials.gov",
-                "Automatically uploaded: DRKS",
-                "Automatically uploaded: ICTRP",
-                "Automatically uploaded: MDM Portal",
-                "Automatically uploaded: Other",
-                "Manually collected"
-              ],
-              "type": "string"
-            }
-          },
-          "required": [
-            "data_source"
-          ],
-          "type": "object"
+          "$ref": "#/definitions/provenance"
         },
         "resource_acronyms": {
           "items": {
@@ -733,24 +788,7 @@
           "type": "array"
         },
         "provenance": {
-          "additionalProperties": false,
-          "properties": {
-            "data_source": {
-              "enum": [
-                "Automatically uploaded: ClinicalTrials.gov",
-                "Automatically uploaded: DRKS",
-                "Automatically uploaded: ICTRP",
-                "Automatically uploaded: MDM Portal",
-                "Automatically uploaded: Other",
-                "Manually collected"
-              ],
-              "type": "string"
-            }
-          },
-          "required": [
-            "data_source"
-          ],
-          "type": "object"
+          "$ref": "#/definitions/provenance"
         },
         "resource_acronyms": {
           "items": {
@@ -1260,8 +1298,7 @@
           "type": "object"
         },
         "study_end_date": {
-          "format": "date-time",
-          "type": "string"
+          "$ref": "#/definitions/date_type"
         },
         "study_ethics_committee_approval": {
           "enum": [
@@ -1434,8 +1471,7 @@
           "type": "object"
         },
         "study_start_date": {
-          "format": "date-time",
-          "type": "string"
+          "$ref": "#/definitions/date_type"
         },
         "study_status": {
           "enum": [
@@ -1748,8 +1784,7 @@
           "type": "object"
         },
         "study_end_date": {
-          "format": "date-time",
-          "type": "string"
+          "$ref": "#/definitions/date_type"
         },
         "study_ethics_committee_approval": {
           "enum": [
@@ -1922,8 +1957,7 @@
           "type": "object"
         },
         "study_start_date": {
-          "format": "date-time",
-          "type": "string"
+          "$ref": "#/definitions/date_type"
         },
         "study_status": {
           "enum": [
