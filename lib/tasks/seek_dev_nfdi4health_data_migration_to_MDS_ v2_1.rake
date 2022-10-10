@@ -13,11 +13,19 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
   task(update_allowed_values_of_relation_type: :environment) do
     scv= SampleControlledVocab.where(title:  'NFDI4Health ID Relation Type').first
     scv.sample_controlled_vocab_terms.each do |term|
-      term.update_attributes label: 'A '+term.label+' B'
+      term.update_attributes label: 'A '+term.label+' B' unless term.label.start_with? 'A'
     end
     scv.save!
   end
 
+
+  task(update_allowed_values_of_study_data_sharing_plan_generally: :environment) do
+    scv= SampleControlledVocab.where(title:  'NFDI4Health Study Data Sharing Plan Generally').first
+    scv.sample_controlled_vocab_terms.each do |term|
+      term.update_attributes label: term.label.chomp('.')
+    end
+    scv.save!
+  end
 
   task(data_migration_to_MDS_2_1: :environment) do
 
@@ -308,7 +316,6 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # ['study_design']['study_countries']
         new_json['study_design']['study_countries'] = if sd['study_country'].blank?
-                                                        pp sd['study_country']
                                                         []
                                                       else
                                                         sd['study_country']
@@ -487,7 +494,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         #['study_design']['study_data_sharing_plan']
         new_json['study_design']['study_data_sharing_plan'] = {}
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_generally'] = sd['study_data_sharing_plan_generally']
+        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_generally'] = sd['study_data_sharing_plan_generally'].chomp('.')
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_description'] = sd['study_data_sharing_plan_description']
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_datashield'] = ''
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'] = sd['study_data_sharing_plan_url']
