@@ -27,6 +27,13 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.save!
   end
 
+
+  task(rename_contact_person_to_contact: :environment) do
+    scv= SampleControlledVocab.where(title:  'NFDI4Health Role Type').first
+    scv.sample_controlled_vocab_terms.where(label: 'Contact person').first.update_attributes label: 'Contact'
+    scv.save!
+  end
+
   task(data_migration_to_MDS_2_1: :environment) do
 
     # the changes for all resources
@@ -80,14 +87,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_role['role_name_type'] = 'Organisational'
 
           new_role['role_name_organisational_group'] = {}
-          new_role['role_name_organisational_group']['type'] = role['role_type']
+          new_role['role_name_organisational_group']['type'] = role['role_type'].chomp(' person')
           new_role['role_name_organisational_group']['role_name_organisational_group_name'] = role['role_name_organisational']
           new_role['role_name_organisational_group']['role_name_organisational_group_type_funding_id'] = ''
 
         when 'Personal'
           new_role['role_name_type'] = 'Personal'
           new_role['role_name_personal'] = {}
-          new_role['role_name_personal']['type'] = role['role_type']
+          new_role['role_name_personal']['type'] = role['role_type'].chomp(' person')
           new_role['role_name_personal']['role_name_personal_given_name'] = role['role_name_personal_given_name']
           new_role['role_name_personal']['role_name_personal_family_name'] = role['role_name_personal_family_name']
           new_role['role_name_personal']['role_name_personal_title'] = role['role_name_personal_title']
