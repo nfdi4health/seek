@@ -10,6 +10,36 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.save!
   end
 
+  task(update_allowed_values_of_relation_type: :environment) do
+    scv= SampleControlledVocab.where(title:  'NFDI4Health ID Relation Type').first
+    scv.sample_controlled_vocab_terms.each do |term|
+      term.update_attributes label: 'A '+term.label+' B' unless term.label.start_with? 'A'
+    end
+    scv.save!
+  end
+
+
+  task(update_allowed_values_of_study_data_sharing_plan_generally: :environment) do
+    scv= SampleControlledVocab.where(title:  'NFDI4Health Study Data Sharing Plan Generally').first
+    scv.sample_controlled_vocab_terms.each do |term|
+      term.update_attributes label: term.label.chomp('.')
+    end
+    scv.save!
+  end
+
+
+  task(rename_contact_person_to_contact: :environment) do
+    scv= SampleControlledVocab.where(title:  'NFDI4Health Role Type').first
+    scv.sample_controlled_vocab_terms.where(label: 'Contact person').first.update_attributes label: 'Contact'
+    scv.save!
+  end
+
+  task(remove_allowed_values_of_study_subject: :environment) do
+      scv = SampleControlledVocab.where(title:  'NFDI4Health Study Subject').first
+      scv.sample_controlled_vocab_terms = scv.sample_controlled_vocab_terms.select {|term| ['Person', 'Animal', 'Other', 'Unknown'].include? term.label }
+      scv.save!
+    end
+
   task(data_migration_to_MDS_2_1: :environment) do
 
     # the changes for all resources
@@ -34,13 +64,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           nfdi_id = {}
           nfdi_id['identifier'] = id['id_identifier']
           nfdi_id['relation_type'] = id['id_relation_type']
+          nfdi_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A '+id['id_relation_type']+ ' B'
           new_json['ids_nfdi4health'] << nfdi_id
         else
           new_id = {}
           new_id['identifier'] = id['id_identifier']
           new_id['type'] = id['id_type']
           new_id['date'] = id['id_date']
-          new_id['relation_type'] = id['id_relation_type']
+          new_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A '+id['id_relation_type']+ ' B'
           new_id['resource_type_general'] = id['id_resource_type_general']
           new_json['ids'] << new_id
         end
@@ -62,14 +93,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_role['role_name_type'] = 'Organisational'
 
           new_role['role_name_organisational_group'] = {}
-          new_role['role_name_organisational_group']['type'] = role['role_type']
+          new_role['role_name_organisational_group']['type'] = role['role_type'].chomp(' person')
           new_role['role_name_organisational_group']['role_name_organisational_group_name'] = role['role_name_organisational']
           new_role['role_name_organisational_group']['role_name_organisational_group_type_funding_id'] = ''
 
         when 'Personal'
           new_role['role_name_type'] = 'Personal'
           new_role['role_name_personal'] = {}
-          new_role['role_name_personal']['type'] = role['role_type']
+          new_role['role_name_personal']['type'] = role['role_type'].chomp(' person')
           new_role['role_name_personal']['role_name_personal_given_name'] = role['role_name_personal_given_name']
           new_role['role_name_personal']['role_name_personal_family_name'] = role['role_name_personal_family_name']
           new_role['role_name_personal']['role_name_personal_title'] = role['role_name_personal_title']
@@ -298,7 +329,6 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # ['study_design']['study_countries']
         new_json['study_design']['study_countries'] = if sd['study_country'].blank?
-                                                        pp sd['study_country']
                                                         []
                                                       else
                                                         sd['study_country']
@@ -335,7 +365,11 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_subject'] = if sd['study_subject'].blank?
                                                       ''
                                                     else
-                                                      sd['study_subject']
+                                                      if %w[Person Animal Other Unknown].include? sd['study_subject']
+                                                        sd['study_subject']
+                                                      else
+                                                        'Other'
+                                                      end
                                                     end
 
         #['study_design']['study_sampling']
@@ -477,7 +511,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         #['study_design']['study_data_sharing_plan']
         new_json['study_design']['study_data_sharing_plan'] = {}
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_generally'] = sd['study_data_sharing_plan_generally']
+        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_generally'] = sd['study_data_sharing_plan_generally'].chomp('.')
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_description'] = sd['study_data_sharing_plan_description']
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_datashield'] = ''
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'] = sd['study_data_sharing_plan_url']

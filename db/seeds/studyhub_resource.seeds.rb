@@ -108,7 +108,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # role_type
   role_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Contact person', 'Principal investigator', 'Creator/Author', 'Funder(public)', 'Funder(private)',
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Contact', 'Principal investigator', 'Creator/Author', 'Funder(public)', 'Funder(private)',
                                                                                                'Sponsor (primary)', 'Sponsor (secondary)', 'Sponsor-Investigator', 'Data collector', 'Data curator',
                                                                                                'Data manager', 'Distributor', 'Editor', 'Hosting institution', 'Producer', 'Project leader', 'Project manager',
                                                                                                'Project member', 'Publisher', 'Registration agency', 'Registration authority', 'Related person', 'Researcher',
@@ -206,9 +206,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
   # study_subject
   study_subject_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Subject').first_or_create!(
     sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(
-      ['Person',  'Animal', 'Practitioner', 'Device', 'Medication', 'Substance', 'Organization', 'Family',
-       'Household', 'Event/Process', 'Geographic unit', 'Time unit', 'Text unit', 'Group', 'Object', 'Pathogens', 'Twins',
-       'Other', 'Unknown'])
+      ['Person', 'Animal', 'Other', 'Unknown'])
   )
 
   # study_status
@@ -251,9 +249,9 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # study_data_sharing_plan_generally
   study_data_sharing_plan_generally_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Data Sharing Plan Generally').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes, there is a plan to make data available.',
-                                                                                                'No, there is no plan to make data available.',
-                                                                                                'Undecided, it is not yet known if data will be made available.'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes, there is a plan to make data available',
+                                                                                                'No, there is no plan to make data available',
+                                                                                                'Undecided, it is not yet known if data will be made available'])
   )
 
 
