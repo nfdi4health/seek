@@ -6,7 +6,6 @@ class StudyhubResourceSerializer < PCSSerializer
 
   attribute :resource do
     object.resource_json['resource_identifier'] = object.id.to_s
-    object.resource_json['resource_type'] = object.studyhub_resource_type.try(:title)
     convert_multi_select_attr
     object.resource_json
   end

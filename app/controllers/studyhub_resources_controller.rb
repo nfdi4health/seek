@@ -279,7 +279,7 @@ class StudyhubResourcesController < ApplicationController
     if json_api_request?
 
       Rails.logger.info("The request is sent from API......")
-      @rt = StudyhubResourceType.where(title: params[:studyhub_resource][:resource_json][:resource_type]).first
+      @rt = StudyhubResourceType.where(title: params[:studyhub_resource][:resource_json][:resource_classification][:resource_type]).first
       params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
 
     else
@@ -558,9 +558,9 @@ class StudyhubResourcesController < ApplicationController
     begin
       raise ArgumentError, 'A POST/PUT request must specify a data:attributes:resource.' if params[:studyhub_resource][:resource].blank?
       params[:studyhub_resource][:resource_json] = params[:studyhub_resource][:resource]
-      raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_type.' if params[:studyhub_resource][:resource_json][:resource_type].blank?
+      raise ArgumentError, 'A POST/PUT request must specify a resource_json:resource_classification:resource_type.' if params[:studyhub_resource][:resource_json][:resource_classification][:resource_type].blank?
 
-      type = params[:studyhub_resource][:resource_json][:resource_type]
+      type = params[:studyhub_resource][:resource_json][:resource_classification][:resource_type]
       raise ArgumentError, "The given #{t('studyhub_resources.studyhub_resource')} type is wrong." if StudyhubResourceType.where(title:type).first.nil?
 
       if params[:action]=='update'
