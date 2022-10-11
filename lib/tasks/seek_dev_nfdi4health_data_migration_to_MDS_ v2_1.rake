@@ -34,6 +34,12 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.save!
   end
 
+  task(remove_allowed_values_of_study_subject: :environment) do
+      scv = SampleControlledVocab.where(title:  'NFDI4Health Study Subject').first
+      scv.sample_controlled_vocab_terms = scv.sample_controlled_vocab_terms.select {|term| ['Person', 'Animal', 'Other', 'Unknown'].include? term.label }
+      scv.save!
+    end
+
   task(data_migration_to_MDS_2_1: :environment) do
 
     # the changes for all resources
@@ -359,7 +365,11 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_subject'] = if sd['study_subject'].blank?
                                                       ''
                                                     else
-                                                      sd['study_subject']
+                                                      if %w[Person Animal Other Unknown].include? sd['study_subject']
+                                                        sd['study_subject']
+                                                      else
+                                                        'Other'
+                                                      end
                                                     end
 
         #['study_design']['study_sampling']
