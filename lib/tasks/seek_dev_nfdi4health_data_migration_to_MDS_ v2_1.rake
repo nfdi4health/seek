@@ -489,7 +489,16 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         #['study_design']['study_interventions']
         new_json['study_design']['study_interventions'] = if (sr.is_interventional_study? && !sd['interventional_study_design']['interventional_study_design_interventions'].blank?)
-                                                            sd['interventional_study_design']['interventional_study_design_interventions']
+                                                            study_interventions = []
+                                                            sd['interventional_study_design']['interventional_study_design_interventions']&.each do |old|
+                                                              new = {}
+                                                              new['study_intervention_arms_groups_label'] = old['study_intervention_arm_group_label']
+                                                              new['study_intervention_name'] = old['study_intervention_name']
+                                                              new['study_intervention_type'] = old['study_intervention_type']
+                                                              new['study_intervention_description'] = old['study_intervention_description']
+                                                              study_interventions << new
+                                                            end
+                                                            study_interventions
                                                           else
                                                             []
                                                           end
