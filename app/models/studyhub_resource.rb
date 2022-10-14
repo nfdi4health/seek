@@ -16,7 +16,6 @@ class StudyhubResource < ApplicationRecord
   validates :resource_json, presence: true, on: %i[create update], unless: :is_ui_request?
   validates :resource_json, resource_json:true, on:  %i[create update], unless: :is_ui_request?
   validate :check_resource_use_rights, on:  [:create, :update], unless: :is_ui_request?
-
   validate :check_title_presence, on:  [:create, :update]
   validate :check_urls, on:  [:create, :update]
   validate :check_provenance_data_presence, on:  [:create, :update]
@@ -28,6 +27,8 @@ class StudyhubResource < ApplicationRecord
   validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
   validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
+  validate :check_nfdi_resource_id, on: [:create, :update]
+
 
   validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
 
@@ -69,7 +70,7 @@ class StudyhubResource < ApplicationRecord
 
   # *****************************************************************************
   #  This section defines constants for multiselect attributes
-  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_languagnfdi4health-studyhub-UI-merge-seek-1.12e],
+  MULTISELECT_ATTRIBUTES_HASH = {'resource' => %w[resource_language],
                                  'study_design' => %w[study_data_source study_country study_data_sharing_plan_supporting_information study_eligibility_gender],
                                  'interventional_study_design' => %w[study_masking_roles],
                                  'non_interventional_study_design' => %w[study_time_perspective study_biospecimen_retention]}.freeze
@@ -241,6 +242,28 @@ study_age_max_examined study_target_follow-up_duration].freeze
       unless id['id_identifier'].blank?
         errors.add("ids[#{index}]['id_type']".to_sym, "can't be blank")  if id['id_type'].blank?
         errors.add("ids[#{index}]['id_relation_type']".to_sym, "can't be blank")  if id['id_relation_type'].blank?
+      end
+    end
+  end
+
+  def check_nfdi_resource_id
+    return unless self.errors[:resource_json].blank?
+
+    resource_json['ids']&.each_with_index do |id,index|
+
+      if id['id_type'] == 'NFDI4Health'
+        begin
+          a = Integer(id['id_identifier'])
+        rescue ArgumentError, TypeError
+          errors.add("ids[#{index}]['id_identifier']".to_sym, "The value must be the ID of the NFDI4Health resource. e.g.1")
+        end
+        begin
+
+        end
+        if StudyhubResource.where(id: id['id_identifier']).blank?
+          errors.add("ids[#{index}]['id_identifier']".to_sym, "This NFDI4Health resource ID doesn't exist.")
+        end
+
       end
     end
   end
