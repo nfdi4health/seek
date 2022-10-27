@@ -7,11 +7,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <% if Seek::Config.header_image_enabled %>
-        <%= link_to root_path,:class=>"logo_link" do %>
-            <%= header_logo_image %>
-        <% end %>
+      <%= link_to root_path,:class=>"logo_link" do %>
+        <%= image_tag 'nfdi/nfdi4health_Favicon-32x32.svg', style: 'height: 50px;' -%>
       <% end %>
+      <%# if Seek::Config.header_image_enabled %>
+        <%#= link_to root_path,:class=>"logo_link" do %>
+            <%#= header_logo_image %>
+        <%# end %>
+      <%# end %>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -22,11 +25,11 @@
         <%= render :partial => "layouts/navbar/create_menu" if logged_in_and_registered? %>
       </ul>
 
-      <%= render :partial => 'layouts/navbar/search_bar' if Seek::Config.solr_enabled %>
+      <%#= render :partial => 'layouts/navbar/search_bar' if Seek::Config.solr_enabled %>
 
       <ul class="nav navbar-nav navbar-right">
-        <%= render :partial => "layouts/navbar/about_menu"%>
-        <%= render :partial => "layouts/navbar/help_menu" if Seek::Config.documentation_enabled %>
+        <%#= render :partial => "layouts/navbar/about_menu"%>
+        <%#= render :partial => "layouts/navbar/help_menu" if Seek::Config.documentation_enabled %>
         <% if logged_in_and_registered? %>
             <%= render :partial => "layouts/navbar/user_menu" %>
         <% else %>

@@ -1,5 +1,5 @@
 <% @error_keys = @studyhub_resource.errors.messages.keys.map {|x| x.to_s}%>
-<%#= @studyhub_resource.errors.messages.inspect %>
+<%# @studyhub_resource.errors.messages.inspect %>
 <% Rails.logger.info("Can not save/submit because:") %>
 <% Rails.logger.info(@studyhub_resource.errors.messages.inspect) %>
 

@@ -19,7 +19,7 @@
 <% if @requested_approval_assets.empty? %>
     <span class="none_text">There are no items waiting for your approval</span>
 
-    <%= button_link_to "Back to your profile", 'back', person_path(params[:id].to_i) -%>
+    <%#= button_link_to "Back to your profile", 'back', person_path(params[:id].to_i) -%>
 <% else %>
     <%= form_tag :action => :gatekeeper_decide do %>
     <h1><%= (@requested_approval_assets.count > 1)? 'The following items have been requested to be published' : 'The following item has been requested to be published' %></h1>

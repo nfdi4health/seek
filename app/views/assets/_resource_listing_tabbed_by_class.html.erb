@@ -23,7 +23,7 @@
         <% active = true %>
         <% ordered_resource_types.each_with_index do |type, i| -%>
             <% unless type[:items].empty? && (type[:hidden_count] == 0) %>
-                <div id="<%= type[:tab_id] -%>" role="tabpanel" class="tab-pane <%= 'active' if active -%>">
+                <div id="<%= type[:tab_id] -%>" role="tabpanel" class="tab-pane <%= 'active' if type[:tab_id]=='studyhubresources' -%>">
                   <% unless type[:items].empty? %>
                       <%= render :partial => "assets/resource_list", :locals => { :collection => type[:items],
                                                                                   :authorization_for_showing_already_done => true,
