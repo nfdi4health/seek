@@ -49,7 +49,7 @@ jobs:
           - mysql
         suite:
           - rails test test/unit
-          - rails test test/functional
+          #- rails test test/functional
           - rails test test/integration
           - rspec spec
           # - rake teaspoon
