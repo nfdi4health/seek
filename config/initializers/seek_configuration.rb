@@ -266,10 +266,8 @@ def load_seek_config_defaults!
   Seek::Config.default :nfdi_other_studyhub_resource_id, nil
   Seek::Config.default :nfdi_default_project_id, 1
 
-
   load_seek_testing_defaults! if Rails.env.test?
 end
 
-SEEK::Application.configure do
-  load_seek_config_defaults!
+SEEK::Application.configure do  load_seek_config_defaults!
 end
