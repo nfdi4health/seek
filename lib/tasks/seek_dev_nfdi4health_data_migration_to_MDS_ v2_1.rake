@@ -2,43 +2,42 @@ require 'json'
 
 namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
-  task(add_new_values_to_study_data_source: :environment) do
+
+  task(update_sample_controlled_vocab_terms: :environment) do
+
+    # add_new_values_to_study_data_source
     scv= SampleControlledVocab.where(title: 'NFDI4Health Study Data Source').first
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.find_or_create_by(label: 'Biological samples')
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.find_or_create_by(label: 'Imaging data')
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.find_or_create_by(label: 'Omics technology')
-    scv.save!
-  end
 
-  task(update_allowed_values_of_relation_type: :environment) do
+    #update_allowed_values_of_relation_type
     scv= SampleControlledVocab.where(title:  'NFDI4Health ID Relation Type').first
     scv.sample_controlled_vocab_terms.each do |term|
       term.update_attributes label: 'A '+term.label+' B' unless term.label.start_with? 'A'
     end
-    scv.save!
-  end
 
-
-  task(update_allowed_values_of_study_data_sharing_plan_generally: :environment) do
+    #update_allowed_values_of_study_data_sharing_plan_generally
     scv= SampleControlledVocab.where(title:  'NFDI4Health Study Data Sharing Plan Generally').first
     scv.sample_controlled_vocab_terms.each do |term|
       term.update_attributes label: term.label.chomp('.')
     end
-    scv.save!
-  end
 
-
-  task(rename_contact_person_to_contact: :environment) do
+    #rename_contact_person_to_contact
     scv= SampleControlledVocab.where(title:  'NFDI4Health Role Type').first
     scv.sample_controlled_vocab_terms.where(label: 'Contact person').first.update_attributes label: 'Contact'
+
+    #remove_allowed_values_of_study_subject
+    scv = SampleControlledVocab.where(title:  'NFDI4Health Study Subject').first
+    scv.sample_controlled_vocab_terms = scv.sample_controlled_vocab_terms.select {|term| ['Person', 'Animal', 'Other', 'Unknown'].include? term.label }
+
+    #update_allowed_values_of_study_biospecimen_retention
+    scv = SampleControlledVocab.where(title:  'NFDI4Health Study Biospecimen Retention').first
+    scv.sample_controlled_vocab_terms.where(label: ' Samples without DNA').first.update_attributes label: 'Samples without DNA'
+
     scv.save!
   end
 
-  task(remove_allowed_values_of_study_subject: :environment) do
-      scv = SampleControlledVocab.where(title:  'NFDI4Health Study Subject').first
-      scv.sample_controlled_vocab_terms = scv.sample_controlled_vocab_terms.select {|term| ['Person', 'Animal', 'Other', 'Unknown'].include? term.label }
-      scv.save!
-    end
 
   task(data_migration_to_MDS_2_1: :environment) do
 
@@ -271,7 +270,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # ['study_design']['study_groups_of_diseases']
         new_json['study_design']['study_groups_of_diseases'] = {}
-        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_generally']=[]
+        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_generally']=['Unknown']
         new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_prevalent_outcomes']=''
         new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_incident_outcomes']=''
 
@@ -489,7 +488,16 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         #['study_design']['study_interventions']
         new_json['study_design']['study_interventions'] = if (sr.is_interventional_study? && !sd['interventional_study_design']['interventional_study_design_interventions'].blank?)
-                                                            sd['interventional_study_design']['interventional_study_design_interventions']
+                                                            study_interventions = []
+                                                            sd['interventional_study_design']['interventional_study_design_interventions']&.each do |old|
+                                                              new = {}
+                                                              new['study_intervention_arms_groups_label'] = old['study_intervention_arm_group_label']
+                                                              new['study_intervention_name'] = old['study_intervention_name']
+                                                              new['study_intervention_type'] = old['study_intervention_type']
+                                                              new['study_intervention_description'] = old['study_intervention_description']
+                                                              study_interventions << new
+                                                            end
+                                                            study_interventions
                                                           else
                                                             []
                                                           end
