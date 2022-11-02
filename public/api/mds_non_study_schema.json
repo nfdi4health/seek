@@ -1,0 +1,867 @@
+{
+  "$ref": "#/definitions/Resource",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date_type": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/emptyString"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\d{2}\\.\\d{2}\\.\\d{4}$"
+        }
+      ]
+    },
+    "emptyString": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 0
+    },
+    "ID": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "relation_type": {
+          "enum": [
+            "A is cited by B",
+            "A cites B",
+            "A is supplement to B",
+            "A is supplemented by B",
+            "A is continued by B",
+            "A continues B",
+            "A is described by B",
+            "A describes B",
+            "A has metadata B",
+            "A is metadata for B",
+            "A has version B",
+            "A is version of B",
+            "A is new version of B",
+            "A is previous version of B",
+            "A is part of B",
+            "A has part B",
+            "A is referenced by B",
+            "A references B",
+            "A is documented by B",
+            "A documents B",
+            "A is compiled by B",
+            "A compiles B",
+            "A is variant form of B",
+            "A is original form of B",
+            "A is identical to B",
+            "A is reviewed by B",
+            "A reviews B",
+            "A is derived from B",
+            "A is source of B",
+            "A is required by B",
+            "A requires B",
+            "A is obsoleted by  B",
+            "A obsoletes B"
+          ],
+          "type": "string"
+        },
+        "resource_type_general": {
+          "enum": [
+            "Audiovisual",
+            "Book",
+            "Book chapter",
+            "Collection",
+            "Computational notebook",
+            "Conference paper",
+            "Conference proceeding",
+            "Data paper",
+            "Dataset",
+            "Dissertation",
+            "Event",
+            "Image",
+            "Interactive resource",
+            "Journal",
+            "Journal article",
+            "Model",
+            "Output management plan",
+            "Peer review",
+            "Physical object",
+            "Preprint",
+            "Report",
+            "Service",
+            "Software",
+            "Sound",
+            "Standard",
+            "Text",
+            "Workflow",
+            "Other"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "DRKS",
+            "NCT (ClinicalTrials.gov)",
+            "ISRCTN",
+            "EudraCT",
+            "EUDAMED",
+            "UTN",
+            "KonsortSWD",
+            "MDM Portal",
+            "DOI",
+            "URL",
+            "arXiv",
+            "EAN13",
+            "EISSN",
+            "Handle",
+            "ISBN",
+            "ISSN",
+            "ISTC",
+            "LISSN",
+            "LSID",
+            "PMID",
+            "PURL",
+            "URN",
+            "w3id",
+            "Other"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "identifier",
+        "type",
+        "relation_type"
+      ],
+      "type": "object"
+    },
+    "provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "data_source": {
+          "enum": [
+            "Automatically uploaded: ClinicalTrials.gov",
+            "Automatically uploaded: DRKS",
+            "Automatically uploaded: ICTRP",
+            "Automatically uploaded: MDM Portal",
+            "Automatically uploaded: Other",
+            "Manually collected"
+          ],
+          "type": "string"
+        },
+        "resource_version": {
+          "type": "string"
+        },
+        "verification_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "verification_date_user": {
+          "type": "string"
+        },
+        "last_update_posted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "last_update_posted_user": {
+          "type": "string"
+        },
+        "last_update_submitted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "last_update_submitted_user": {
+          "type": "string"
+        },
+        "resource_first_posted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "resource_first_posted_user": {
+          "type": "string"
+        },
+        "resource_first_submitted_date": {
+          "$ref": "#/definitions/date_type"
+        },
+        "resource_first_submitted_user": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "data_source"
+      ],
+      "type": "object"
+    },
+    "NonStudyResource": {
+      "additionalProperties": false,
+      "properties": {
+        "ids": {
+          "items": {
+            "$ref": "#/definitions/ID"
+          },
+          "type": "array"
+        },
+        "ids_alternative": {
+          "items": {
+            "$ref": "#/definitions/altId"
+          },
+          "type": "array"
+        },
+        "ids_nfdi4health": {
+          "items": {
+            "$ref": "#/definitions/nfdiId"
+          },
+          "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/definitions/provenance"
+        },
+        "resource_acronyms": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "language": {
+                "enum": [
+                  "EN (English)",
+                  "DE (German)",
+                  "ES (Spanish)",
+                  "FR (French)",
+                  "Other"
+                ],
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "language"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "resource_classification": {
+          "additionalProperties": false,
+          "properties": {
+            "resource_type": {
+              "enum": [
+                "Study",
+                "Substudy/Data collection event",
+                "Dataset",
+                "Study protocol",
+                "Protocol amendment",
+                "Data dictionary",
+                "Informed consent form",
+                "Patient information sheet",
+                "Manual of operations (SOPs)",
+                "Statistical analysis plan",
+                "Data management plan",
+                "Case report form",
+                "Code book",
+                "Questionnaire",
+                "Interview scheme and themes",
+                "Observation guide",
+                "Discussion guide",
+                "Participant tasks",
+                "Other data collection instrument",
+                "Other study document",
+                "Other"
+              ],
+              "type": "string"
+            },
+            "resource_type_general": {
+              "enum": [
+                "Audiovisual",
+                "Book",
+                "Book chapter",
+                "Collection",
+                "Computational notebook",
+                "Conference paper",
+                "Conference proceeding",
+                "Data paper",
+                "Dataset",
+                "Dissertation",
+                "Event",
+                "Image",
+                "Interactive resource",
+                "Journal",
+                "Journal article",
+                "Model",
+                "Output management plan",
+                "Peer review",
+                "Physical object",
+                "Preprint",
+                "Report",
+                "Service",
+                "Software",
+                "Sound",
+                "Standard",
+                "Text",
+                "Workflow",
+                "Other"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "resource_type",
+            "resource_type_general"
+          ],
+          "type": "object"
+        },
+        "resource_description_english": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "language": {
+                "const": "EN (English)",
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "language"
+            ],
+            "type": "object"
+          }
+        },
+        "resource_descriptions_non_english": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "language": {
+                "enum": [
+                  "DE (German)",
+                  "ES (Spanish)",
+                  "FR (French)",
+                  "Other"
+                ],
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "language"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "resource_keywords": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "resource_keywords_label": {
+                "type": "string"
+              },
+              "resource_keywords_label_code": {
+                "format": "uri",
+                "type": "string"
+              }
+            },
+            "required": [
+              "resource_keywords_label"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "resource_languages": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resource_non_study_details": {
+          "additionalProperties": false,
+          "properties": {
+            "resource_format": {
+              "type": "string"
+            },
+            "resource_use_rights": {
+              "additionalProperties": false,
+              "properties": {
+                "resource_use_rights_confirmations": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "resource_use_rights_authors_confirmation_1": {
+                      "type": "boolean"
+                    },
+                    "resource_use_rights_authors_confirmation_2": {
+                      "type": "boolean"
+                    },
+                    "resource_use_rights_authors_confirmation_3": {
+                      "type": "boolean"
+                    },
+                    "resource_use_rights_support_by_licencing": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "resource_use_rights_authors_confirmation_1",
+                    "resource_use_rights_authors_confirmation_2",
+                    "resource_use_rights_authors_confirmation_3",
+                    "resource_use_rights_support_by_licencing"
+                  ],
+                  "type": "object"
+                },
+                "resource_use_rights_description": {
+                  "type": "string"
+                },
+                "resource_use_rights_label": {
+                  "enum": [
+                    "CC0 1.0 (Creative Commons Zero v1.0 Universal)",
+                    "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
+                    "CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)",
+                    "CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)",
+                    "CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)",
+                    "All rights reserved",
+                    "Other",
+                    "Not applicable"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "resource_use_rights_label"
+              ],
+              "type": "object"
+            },
+            "resource_version": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "resource_titles": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "language": {
+                "enum": [
+                  "EN (English)",
+                  "DE (German)",
+                  "ES (Spanish)",
+                  "FR (French)",
+                  "Other"
+                ],
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "language"
+            ],
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "resource_web_page": {
+          "format": "url",
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "$ref": "#/definitions/Role"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "provenance",
+        "resource_classification",
+        "resource_description_english",
+        "resource_non_study_details",
+        "resource_titles",
+        "roles"
+      ],
+      "type": "object"
+    },
+    "OrganisationalRole": {
+      "additionalProperties": false,
+      "properties": {
+        "role_affiliations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "role_affiliation_address": {
+                "type": "string"
+              },
+              "role_affiliation_identifiers": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {
+                      "type": "string"
+                    },
+                    "scheme": {
+                      "enum": [
+                        "ROR",
+                        "GRID",
+                        "ISNI"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "identifier",
+                    "scheme"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "role_affiliation_name": {
+                "type": "string"
+              },
+              "role_affiliation_web_page": {
+                "format": "url",
+                "type": "string"
+              }
+            },
+            "required": [
+              "role_affiliation_name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "role_email": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "email"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
+        },
+        "role_name_organisational_group": {
+          "additionalProperties": false,
+          "properties": {
+            "role_name_organisational_group_name": {
+              "type": "string"
+            },
+            "role_name_organisational_group_type_funding_id": {
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "Contact",
+                "Creator/Author",
+                "Funder (public)",
+                "Funder (private)",
+                "Sponsor (primary)",
+                "Sponsor (secondary)",
+                "Sponsor-Investigator",
+                "Research group",
+                "Data collector",
+                "Data curator",
+                "Data manager",
+                "Distributor",
+                "Hosting institution",
+                "Producer",
+                "Publisher",
+                "Registration agency",
+                "Registration authority",
+                "Rights holder",
+                "Supervisor",
+                "Other"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "role_name_organisational_group_name"
+          ],
+          "type": "object"
+        },
+        "role_name_type": {
+          "const": "Organisational",
+          "type": "string"
+        },
+        "role_phone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "role_name_organisational_group",
+        "role_name_type"
+      ],
+      "type": "object"
+    },
+    "PersonalRole": {
+      "additionalProperties": false,
+      "properties": {
+        "role_affiliations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "role_affiliation_address": {
+                "type": "string"
+              },
+              "role_affiliation_identifiers": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "identifier": {
+                      "type": "string"
+                    },
+                    "scheme": {
+                      "enum": [
+                        "ROR",
+                        "GRID",
+                        "ISNI"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "identifier",
+                    "scheme"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "role_affiliation_name": {
+                "type": "string"
+              },
+              "role_affiliation_web_page": {
+                "format": "url",
+                "type": "string"
+              }
+            },
+            "required": [
+              "role_affiliation_name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "role_email": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "email"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
+        },
+        "role_name_personal": {
+          "additionalProperties": false,
+          "properties": {
+            "role_name_identifiers": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "identifier": {
+                    "type": "string"
+                  },
+                  "scheme": {
+                    "enum": [
+                      "ORCID",
+                      "ROR",
+                      "GRID",
+                      "ISNI"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "scheme"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "role_name_personal_family_name": {
+              "type": "string"
+            },
+            "role_name_personal_given_name": {
+              "type": "string"
+            },
+            "role_name_personal_title": {
+              "enum": [
+                "Mr.",
+                "Ms.",
+                "Dr.",
+                "Prof. Dr.",
+                "Other"
+              ],
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "Contact",
+                "Principal investigator",
+                "Creator/Author",
+                "Sponsor (primary)",
+                "Sponsor (secondary)",
+                "Sponsor-Investigator",
+                "Data collector",
+                "Data curator",
+                "Data manager",
+                "Editor",
+                "Producer",
+                "Project leader",
+                "Project manager",
+                "Project member",
+                "Related person",
+                "Researcher",
+                "Rights holder",
+                "Supervisor",
+                "Work package leader",
+                "Other"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "role_name_personal_title",
+            "role_name_personal_given_name",
+            "role_name_personal_family_name"
+          ],
+          "type": "object"
+        },
+        "role_name_type": {
+          "const": "Personal",
+          "type": "string"
+        },
+        "role_phone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "role_name_personal",
+        "role_name_type"
+      ],
+      "type": "object"
+    },
+    "Resource": {
+      "$ref": "#/definitions/NonStudyResource"
+    },
+    "Role": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/PersonalRole"
+        },
+        {
+          "$ref": "#/definitions/OrganisationalRole"
+        }
+      ]
+    },
+    "altId": {
+      "additionalProperties": false,
+      "properties": {
+        "identifier": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "DRKS",
+            "NCT (ClinicalTrials.gov)",
+            "ISRCTN",
+            "EudraCT",
+            "EUDAMED",
+            "UTN",
+            "KonsortSWD",
+            "MDM Portal",
+            "DOI",
+            "URL",
+            "arXiv",
+            "EAN13",
+            "EISSN",
+            "Handle",
+            "ISBN",
+            "ISSN",
+            "ISTC",
+            "LISSN",
+            "LSID",
+            "PMID",
+            "PURL",
+            "URN",
+            "w3id",
+            "Other"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "identifier",
+        "type"
+      ],
+      "type": "object"
+    },
+    "nfdiId": {
+      "additionalProperties": false,
+      "properties": {
+        "identifier": {
+          "type": "string"
+        },
+        "relation_type": {
+          "enum": [
+            "A is cited by B",
+            "A cites B",
+            "A is supplement to B",
+            "A is supplemented by B",
+            "A is continued by B",
+            "A continues B",
+            "A is described by B",
+            "A describes B",
+            "A has metadata B",
+            "A is metadata for B",
+            "A has version B",
+            "A is version of B",
+            "A is new version of B",
+            "A is previous version of B",
+            "A is part of B",
+            "A has part B",
+            "A is referenced by B",
+            "A references B",
+            "A is documented by B",
+            "A documents B",
+            "A is compiled by B",
+            "A compiles B",
+            "A is variant form of B",
+            "A is original form of B",
+            "A is identical to B",
+            "A is reviewed by B",
+            "A reviews B",
+            "A is derived from B",
+            "A is source of B",
+            "A is required by B",
+            "A requires B",
+            "A is obsoleted by  B",
+            "A obsoletes B"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "identifier",
+        "relation_type"
+      ],
+      "type": "object"
+    }
+  }
+}

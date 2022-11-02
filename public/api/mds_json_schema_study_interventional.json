@@ -192,306 +192,6 @@
       ],
       "type": "object"
     },
-    "NonStudyResource": {
-      "additionalProperties": false,
-      "properties": {
-        "ids": {
-          "items": {
-            "$ref": "#/definitions/ID"
-          },
-          "type": "array"
-        },
-        "ids_alternative": {
-          "items": {
-            "$ref": "#/definitions/altId"
-          },
-          "type": "array"
-        },
-        "ids_nfdi4health": {
-          "items": {
-            "$ref": "#/definitions/nfdiId"
-          },
-          "type": "array"
-        },
-        "provenance": {
-          "$ref": "#/definitions/provenance"
-        },
-        "resource_acronyms": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "language": {
-                "enum": [
-                  "EN (English)",
-                  "DE (German)",
-                  "ES (Spanish)",
-                  "FR (French)",
-                  "Other"
-                ],
-                "type": "string"
-              },
-              "text": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "text",
-              "language"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "resource_classification": {
-          "additionalProperties": false,
-          "properties": {
-            "resource_type": {
-              "enum": [
-                "Study",
-                "Substudy/Data collection event",
-                "Dataset",
-                "Study protocol",
-                "Protocol amendment",
-                "Data dictionary",
-                "Informed consent form",
-                "Patient information sheet",
-                "Manual of operations (SOPs)",
-                "Statistical analysis plan",
-                "Data management plan",
-                "Case report form",
-                "Code book",
-                "Questionnaire",
-                "Interview scheme and themes",
-                "Observation guide",
-                "Discussion guide",
-                "Participant tasks",
-                "Other data collection instrument",
-                "Other study document",
-                "Other"
-              ],
-              "type": "string"
-            },
-            "resource_type_general": {
-              "enum": [
-                "Audiovisual",
-                "Book",
-                "Book chapter",
-                "Collection",
-                "Computational notebook",
-                "Conference paper",
-                "Conference proceeding",
-                "Data paper",
-                "Dataset",
-                "Dissertation",
-                "Event",
-                "Image",
-                "Interactive resource",
-                "Journal",
-                "Journal article",
-                "Model",
-                "Output management plan",
-                "Peer review",
-                "Physical object",
-                "Preprint",
-                "Report",
-                "Service",
-                "Software",
-                "Sound",
-                "Standard",
-                "Text",
-                "Workflow",
-                "Other"
-              ],
-              "type": "string"
-            }
-          },
-          "required": [
-            "resource_type",
-            "resource_type_general"
-          ],
-          "type": "object"
-        },
-        "resource_description_english": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "language": {
-                "const": "EN (English)",
-                "type": "string"
-              },
-              "text": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "text",
-              "language"
-            ],
-            "type": "object"
-          },
-          "minItems": 1,
-          "type": "array"
-        },
-        "resource_descriptions_non_english": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "language": {
-                "enum": [
-                  "DE (German)",
-                  "ES (Spanish)",
-                  "FR (French)",
-                  "Other"
-                ],
-                "type": "string"
-              },
-              "text": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "text",
-              "language"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "resource_keywords": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "resource_keywords_label": {
-                "type": "string"
-              },
-              "resource_keywords_label_code": {
-                "format": "uri",
-                "type": "string"
-              }
-            },
-            "required": [
-              "resource_keywords_label"
-            ],
-            "type": "object"
-          },
-          "type": "array"
-        },
-        "resource_languages": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "resource_non_study_details": {
-          "additionalProperties": false,
-          "properties": {
-            "resource_format": {
-              "type": "string"
-            },
-            "resource_use_rights": {
-              "additionalProperties": false,
-              "properties": {
-                "resource_use_rights_confirmations": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "resource_use_rights_authors_confirmation_1": {
-                      "type": "boolean"
-                    },
-                    "resource_use_rights_authors_confirmation_2": {
-                      "type": "boolean"
-                    },
-                    "resource_use_rights_authors_confirmation_3": {
-                      "type": "boolean"
-                    },
-                    "resource_use_rights_support_by_licencing": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "resource_use_rights_authors_confirmation_1",
-                    "resource_use_rights_authors_confirmation_2",
-                    "resource_use_rights_authors_confirmation_3",
-                    "resource_use_rights_support_by_licencing"
-                  ],
-                  "type": "object"
-                },
-                "resource_use_rights_description": {
-                  "type": "string"
-                },
-                "resource_use_rights_label": {
-                  "enum": [
-                    "CC0 1.0 (Creative Commons Zero v1.0 Universal)",
-                    "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
-                    "CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)",
-                    "CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)",
-                    "CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)",
-                    "All rights reserved",
-                    "Other",
-                    "Not applicable"
-                  ],
-                  "type": "string"
-                }
-              },
-              "required": [
-                "resource_use_rights_label"
-              ],
-              "type": "object"
-            },
-            "resource_version": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "resource_titles": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "language": {
-                "enum": [
-                  "EN (English)",
-                  "DE (German)",
-                  "ES (Spanish)",
-                  "FR (French)",
-                  "Other"
-                ],
-                "type": "string"
-              },
-              "text": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "text",
-              "language"
-            ],
-            "type": "object"
-          },
-          "minItems": 1,
-          "type": "array"
-        },
-        "resource_web_page": {
-          "format": "url",
-          "type": "string"
-        },
-        "roles": {
-          "items": {
-            "$ref": "#/definitions/Role"
-          },
-          "minItems": 1,
-          "type": "array"
-        }
-      },
-      "required": [
-        "provenance",
-        "resource_classification",
-        "resource_description_english",
-        "resource_non_study_details",
-        "resource_titles",
-        "roles"
-      ],
-      "type": "object"
-    },
     "OrganisationalRole": {
       "additionalProperties": false,
       "properties": {
@@ -542,8 +242,15 @@
           "type": "array"
         },
         "role_email": {
-          "format": "email",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "email"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         },
         "role_name_organisational_group": {
           "additionalProperties": false,
@@ -650,8 +357,15 @@
           "type": "array"
         },
         "role_email": {
-          "format": "email",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "email"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         },
         "role_name_personal": {
           "additionalProperties": false,
@@ -746,15 +460,7 @@
       "type": "object"
     },
     "Resource": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/StudyResource"
-        },
-        {
-          "$ref": "#/definitions/NonStudyResource"
-        }
-      ],
-      "description": "\"Resource\": {      \"if\": {        \"properties\": {          \"resource_classification\": {  \"properties\": {            \"resource_type\": { \"enum\": [\"Study\", \"Substudy/Data collection event\"] }            }          }        }      },      \"then\": {        \"$ref\": \"#/definitions/StudyResource\"      },      \"else\": {       \"$ref\": \"#/definitions/NonStudyResource\"      }    },"
+      "$ref": "#/definitions/StudyResource"
     },
     "Role": {
       "anyOf": [
@@ -844,67 +550,29 @@
                 "Other"
               ],
               "type": "string"
-            },
-            "resource_type_general": {
-              "enum": [
-                "Audiovisual",
-                "Book",
-                "Book chapter",
-                "Collection",
-                "Computational notebook",
-                "Conference paper",
-                "Conference proceeding",
-                "Data paper",
-                "Dataset",
-                "Dissertation",
-                "Event",
-                "Image",
-                "Interactive resource",
-                "Journal",
-                "Journal article",
-                "Model",
-                "Output management plan",
-                "Peer review",
-                "Physical object",
-                "Preprint",
-                "Report",
-                "Service",
-                "Software",
-                "Sound",
-                "Standard",
-                "Text",
-                "Workflow",
-                "Other"
-              ],
-              "type": "string"
             }
           },
           "required": [
-            "resource_type",
-            "resource_type_general"
+            "resource_type"
           ],
           "type": "object"
         },
         "resource_description_english": {
-          "items": {
-            "additionalProperties": false,
-            "properties": {
-              "language": {
-                "const": "EN (English)",
-                "type": "string"
-              },
-              "text": {
-                "type": "string"
-              }
+          "additionalProperties": false,
+          "properties": {
+            "language": {
+              "const": "EN (English)",
+              "type": "string"
             },
-            "required": [
-              "text",
-              "language"
-            ],
-            "type": "object"
+            "text": {
+              "type": "string"
+            }
           },
-          "minItems": 1,
-          "type": "array"
+          "required": [
+            "text",
+            "language"
+          ],
+          "type": "object"
         },
         "resource_descriptions_non_english": {
           "items": {
@@ -939,8 +607,15 @@
                 "type": "string"
               },
               "resource_keywords_label_code": {
-                "format": "uri",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "$ref": "#/definitions/emptyString"
+                  }
+                ]
               }
             },
             "required": [
@@ -1012,19 +687,29 @@
       "additionalProperties": false,
       "properties": {
         "number": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "time_unit": {
-          "enum": [
-            "Years",
-            "Months",
-            "Weeks",
-            "Days",
-            "Hours",
-            "Minutes",
-            "Weeks of gestation"
-          ],
-          "type": "string"
+          "anyOf": [
+            {
+              "enum": [
+                "Years",
+                "Months",
+                "Weeks",
+                "Days",
+                "Hours",
+                "Minutes",
+                "Weeks of gestation"
+              ],
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         }
       },
       "required": [
@@ -1106,10 +791,7 @@
       "additionalProperties": false,
       "properties": {
         "study_intervention_arms_groups_label": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
+          "type": "string"
         },
         "study_intervention_description": {
           "type": "string"
@@ -1155,14 +837,24 @@
           "type": "array"
         },
         "study_centers": {
-          "enum": [
-            "Monocentric",
-            "Multicentric"
-          ],
-          "type": "string"
+          "anyOf": [
+            {
+              "enum": [
+                "Monocentric",
+                "Multicentric"
+              ],
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         },
         "study_centers_number": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "study_conditions": {
           "items": {
@@ -1375,7 +1067,10 @@
           "type": "array"
         },
         "study_obtained_sample_size": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "study_outcomes": {
           "items": {
@@ -1391,23 +1086,30 @@
           "type": "string"
         },
         "study_primary_purpose": {
-          "enum": [
-            "Treatment",
-            "Prevention",
-            "Prognostic",
-            "Diagnostic",
-            "Supportive care",
-            "Screening",
-            "Health services research",
-            "Basic science/Physiological study",
-            "Device feasibility",
-            "Pharmacogenetics",
-            "Pharmacogenomics",
-            "Health economics",
-            "Not applicable",
-            "Other"
-          ],
-          "type": "string"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/emptyString"
+            },
+            {
+              "enum": [
+                "Treatment",
+                "Prevention",
+                "Prognostic",
+                "Diagnostic",
+                "Supportive care",
+                "Screening",
+                "Health services research",
+                "Basic science/Physiological study",
+                "Device feasibility",
+                "Pharmacogenetics",
+                "Pharmacogenomics",
+                "Health economics",
+                "Not applicable",
+                "Other"
+              ],
+              "type": "string"
+            }
+          ]
         },
         "study_recruitment_status_register": {
           "enum": [
@@ -1419,7 +1121,8 @@
             "Suspended",
             "Terminated",
             "Withdrawn",
-            "Other"
+            "Other",
+            ""
           ],
           "type": "string"
         },
@@ -1509,11 +1212,18 @@
           "type": "string"
         },
         "study_status_when_intervention": {
-          "enum": [
-            "Intervention ongoing",
-            "Intervention completed, follow-up ongoing"
-          ],
-          "type": "string"
+          "anyOf": [
+            {
+              "enum": [
+                "Intervention ongoing",
+                "Intervention completed, follow-up ongoing"
+              ],
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         },
         "study_subject": {
           "enum": [
@@ -1530,11 +1240,11 @@
         "study_type": {
           "items": {
             "enum": [
-              "Single group ",
-              "Parallel ",
-              "Crossover ",
-              "Factorial ",
-              "Sequential ",
+              "Single group",
+              "Parallel",
+              "Crossover",
+              "Factorial",
+              "Sequential",
               "Other",
               "Unknown",
               "Case-control",
@@ -1625,441 +1335,6 @@
       ],
       "type": "object"
     },
-    "non_interventional": {
-      "additionalProperties": false,
-      "properties": {
-        "study_age_max_examined": {
-          "$ref": "#/definitions/age"
-        },
-        "study_age_min_examined": {
-          "$ref": "#/definitions/age"
-        },
-        "study_arms_groups": {
-          "items": {
-            "$ref": "#/definitions/arm"
-          },
-          "type": "array"
-        },
-        "study_centers": {
-          "enum": [
-            "Monocentric",
-            "Multicentric"
-          ],
-          "type": "string"
-        },
-        "study_centers_number": {
-          "type": "number"
-        },
-        "study_conditions": {
-          "items": {
-            "$ref": "#/definitions/study_condition"
-          },
-          "type": "array"
-        },
-        "study_countries": {
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1,
-          "type": "array"
-        },
-        "study_data_sharing_plan": {
-          "$ref": "#/definitions/study_data_sharing_plan"
-        },
-        "study_data_source": {
-          "additionalProperties": false,
-          "properties": {
-            "study_data_source_description": {
-              "type": "string"
-            },
-            "study_data_sources_biosamples": {
-              "items": {
-                "enum": [
-                  "Blood",
-                  "Buccal cells",
-                  "Cord blood",
-                  "DNA",
-                  "Faeces",
-                  "Hair",
-                  "Immortalized cell lines",
-                  "Isolated pathogen",
-                  "Nail",
-                  "Plasma",
-                  "RNA",
-                  "Saliva",
-                  "Serum",
-                  "Tissue (frozen)",
-                  "Tissue (FFPE)",
-                  "Urine",
-                  "Other biological samples"
-                ],
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "study_data_sources_general": {
-              "items": {
-                "enum": [
-                  "Biological samples",
-                  "Administrative databases",
-                  "Cognitive measurements",
-                  "Genealogical records",
-                  "Imaging data",
-                  "Medical records",
-                  "Registries",
-                  "Interview",
-                  "Questionnaire",
-                  "Physiological/Biochemical measurements",
-                  "Omics technology",
-                  "Other"
-                ],
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "study_data_sources_imaging": {
-              "items": {
-                "enum": [
-                  "Ultrasound",
-                  "Magnetic resonance imaging (MRI)",
-                  "Radiography (x-ray)",
-                  "Computed tomography (CT)",
-                  "Other imaging data"
-                ],
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "study_data_sources_omics": {
-              "items": {
-                "enum": [
-                  "Biomarkers",
-                  "Genomics",
-                  "Metabolomics",
-                  "Transcriptomics",
-                  "Proteomics",
-                  "Other omics technology"
-                ],
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "type": "object"
-        },
-        "study_design_comment": {
-          "type": "string"
-        },
-        "study_design_non_interventional": {
-          "$ref": "#/definitions/study_design_non_interventional"
-        },
-        "study_eligibility_criteria": {
-          "additionalProperties": false,
-          "properties": {
-            "study_eligibility_age_max": {
-              "$ref": "#/definitions/age"
-            },
-            "study_eligibility_age_min": {
-              "$ref": "#/definitions/age"
-            },
-            "study_eligibility_exclusion_criteria": {
-              "type": "string"
-            },
-            "study_eligibility_genders": {
-              "items": {
-                "enum": [
-                  "Male",
-                  "Female",
-                  "Diverse",
-                  "Not applicable"
-                ],
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "study_eligibility_inclusion_criteria": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "study_end_date": {
-          "$ref": "#/definitions/date_type"
-        },
-        "study_ethics_committee_approval": {
-          "enum": [
-            "Request for approval not yet submitted",
-            "Request for approval submitted, approval pending",
-            "Request for approval submitted, approval granted",
-            "Request for approval submitted, exempt granted",
-            "Request for approval submitted, approval denied",
-            "Approval not required",
-            "Study withdrawn prior to decision on approval",
-            "Unknown status of request approval"
-          ],
-          "type": "string"
-        },
-        "study_groups_of_diseases": {
-          "additionalProperties": false,
-          "properties": {
-            "study_groups_of_diseases_generally": {
-              "items": {
-                "enum": [
-                  "Certain infectious or parasitic diseases (01)",
-                  "Neoplasms (02)",
-                  "Diseases of the blood or blood-forming organs (03)",
-                  "Diseases of the immune system (04)",
-                  "Endocrine, nutritional or metabolic diseases (05)",
-                  "Mental, behavioural or neurodevelopmental disorders (06)",
-                  "Sleep-wake disorders (07)",
-                  "Diseases of the nervous system (08)",
-                  "Diseases of the visual system (09)",
-                  "Diseases of the ear or mastoid process (10)",
-                  "Diseases of the circulatory system (11)",
-                  "Diseases of the respiratory system (12)",
-                  "Diseases of the digestive system (13)",
-                  "Diseases of the skin (14)",
-                  "Diseases of the musculoskeletal system or connective tissue (15)",
-                  "Diseases of the genitourinary system (16)",
-                  "Conditions related to sexual health (17)",
-                  "Pregnancy, childbirth or the puerperium (18)",
-                  "Certain conditions originating in the perinatal period (19)",
-                  "Developmental anomalies (20)",
-                  "Symptoms, signs or clinical findings, not elsewhere classified (21)",
-                  "Injury, poisoning or certain other consequences of external causes (22)",
-                  "External causes of morbidity or mortality (23)",
-                  "Factors influencing health status or contact with health services (24)",
-                  "Other",
-                  "Unknown"
-                ],
-                "type": "string"
-              },
-              "minItems": 1,
-              "type": "array"
-            },
-            "study_groups_of_diseases_incident_outcomes": {
-              "type": "string"
-            },
-            "study_groups_of_diseases_prevalent_outcomes": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "study_groups_of_diseases_generally",
-            "study_groups_of_diseases_prevalent_outcomes",
-            "study_groups_of_diseases_incident_outcomes"
-          ],
-          "type": "object"
-        },
-        "study_hypothesis": {
-          "type": "string"
-        },
-        "study_interventions": {
-          "items": {
-            "$ref": "#/definitions/intervention"
-          },
-          "type": "array"
-        },
-        "study_obtained_sample_size": {
-          "type": "number"
-        },
-        "study_outcomes": {
-          "items": {
-            "$ref": "#/definitions/outcome"
-          },
-          "type": "array"
-        },
-        "study_population": {
-          "type": "string"
-        },
-        "study_primary_design": {
-          "const": "Non-interventional",
-          "type": "string"
-        },
-        "study_primary_purpose": {
-          "enum": [
-            "Treatment",
-            "Prevention",
-            "Prognostic",
-            "Diagnostic",
-            "Supportive care",
-            "Screening",
-            "Health services research",
-            "Basic science/Physiological study",
-            "Device feasibility",
-            "Pharmacogenetics",
-            "Pharmacogenomics",
-            "Health economics",
-            "Not applicable",
-            "Other"
-          ],
-          "type": "string"
-        },
-        "study_recruitment_status_register": {
-          "enum": [
-            "Not yet recruiting ",
-            "Recruiting",
-            "Enrolling by invitation",
-            "Active, not recruiting",
-            "Completed",
-            "Suspended",
-            "Terminated",
-            "Withdrawn",
-            "Other"
-          ],
-          "type": "string"
-        },
-        "study_region": {
-          "type": "string"
-        },
-        "study_sampling": {
-          "additionalProperties": false,
-          "properties": {
-            "study_sampling_method": {
-              "enum": [
-                "Probability",
-                "Non-probability",
-                "Mixed probability and non-probability",
-                "Total universe/Complete enumeration",
-                "Other",
-                "Unknown",
-                "Not applicable"
-              ],
-              "type": "string"
-            },
-            "study_sampling_method_non_probability": {
-              "enum": [
-                "Availability",
-                "Purposive",
-                "Quota",
-                "Respondent-assisted"
-              ],
-              "type": "string"
-            },
-            "study_sampling_method_probability": {
-              "enum": [
-                "Simple random",
-                "Systematic random",
-                "Stratified",
-                "Stratified: Proportional",
-                "Stratified: Disproportional",
-                "Cluster",
-                "Cluster: Simple random",
-                "Cluster: Stratified random",
-                "Multistage"
-              ],
-              "type": "string"
-            }
-          },
-          "required": [
-            "study_sampling_method"
-          ],
-          "type": "object"
-        },
-        "study_start_date": {
-          "$ref": "#/definitions/date_type"
-        },
-        "study_status": {
-          "enum": [
-            "At the planning stage",
-            "Ongoing (I): Recruitment ongoing, but data collection not yet started",
-            "Ongoing (II): Recruitment and data collection ongoing",
-            "Ongoing (III): Recruitment completed, but data collection ongoing",
-            "Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing",
-            "Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume",
-            "Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resume",
-            "Completed: Recruitment, data collection, and data quality management completed normally",
-            "Other"
-          ],
-          "type": "string"
-        },
-        "study_status_enrolling_by_invitation": {
-          "enum": [
-            "Yes",
-            "No",
-            "Not applicable"
-          ],
-          "type": "string"
-        },
-        "study_status_halted_reason": {
-          "type": "string"
-        },
-        "study_status_halted_stage": {
-          "enum": [
-            "At the planning stage",
-            "Ongoing (I): Recruitment ongoing, but data collection not yet started",
-            "Ongoing (II): Recruitment and data collection ongoing",
-            "Ongoing (III): Recruitment completed, but data collection ongoing",
-            "Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing"
-          ],
-          "type": "string"
-        },
-        "study_status_when_intervention": {
-          "enum": [
-            "Intervention ongoing",
-            "Intervention completed, follow-up ongoing"
-          ],
-          "type": "string"
-        },
-        "study_subject": {
-          "enum": [
-            "Person",
-            "Animal",
-            "Other",
-            "Unknown"
-          ],
-          "type": "string"
-        },
-        "study_target_sample_size": {
-          "type": "number"
-        },
-        "study_type": {
-          "items": {
-            "enum": [
-              "Single group ",
-              "Parallel ",
-              "Crossover ",
-              "Factorial ",
-              "Sequential ",
-              "Other",
-              "Unknown",
-              "Case-control",
-              "Nested case-control",
-              "Case-only",
-              "Case-crossover",
-              "Ecologic or community studies",
-              "Family-based",
-              "Twin study",
-              "Cohort",
-              "Case-cohort",
-              "Birth cohort",
-              "Trend",
-              "Panel",
-              "Longitudinal",
-              "Cross-section",
-              "Cross-section ad-hoc follow-up",
-              "Time series",
-              "Quality control",
-              "Registry"
-            ],
-            "type": "string"
-          },
-          "minItems": 1,
-          "type": "array"
-        }
-      },
-      "required": [
-        "study_countries",
-        "study_data_sharing_plan",
-        "study_design_non_interventional",
-        "study_groups_of_diseases",
-        "study_primary_design",
-        "study_status",
-        "study_subject",
-        "study_type"
-      ],
-      "type": "object"
-    },
     "outcome": {
       "additionalProperties": false,
       "properties": {
@@ -2101,8 +1376,15 @@
           "type": "string"
         },
         "study_conditions_classification_code": {
-          "format": "uri",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         },
         "study_conditions_label": {
           "type": "string"
@@ -2121,12 +1403,19 @@
           "type": "string"
         },
         "study_data_sharing_plan_datashield": {
-          "enum": [
-            "Yes",
-            "No",
-            "Pending"
-          ],
-          "type": "string"
+          "anyOf": [
+            {
+              "enum": [
+                "Yes",
+                "No",
+                "Pending"
+              ],
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         },
         "study_data_sharing_plan_description": {
           "type": "string"
@@ -2173,14 +1462,7 @@
       "type": "object"
     },
     "study_design": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/non_interventional"
-        },
-        {
-          "$ref": "#/definitions/interventional"
-        }
-      ]
+      "$ref": "#/definitions/interventional"
     },
     "study_design_interventional": {
       "additionalProperties": false,
@@ -2226,57 +1508,29 @@
           "type": "string"
         },
         "study_phase": {
-          "enum": [
-            "Early-phase-1",
-            "Phase-1",
-            "Phase-1-phase-2",
-            "Phase-2",
-            "Phase-2a",
-            "Phase-2b",
-            "Phase-2-phase-3",
-            "Phase-3",
-            "Phase-3a",
-            "Phase-3b",
-            "Phase-4",
-            "Other",
-            "Not applicable"
-          ],
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "study_design_non_interventional": {
-      "additionalProperties": false,
-      "properties": {
-        "study_biospecimen_description": {
-          "type": "string"
-        },
-        "study_biospecimen_retention": {
-          "items": {
-            "enum": [
-              "None retained",
-              "Samples with DNA",
-              "Samples without DNA"
-            ],
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "study_target_followup_duration": {
-          "type": "string"
-        },
-        "study_time_perspectives": {
-          "items": {
-            "enum": [
-              "Retrospective",
-              "Prospective",
-              "Cross-sectional",
-              "Other"
-            ],
-            "type": "string"
-          },
-          "type": "array"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/emptyString"
+            },
+            {
+              "enum": [
+                "Early-phase-1",
+                "Phase-1",
+                "Phase-1-phase-2",
+                "Phase-2",
+                "Phase-2a",
+                "Phase-2b",
+                "Phase-2-phase-3",
+                "Phase-3",
+                "Phase-3a",
+                "Phase-3b",
+                "Phase-4",
+                "Other",
+                "Not applicable"
+              ],
+              "type": "string"
+            }
+          ]
         }
       },
       "type": "object"
