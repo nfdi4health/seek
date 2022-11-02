@@ -270,7 +270,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # ['study_design']['study_groups_of_diseases']
         new_json['study_design']['study_groups_of_diseases'] = {}
-        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_generally']=[]
+        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_generally']=['Unknown']
         new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_prevalent_outcomes']=''
         new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_incident_outcomes']=''
 
