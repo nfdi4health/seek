@@ -680,10 +680,7 @@
       "additionalProperties": false,
       "properties": {
         "number": {
-          "type": [
-            "number",
-            "null"
-          ]
+          "type":"integer"
         },
         "time_unit": {
           "anyOf": [
@@ -891,7 +888,7 @@
           "type": "string"
         },
         "study_centers_number": {
-          "type": ["number", "null"]
+          "type": ["integer", "null"]
         },
         "study_conditions": {
           "items": {
@@ -1104,7 +1101,7 @@
           "type": "array"
         },
         "study_obtained_sample_size": {
-          "type": "number"
+          "type": ["integer", "null"]
         },
         "study_outcomes": {
           "items": {
@@ -1262,7 +1259,7 @@
           "type": "string"
         },
         "study_target_sample_size": {
-          "type": "number"
+          "type": ["integer", "null"]
         },
         "study_type": {
           "items": {
