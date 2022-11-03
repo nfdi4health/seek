@@ -230,8 +230,15 @@
                 "type": "string"
               },
               "role_affiliation_web_page": {
-                "format": "url",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "$ref": "#/definitions/emptyString"
+                  }
+                ]
               }
             },
             "required": [
@@ -345,8 +352,15 @@
                 "type": "string"
               },
               "role_affiliation_web_page": {
-                "format": "url",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "$ref": "#/definitions/emptyString"
+                  }
+                ]
               }
             },
             "required": [
@@ -607,8 +621,15 @@
                 "type": "string"
               },
               "resource_keywords_label_code": {
-                "format": "uri",
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "$ref": "#/definitions/emptyString"
+                  }
+                ]
               }
             },
             "required": [
@@ -652,8 +673,15 @@
           "type": "array"
         },
         "resource_web_page": {
-          "format": "url",
-          "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "$ref": "#/definitions/emptyString"
+                  }
+                ]
         },
         "roles": {
           "items": {
@@ -1425,8 +1453,15 @@
           "type": "string"
         },
         "study_data_sharing_plan_url": {
-          "format": "url",
-          "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "$ref": "#/definitions/emptyString"
+                  }
+                ]
         }
       },
       "required": [
