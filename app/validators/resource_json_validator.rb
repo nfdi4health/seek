@@ -2,8 +2,6 @@ require 'json_schemer'
 
 class ResourceJsonValidator < ActiveModel::EachValidator
 
-  # JSONAPI_SCHEMA_FILE_PATH = File.join(Rails.root, 'public', 'api', 'jsonapi-schema-resource-json-resource.json')
-  # JSONAPI_SCHEMA_STUDY_DESIGN_FILE_PATH = File.join(Rails.root, 'public', 'api', 'jsonapi-schema-resource-json-addtional-study-design.json')
   JSONAPI_MDS_NON_STUDY_FILE_PATH = File.join(Rails.root, 'public', 'api', 'mds_non_study_schema.json')
   JSONAPI_MDS_STUDY_NON_INTERVENTIONAL_PATH = File.join(Rails.root, 'public', 'api', 'mds_json_schema_study_non_interventional.json')
   JSONAPI_MDS_STUDY_INTERVENTIONAL_PATH = File.join(Rails.root, 'public', 'api', 'mds_json_schema_study_interventional.json')
