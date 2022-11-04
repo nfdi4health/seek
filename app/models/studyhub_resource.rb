@@ -17,7 +17,6 @@ class StudyhubResource < ApplicationRecord
   validates :resource_json, resource_json:true, on:  %i[create update], unless: :is_ui_request?
   validate :check_resource_use_rights, on:  [:create, :update], unless: :is_ui_request?
   validate :check_urls, on:  [:create, :update]
-  # validate :check_provenance_data_presence, on:  [:create, :update]
   # validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
   # validate :check_id_presence, on: [:create, :update], if: :request_to_submit?
   # validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
@@ -168,13 +167,6 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
     end
 
     errors.add(:study_end_date, 'cannot be before the start date') if end_date < start_date
-  end
-
-
-  def check_provenance_data_presence
-    return if resource_json.blank?
-
-    errors.add(:data_source, 'cannot be empty') if resource_json['provenance'].blank?
   end
 
   def check_id_presence
