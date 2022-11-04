@@ -19,14 +19,14 @@ class StudyhubResource < ApplicationRecord
   validate :check_urls, on:  [:create, :update]
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
   ## validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
+  ## validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
 
-  # validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
   # validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
   # validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
-  # validate :check_nfdi_resource_id, on: [:create, :update]
+  validate :check_nfdi_resource_id, on: [:create, :update]
 
 
-  validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
+  # validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
 
   attr_readonly :studyhub_resource_type_id
   attr_accessor :commit_button
@@ -172,22 +172,17 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
   def check_nfdi_resource_id
     return unless errors[:resource_json].blank?
 
-    resource_json['ids']&.each_with_index do |id,index|
-
-      if id['id_type'] == 'NFDI4Health'
+    resource_json['ids_nfdi4health']&.each_with_index do |id,index|
         begin
-          a = Integer(id['id_identifier'])
+          a = Integer(id['identifier'])
         rescue ArgumentError, TypeError
-          errors.add("ids[#{index}]['id_identifier']".to_sym, 'The value must be the ID of the NFDI4Health resource. e.g.1')
+          errors.add("ids_nfdi4health[#{index}]['identifier']".to_sym, 'The value must be the ID of the NFDI4Health resource. e.g.1')
         end
         begin
-
         end
-        if StudyhubResource.where(id: id['id_identifier']).blank?
-          errors.add("ids[#{index}]['id_identifier']".to_sym, "This NFDI4Health resource ID doesn't exist.")
+        if StudyhubResource.where(id: id['identifier']).blank?
+          errors.add("ids_nfdi4health[#{index}]['identifier']".to_sym, "This NFDI4Health resource ID doesn't exist.")
         end
-
-      end
     end
   end
 
@@ -249,21 +244,21 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
   #   end
   # end
 
-  def check_description_presence
-    errors.add(:description, "can't be blank") if resource_json['resource_descriptions'].blank? || resource_json['resource_descriptions'].reject {|desc| desc['description'].blank?}.blank?
-  end
+  # def check_description_presence
+  #   errors.add(:description, "can't be blank") if resource_json['resource_descriptions'].blank? || resource_json['resource_descriptions'].reject {|desc| desc['description'].blank?}.blank?
+  # end
 
-  def check_required_singular_attributes
-
-    REQUIRED_FIELDS_RESOURCE_BASIC.each do |attr|
-      errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json[attr].blank?
-    end
-    if is_studytype?
-      REQUIRED_FIELDS_STUDY_DESIGN_GENERAL.each do |attr|
-        errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json['study_design'][attr].blank?
-      end
-    end
-  end
+  # def check_required_singular_attributes
+  #
+  #   REQUIRED_FIELDS_RESOURCE_BASIC.each do |attr|
+  #     errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json[attr].blank?
+  #   end
+  #   if is_studytype?
+  #     REQUIRED_FIELDS_STUDY_DESIGN_GENERAL.each do |attr|
+  #       errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json['study_design'][attr].blank?
+  #     end
+  #   end
+  # end
 
   def check_required_multi_attributes
     return unless errors.messages[:resource_json].blank?

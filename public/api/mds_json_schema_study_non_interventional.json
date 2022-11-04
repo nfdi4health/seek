@@ -525,7 +525,7 @@
                 "type": "string"
               },
               "text": {
-                "type": "string"
+                 "$ref": "#/definitions/nonEmptyString"
               }
             },
             "required": [
@@ -579,7 +579,7 @@
               "type": "string"
             },
             "text": {
-              "type": "string"
+               "$ref": "#/definitions/nonEmptyString"
             }
           },
           "required": [
@@ -602,7 +602,7 @@
                 "type": "string"
               },
               "text": {
-                "type": "string"
+               "$ref": "#/definitions/nonEmptyString"
               }
             },
             "required": [
@@ -660,7 +660,7 @@
                 "type": "string"
               },
               "text": {
-                "type": "string"
+               "$ref": "#/definitions/nonEmptyString"
               }
             },
             "required": [
