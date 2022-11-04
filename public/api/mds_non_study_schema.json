@@ -29,7 +29,7 @@
           "$ref": "#/definitions/date_type"
         },
         "identifier": {
-          "type": "string"
+            "$ref": "#/definitions/nonEmptyString"
         },
         "relation_type": {
           "enum": [
@@ -519,7 +519,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {
-                      "type": "string"
+                        "$ref": "#/definitions/nonEmptyString"
                     },
                     "scheme": {
                       "enum": [
@@ -539,7 +539,7 @@
                 "type": "array"
               },
               "role_affiliation_name": {
-                "type": "string"
+                  "$ref": "#/definitions/nonEmptyString"
               },
               "role_affiliation_web_page": {
                 "anyOf": [
@@ -641,7 +641,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {
-                      "type": "string"
+                        "$ref": "#/definitions/nonEmptyString"
                     },
                     "scheme": {
                       "enum": [
@@ -661,7 +661,7 @@
                 "type": "array"
               },
               "role_affiliation_name": {
-                "type": "string"
+                  "$ref": "#/definitions/nonEmptyString"
               },
               "role_affiliation_web_page": {
                 "anyOf": [
@@ -701,7 +701,7 @@
                 "additionalProperties": false,
                 "properties": {
                   "identifier": {
-                    "type": "string"
+                        "$ref": "#/definitions/nonEmptyString"
                   },
                   "scheme": {
                     "enum": [
@@ -722,10 +722,10 @@
               "type": "array"
             },
             "role_name_personal_family_name": {
-              "type": "string"
+               "$ref": "#/definitions/nonEmptyString"
             },
             "role_name_personal_given_name": {
-              "type": "string"
+                "$ref": "#/definitions/nonEmptyString"
             },
             "role_name_personal_title": {
               "enum": [
@@ -802,7 +802,7 @@
       "additionalProperties": false,
       "properties": {
         "identifier": {
-          "type": "string"
+           "$ref": "#/definitions/nonEmptyString"
         },
         "type": {
           "enum": [
@@ -844,7 +844,7 @@
       "additionalProperties": false,
       "properties": {
         "identifier": {
-          "type": "string"
+            "$ref": "#/definitions/nonEmptyString"
         },
         "relation_type": {
           "enum": [
