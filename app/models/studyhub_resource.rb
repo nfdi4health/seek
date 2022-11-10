@@ -18,11 +18,8 @@ class StudyhubResource < ApplicationRecord
   validate :check_resource_use_rights, on:  [:create, :update], unless: :is_ui_request?
   validate :check_urls, on:  [:create, :update]
   validate :end_date_is_after_start_date, on: [:create, :update], if: :is_studytype?
-  ## validate :check_role_presence, on: [:create, :update], if: :request_to_submit?
-  ## validate :check_description_presence, on:  [:create, :update], if: :request_to_submit?
 
-  # validate :check_required_singular_attributes, on:  [:create, :update], if: :request_to_submit?
-  # validate :check_required_multi_attributes, on:  [:create, :update], if: -> {request_to_submit? && is_studytype?}
+
   validate :check_nfdi_resource_id, on: [:create, :update]
 
 
@@ -83,11 +80,11 @@ class StudyhubResource < ApplicationRecord
   #  This section defines attributes which have 0-n relationship
   MULTI_ATTRIBUTE_FIELDS_LIST_STYLE =  { 'study_conditions' => %w[study_conditions study_conditions_classification study_conditions_classification_code],
                                          'study_outcomes' => %w[study_outcome_type study_outcome_title
-study_outcome_description study_outcome_time_frame],
+                                                                study_outcome_description study_outcome_time_frame],
                                          'interventional_study_design_arms' => %w[study_arm_group_label
-study_arm_group_type study_arm_group_description],
+                                                                                  study_arm_group_type study_arm_group_description],
                                          'interventional_study_design_interventions' => %w[study_intervention_name
-study_intervention_type study_intervention_description study_intervention_arm_group_label]
+                                                                                           study_intervention_type study_intervention_description study_intervention_arm_group_label]
 
   }.freeze
 
@@ -95,9 +92,9 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
   }.freeze
 
   MULTI_ATTRIBUTE_SKIPPED_FIELDS = %w[resource_keywords_label resource_keywords_label_code study_conditions_classification study_conditions_classification_code
-                                    study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame
-                                    study_arm_group_label study_arm_group_type study_arm_group_description
-                                    study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label study_recruitment_status_register].freeze
+                                      study_outcome_type study_outcome_title study_outcome_description study_outcome_time_frame
+                                      study_arm_group_label study_arm_group_type study_arm_group_description
+                                      study_intervention_name study_intervention_type study_intervention_description study_intervention_arm_group_label study_recruitment_status_register].freeze
 
   NOT_PUBLIC_DISPLAY_ATTRIBUTES =  %w[study_recruitment_status_register].freeze
 
@@ -108,8 +105,6 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
       resource_json['resource_descriptions'].first['description']
     end
   end
-
-
 
   def check_resource_use_rights
 
@@ -152,7 +147,6 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
 
   end
 
-
   def end_date_is_after_start_date
     return unless is_ui_request?  || errors.messages.blank?
 
@@ -186,105 +180,6 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
     end
   end
 
-  # def check_role_presence
-  #
-  #   return unless resource_json.has_key?('roles')
-  #
-  #   if resource_json['roles'].blank?
-  #     errors.add(:base, "Please add at least one resource role for the #{studyhub_resource_type_title}.")
-  #     errors.add("roles[0]['role_type']".to_sym, "can't be blank")
-  #     errors.add("roles[0]['role_name_type']".to_sym, "can't be blank")
-  #   else
-  #     resource_json['roles']&.each_with_index do |role,index|
-  #       errors.add("roles[#{index}]['role_type']".to_sym, "can't be blank")  if role['role_type'].blank?
-  #       errors.add("roles[#{index}]['role_name_type']".to_sym, "can't be blank")  if role['role_name_type'].blank?
-  #
-  #       if role['role_name_type'] == 'Personal'
-  #
-  #         if role['role_name_personal_title'].blank?
-  #           errors.add("roles[#{index}]['role_name_personal_title']".to_sym, "can't be blank")
-  #         end
-  #
-  #         if role['role_name_personal_given_name'].blank?
-  #           errors.add("roles[#{index}]['role_name_personal_given_name']".to_sym, "can't be blank")
-  #         end
-  #
-  #         if role['role_name_personal_family_name'].blank?
-  #           errors.add("roles[#{index}]['role_name_personal_family_name']".to_sym, "can't be blank")
-  #         end
-  #
-  #         role['role_name_identifiers']&.each_with_index do |id,id_index|
-  #           if !id['role_name_identifier'].blank? && id['role_name_identifier_scheme'].blank?
-  #             errors.add("roles[#{index}]['role_name_identifier_scheme'][#{id_index}]".to_sym,
-  #                        'Please select the name identifier scheme.')
-  #           end
-  #         end
-  #
-  #       end
-  #
-  #       if role['role_name_type'] == 'Organisational'
-  #         if role['role_name_organisational'].blank?
-  #           errors.add("roles[#{index}]['role_name_organisational']".to_sym, "can't be blank")
-  #         end
-  #       end
-  #
-  #       role['role_affiliation_identifiers']&.each_with_index do |id,id_index|
-  #         if !id['role_affiliation_identifier'].blank? && id['role_affiliation_identifier_scheme'].blank?
-  #           errors.add("roles[#{index}]['role_affiliation_identifier_scheme'][#{id_index}]".to_sym,
-  #                      'Please select the affiliation identifier scheme.')
-  #
-  #         end
-  #       end
-  #
-  #     end
-  #
-  #     if errors.messages.keys.select {|x| x.to_s.include? 'roles' }.size  > 0
-  #       errors.add(:base, 'Please add the required fields for resource roles.')
-  #     end
-  #   end
-  # end
-
-  # def check_description_presence
-  #   errors.add(:description, "can't be blank") if resource_json['resource_descriptions'].blank? || resource_json['resource_descriptions'].reject {|desc| desc['description'].blank?}.blank?
-  # end
-
-  # def check_required_singular_attributes
-  #
-  #   REQUIRED_FIELDS_RESOURCE_BASIC.each do |attr|
-  #     errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json[attr].blank?
-  #   end
-  #   if is_studytype?
-  #     REQUIRED_FIELDS_STUDY_DESIGN_GENERAL.each do |attr|
-  #       errors.add(attr.to_sym, "Please enter the #{attr.humanize.downcase}.") if resource_json['study_design'][attr].blank?
-  #     end
-  #   end
-  # end
-
-  def check_required_multi_attributes
-    return unless errors.messages[:resource_json].blank?
-
-    resource_json['study_design']['study_conditions']&.each_with_index  do |condition, index|
-      if !condition['study_conditions'].blank? && condition['study_conditions_classification'].blank?
-        errors.add("study_conditions_classification[#{index}]".to_sym, 'Please select the study conditions classification.')
-      end
-    end
-
-    resource_json['study_design']['study_outcomes']&.each_with_index  do |outcome, index|
-      if !outcome['study_outcome_title'].blank? && outcome['study_outcome_type'].blank?
-        errors.add("study_outcome_type[#{index}]".to_sym, 'Please select the type of the outcome measure.')
-      end
-    end
-
-    if  is_interventional_study?
-      resource_json['study_design']['interventional_study_design']['interventional_study_design_arms']&.each_with_index  do |arm, index|
-        if !arm['study_arm_group_label'].blank? && arm['study_arm_group_type'].blank?
-          errors.add("study_arm_group_type[#{index}]".to_sym, 'Please select the role of the arm.')
-        end
-      end
-    end
-
-  end
-
   def final_error_check
     unless errors.messages.except(:resource_json).empty?
       errors.add(:base, 'Please make sure all required fields are filled in correctly.')
@@ -298,7 +193,6 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
   def is_ui_request?
     ui_request.nil?? false : true
   end
-
 
   def is_submitted?
     stage == StudyhubResource::SUBMITTED
@@ -356,7 +250,6 @@ study_intervention_type study_intervention_description study_intervention_arm_gr
   def convert_date_format(date)
     Date.parse(date).strftime('%d.%m.%Y')
   end
-
 
   def convert_label_to_id_for_multi_select_attribute
 
