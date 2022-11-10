@@ -1399,7 +1399,7 @@
           ]
         },
         "study_conditions_label": {
-          "type": "string"
+            "$ref": "#/definitions/nonEmptyString"
         }
       },
       "required": [
