@@ -29,7 +29,7 @@
           "$ref": "#/definitions/date_type"
         },
         "identifier": {
-            "$ref": "#/definitions/nonEmptyString"
+          "$ref": "#/definitions/nonEmptyString"
         },
         "relation_type": {
           "enum": [
@@ -207,7 +207,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {
-                        "$ref": "#/definitions/nonEmptyString"
+                      "$ref": "#/definitions/nonEmptyString"
                     },
                     "scheme": {
                       "enum": [
@@ -227,7 +227,7 @@
                 "type": "array"
               },
               "role_affiliation_name": {
-                  "$ref": "#/definitions/nonEmptyString"
+                "$ref": "#/definitions/nonEmptyString"
               },
               "role_affiliation_web_page": {
                 "anyOf": [
@@ -329,7 +329,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "identifier": {
-                       "$ref": "#/definitions/nonEmptyString"
+                      "$ref": "#/definitions/nonEmptyString"
                     },
                     "scheme": {
                       "enum": [
@@ -349,7 +349,7 @@
                 "type": "array"
               },
               "role_affiliation_name": {
-                  "$ref": "#/definitions/nonEmptyString"
+                "$ref": "#/definitions/nonEmptyString"
               },
               "role_affiliation_web_page": {
                 "anyOf": [
@@ -410,11 +410,11 @@
               "type": "array"
             },
             "role_name_personal_family_name": {
-                "$ref": "#/definitions/nonEmptyString"
-             },
+              "$ref": "#/definitions/nonEmptyString"
+            },
             "role_name_personal_given_name": {
-                "$ref": "#/definitions/nonEmptyString"
-             },
+              "$ref": "#/definitions/nonEmptyString"
+            },
             "role_name_personal_title": {
               "enum": [
                 "Mr.",
@@ -525,7 +525,7 @@
                 "type": "string"
               },
               "text": {
-                 "$ref": "#/definitions/nonEmptyString"
+                "$ref": "#/definitions/nonEmptyString"
               }
             },
             "required": [
@@ -579,7 +579,7 @@
               "type": "string"
             },
             "text": {
-               "$ref": "#/definitions/nonEmptyString"
+              "$ref": "#/definitions/nonEmptyString"
             }
           },
           "required": [
@@ -602,7 +602,7 @@
                 "type": "string"
               },
               "text": {
-               "$ref": "#/definitions/nonEmptyString"
+                "$ref": "#/definitions/nonEmptyString"
               }
             },
             "required": [
@@ -660,7 +660,7 @@
                 "type": "string"
               },
               "text": {
-               "$ref": "#/definitions/nonEmptyString"
+                "$ref": "#/definitions/nonEmptyString"
               }
             },
             "required": [
@@ -673,15 +673,15 @@
           "type": "array"
         },
         "resource_web_page": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uri"
-                  },
-                  {
-                    "$ref": "#/definitions/emptyString"
-                  }
-                ]
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         },
         "roles": {
           "items": {
@@ -708,7 +708,7 @@
       "additionalProperties": false,
       "properties": {
         "number": {
-          "type":"integer"
+          "type": "integer"
         },
         "time_unit": {
           "anyOf": [
@@ -740,7 +740,7 @@
       "additionalProperties": false,
       "properties": {
         "identifier": {
-            "$ref": "#/definitions/nonEmptyString"
+          "$ref": "#/definitions/nonEmptyString"
         },
         "type": {
           "enum": [
@@ -788,15 +788,22 @@
           "type": "string"
         },
         "study_arm_group_type": {
-          "enum": [
-            "Experimental",
-            "Active comparator",
-            "Placebo comparator",
-            "Sham comparator",
-            "No intervention",
-            "Other"
-          ],
-          "type": "string"
+          "anyOf": [
+            {
+              "enum": [
+                "Experimental",
+                "Active comparator",
+                "Placebo comparator",
+                "Sham comparator",
+                "No intervention",
+                "Other"
+              ],
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         }
       },
       "required": [
@@ -846,7 +853,7 @@
       "additionalProperties": false,
       "properties": {
         "identifier": {
-            "$ref": "#/definitions/nonEmptyString"
+          "$ref": "#/definitions/nonEmptyString"
         },
         "relation_type": {
           "enum": [
@@ -916,7 +923,10 @@
           "type": "string"
         },
         "study_centers_number": {
-          "type": ["integer", "null"]
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "study_conditions": {
           "items": {
@@ -1129,7 +1139,10 @@
           "type": "array"
         },
         "study_obtained_sample_size": {
-          "type": ["integer", "null"]
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "study_outcomes": {
           "items": {
@@ -1287,7 +1300,10 @@
           "type": "string"
         },
         "study_target_sample_size": {
-          "type": ["integer", "null"]
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "study_type": {
           "items": {
@@ -1388,7 +1404,7 @@
           ]
         },
         "study_conditions_label": {
-          "type": "string"
+          "$ref": "#/definitions/nonEmptyString"
         }
       },
       "required": [
@@ -1453,15 +1469,15 @@
           "type": "string"
         },
         "study_data_sharing_plan_url": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uri"
-                  },
-                  {
-                    "$ref": "#/definitions/emptyString"
-                  }
-                ]
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "$ref": "#/definitions/emptyString"
+            }
+          ]
         }
       },
       "required": [
@@ -1491,7 +1507,10 @@
           "type": "array"
         },
         "study_target_followup_duration": {
-          "type": ["number","null"]
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "study_time_perspectives": {
           "items": {
