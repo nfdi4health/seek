@@ -16,8 +16,6 @@ class ResourceJsonValidator < ActiveModel::EachValidator
     Rails.logger.info('Validator:starting to check resource_json............')
 
     if record.is_studytype?
-      Rails.logger.info('Validator:starting to check study ............')
-      Rails.logger.info('Study Type: ............')
       if record.resource_json['study_design']['study_primary_design'].blank?
         record.errors['study_primary_design'] << 'please assign an value.'
         return
@@ -27,7 +25,6 @@ class ResourceJsonValidator < ActiveModel::EachValidator
       schema = JSONSchemer.schema(File.read(path))
 
     else
-      Rails.logger.info('Validator:starting to check non study ............')
       schema = JSONSchemer.schema(File.read(JSONAPI_MDS_NON_STUDY_FILE_PATH))
     end
 
