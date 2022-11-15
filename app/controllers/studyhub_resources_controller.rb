@@ -9,7 +9,7 @@ class StudyhubResourcesController < ApplicationController
   before_action :find_assets, only: [:index]
   before_action :login_required, only: [:create, :create_content_blob, :new_resource]
   before_action :check_studyhub_resource_type, only: [:create, :update], if: :json_api_request?
-  before_action :check_can_publish, only: [:publish], if: :json_api_request?
+  # before_action :check_can_publish, only: [:publish], if: :json_api_request?
   before_action :redirect_to_only_api,  unless: :json_api_request?
 
   api_actions :index, :show, :create, :update, :destroy
