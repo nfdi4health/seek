@@ -20,7 +20,7 @@
     ]) %>
 
     <%= render_menu_group(t('menu.assets'), [
-      [t('studyhub_resource'), studyhub_resources_path, Seek::Config.nfdi_studyhub_enabled],
+      # [t('studyhub_resource'), studyhub_resources_path, Seek::Config.nfdi_studyhub_enabled],
       [t('data_file').pluralize, data_files_path, Seek::Config.data_files_enabled],
       [t('model').pluralize, models_path, Seek::Config.models_enabled],
       [t('sop').pluralize, sops_path, Seek::Config.sops_enabled],

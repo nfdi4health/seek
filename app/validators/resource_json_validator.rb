@@ -2,8 +2,11 @@ require 'json_schemer'
 
 class ResourceJsonValidator < ActiveModel::EachValidator
 
-  JSONAPI_SCHEMA_FILE_PATH = File.join(Rails.root, 'public', 'api', 'jsonapi-schema-resource-json-resource.json')
-  JSONAPI_SCHEMA_STUDY_DESIGN_FILE_PATH = File.join(Rails.root, 'public', 'api', 'jsonapi-schema-resource-json-addtional-study-design.json')
+  JSONAPI_MDS_NON_STUDY_FILE_PATH = File.join(Rails.root, 'public', 'api', 'mds_non_study_schema.json')
+  JSONAPI_MDS_STUDY_NON_INTERVENTIONAL_PATH = File.join(Rails.root, 'public', 'api', 'mds_json_schema_study_non_interventional.json')
+  JSONAPI_MDS_STUDY_INTERVENTIONAL_PATH = File.join(Rails.root, 'public', 'api', 'mds_json_schema_study_interventional.json')
+
+
 
   def validate_each(record, attribute, value)
     #record=>#<StudyhubResource id: nil, resource_json: {"resource_titles"=>[{"title"=>"National Pandemi....
@@ -11,7 +14,20 @@ class ResourceJsonValidator < ActiveModel::EachValidator
     # value => {"resource_titles"=>[{"title"=>"National Pandemic Cohort Network ns, echocardiography, external laboratory data).
 
     Rails.logger.info('Validator:starting to check resource_json............')
-    schema = JSONSchemer.schema(File.read(JSONAPI_SCHEMA_FILE_PATH))
+
+    if record.is_studytype?
+      if record.resource_json['study_design']['study_primary_design'].blank?
+        record.errors['study_primary_design'] << 'please assign an value.'
+        return
+      end
+
+      path = record.is_non_interventional_study?? JSONAPI_MDS_STUDY_NON_INTERVENTIONAL_PATH : JSONAPI_MDS_STUDY_INTERVENTIONAL_PATH
+      schema = JSONSchemer.schema(File.read(path))
+
+    else
+      schema = JSONSchemer.schema(File.read(JSONAPI_MDS_NON_STUDY_FILE_PATH))
+    end
+
 
     unless schema.valid?(value)
       schema.validate(value).each do |v|
@@ -19,20 +35,9 @@ class ResourceJsonValidator < ActiveModel::EachValidator
         record.errors.add(attribute.to_sym, (nice_error v))
       end
     end
-
-    if record.is_studytype?
-      Rails.logger.info('Validator:starting to check study design............')
-      schema = JSONSchemer.schema(File.read(JSONAPI_SCHEMA_STUDY_DESIGN_FILE_PATH))
-
-      unless schema.valid?(value)
-        schema.validate(value).each do |v|
-          Rails.logger.info("- #{nice_error v}")
-          record.errors.add(attribute.to_sym, (nice_error v))
-        end
-      end
-    end
   end
 
+  private
 
   def nice_error verr
     case verr['type']
@@ -47,4 +52,4 @@ class ResourceJsonValidator < ActiveModel::EachValidator
     end
   end
 
-end
+  end
