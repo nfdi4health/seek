@@ -12,6 +12,9 @@ module Seek
         @requested_approval_assets = ResourcePublishLog.requested_approval_assets_for(@gatekeeper)
         respond_to do |format|
           format.html { render template: 'assets/publishing/requested_approval_assets' }
+          format.json do
+            render json: @requested_approval_assets, status: 200
+          end
         end
       end
 
