@@ -348,7 +348,7 @@ class StudiesController < ApplicationController
     @study = Study.find(params[:id])
     url = Seek::Config.n4h_url.blank? ? nil : Seek::Config.n4h_url
     endpoint = Nfdi4Health::Client.new(url)
-    endpoint.publish_study(@study.to_json)
+    endpoint.publish_study(@study)
 
     respond_to do |format|
       flash[:notice] = "#{t('study')} was successfully published."

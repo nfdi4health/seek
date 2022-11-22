@@ -1,4 +1,5 @@
-puts 'Seeded MDS Metadata Scheme V0.1'
+mds_version = '2.1-alpha1'
+puts "Seeded MDS #{mds_version}"
 
 # Initialisation of aliases for common sample attributes types, for easier use.
 
@@ -23,11 +24,11 @@ cv_type.update(base_type: Seek::Samples::BaseType::CV)
 text_type = SampleAttributeType.find_or_initialize_by(title: 'Text')
 text_type.update(base_type: Seek::Samples::BaseType::TEXT, placeholder: '1')
 
-link_type = SampleAttributeType.find_or_initialize_by(title:'Web link')
-link_type.update(base_type: Seek::Samples::BaseType::STRING, regexp: URI.regexp(%w(http https)).to_s, placeholder: 'http://www.example.com', resolution:'\\0')
+link_type = SampleAttributeType.find_or_initialize_by(title: 'Web link')
+link_type.update(base_type: Seek::Samples::BaseType::STRING, regexp: URI.regexp(%w(http https)).to_s, placeholder: 'http://www.example.com', resolution: '\\0')
 
 # helper to create sample controlled vocab
-def create_sample_controlled_vocab_terms_attributes(array)
+def create_cv_attr_terms(array)
   attributes = []
   array.each do |type|
     attributes << { label: type }
@@ -35,58 +36,101 @@ def create_sample_controlled_vocab_terms_attributes(array)
   attributes
 end
 
+# Helper
+def create_cm_attr(title:, required:, type:, cv: nil)
+  CustomMetadataAttribute.where(title).create!(
+    title: title, required: required, sample_attribute_type: type, sample_controlled_vocab: cv
+  )
+end
+
 disable_authorization_checks do
 
-  # seeds for sample controlled vocab
-
-  # study type
-  study_type_cv = SampleControlledVocab.where(title: 'Study Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Interventional', 'Observational'])
+  type_cv = SampleControlledVocab.where(key: "mds-#{mds_version}/study-type").first_or_create!(
+    title: 'Study Type',
+    sample_controlled_vocab_terms_attributes: create_cv_attr_terms(
+      [
+        'Single group ', 'Parallel ', 'Crossover ', 'Factorial ', 'Sequential ', 'Other', 'Unknown', 'Case-control',
+        'Nested case-control', 'Case-only', 'Case-crossover', 'Ecologic or community studies', 'Family-based',
+        'Twin study', 'Cohort', 'Case-cohort', 'Birth cohort', 'Trend', 'Panel', 'Longitudinal', 'Cross-section',
+        'Cross-section ad-hoc follow-up', 'Time series', 'Quality control', 'Registry',
+      ]
+    )
   )
 
-  # study status
-  study_status_cv = SampleControlledVocab.where(title: 'Study Status').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Running', 'Closed'])
+  status_cv = SampleControlledVocab.where(key: "mds-#{mds_version}/study-status").first_or_create!(
+    title: 'Study Status',
+    sample_controlled_vocab_terms_attributes: create_cv_attr_terms(
+      [
+        'At the planning stag',
+        'Ongoing (I): Recruitment ongoing, but data collection not yet starte',
+        'Ongoing (II): Recruitment and data collection ongoing',
+        'Ongoing (III): Recruitment completed, but data collection ongoin',
+        'Ongoing (IV): Recruitment and data collection completed, but data quality management ongoin',
+        'Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume',
+        'Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resum',
+        'Completed: Recruitment, data collection, and data quality management completed normall',
+        'Other',
+      ]
+    )
   )
 
-  # study accrual
-  study_accrual_cv = SampleControlledVocab.where(title: 'Study Accrual').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No'])
+  groups_of_diseases_cv = SampleControlledVocab.where(key: "mds-#{mds_version}/study-groups-of-diseases").first_or_create!(
+    title: 'Study Groups of Diseases',
+    sample_controlled_vocab_terms_attributes: create_cv_attr_terms(
+      [
+        'Certain infectious or parasitic diseases (01)',
+        'Neoplasms (02)',
+        'Diseases of the blood or blood-forming organs (03)',
+        'Diseases of the immune system (04)',
+        'Endocrine, nutritional or metabolic diseases (05)',
+        'Mental, behavioural or neurodevelopmental disorders (06)',
+        'Sleep-wake disorders (07)',
+        'Diseases of the nervous system (08)',
+        'Diseases of the visual system (09)',
+        'Diseases of the ear or mastoid process (10)',
+        'Diseases of the circulatory system (11)',
+        'Diseases of the respiratory system (12)',
+        'Diseases of the digestive system (13)',
+        'Diseases of the skin (14)',
+        'Diseases of the musculoskeletal system or connective tissue (15)',
+        'Diseases of the genitourinary system (16)',
+        'Conditions related to sexual health (17)',
+        'Pregnancy, childbirth or the puerperium (18)',
+        'Certain conditions originating in the perinatal period (19)',
+        'Developmental anomalies (20)',
+        'Symptoms, signs or clinical findings, not elsewhere classified (21)',
+        'Injury, poisoning or certain other consequences of external causes (22)',
+        'External causes of morbidity or mortality (23)',
+        'Factors influencing health status or contact with health services (24)',
+        'Other',
+        'Unknown',
+      ]
+    )
   )
 
-  # study status
-  study_dmp_cv = SampleControlledVocab.where(title: 'Study DMP').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Yes', 'No', 'On request'])
+  data_sharing_plan_cv = SampleControlledVocab.where(key: "mds-#{mds_version}/study-data-sharing-plan").first_or_create!(
+    title: 'Study Data Sharing Plan',
+    sample_controlled_vocab_terms_attributes: create_cv_attr_terms(
+      [
+        'Yes, there is a plan to make data available',
+        'No, there is no plan to make data available',
+        'Undecided, it is not yet known if data will be made available',
+      ]
+    )
   )
 
-  # Definition of the Custom Metadata types
-
-  # Helper
-  def create_custom_metadata_attribute(title:, required:, sample_attribute_type:, sample_controlled_vocab: nil)
-    CustomMetadataAttribute.where(title).create!(title: title, required: required,
-                                                 sample_attribute_type: sample_attribute_type,
-                                                 sample_controlled_vocab: sample_controlled_vocab)
-  end
-
-  # ISA Study
-
-  CustomMetadataType.where(title: 'MDS Metadata V0.1 for object type Study', supported_type: 'Study').first_or_create!(
-    title: 'MDS Metadata V0.1 for object type Study', supported_type: 'Study',
+  CustomMetadataType.where(title: "MDS #{mds_version} Study", supported_type: 'Study').first_or_create!(
     custom_metadata_attributes: [
-      create_custom_metadata_attribute(title: 'Study Acronym', required: false, sample_attribute_type: string_type),
-      create_custom_metadata_attribute(title: 'Study Identifier', required: false, sample_attribute_type: string_type),
-      create_custom_metadata_attribute(title: 'Study Start Date', required: false, sample_attribute_type: date_type),
-      create_custom_metadata_attribute(title: 'Study End Date', required: false, sample_attribute_type: date_type),
-      create_custom_metadata_attribute(title: 'Study Homepage', required: false, sample_attribute_type: link_type),
-      create_custom_metadata_attribute(title: 'Study Type', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_type_cv),
-      create_custom_metadata_attribute(title: 'Health Condition(s) or Problem(s) Studied', required: false, sample_attribute_type: text_type),
-      create_custom_metadata_attribute(title: 'Sample Size', required: false, sample_attribute_type: int_type),
-      create_custom_metadata_attribute(title: 'Study Status', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_status_cv),
-      create_custom_metadata_attribute(title: 'Number of sites', required: false, sample_attribute_type: int_type),
-      create_custom_metadata_attribute(title: 'Recruting?', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_accrual_cv),
-      create_custom_metadata_attribute(title: 'Data Management Plan for data sharing?', required: false, sample_attribute_type: cv_type, sample_controlled_vocab: study_dmp_cv)
+      create_cm_attr(title: 'Study Title (EN)', required: true, type: string_type),
+      create_cm_attr(title: 'Study Description (EN)', required: true, type: text_type),
+      create_cm_attr(title: 'Study Type', required: true, type: cv_type, cv: type_cv),
+      create_cm_attr(title: 'Study Status', required: true, type: cv_type, cv: status_cv),
+      create_cm_attr(title: 'Study Groups of Diseases', required: true, type: cv_type, cv: groups_of_diseases_cv),
+      create_cm_attr(title: 'Study Data Sharing Plan', required: true, type: cv_type, cv: data_sharing_plan_cv),
+    # Missing study_design.study_countries
+    #                      study_groups_of_diseases_prevalent_outcomes
+    #                      study_groups_of_diseases_incident_outcomes
     ]
   )
-
 end
 
