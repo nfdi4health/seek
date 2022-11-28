@@ -23,6 +23,7 @@ class ResourcePublishLog < ApplicationRecord
                                                                             WAITING_FOR_APPROVAL])
     requested_approval_assets = requested_approval_logs.collect(&:resource).compact
     requested_approval_assets.reject!(&:is_published?)
+    requested_approval_assets.reject!(&:is_rejected?)
     requested_approval_assets.select! { |asset| gatekeeper.is_asset_gatekeeper_of? asset }
     requested_approval_assets.uniq.sort_by{ |asset| asset.resource_publish_logs.last.created_at}.reverse!
 
