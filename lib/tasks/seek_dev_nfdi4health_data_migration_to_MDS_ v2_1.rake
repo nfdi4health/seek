@@ -6,30 +6,31 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
   task(update_sample_controlled_vocab_terms: :environment) do
 
     # add_new_values_to_study_data_source
-    scv= SampleControlledVocab.where(title: 'NFDI4Health Study Data Source').first
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Data Source').first
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.find_or_create_by(label: 'Biological samples')
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.find_or_create_by(label: 'Imaging data')
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.find_or_create_by(label: 'Omics technology')
 
     #update_allowed_values_of_relation_type
-    scv= SampleControlledVocab.where(title:  'NFDI4Health ID Relation Type').first
+    scv = SampleControlledVocab.where(title:  'NFDI4Health ID Relation Type').first
     scv.sample_controlled_vocab_terms.each do |term|
-      term.update_attributes label: 'A '+term.label+' B' unless term.label.start_with? 'A'
+      term.update_attributes label: 'A ' + term.label + ' B' unless term.label.start_with? 'A'
     end
 
     #update_allowed_values_of_study_data_sharing_plan_generally
-    scv= SampleControlledVocab.where(title:  'NFDI4Health Study Data Sharing Plan Generally').first
+    scv = SampleControlledVocab.where(title:  'NFDI4Health Study Data Sharing Plan Generally').first
     scv.sample_controlled_vocab_terms.each do |term|
       term.update_attributes label: term.label.chomp('.')
     end
 
     #rename_contact_person_to_contact
-    scv= SampleControlledVocab.where(title:  'NFDI4Health Role Type').first
+    scv = SampleControlledVocab.where(title:  'NFDI4Health Role Type').first
     scv.sample_controlled_vocab_terms.where(label: 'Contact person').first.update_attributes label: 'Contact'
 
     #remove_allowed_values_of_study_subject
     scv = SampleControlledVocab.where(title:  'NFDI4Health Study Subject').first
-    scv.sample_controlled_vocab_terms = scv.sample_controlled_vocab_terms.select {|term| ['Person', 'Animal', 'Other', 'Unknown'].include? term.label }
+    scv.sample_controlled_vocab_terms = scv.sample_controlled_vocab_terms.select {|term|
+ ['Person', 'Animal', 'Other', 'Unknown'].include? term.label }
 
     #update_allowed_values_of_study_biospecimen_retention
     scv = SampleControlledVocab.where(title:  'NFDI4Health Study Biospecimen Retention').first
@@ -63,14 +64,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           nfdi_id = {}
           nfdi_id['identifier'] = id['id_identifier']
           nfdi_id['relation_type'] = id['id_relation_type']
-          nfdi_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A '+id['id_relation_type']+ ' B'
+          nfdi_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A ' + id['id_relation_type'] + ' B'
           new_json['ids_nfdi4health'] << nfdi_id
         else
           new_id = {}
           new_id['identifier'] = id['id_identifier']
           new_id['type'] = id['id_type']
           new_id['date'] = id['id_date']
-          new_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A '+id['id_relation_type']+ ' B'
+          new_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A ' + id['id_relation_type'] + ' B'
           new_id['resource_type_general'] = id['id_resource_type_general']
           new_json['ids'] << new_id
         end
@@ -92,8 +93,9 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_role['role_name_type'] = 'Organisational'
 
           new_role['role_name_organisational_group'] = {}
-          new_role['role_name_organisational_group']['type'] = role['role_type'].chomp(' person')
-          new_role['role_name_organisational_group']['role_name_organisational_group_name'] = role['role_name_organisational']
+          new_role['role_name_organisational_group']['type'] = role['role_type'].chomp('person')
+          new_role['role_name_organisational_group']['role_name_organisational_group_name'] =
+            role['role_name_organisational']
           new_role['role_name_organisational_group']['role_name_organisational_group_type_funding_id'] = ''
 
         when 'Personal'
@@ -194,7 +196,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         non_english_descrs = []
 
         unless desc['description_language'] == 'EN (English)'
-          new_desc ={}
+          new_desc = {}
           new_desc['text'] = desc['description']
           new_desc['language'] = desc['description_language']
           non_english_descrs << new_desc
@@ -235,14 +237,18 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             'CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)',
             'CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)'].include? json['resource_use_rights_label']
           resource_use_rights['resource_use_rights_confirmations'] = {}
-          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_authors_confirmation_1'] = json['resource_use_rights_authors_confirmation_1']
-          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_authors_confirmation_2'] = json['resource_use_rights_authors_confirmation_2']
-          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_authors_confirmation_3'] = json['resource_use_rights_authors_confirmation_3']
-          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_support_by_licencing'] = json['resource_use_rights_support_by_licencing']
+          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_authors_confirmation_1'] =
+            json['resource_use_rights_authors_confirmation_1']
+          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_authors_confirmation_2'] =
+            json['resource_use_rights_authors_confirmation_2']
+          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_authors_confirmation_3'] =
+            json['resource_use_rights_authors_confirmation_3']
+          resource_use_rights['resource_use_rights_confirmations']['resource_use_rights_support_by_licencing'] =
+            json['resource_use_rights_support_by_licencing']
         end
 
         resource_use_rights['resource_use_rights_description'] = json['resource_use_rights_description']
-        new_json['resource_non_study_details']['resource_use_rights']  = resource_use_rights
+        new_json['resource_non_study_details']['resource_use_rights'] = resource_use_rights
       end
 
       # 12. ['study_design']
@@ -250,7 +256,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         sd = json['study_design']
 
-        new_json['study_design']={}
+        new_json['study_design'] = {}
 
         # ['study_design']['study_primary_design']
         new_json['study_design']['study_primary_design'] = sd['study_primary_design']
@@ -261,7 +267,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         # ['study_design']['study_conditions']
         new_json['study_design']['study_conditions'] = []
         sd['study_conditions'].each do |con|
-          new_condition ={}
+          new_condition = {}
           new_condition['study_conditions_label'] = con['study_conditions']
           new_condition['study_conditions_classification'] = con['study_conditions_classification']
           new_condition['study_conditions_classification_code'] = con['study_conditions_classification_code']
@@ -270,9 +276,9 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # ['study_design']['study_groups_of_diseases']
         new_json['study_design']['study_groups_of_diseases'] = {}
-        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_generally']=['Unknown']
-        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_prevalent_outcomes']=''
-        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_incident_outcomes']=''
+        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_generally'] = ['Unknown']
+        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_prevalent_outcomes'] = ''
+        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_incident_outcomes'] = ''
 
         # ['study_design']['study_ethics_committee_approval']
         new_json['study_design']['study_ethics_committee_approval'] = if sd['study_ethics_commitee_approval'].blank?
@@ -372,18 +378,20 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
                                                     end
 
         #['study_design']['study_sampling']
-        new_json['study_design']['study_sampling']={}
+        new_json['study_design']['study_sampling'] = {}
 
         if sd['study_sampling'].start_with?('Probability')
           new_json['study_design']['study_sampling']['study_sampling_method'] = 'Probability'
           unless sd['study_sampling'] == 'Probability'
-            new_json['study_design']['study_sampling']['study_sampling_method_probability'] = sd['study_sampling'].partition("(").last.partition(")").first
+            new_json['study_design']['study_sampling']['study_sampling_method_probability'] =
+              sd['study_sampling'].partition("(").last.partition(")").first
           end
 
         elsif sd['study_sampling'].start_with?('Non-probability')
           new_json['study_design']['study_sampling']['study_sampling_method'] = 'Non-probability'
           unless sd['study_sampling'] == 'Non-probability'
-            new_json['study_design']['study_sampling']['study_sampling_method_non_probability'] = sd['study_sampling'].partition("(").last.partition(")").first
+            new_json['study_design']['study_sampling']['study_sampling_method_non_probability'] =
+              sd['study_sampling'].partition("(").last.partition(")").first
           end
 
         else
@@ -398,14 +406,16 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         #['study_design']['study_data_source']
         biological_samples = ['Blood', 'Buccal cells', 'Cord blood', 'DNA', 'Faeces', 'Hair', 'Immortalized cell lines',
                               'Isolated pathogen', 'Nail', 'Plasma', 'RNA', 'Saliva', 'Serum', 'Tissue (frozen)', 'Tissue (FFPE)', 'Urine', 'Other biological samples']
-        imaging_data = ['Imaging data (ultrasound)','Imaging data (MRI)','Imaging data (MRI, radiography)','Imaging data (CT)','Other imaging data']
+        imaging_data = ['Imaging data (ultrasound)','Imaging data (MRI)','Imaging data (MRI, radiography)',
+'Imaging data (CT)','Other imaging data']
         proteomics = ['Genomics','Metabolomics','Transcriptomics','Proteomics','Other omics technology']
         new_json['study_design']['study_data_source'] = {}
         new_json['study_design']['study_data_source']['study_data_sources_general'] = []
         new_json['study_design']['study_data_source']['study_data_sources_biosamples'] = []
         new_json['study_design']['study_data_source']['study_data_sources_imaging'] = []
         new_json['study_design']['study_data_source']['study_data_sources_omics'] = []
-        new_json['study_design']['study_data_source']['study_data_source_description'] = sd['study_data_source_description']
+        new_json['study_design']['study_data_source']['study_data_source_description'] =
+          sd['study_data_source_description']
 
         old_ds = sd['study_data_source'].map{|x| SampleControlledVocabTerm.find(x).label}
         study_data_sources_general = []
@@ -424,7 +434,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             study_data_sources_general << ds_id
           end
         end
-        new_json['study_design']['study_data_source']['study_data_sources_general']= study_data_sources_general.uniq
+        new_json['study_design']['study_data_source']['study_data_sources_general'] = study_data_sources_general.uniq
 
         #['study_design']['study_primary_purpose']
         new_json['study_design']['study_primary_purpose'] = if sr.is_interventional_study?
@@ -434,24 +444,46 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
                                                             end
 
         #['study_design']['study_eligibility_criteria']
-        new_json['study_design']['study_eligibility_criteria']={}
+        new_json['study_design']['study_eligibility_criteria'] = {}
         study_eligibility_age_min = {}
         study_eligibility_age_max = {}
 
-        new_json['study_design']['study_eligibility_criteria']['study_eligibility_genders'] = sd['study_eligibility_gender']
-        new_json['study_design']['study_eligibility_criteria']['study_eligibility_inclusion_criteria'] = sd['study_eligibility_inclusion_criteria']
-        new_json['study_design']['study_eligibility_criteria']['study_eligibility_exclusion_criteria'] = sd['study_eligibility_exclusion_criteria']
+        unless sd['study_eligibility_gender'].blank?
+          new_json['study_design']['study_eligibility_criteria']['study_eligibility_genders'] =
+            sd['study_eligibility_gender']
+        end
 
-        study_eligibility_age_min['number'] = sd['study_eligibility_age_min']
-        #todo check if 'time_unit' is a new item in 2.1
-        study_eligibility_age_min['time_unit']=''
+        unless sd['study_eligibility_inclusion_criteria'].blank?
+          new_json['study_design']['study_eligibility_criteria']['study_eligibility_inclusion_criteria'] =
+            sd['study_eligibility_inclusion_criteria']
+        end
 
-        study_eligibility_age_max['number']= sd['study_eligibility_age_max']
-        #todo check if 'time_unit' is a new item in 2.1
-        study_eligibility_age_max['time_unit']=''
+        unless sd['study_eligibility_exclusion_criteria'].blank?
+          new_json['study_design']['study_eligibility_criteria']['study_eligibility_exclusion_criteria'] =
+            sd['study_eligibility_exclusion_criteria']
+        end
 
-        new_json['study_design']['study_eligibility_criteria']['study_eligibility_age_min'] = study_eligibility_age_min
-        new_json['study_design']['study_eligibility_criteria']['study_eligibility_age_max'] = study_eligibility_age_max
+        unless sd['study_eligibility_age_min'].blank?
+          study_eligibility_age_min['number'] = sd['study_eligibility_age_min']
+          study_eligibility_age_min['time_unit'] = nil
+        end
+
+        unless sd['study_eligibility_age_max'].blank?
+          study_eligibility_age_max['number'] = sd['study_eligibility_age_max']
+          study_eligibility_age_max['time_unit'] = nil
+        end
+
+        unless study_eligibility_age_min.blank?
+          new_json['study_design']['study_eligibility_criteria']['study_eligibility_age_min'] =
+            study_eligibility_age_min
+        end
+
+        unless study_eligibility_age_max.blank?
+          new_json['study_design']['study_eligibility_criteria']['study_eligibility_age_max'] =
+            study_eligibility_age_max
+        end
+
+        new_json['study_design'].delete('study_eligibility_criteria') if new_json['study_design']['study_eligibility_criteria'].blank?
 
         #['study_design']['study_population']
         new_json['study_design']['study_population'] = sd['study_population']
@@ -470,7 +502,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_age_min_examined']['time_unit'] = ''
 
         #['study_design']['study_age_max_examined']
-        new_json['study_design']['study_age_max_examined']= {}
+        new_json['study_design']['study_age_max_examined'] = {}
         new_json['study_design']['study_age_max_examined']['number'] = sd['study_age_max_examined']
         #todo check if 'time_unit' is a new item in 2.1
         new_json['study_design']['study_age_max_examined']['time_unit'] = ''
@@ -504,8 +536,8 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
 
         #['study_design']['study_outcomes']
-        new_json['study_design']['study_outcomes']  = if !sd['study_outcomes'].blank?
-                                                        sd['study_outcomes']
+        new_json['study_design']['study_outcomes'] = if !sd['study_outcomes'].blank?
+                                                       sd['study_outcomes']
                                                       else
                                                         []
                                                       end
@@ -519,39 +551,59 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         #['study_design']['study_data_sharing_plan']
         new_json['study_design']['study_data_sharing_plan'] = {}
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_generally'] = sd['study_data_sharing_plan_generally'].chomp('.')
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_description'] = sd['study_data_sharing_plan_description']
+        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_generally'] =
+          sd['study_data_sharing_plan_generally'].chomp('.')
+        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_description'] =
+          sd['study_data_sharing_plan_description']
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_datashield'] = ''
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'] = sd['study_data_sharing_plan_url']
+        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'] =
+          sd['study_data_sharing_plan_url']
 
 
         if sd['study_data_sharing_plan_generally'] == 'Yes, there is a plan to make data available.'
-          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_supporting_information'] = sd['study_data_sharing_plan_supporting_information']
-          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_time_frame'] = sd['study_data_sharing_plan_time_frame']
-          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_access_criteria'] = sd['study_data_sharing_plan_access_criteria']
+          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_supporting_information'] =
+            sd['study_data_sharing_plan_supporting_information']
+          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_time_frame'] =
+            sd['study_data_sharing_plan_time_frame']
+          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_access_criteria'] =
+            sd['study_data_sharing_plan_access_criteria']
         end
 
 
         #['study_design']['study_design_interventional']
         if sr.is_interventional_study?
           new_json['study_design']['study_design_interventional'] = {}
-          new_json['study_design']['study_design_interventional']['study_phase'] = sd['interventional_study_design']['study_phase']
+          new_json['study_design']['study_design_interventional']['study_phase'] =
+            sd['interventional_study_design']['study_phase']
           new_json['study_design']['study_design_interventional']['study_masking'] = {}
           #todo check if the mapping is ok
-          new_json['study_design']['study_design_interventional']['study_masking']['study_masking_general'] = sd['interventional_study_design']['study_masking']
-          new_json['study_design']['study_design_interventional']['study_masking']['study_masking_roles'] = sd['interventional_study_design']['study_masking_roles'] if sd['interventional_study_design']['study_masking']
-          new_json['study_design']['study_design_interventional']['study_masking']['study_masking_description'] = sd['interventional_study_design']['study_masking_description'] if sd['interventional_study_design']['study_masking']
-          new_json['study_design']['study_design_interventional']['study_allocation'] = sd['interventional_study_design']['study_allocation']
-          new_json['study_design']['study_design_interventional']['study_off_label_use'] = sd['interventional_study_design']['study_off_label_use']
+          new_json['study_design']['study_design_interventional']['study_masking']['study_masking_general'] =
+            sd['interventional_study_design']['study_masking']
+          if sd['interventional_study_design']['study_masking']
+            new_json['study_design']['study_design_interventional']['study_masking']['study_masking_roles'] =
+              sd['interventional_study_design']['study_masking_roles']
+          end
+          if sd['interventional_study_design']['study_masking']
+            new_json['study_design']['study_design_interventional']['study_masking']['study_masking_description'] =
+              sd['interventional_study_design']['study_masking_description']
+          end
+          new_json['study_design']['study_design_interventional']['study_allocation'] =
+            sd['interventional_study_design']['study_allocation']
+          new_json['study_design']['study_design_interventional']['study_off_label_use'] =
+            sd['interventional_study_design']['study_off_label_use']
         end
 
         #['study_design']['study_design_non_interventional']
         if sr.is_non_interventional_study?
           new_json['study_design']['study_design_non_interventional'] = {}
-          new_json['study_design']['study_design_non_interventional']['study_time_perspectives'] = sd['non_interventional_study_design']['study_time_perspective']
-          new_json['study_design']['study_design_non_interventional']['study_target_followup_duration'] = sd['non_interventional_study_design']['study_target_follow-up_duration']
-          new_json['study_design']['study_design_non_interventional']['study_biospecimen_retention'] = sd['non_interventional_study_design']['study_biospecimen_retention']
-          new_json['study_design']['study_design_non_interventional']['study_biospecimen_description'] = sd['non_interventional_study_design']['study_biospecomen_description']
+          new_json['study_design']['study_design_non_interventional']['study_time_perspectives'] =
+            sd['non_interventional_study_design']['study_time_perspective']
+          new_json['study_design']['study_design_non_interventional']['study_target_followup_duration'] =
+            sd['non_interventional_study_design']['study_target_follow-up_duration']
+          new_json['study_design']['study_design_non_interventional']['study_biospecimen_retention'] =
+            sd['non_interventional_study_design']['study_biospecimen_retention']
+          new_json['study_design']['study_design_non_interventional']['study_biospecimen_description'] =
+            sd['non_interventional_study_design']['study_biospecomen_description']
         end
       end
 
