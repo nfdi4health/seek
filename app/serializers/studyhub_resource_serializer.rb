@@ -53,7 +53,7 @@ class StudyhubResourceSerializer < PCSSerializer
               convert_id_to_label_for_multi_select_attribute(study_design['study_data_source'][attr]) unless study_design['study_data_source'][attr].blank?
           end
 
-          if key == 'study_eligibility_criteria'
+          if study_design.key?('study_eligibility_criteria') && (key == 'study_eligibility_criteria')
             study_design['study_eligibility_criteria'][attr] =
               convert_id_to_label_for_multi_select_attribute(study_design['study_eligibility_criteria'][attr]) unless study_design['study_eligibility_criteria'][attr].blank?
           end
