@@ -70,12 +70,16 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_id = {}
           new_id['identifier'] = id['id_identifier']
           new_id['type'] = id['id_type']
-          new_id['date'] = id['id_date']
+          new_id['date'] = id['id_date'] unless id['id_date'].blank?
           new_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A ' + id['id_relation_type'] + ' B'
-          new_id['resource_type_general'] = id['id_resource_type_general']
+          new_id['resource_type_general'] = id['id_resource_type_general'] unless id['id_resource_type_general'].blank?
           new_json['ids'] << new_id
         end
       end
+      new_json.delete('ids_alternative') if new_json['ids_alternative'].blank?
+      new_json.delete('ids_nfdi4health') if new_json['ids_nfdi4health'].blank?
+      new_json.delete('ids') if new_json['ids'].blank?
+
 
 
       # 2.['roles']
@@ -84,8 +88,8 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         new_role = {}
 
-        new_role['role_email'] = role['role_email']
-        new_role['role_phone'] = role['role_phone']
+        new_role['role_email'] = role['role_email'] unless role['role_email'].blank?
+        new_role['role_phone'] = role['role_phone'] unless role['role_phone'].blank?
 
 
         case role['role_name_type']
@@ -119,8 +123,8 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_role['role_affiliations'] = []
         role_affiliations = {}
         role_affiliations['role_affiliation_name'] = role['role_affiliation_name']
-        role_affiliations['role_affiliation_address'] = role['role_affiliation_address']
-        role_affiliations['role_affiliation_web_page'] = role['role_affiliation_web_page']
+        role_affiliations['role_affiliation_address'] = role['role_affiliation_address'] unless role['role_affiliation_address'].blank?
+        role_affiliations['role_affiliation_web_page'] = role['role_affiliation_web_page'] unless role['role_affiliation_web_page'].blank?
         role_affiliations['role_affiliation_identifiers'] = []
 
         role['role_affiliation_identifiers'].each do |id|
@@ -129,8 +133,11 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_id['scheme'] = id['role_affiliation_identifier_scheme']
           role_affiliations['role_affiliation_identifiers'] << new_id
         end
+        role_affiliations.delete('role_affiliation_identifiers') if role_affiliations['role_affiliation_identifiers'].blank?
 
         new_role['role_affiliations'] << role_affiliations
+
+        new_role.delete('role_affiliations') if new_role['role_affiliations'].blank?
 
         new_json['roles'] << new_role
       end
