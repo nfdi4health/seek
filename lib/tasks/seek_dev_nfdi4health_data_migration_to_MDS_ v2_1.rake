@@ -96,7 +96,6 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_role['role_name_organisational_group']['type'] = role['role_type'].chomp('person')
           new_role['role_name_organisational_group']['role_name_organisational_group_name'] =
             role['role_name_organisational']
-          new_role['role_name_organisational_group']['role_name_organisational_group_type_funding_id'] = ''
 
         when 'Personal'
           new_role['role_name_type'] = 'Personal'
@@ -106,6 +105,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_role['role_name_personal']['role_name_personal_family_name'] = role['role_name_personal_family_name']
           new_role['role_name_personal']['role_name_personal_title'] = role['role_name_personal_title']
 
+
           new_role['role_name_personal']['role_name_identifiers'] = []
           role['role_name_identifiers'].each do |id|
             new_id = {}
@@ -113,7 +113,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             new_id['scheme'] = id['role_name_identifier_scheme']
             new_role['role_name_personal']['role_name_identifiers'] << new_id
           end
-
+          new_role['role_name_personal'].delete('role_name_identifiers') if new_role['role_name_personal']['role_name_identifiers'].blank?
         end
 
         new_role['role_affiliations'] = []
@@ -160,22 +160,25 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       end
 
       # 5. ['resource_acronyms']
-      new_json['resource_acronyms'] = []
-      json['resource_acronyms'].each do |acronym|
-        new_acronyms = {}
-        new_acronyms['text'] = acronym['acronym']
-        new_acronyms['language'] = acronym['acronym_language']
-        new_json['resource_acronyms'] << new_acronyms
+      unless json['resource_acronyms'].blank?
+        new_json['resource_acronyms'] = []
+        json['resource_acronyms'].each do |acronym|
+          new_acronyms = {}
+          new_acronyms['text'] = acronym['acronym']
+          new_acronyms['language'] = acronym['acronym_language']
+          new_json['resource_acronyms'] << new_acronyms
+        end
       end
 
-
       # 6. ['resource_languages']
-      new_json['resource_languages'] = json['resource_language']
-
+      unless json['resource_language'].blank?
+         new_json['resource_languages'] = json['resource_language']
+      end
 
       # 7. ['resource_web_page']
-      new_json['resource_web_page'] = json['resource_web_page']
-
+      unless json['resource_web_page'].blank?
+        new_json['resource_web_page'] = json['resource_web_page']
+      end
 
       # 8.  ['resource_description_english']
       new_json['resource_description_english'] = {}
@@ -201,12 +204,10 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_desc['language'] = desc['description_language']
           non_english_descrs << new_desc
         end
-        if non_english_descrs.blank?
-          non_english_descrs[0] = {}
-          non_english_descrs[0]['text'] = ''
-          non_english_descrs[0]['language'] = ''
+        unless non_english_descrs.blank?
+          new_json['resource_descriptions_non_english'] = non_english_descrs
         end
-        new_json['resource_descriptions_non_english'] = non_english_descrs
+
       end
 
 
@@ -215,8 +216,9 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       new_json['resource_classification']['resource_type'] = sr.studyhub_resource_type.title
 
       #11. ['resource_keywords']
-      new_json['resource_keywords'] = json['resource_keywords']
-
+      unless json['resource_keywords'].blank?
+        new_json['resource_keywords'] = json['resource_keywords']
+      end
 
       ###################non_study#####################
 
@@ -227,9 +229,12 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # 11. ['resource_non_study_details']
         new_json['resource_non_study_details'] = {}
-        new_json['resource_non_study_details']['resource_version'] = json['resource_version']
-        new_json['resource_non_study_details']['resource_format']  = json['resource_format']
+        new_json['resource_non_study_details']['resource_version'] = json['resource_version'] unless json['resource_version'].blank?
+        new_json['resource_non_study_details']['resource_format']  = json['resource_format'] unless json['resource_format'].blank?
+
+
         resource_use_rights = {}
+
         resource_use_rights['resource_use_rights_label'] = json['resource_use_rights_label']
 
         if ['CC BY 4.0 (Creative Commons Attribution 4.0 International)',
@@ -247,8 +252,12 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             json['resource_use_rights_support_by_licencing']
         end
 
-        resource_use_rights['resource_use_rights_description'] = json['resource_use_rights_description']
+
+        resource_use_rights['resource_use_rights_description'] = json['resource_use_rights_description'] unless json['resource_use_rights_description'].blank?
         new_json['resource_non_study_details']['resource_use_rights'] = resource_use_rights
+
+        new_json.delete('resource_non_study_details') if new_json['resource_non_study_details'].blank?
+
       end
 
       # 12. ['study_design']
