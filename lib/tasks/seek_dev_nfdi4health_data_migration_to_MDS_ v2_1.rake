@@ -153,17 +153,6 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       # 3.['provenance']
       new_json['provenance'] = {}
       new_json['provenance']['data_source'] = json['provenance']['data_source']
-      new_json['provenance']['verification_date'] = ''
-      new_json['provenance']['verification_date_user'] = ''
-      new_json['provenance']['resource_first_submitted_date'] = ''
-      new_json['provenance']['resource_first_submitted_user'] = ''
-      new_json['provenance']['resource_first_posted_date'] = ''
-      new_json['provenance']['resource_first_posted_user'] = ''
-      new_json['provenance']['last_update_submitted_date'] = ''
-      new_json['provenance']['last_update_submitted_user'] = ''
-      new_json['provenance']['last_update_posted_date'] = ''
-      new_json['provenance']['last_update_posted_user'] = ''
-      new_json['provenance']['resource_version'] = ''
 
       # 4. ['resource_titles']
       new_json['resource_titles'] = []
@@ -406,8 +395,10 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_data_source']['study_data_sources_biosamples'] = []
         new_json['study_design']['study_data_source']['study_data_sources_imaging'] = []
         new_json['study_design']['study_data_source']['study_data_sources_omics'] = []
-        new_json['study_design']['study_data_source']['study_data_source_description'] =
-          sd['study_data_source_description'] unless sd['study_data_source_description'].blank?
+        unless sd['study_data_source_description'].blank?
+          new_json['study_design']['study_data_source']['study_data_source_description'] =
+            sd['study_data_source_description']
+        end
 
         old_ds = sd['study_data_source'].map{|x| SampleControlledVocabTerm.find(x).label}
         study_data_sources_general = []
@@ -492,56 +483,50 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_obtained_sample_size'] = sd['study_obtained_sample_size'] unless sd['study_obtained_sample_size'].blank?
 
         #['study_design']['study_age_min_examined']
-        new_json['study_design']['study_age_min_examined'] = {}
-        new_json['study_design']['study_age_min_examined']['number'] = sd['study_age_min_examined']
-        #todo check if 'time_unit' is a new item in 2.1
-        new_json['study_design']['study_age_min_examined']['time_unit'] = ''
+
+        unless sd['study_age_min_examined'].blank?
+          new_json['study_design']['study_age_min_examined'] = {}
+          new_json['study_design']['study_age_min_examined']['number'] = sd['study_age_min_examined']
+          new_json['study_design']['study_age_min_examined']['time_unit'] = nil
+        end
+
 
         #['study_design']['study_age_max_examined']
-        new_json['study_design']['study_age_max_examined'] = {}
-        new_json['study_design']['study_age_max_examined']['number'] = sd['study_age_max_examined']
-        #todo check if 'time_unit' is a new item in 2.1
-        new_json['study_design']['study_age_max_examined']['time_unit'] = ''
+        unless sd['study_age_max_examined'].blank?
+          new_json['study_design']['study_age_max_examined'] = {}
+          new_json['study_design']['study_age_max_examined']['number'] = sd['study_age_max_examined']
+          new_json['study_design']['study_age_max_examined']['time_unit'] = nil
+        end
 
 
         # ['study_design']['study_hypothesis']
-        new_json['study_design']['study_hypothesis'] = sd['study_hypothesis']
+        new_json['study_design']['study_hypothesis'] = sd['study_hypothesis'] unless sd['study_hypothesis'].blank?
 
         #['study_design']['study_arms_groups']
-        new_json['study_design']['study_arms_groups'] = if (sr.is_interventional_study? && !sd['interventional_study_design']['interventional_study_design_arms'].blank?)
-                                                          sd['interventional_study_design']['interventional_study_design_arms']
-                                                        else
-                                                          []
-                                                        end
+        if (sr.is_interventional_study? && !sd['interventional_study_design']['interventional_study_design_arms'].blank?)
+          new_json['study_design']['study_arms_groups'] =  sd['interventional_study_design']['interventional_study_design_arms']
+        end
 
         #['study_design']['study_interventions']
-        new_json['study_design']['study_interventions'] = if (sr.is_interventional_study? && !sd['interventional_study_design']['interventional_study_design_interventions'].blank?)
-                                                            study_interventions = []
-                                                            sd['interventional_study_design']['interventional_study_design_interventions']&.each do |old|
-                                                              new = {}
-                                                              new['study_intervention_arms_groups_label'] = old['study_intervention_arm_group_label']
-                                                              new['study_intervention_name'] = old['study_intervention_name']
-                                                              new['study_intervention_type'] = old['study_intervention_type']
-                                                              new['study_intervention_description'] = old['study_intervention_description']
-                                                              study_interventions << new
-                                                            end
-                                                            study_interventions
-                                                          else
-                                                            []
-                                                          end
+        if (sr.is_interventional_study? && !sd['interventional_study_design']['interventional_study_design_interventions'].blank?)
+          study_interventions = []
+          sd['interventional_study_design']['interventional_study_design_interventions']&.each do |old|
+            new = {}
+            new['study_intervention_arms_groups_label'] = old['study_intervention_arm_group_label']
+            new['study_intervention_name'] = old['study_intervention_name']
+            new['study_intervention_type'] = old['study_intervention_type']
+            new['study_intervention_description'] = old['study_intervention_description']
+            study_interventions << new
+          end
+          new_json['study_design']['study_interventions'] = study_interventions
+        end
 
 
         #['study_design']['study_outcomes']
-        new_json['study_design']['study_outcomes'] = if !sd['study_outcomes'].blank?
-                                                       sd['study_outcomes']
-                                                      else
-                                                        []
-                                                      end
-
-
+        new_json['study_design']['study_outcomes'] = sd['study_outcomes'] unless sd['study_outcomes'].blank?
 
         #['study_design']['study_design_comment']
-        new_json['study_design']['study_design_comment'] = sd['study_design_comment']
+        new_json['study_design']['study_design_comment'] = sd['study_design_comment'] unless sd['study_design_comment'].blank?
 
 
 
@@ -549,59 +534,100 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_data_sharing_plan'] = {}
         new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_generally'] =
           sd['study_data_sharing_plan_generally'].chomp('.')
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_description'] =
-          sd['study_data_sharing_plan_description']
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_datashield'] = ''
-        new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'] =
-          sd['study_data_sharing_plan_url']
+        unless sd['study_data_sharing_plan_description'].blank?
+          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_description'] =
+            sd['study_data_sharing_plan_description']
+        end
+        unless sd['study_data_sharing_plan_url'].blank?
+          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'] =
+            sd['study_data_sharing_plan_url']
+        end
 
 
         if sd['study_data_sharing_plan_generally'] == 'Yes, there is a plan to make data available.'
-          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_supporting_information'] =
-            sd['study_data_sharing_plan_supporting_information']
-          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_time_frame'] =
-            sd['study_data_sharing_plan_time_frame']
-          new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_access_criteria'] =
-            sd['study_data_sharing_plan_access_criteria']
+          unless sd['study_data_sharing_plan_supporting_information'].blank?
+            new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_supporting_information'] =
+              sd['study_data_sharing_plan_supporting_information']
+          end
+          unless sd['study_data_sharing_plan_time_frame'].blank?
+            new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_time_frame'] =
+              sd['study_data_sharing_plan_time_frame']
+          end
+          unless sd['study_data_sharing_plan_access_criteria'].blank?
+            new_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_access_criteria'] =
+              sd['study_data_sharing_plan_access_criteria']
+          end
         end
 
 
         #['study_design']['study_design_interventional']
         if sr.is_interventional_study?
+
           new_json['study_design']['study_design_interventional'] = {}
-          new_json['study_design']['study_design_interventional']['study_phase'] =
-            sd['interventional_study_design']['study_phase']
+
+          #['study_design']['study_design_interventional']['study_phase']
+          unless sd['interventional_study_design']['study_phase'].blank?
+            new_json['study_design']['study_design_interventional']['study_phase'] =
+              sd['interventional_study_design']['study_phase']
+          end
+
+          #['study_design']['study_design_interventional']['study_masking']
           new_json['study_design']['study_design_interventional']['study_masking'] = {}
-          #todo check if the mapping is ok
+
           new_json['study_design']['study_design_interventional']['study_masking']['study_masking_general'] =
-            sd['interventional_study_design']['study_masking']
+            sd['interventional_study_design']['study_masking'] unless sd['interventional_study_design']['study_masking'].blank?
+
           if sd['interventional_study_design']['study_masking']
             new_json['study_design']['study_design_interventional']['study_masking']['study_masking_roles'] =
               sd['interventional_study_design']['study_masking_roles']
           end
+
           if sd['interventional_study_design']['study_masking']
             new_json['study_design']['study_design_interventional']['study_masking']['study_masking_description'] =
               sd['interventional_study_design']['study_masking_description']
           end
-          new_json['study_design']['study_design_interventional']['study_allocation'] =
-            sd['interventional_study_design']['study_allocation']
-          new_json['study_design']['study_design_interventional']['study_off_label_use'] =
-            sd['interventional_study_design']['study_off_label_use']
+          new_json['study_design']['study_design_interventional'].delete('study_masking') if new_json['study_design']['study_design_interventional']['study_masking'].blank?
+
+
+          #['study_design']['study_design_interventional']['study_allocation']
+          unless sd['interventional_study_design']['study_allocation'].blank?
+            new_json['study_design']['study_design_interventional']['study_allocation'] =
+              sd['interventional_study_design']['study_allocation']
+          end
+
+          #['study_design']['study_design_interventional']['study_off_label_use']
+          unless sd['interventional_study_design']['study_off_label_use'].blank?
+            new_json['study_design']['study_design_interventional']['study_off_label_use'] =
+              sd['interventional_study_design']['study_off_label_use']
+          end
+
+          new_json['study_design'].delete('study_design_interventional') if new_json['study_design']['study_design_interventional'].blank?
         end
 
         #['study_design']['study_design_non_interventional']
         if sr.is_non_interventional_study?
           new_json['study_design']['study_design_non_interventional'] = {}
-          new_json['study_design']['study_design_non_interventional']['study_time_perspectives'] =
-            sd['non_interventional_study_design']['study_time_perspective']
-          new_json['study_design']['study_design_non_interventional']['study_target_followup_duration'] =
-            sd['non_interventional_study_design']['study_target_follow-up_duration']
-          new_json['study_design']['study_design_non_interventional']['study_biospecimen_retention'] =
-            sd['non_interventional_study_design']['study_biospecimen_retention']
-          new_json['study_design']['study_design_non_interventional']['study_biospecimen_description'] =
-            sd['non_interventional_study_design']['study_biospecomen_description']
+          unless sd['non_interventional_study_design']['study_time_perspective'].blank?
+            new_json['study_design']['study_design_non_interventional']['study_time_perspectives'] =
+              sd['non_interventional_study_design']['study_time_perspective']
+          end
+          unless sd['non_interventional_study_design']['study_target_follow-up_duration'].blank?
+            new_json['study_design']['study_design_non_interventional']['study_target_followup_duration'] =
+              sd['non_interventional_study_design']['study_target_follow-up_duration']
+          end
+          unless sd['non_interventional_study_design']['study_biospecimen_retention'].blank?
+            new_json['study_design']['study_design_non_interventional']['study_biospecimen_retention'] =
+              sd['non_interventional_study_design']['study_biospecimen_retention']
+          end
+          unless sd['non_interventional_study_design']['study_biospecomen_description'].blank?
+            new_json['study_design']['study_design_non_interventional']['study_biospecimen_description'] =
+              sd['non_interventional_study_design']['study_biospecomen_description']
+          end
         end
+        new_json['study_design'].delete('study_design_non_interventional') if new_json['study_design']['study_design_non_interventional'].blank?
+
       end
+
 
 
       # at the very end to print new_json and update the resource_json
