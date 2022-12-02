@@ -117,14 +117,20 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             new_id['scheme'] = id['role_name_identifier_scheme']
             new_role['role_name_personal']['role_name_identifiers'] << new_id
           end
-          new_role['role_name_personal'].delete('role_name_identifiers') if new_role['role_name_personal']['role_name_identifiers'].blank?
+          if new_role['role_name_personal']['role_name_identifiers'].blank?
+            new_role['role_name_personal'].delete('role_name_identifiers')
+          end
         end
 
         new_role['role_affiliations'] = []
         role_affiliations = {}
         role_affiliations['role_affiliation_name'] = role['role_affiliation_name']
-        role_affiliations['role_affiliation_address'] = role['role_affiliation_address'] unless role['role_affiliation_address'].blank?
-        role_affiliations['role_affiliation_web_page'] = role['role_affiliation_web_page'] unless role['role_affiliation_web_page'].blank?
+        unless role['role_affiliation_address'].blank?
+          role_affiliations['role_affiliation_address'] = role['role_affiliation_address']
+        end
+        unless role['role_affiliation_web_page'].blank?
+          role_affiliations['role_affiliation_web_page'] = role['role_affiliation_web_page']
+        end
         role_affiliations['role_affiliation_identifiers'] = []
 
         role['role_affiliation_identifiers'].each do |id|
@@ -133,7 +139,9 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_id['scheme'] = id['role_affiliation_identifier_scheme']
           role_affiliations['role_affiliation_identifiers'] << new_id
         end
-        role_affiliations.delete('role_affiliation_identifiers') if role_affiliations['role_affiliation_identifiers'].blank?
+        if role_affiliations['role_affiliation_identifiers'].blank?
+          role_affiliations.delete('role_affiliation_identifiers')
+        end
 
         new_role['role_affiliations'] << role_affiliations
 
@@ -178,14 +186,10 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       end
 
       # 6. ['resource_languages']
-      unless json['resource_language'].blank?
-         new_json['resource_languages'] = json['resource_language']
-      end
+      new_json['resource_languages'] = json['resource_language'] unless json['resource_language'].blank?
 
       # 7. ['resource_web_page']
-      unless json['resource_web_page'].blank?
-        new_json['resource_web_page'] = json['resource_web_page']
-      end
+      new_json['resource_web_page'] = json['resource_web_page'] unless json['resource_web_page'].blank?
 
       # 8.  ['resource_description_english']
       new_json['resource_description_english'] = {}
@@ -211,9 +215,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_desc['language'] = desc['description_language']
           non_english_descrs << new_desc
         end
-        unless non_english_descrs.blank?
-          new_json['resource_descriptions_non_english'] = non_english_descrs
-        end
+        new_json['resource_descriptions_non_english'] = non_english_descrs unless non_english_descrs.blank?
 
       end
 
@@ -223,9 +225,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       new_json['resource_classification']['resource_type'] = sr.studyhub_resource_type.title
 
       #11. ['resource_keywords']
-      unless json['resource_keywords'].blank?
-        new_json['resource_keywords'] = json['resource_keywords']
-      end
+      new_json['resource_keywords'] = json['resource_keywords'] unless json['resource_keywords'].blank?
 
       ###################non_study#####################
 
@@ -236,8 +236,12 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # 11. ['resource_non_study_details']
         new_json['resource_non_study_details'] = {}
-        new_json['resource_non_study_details']['resource_version'] = json['resource_version'] unless json['resource_version'].blank?
-        new_json['resource_non_study_details']['resource_format']  = json['resource_format'] unless json['resource_format'].blank?
+        unless json['resource_version'].blank?
+          new_json['resource_non_study_details']['resource_version'] = json['resource_version']
+        end
+        unless json['resource_format'].blank?
+          new_json['resource_non_study_details']['resource_format']  = json['resource_format']
+        end
 
 
         resource_use_rights = {}
@@ -260,7 +264,9 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         end
 
 
-        resource_use_rights['resource_use_rights_description'] = json['resource_use_rights_description'] unless json['resource_use_rights_description'].blank?
+        unless json['resource_use_rights_description'].blank?
+          resource_use_rights['resource_use_rights_description'] = json['resource_use_rights_description']
+        end
         new_json['resource_non_study_details']['resource_use_rights'] = resource_use_rights
 
         new_json.delete('resource_non_study_details') if new_json['resource_non_study_details'].blank?
@@ -289,63 +295,52 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_condition['study_conditions_classification_code'] = con['study_conditions_classification_code']
           new_json['study_design']['study_conditions'] << new_condition
         end
+        new_json['study_design'].delete('study_conditions') if new_json['study_design']['study_conditions'].blank?
 
         # ['study_design']['study_groups_of_diseases']
         new_json['study_design']['study_groups_of_diseases'] = {}
         new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_generally'] = ['Unknown']
-        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_prevalent_outcomes'] = ''
-        new_json['study_design']['study_groups_of_diseases']['study_groups_of_diseases_incident_outcomes'] = ''
+
 
         # ['study_design']['study_ethics_committee_approval']
-        new_json['study_design']['study_ethics_committee_approval'] = if sd['study_ethics_commitee_approval'].blank?
-                                                                        ''
-                                                                      else
-                                                                        sd['study_ethics_commitee_approval']
-                                                                      end
+        unless sd['study_ethics_commitee_approval'].blank?
+          new_json['study_design']['study_ethics_committee_approval'] = sd['study_ethics_commitee_approval']
+        end
 
 
         #todo ['study_design']['study_status'], https://github.com/nfdi4health/metadataschema/issues/206
-        new_json['study_design']['study_status'] = sd['study_status']
+        new_json['study_design']['study_status'] = sd['study_status'] unless sd['study_status'].blank?
 
         if sr.is_interventional_study?
           if (sd['study_status'].start_with? 'Ongoing') || (sd['study_status'].start_with? 'At')
-            new_json['study_design']['study_status_when_intervention'] = sd['study_status_when_intervention']
+            new_json['study_design']['study_status_when_intervention'] = sd['study_status_when_intervention'] unless sd['study_status_when_intervention'].blank?
           end
         end
 
 
 
         if (sd['study_status'].start_with? 'Suspended') || (sd['study_status'].start_with? 'Terminated')
-          new_json['study_design']['study_status_halted_stage'] = sd['study_status_halted_stage']
-          new_json['study_design']['study_status_halted_reason'] = sd['study_status_halted_reason']
+          new_json['study_design']['study_status_halted_stage'] = sd['study_status_halted_stage'] unless sd['study_status_halted_stage'].blank?
+          new_json['study_design']['study_status_halted_reason'] = sd['study_status_halted_reason'] unless sd['study_status_halted_reason'].blank?
         end
 
-        new_json['study_design']['study_status_enrolling_by_invitation'] = sd['study_status_enrolling_by_invitation']
+        new_json['study_design']['study_status_enrolling_by_invitation'] = sd['study_status_enrolling_by_invitation'] unless sd['study_status_enrolling_by_invitation'].blank?
 
 
 
         # ['study_design']['study_recruitment_status_register']
-        new_json['study_design']['study_recruitment_status_register'] = if sd['study_recruitment_status_register'].blank?
-                                                                          ''
-                                                                        else
-                                                                          sd['study_recruitment_status_register']
-                                                                        end
+        unless sd['study_recruitment_status_register'].blank?
+          new_json['study_design']['study_recruitment_status_register'] = sd['study_recruitment_status_register']
+        end
 
 
         # ['study_design']['study_start_date']
-        new_json['study_design']['study_start_date'] = if sd['study_start_date'].blank?
-                                                         ''
-                                                       else
-                                                         sd['study_start_date']
-                                                       end
+        new_json['study_design']['study_start_date'] = sd['study_start_date'] unless sd['study_start_date'].blank?
+
 
 
         # ['study_design']['study_end_date']
-        new_json['study_design']['study_end_date'] = if sd['study_end_date'].blank?
-                                                       ''
-                                                     else
-                                                       sd['study_end_date']
-                                                     end
+        new_json['study_design']['study_end_date'] = sd['study_end_date'] unless sd['study_end_date'].blank?
 
 
         # ['study_design']['study_countries']
@@ -357,30 +352,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
 
         # ['study_design']['study_region']
-        new_json['study_design']['study_region'] = if sd['study_region'].blank?
-                                                     ''
-                                                   else
-                                                     sd['study_region']
-                                                   end
-
+        new_json['study_design']['study_region'] = sd['study_region'] unless sd['study_region'].blank?
 
 
         # ['study_design']['study_centers']
-        new_json['study_design']['study_centers'] = if sd['study_centers'].blank?
-                                                      ''
-                                                    else
-                                                      sd['study_centers']
-                                                    end
-
+        new_json['study_design']['study_centers'] = sd['study_centers'] unless sd['study_centers'].blank?
 
         # ['study_design']['study_centers_number']
-        new_json['study_design']['study_centers_number'] = if sd['study_centers_number'].blank?
-                                                             nil
-                                                           else
-                                                             sd['study_centers_number']
-                                                           end
-
-
+        new_json['study_design']['study_centers_number'] = sd['study_centers_number'] unless sd['study_centers_number'].blank?
 
         # ['study_design']['study_subject']
         new_json['study_design']['study_subject'] = if sd['study_subject'].blank?
@@ -411,13 +390,10 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           end
 
         else
-          new_json['study_design']['study_sampling']['study_sampling_method'] = if sd['study_sampling'].blank?
-                                                                                  ''
-                                                                                else
-                                                                                  sd['study_sampling']
-                                                                                end
+          new_json['study_design']['study_sampling']['study_sampling_method'] =sd['study_sampling'] unless sd['study_sampling'].blank?
         end
 
+        new_json['study_design'].delete('study_sampling') if new_json['study_design']['study_sampling'].blank?
 
         #['study_design']['study_data_source']
         biological_samples = ['Blood', 'Buccal cells', 'Cord blood', 'DNA', 'Faeces', 'Hair', 'Immortalized cell lines',
@@ -431,7 +407,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_data_source']['study_data_sources_imaging'] = []
         new_json['study_design']['study_data_source']['study_data_sources_omics'] = []
         new_json['study_design']['study_data_source']['study_data_source_description'] =
-          sd['study_data_source_description']
+          sd['study_data_source_description'] unless sd['study_data_source_description'].blank?
 
         old_ds = sd['study_data_source'].map{|x| SampleControlledVocabTerm.find(x).label}
         study_data_sources_general = []
@@ -450,14 +426,16 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             study_data_sources_general << ds_id
           end
         end
-        new_json['study_design']['study_data_source']['study_data_sources_general'] = study_data_sources_general.uniq
+
+        new_json['study_design']['study_data_source']['study_data_sources_general'] = study_data_sources_general.uniq unless study_data_sources_general.uniq.blank?
+        new_json['study_design']['study_data_source'].delete('study_data_sources_general') if new_json['study_design']['study_data_source']['study_data_sources_general'].blank?
+        new_json['study_design']['study_data_source'].delete('study_data_sources_biosamples') if new_json['study_design']['study_data_source']['study_data_sources_biosamples'].blank?
+        new_json['study_design']['study_data_source'].delete('study_data_sources_imaging') if new_json['study_design']['study_data_source']['study_data_sources_imaging'].blank?
+        new_json['study_design']['study_data_source'].delete('study_data_sources_omics') if new_json['study_design']['study_data_source']['study_data_sources_omics'].blank?
+        new_json['study_design'].delete('study_data_source') if new_json['study_design']['study_data_source'].blank?
 
         #['study_design']['study_primary_purpose']
-        new_json['study_design']['study_primary_purpose'] = if sr.is_interventional_study?
-                                                              sd['interventional_study_design']['study_primary_purpose']
-                                                            else
-                                                              ''
-                                                            end
+        new_json['study_design']['study_primary_purpose'] = sd['interventional_study_design']['study_primary_purpose'] if sr.is_interventional_study? && !sd['interventional_study_design']['study_primary_purpose'].blank?
 
         #['study_design']['study_eligibility_criteria']
         new_json['study_design']['study_eligibility_criteria'] = {}
@@ -499,17 +477,19 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             study_eligibility_age_max
         end
 
-        new_json['study_design'].delete('study_eligibility_criteria') if new_json['study_design']['study_eligibility_criteria'].blank?
+        if new_json['study_design']['study_eligibility_criteria'].blank?
+          new_json['study_design'].delete('study_eligibility_criteria')
+        end
 
         #['study_design']['study_population']
-        new_json['study_design']['study_population'] = sd['study_population']
+        new_json['study_design']['study_population'] = sd['study_population'] unless sd['study_population'].blank?
 
         #['study_design']['study_target_sample_size']
-        new_json['study_design']['study_target_sample_size'] = sd['study_target_sample_size']
+        new_json['study_design']['study_target_sample_size'] = sd['study_target_sample_size'] unless sd['study_target_sample_size'].blank?
 
 
         #['study_design']['study_obtained_sample_size']
-        new_json['study_design']['study_obtained_sample_size'] = sd['study_obtained_sample_size']
+        new_json['study_design']['study_obtained_sample_size'] = sd['study_obtained_sample_size'] unless sd['study_obtained_sample_size'].blank?
 
         #['study_design']['study_age_min_examined']
         new_json['study_design']['study_age_min_examined'] = {}
