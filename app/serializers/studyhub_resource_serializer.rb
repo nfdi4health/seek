@@ -64,21 +64,21 @@ class StudyhubResourceSerializer < PCSSerializer
             end
           end
 
-          if key == 'study_data_sharing_plan'
+          if study_design.key?('study_data_sharing_plan') && (key == 'study_data_sharing_plan')
             unless study_design['study_data_sharing_plan'][attr].blank?
               study_design['study_data_sharing_plan'][attr] =
                 convert_id_to_label_for_multi_select_attribute(study_design['study_data_sharing_plan'][attr])
             end
           end
 
-          if object.is_non_interventional_study? && key == 'study_design_non_interventional'
+          if object.is_non_interventional_study? && key == 'study_design_non_interventional' && study_design.key?('study_design_non_interventional')
             unless study_design['study_design_non_interventional'][attr].blank?
               study_design['study_design_non_interventional'][attr] =
                 convert_id_to_label_for_multi_select_attribute(study_design['study_design_non_interventional'][attr])
             end
           end
 
-          if object.is_interventional_study? && key == 'study_masking'
+          if object.is_interventional_study? && key == 'study_masking' && study_design.key?('study_masking')
             unless study_design['study_design_interventional']['study_masking'][attr].blank?
               study_design['study_design_interventional']['study_masking'][attr]= convert_id_to_label_for_multi_select_attribute(study_design['study_design_interventional']['study_masking'][attr])
             end
