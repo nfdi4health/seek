@@ -44,28 +44,38 @@ class StudyhubResourceSerializer < PCSSerializer
 
           study_design = object.resource_json['study_design']
 
-          study_design[attr] =
-            convert_id_to_label_for_multi_select_attribute(study_design[attr]) unless study_design[attr].blank?
+          unless study_design[attr].blank?
+            study_design[attr] =
+              convert_id_to_label_for_multi_select_attribute(study_design[attr])
+          end
 
 
-          if key == 'study_data_source'
-            study_design['study_data_source'][attr] =
-              convert_id_to_label_for_multi_select_attribute(study_design['study_data_source'][attr]) unless study_design['study_data_source'][attr].blank?
+          if key == 'study_data_source' && !study_design['study_data_source'].blank?
+            unless study_design['study_data_source'][attr].blank?
+              study_design['study_data_source'][attr] =
+                convert_id_to_label_for_multi_select_attribute(study_design['study_data_source'][attr])
+            end
           end
 
           if study_design.key?('study_eligibility_criteria') && (key == 'study_eligibility_criteria')
-            study_design['study_eligibility_criteria'][attr] =
-              convert_id_to_label_for_multi_select_attribute(study_design['study_eligibility_criteria'][attr]) unless study_design['study_eligibility_criteria'][attr].blank?
+            unless study_design['study_eligibility_criteria'][attr].blank?
+              study_design['study_eligibility_criteria'][attr] =
+                convert_id_to_label_for_multi_select_attribute(study_design['study_eligibility_criteria'][attr])
+            end
           end
 
           if key == 'study_data_sharing_plan'
-            study_design['study_data_sharing_plan'][attr] =
-              convert_id_to_label_for_multi_select_attribute(study_design['study_data_sharing_plan'][attr]) unless study_design['study_data_sharing_plan'][attr].blank?
+            unless study_design['study_data_sharing_plan'][attr].blank?
+              study_design['study_data_sharing_plan'][attr] =
+                convert_id_to_label_for_multi_select_attribute(study_design['study_data_sharing_plan'][attr])
+            end
           end
 
           if object.is_non_interventional_study? && key == 'study_design_non_interventional'
-            study_design['study_design_non_interventional'][attr] =
-              convert_id_to_label_for_multi_select_attribute(study_design['study_design_non_interventional'][attr]) unless study_design['study_design_non_interventional'][attr].blank?
+            unless study_design['study_design_non_interventional'][attr].blank?
+              study_design['study_design_non_interventional'][attr] =
+                convert_id_to_label_for_multi_select_attribute(study_design['study_design_non_interventional'][attr])
+            end
           end
 
           if object.is_interventional_study? && key == 'study_masking'
@@ -77,9 +87,6 @@ class StudyhubResourceSerializer < PCSSerializer
       end
     end
   end
-
-
-
 
 
   def convert_id_to_label_for_multi_select_attribute(array)
