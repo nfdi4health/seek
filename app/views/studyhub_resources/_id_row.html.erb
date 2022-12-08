@@ -41,8 +41,11 @@
   </td>
 
   <td>
-    <div class="form-group">
-      <%= f.text_field "#{field_name_prefix}[id_identifier][#{index}]", :class => "form-control",:value => id_identifier %>
+    <div class="form-group <%= "has-error text-danger" if id_error.include? "id_identifier" %>">
+      <div class="form-group">
+        <%= f.text_field "#{field_name_prefix}[id_identifier][#{index}]", :class => "form-control",:value => id_identifier %>
+        <small><%= id_error["id_identifier"] if id_error.include? "id_identifier" %></small>
+      </div>
     </div>
   </td>
 
