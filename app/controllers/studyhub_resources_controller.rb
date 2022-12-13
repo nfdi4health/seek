@@ -281,7 +281,7 @@ class StudyhubResourcesController < ApplicationController
       Rails.logger.info("The request is sent from API......")
       @rt = StudyhubResourceType.where(title: params[:studyhub_resource][:resource_json][:resource_classification][:resource_type]).first
       params[:studyhub_resource][:studyhub_resource_type_id] = @rt.id unless @rt.nil?
-
+      params[:studyhub_resource][:commit_button] = 'Submit'
     else
       Rails.logger.info("The request is sent from UI......")
 
