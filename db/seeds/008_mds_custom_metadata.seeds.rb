@@ -1,4 +1,4 @@
-mds_version = '2.1-alpha1'
+mds_version = '2.1'
 puts "Seeded MDS #{mds_version}"
 
 # Initialisation of aliases for common sample attributes types, for easier use.
@@ -119,25 +119,31 @@ disable_authorization_checks do
     )
   )
 
-  CustomMetadataType.where(title: "MDS #{mds_version} Study", supported_type: 'Study').first_or_create!(
-    custom_metadata_attributes: [
-      create_cm_attr(title: 'Title (EN)', required: true, type: string_type),
-      create_cm_attr(title: 'Description (EN)', required: true, type: text_type),
-      create_cm_attr(title: 'Acronym (EN)', required: false, type: string_type),
-      create_cm_attr(title: 'Acronym (DE)', required: false, type: string_type),
-      create_cm_attr(title: 'Type', required: true, type: cv_type, cv: type_cv),
-      create_cm_attr(title: 'Status', required: true, type: cv_type, cv: status_cv),
-      create_cm_attr(title: 'Start Date', required: false, type: date_type),
-      create_cm_attr(title: 'End Date', required: false, type: date_type),
-      create_cm_attr(title: 'Web Page', required: false, type: link_type),
-      create_cm_attr(title: 'Groups of Diseases', required: true, type: cv_type, cv: groups_of_diseases_cv),
-      create_cm_attr(title: 'Sample Size', required: false, type: int_type),
-      create_cm_attr(title: 'Number of Sites', required: false, type: int_type),
-      create_cm_attr(title: 'Data Sharing Plan', required: true, type: cv_type, cv: data_sharing_plan_cv),
-    # Missing study_design.study_countries
-    #                      study_groups_of_diseases_prevalent_outcomes
-    #                      study_groups_of_diseases_incident_outcomes
-    ]
-  )
-end
+  generic_study_attributes = [
+    create_cm_attr(title: 'Title (EN)', required: true, type: string_type),
+    create_cm_attr(title: 'Description (EN)', required: true, type: text_type),
+    create_cm_attr(title: 'Acronym (EN)', required: false, type: string_type),
+    create_cm_attr(title: 'Acronym (DE)', required: false, type: string_type),
+    create_cm_attr(title: 'Type', required: true, type: cv_type, cv: type_cv),
+    create_cm_attr(title: 'Status', required: true, type: cv_type, cv: status_cv),
+    create_cm_attr(title: 'Start Date', required: false, type: date_type),
+    create_cm_attr(title: 'End Date', required: false, type: date_type),
+    create_cm_attr(title: 'Web Page', required: false, type: link_type),
+    create_cm_attr(title: 'Groups of Diseases', required: true, type: cv_type, cv: groups_of_diseases_cv),
+    create_cm_attr(title: 'Sample Size', required: false, type: int_type),
+    create_cm_attr(title: 'Number of Sites', required: false, type: int_type),
+    create_cm_attr(title: 'Data Sharing Plan', required: true, type: cv_type, cv: data_sharing_plan_cv),
+  # Missing study_design.study_countries
+  #                      study_groups_of_diseases_prevalent_outcomes
+  #                      study_groups_of_diseases_incident_outcomes
+  ]
 
+  CustomMetadataType.where(title: "MDS #{mds_version} Non-Interventional Study", supported_type: 'Study').first_or_create!(
+    custom_metadata_attributes: generic_study_attributes
+  )
+
+  CustomMetadataType.where(title: "MDS #{mds_version} Interventional Study", supported_type: 'Study').first_or_create!(
+    custom_metadata_attributes: generic_study_attributes
+  )
+
+end
