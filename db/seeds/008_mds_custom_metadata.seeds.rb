@@ -38,7 +38,7 @@ end
 
 # Helper
 def create_cm_attr(title:, required:, type:, cv: nil)
-  CustomMetadataAttribute.where(title).create!(
+  CustomMetadataAttribute.where(title: title).first_or_create!(
     title: title, required: required, sample_attribute_type: type, sample_controlled_vocab: cv
   )
 end
