@@ -743,32 +743,7 @@
           "$ref": "#/definitions/nonEmptyString"
         },
         "type": {
-          "enum": [
-            "DRKS",
-            "NCT (ClinicalTrials.gov)",
-            "ISRCTN",
-            "EudraCT",
-            "EUDAMED",
-            "UTN",
-            "KonsortSWD",
-            "MDM Portal",
-            "DOI",
-            "URL",
-            "arXiv",
-            "EAN13",
-            "EISSN",
-            "Handle",
-            "ISBN",
-            "ISSN",
-            "ISTC",
-            "LISSN",
-            "LSID",
-            "PMID",
-            "PURL",
-            "URN",
-            "w3id",
-            "Other"
-          ],
+          "enum": ["DRKS", "NCT (ClinicalTrials.gov)", "ISRCTN", "EudraCT", "EUDAMED", "UTN", "KonsortSWD", "MDM Portal", "Other"],
           "type": "string"
         }
       },
