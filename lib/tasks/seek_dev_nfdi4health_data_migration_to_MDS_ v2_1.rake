@@ -44,7 +44,12 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.sample_controlled_vocab_terms.where(label: 'Request submitted, exempt granted').first.update_attributes label: 'Request for approval submitted, exempt granted'
     scv.sample_controlled_vocab_terms.where(label: 'Request submitted, approval denied').first.update_attributes label: 'Request for approval submitted, approval denied'
     scv.sample_controlled_vocab_terms.where(label: 'Unknown').first.update_attributes label: 'Unknown status of request approval'
+
+    scv = SampleControlledVocab.where(title:  'NFDI4Health ID Type').first
+    scv.sample_controlled_vocab_terms.where(label: 'NCT(ClinicalTrials.gov)').first.update_attributes label: 'NCT (ClinicalTrials.gov)'
+
     scv.save!
+
   end
 
 
@@ -66,7 +71,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         if (id['id_relation_type'] == 'has alternate ID')
           new_alt_id = {}
           new_alt_id['identifier'] = id['id_identifier']
-          new_alt_id['type'] = id['id_type']
+          new_alt_id['type'] = case id['id_type']
+                               when 'URL'
+                                 'Other'
+                               when 'NCT(ClinicalTrials.gov)'
+                                 'NCT (ClinicalTrials.gov)'
+                               else
+                                 id['id_type']
+                               end
           new_json['ids_alternative'] << new_alt_id
         elsif id['id_type'] == 'NFDI4Health'
           nfdi_id = {}
