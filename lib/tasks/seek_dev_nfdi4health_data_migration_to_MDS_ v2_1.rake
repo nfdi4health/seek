@@ -36,6 +36,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv = SampleControlledVocab.where(title:  'NFDI4Health Study Biospecimen Retention').first
     scv.sample_controlled_vocab_terms.where(label: ' Samples without DNA').first.update_attributes label: 'Samples without DNA'
 
+
+    #update_study_ethics_committee_approval
+    scv = SampleControlledVocab.where(title:  'NFDI4Health Study Ethics Commitee Approval').first
+    scv.sample_controlled_vocab_terms.where(label: 'Request submitted, approval pending').first.update_attributes label: 'Request for approval submitted, approval pending'
+    scv.sample_controlled_vocab_terms.where(label: 'Request submitted, approval granted').first.update_attributes label: 'Request for approval submitted, approval granted'
+    scv.sample_controlled_vocab_terms.where(label: 'Request submitted, exempt granted').first.update_attributes label: 'Request for approval submitted, exempt granted'
+    scv.sample_controlled_vocab_terms.where(label: 'Request submitted, approval denied').first.update_attributes label: 'Request for approval submitted, approval denied'
+    scv.sample_controlled_vocab_terms.where(label: 'Unknown').first.update_attributes label: 'Unknown status of request approval'
     scv.save!
   end
 
@@ -293,7 +301,21 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         # ['study_design']['study_ethics_committee_approval']
         unless sd['study_ethics_commitee_approval'].blank?
-          new_json['study_design']['study_ethics_committee_approval'] = sd['study_ethics_commitee_approval']
+
+          new_json['study_design']['study_ethics_committee_approval'] = case sd['study_ethics_commitee_approval']
+                                                                        when 'Request submitted, approval pending'
+                                                                          'Request for approval submitted, approval pending'
+                                                                        when 'Request submitted, approval granted'
+                                                                          'Request for approval submitted, approval granted'
+                                                                        when 'Request submitted, exempt granted'
+                                                                          'Request for approval submitted, exempt granted'
+                                                                        when 'Request submitted, approval denied'
+                                                                          'Request for approval submitted, approval denied'
+                                                                        when 'Unknown'
+                                                                          'Unknown status of request approval'
+                                                                        else
+                                                                          sd['study_ethics_commitee_approval']
+                                                                        end
         end
 
 
