@@ -70,6 +70,11 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.sample_controlled_vocab_terms.where(label: 'Health Economics').first.update_attributes label: 'Health economics'
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.create(label: 'Not applicable')
 
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first
+    scv.sample_controlled_vocab_terms.where(label: 'Funder(public)').first.update_attributes label: 'Funder (public)'
+    scv.sample_controlled_vocab_terms.where(label: 'Funder(private)').first.update_attributes label: 'Funder (private)'
+    scv.sample_controlled_vocab_terms.where(label: 'Principal investigator').first.destroy
+
     scv.save!
 
   end
@@ -139,7 +144,19 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_role['role_name_type'] = 'Organisational'
 
           new_role['role_name_organisational_group'] = {}
-          new_role['role_name_organisational_group']['type'] = role['role_type'].chomp('person')
+
+          new_role['role_name_organisational_group']['type'] = case role['role_type']
+                                                               when 'Funder(public)'
+                                                                 'Funder (public)'
+                                                               when 'Funder(private)'
+                                                                 'Funder (private)'
+                                                               when 'Principal investigator'
+                                                                 'Other'
+                                                               else
+                                                                 role['role_type'].chomp(' person')
+                                                               end
+
+
           new_role['role_name_organisational_group']['role_name_organisational_group_name'] =
             role['role_name_organisational']
 
