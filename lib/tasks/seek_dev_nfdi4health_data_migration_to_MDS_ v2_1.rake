@@ -181,8 +181,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_role['role_name_personal']['type'] = role['role_type'].chomp(' person')
           new_role['role_name_personal']['role_name_personal_given_name'] = role['role_name_personal_given_name']
           new_role['role_name_personal']['role_name_personal_family_name'] = role['role_name_personal_family_name']
-          new_role['role_name_personal']['role_name_personal_title'] = role['role_name_personal_title']
-
+          new_role['role_name_personal']['role_name_personal_title'] = role['role_name_personal_title'].blank? ? 'Other' : role['role_name_personal_title']
 
           new_role['role_name_personal']['role_name_identifiers'] = []
           role['role_name_identifiers'].each do |id|
@@ -198,7 +197,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         new_role['role_affiliations'] = []
         role_affiliations = {}
-        role_affiliations['role_affiliation_name'] = role['role_affiliation_name']
+        role_affiliations['role_affiliation_name'] =  role['role_affiliation_name'].blank? ? 'NONE GIVEN' : role['role_affiliation_name']
         unless role['role_affiliation_address'].blank?
           role_affiliations['role_affiliation_address'] = role['role_affiliation_address']
         end
