@@ -191,8 +191,9 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # study_primary_purpose
   study_primary_purpose_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Purpose').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Treatment', 'Prevention', 'Prognostic', 'Diagnostic', 'Supportive Care', 'Screening', 'Health Services Research',
-                                                                                               'Basic Science/Physiological study', 'Device Feasibility', 'Pharmacogenetics', 'Pharmacogenomics', 'Health Economics', 'Other'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Treatment', 'Prevention', 'Prognostic', 'Diagnostic', 'Supportive care', 'Screening', 'Health services research',
+                                                                                               'Basic science/Physiological study', 'Device feasibility', 'Pharmacogenetics', 'Pharmacogenomics',
+                                                                                               'Health economics','Not applicable','Other'])
   )
 
 

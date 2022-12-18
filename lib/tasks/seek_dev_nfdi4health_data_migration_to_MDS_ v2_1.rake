@@ -61,6 +61,15 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.sample_controlled_vocab_terms.where(label: 'Intervention completed').first.update_attributes label: 'Intervention completed, follow-up ongoing'
     scv.sample_controlled_vocab_terms.where(label: 'follow-up ongoing').first.destroy
 
+    #update_study_primary_purpose
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Purpose').first
+    scv.sample_controlled_vocab_terms.where(label: 'Supportive Care').first.update_attributes label: 'Supportive care'
+    scv.sample_controlled_vocab_terms.where(label: 'Health Services Research').first.update_attributes label: 'Health services research'
+    scv.sample_controlled_vocab_terms.where(label: 'Basic Science/Physiological study').first.update_attributes label: 'Basic science/Physiological study'
+    scv.sample_controlled_vocab_terms.where(label: 'Device Feasibility').first.update_attributes label: 'Device feasibility'
+    scv.sample_controlled_vocab_terms.where(label: 'Health Economics').first.update_attributes label: 'Health economics'
+    scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.create(label: 'Not applicable')
+
     scv.save!
 
   end
@@ -475,7 +484,13 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design'].delete('study_data_source') if new_json['study_design']['study_data_source'].blank?
 
         #['study_design']['study_primary_purpose']
-        new_json['study_design']['study_primary_purpose'] = sd['interventional_study_design']['study_primary_purpose'] if sr.is_interventional_study? && !sd['interventional_study_design']['study_primary_purpose'].blank?
+        if sr.is_interventional_study? && !sd['interventional_study_design']['study_primary_purpose'].blank?
+          if sd['interventional_study_design']['study_primary_purpose']== 'Health Services Research'
+            new_json['study_design']['study_primary_purpose'] = 'Health services research'
+          else
+            new_json['study_design']['study_primary_purpose'] = sd['interventional_study_design']['study_primary_purpose']
+          end
+        end
 
         #['study_design']['study_eligibility_criteria']
         new_json['study_design']['study_eligibility_criteria'] = {}
