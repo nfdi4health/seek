@@ -163,7 +163,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # study_status_when_intervention
   study_status_when_intervention_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status When Intervention').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Intervention ongoing', 'Intervention completed', 'follow-up ongoing'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Intervention ongoing', 'Intervention completed, follow-up ongoing'])
   )
 
   # study_status_halted_stage

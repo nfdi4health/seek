@@ -56,6 +56,11 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv = SampleControlledVocab.where(title: 'NFDI4Health Study Phase').first
     scv.sample_controlled_vocab_terms.where(label: 'Not-application').first.update_attributes label: 'Not applicable'
 
+    #update_study_status_when_intervention
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Status When Intervention').first
+    scv.sample_controlled_vocab_terms.where(label: 'Intervention completed').first.update_attributes label: 'Intervention completed, follow-up ongoing'
+    scv.sample_controlled_vocab_terms.where(label: 'follow-up ongoing').first.destroy
+
     scv.save!
 
   end
@@ -342,10 +347,12 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         #todo ['study_design']['study_status'], https://github.com/nfdi4health/metadataschema/issues/206
         new_json['study_design']['study_status'] = sd['study_status'] unless sd['study_status'].blank?
 
-        if sr.is_interventional_study?
-          if (sd['study_status'].start_with? 'Ongoing') || (sd['study_status'].start_with? 'At')
-            new_json['study_design']['study_status_when_intervention'] = sd['study_status_when_intervention'] unless sd['study_status_when_intervention'].blank?
-          end
+        if sr.is_interventional_study? && !sd['study_status_when_intervention'].blank?
+          new_json['study_design']['study_status_when_intervention'] = if sd['study_status_when_intervention'] == 'Intervention completed'
+                                                                         'Intervention completed, follow-up ongoing'
+                                                                       else
+                                                                         sd['study_status_when_intervention']
+                                                                       end
         end
 
 
