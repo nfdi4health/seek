@@ -524,17 +524,23 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         unless sd['study_age_min_examined'].blank?
           new_json['study_design']['study_age_min_examined'] = {}
-          new_json['study_design']['study_age_min_examined']['number'] = sd['study_age_min_examined']
-          new_json['study_design']['study_age_min_examined']['time_unit'] = nil
+          unless  sd['study_age_min_examined'] == -1
+            new_json['study_design']['study_age_min_examined']['number'] = sd['study_age_min_examined']
+            new_json['study_design']['study_age_min_examined']['time_unit'] = 'Years'
+          end
         end
+        new_json['study_design'].delete('study_age_min_examined') if new_json['study_design']['study_age_min_examined'].blank?
 
 
         #['study_design']['study_age_max_examined']
         unless sd['study_age_max_examined'].blank?
           new_json['study_design']['study_age_max_examined'] = {}
-          new_json['study_design']['study_age_max_examined']['number'] = sd['study_age_max_examined']
-          new_json['study_design']['study_age_max_examined']['time_unit'] = nil
+          unless  sd['study_age_max_examined'] == -1
+            new_json['study_design']['study_age_max_examined']['number'] = sd['study_age_max_examined']
+            new_json['study_design']['study_age_max_examined']['time_unit'] = 'Years'
+          end
         end
+        new_json['study_design'].delete('study_age_max_examined') if new_json['study_design']['study_age_max_examined'].blank?
 
 
         # ['study_design']['study_hypothesis']
