@@ -75,6 +75,12 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.sample_controlled_vocab_terms.where(label: 'Funder(private)').first.update_attributes label: 'Funder (private)'
     scv.sample_controlled_vocab_terms.where(label: 'Principal investigator').first.destroy
 
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Arm Group Type').first
+    scv.sample_controlled_vocab_terms.where(label: 'Active Comparator').first.update_attributes label: 'Active comparator'
+    scv.sample_controlled_vocab_terms.where(label: 'Placebo Comparator').first.update_attributes label: 'Placebo comparator'
+    scv.sample_controlled_vocab_terms.where(label: 'Sham Comparator').first.update_attributes label: 'Sham comparator'
+    scv.sample_controlled_vocab_terms.where(label: 'No Intervention').first.update_attributes label: 'No intervention'
+
     scv.save!
 
   end
@@ -332,11 +338,11 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_primary_design'] = sd['study_primary_design']
 
         # ['study_design']['study_type']
-        if sd['study_type'].blank?
-          new_json['study_design']['study_type'] = []
-        else
-          new_json['study_design']['study_type'] = [sd['study_type'].lstrip]
-        end
+        new_json['study_design']['study_type'] = if sd['study_type'].blank?
+                                                   []
+                                                 else
+                                                   [sd['study_type'].lstrip]
+                                                 end
 
         # ['study_design']['study_conditions']
         new_json['study_design']['study_conditions'] = []
@@ -595,6 +601,19 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         #['study_design']['study_arms_groups']
         if (sr.is_interventional_study? && !sd['interventional_study_design']['interventional_study_design_arms'].blank?)
+
+          sd['interventional_study_design']['interventional_study_design_arms'].each do |arm|
+            case arm['study_arm_group_type']
+            when 'Active Comparator'
+              arm['study_arm_group_type'] = 'Active comparator'
+            when 'Placebo Comparator'
+              arm['study_arm_group_type'] = 'Placebo comparator'
+            when 'Sham Comparator'
+              arm['study_arm_group_type'] = 'Sham comparator'
+            when 'No Intervention'
+              arm['study_arm_group_type'] = 'No intervention'
+            end
+          end
           new_json['study_design']['study_arms_groups'] =  sd['interventional_study_design']['interventional_study_design_arms']
         end
 
