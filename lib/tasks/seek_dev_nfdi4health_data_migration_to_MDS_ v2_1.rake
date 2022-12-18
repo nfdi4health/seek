@@ -48,6 +48,10 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv = SampleControlledVocab.where(title:  'NFDI4Health ID Type').first
     scv.sample_controlled_vocab_terms.where(label: 'NCT(ClinicalTrials.gov)').first.update_attributes label: 'NCT (ClinicalTrials.gov)'
 
+    #update_study_outcome_type
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Outcome Type').first
+    scv.sample_controlled_vocab_terms.where(label: ' Secondary').first.update_attributes label: 'Secondary'
+
     scv.save!
 
   end
@@ -558,11 +562,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         #['study_design']['study_outcomes']
         new_json['study_design']['study_outcomes'] = sd['study_outcomes'] unless sd['study_outcomes'].blank?
+        new_json['study_design']['study_outcomes']&.each do |out_come|
+          if out_come['study_outcome_type'] == ' Secondary'
+            out_come['study_outcome_type'] ='Secondary'
+          end
+        end
 
         #['study_design']['study_design_comment']
         new_json['study_design']['study_design_comment'] = sd['study_design_comment'] unless sd['study_design_comment'].blank?
-
-
 
         #['study_design']['study_data_sharing_plan']
         new_json['study_design']['study_data_sharing_plan'] = {}
