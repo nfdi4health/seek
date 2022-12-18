@@ -70,16 +70,23 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.sample_controlled_vocab_terms.where(label: 'Health Economics').first.update_attributes label: 'Health economics'
     scv.sample_controlled_vocab_terms << SampleControlledVocabTerm.create(label: 'Not applicable')
 
+    #update_role_type
     scv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first
     scv.sample_controlled_vocab_terms.where(label: 'Funder(public)').first.update_attributes label: 'Funder (public)'
     scv.sample_controlled_vocab_terms.where(label: 'Funder(private)').first.update_attributes label: 'Funder (private)'
     scv.sample_controlled_vocab_terms.where(label: 'Principal investigator').first.destroy
 
+    #update_study_arm_group_type
     scv = SampleControlledVocab.where(title: 'NFDI4Health Study Arm Group Type').first
     scv.sample_controlled_vocab_terms.where(label: 'Active Comparator').first.update_attributes label: 'Active comparator'
     scv.sample_controlled_vocab_terms.where(label: 'Placebo Comparator').first.update_attributes label: 'Placebo comparator'
     scv.sample_controlled_vocab_terms.where(label: 'Sham Comparator').first.update_attributes label: 'Sham comparator'
     scv.sample_controlled_vocab_terms.where(label: 'No Intervention').first.update_attributes label: 'No intervention'
+
+    #update_study_data_sources_imaging
+    SampleControlledVocabTerm.find_by(label: 'Imaging data (CT)').update_attributes label: 'Computed tomography (CT)'
+    SampleControlledVocabTerm.find_by(label: 'Imaging data (MRI)').update_attributes label: 'Magnetic resonance imaging (MRI)'
+    SampleControlledVocabTerm.find_by(label: 'Imaging data (ultrasound)').update_attributes label: 'Ultrasound'
 
     scv.save!
 
