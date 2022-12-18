@@ -332,7 +332,11 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design']['study_primary_design'] = sd['study_primary_design']
 
         # ['study_design']['study_type']
-        new_json['study_design']['study_type'] = [sd['study_type']]
+        if sd['study_type'].blank?
+          new_json['study_design']['study_type'] = []
+        else
+          new_json['study_design']['study_type'] = [sd['study_type'].lstrip]
+        end
 
         # ['study_design']['study_conditions']
         new_json['study_design']['study_conditions'] = []

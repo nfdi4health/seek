@@ -395,9 +395,9 @@ var SR = {
 
 
 function setStudyTypeOptions(type) {
-    const interventional_options = ['Single Group', ' Parallel', 'Crossover', 'Factorial', 'Sequential', 'Other', 'Unknown']
+    const interventional_options = ['Single Group', 'Parallel', 'Crossover', 'Factorial', 'Sequential', 'Other', 'Unknown']
     const non_interventional_options = ['Case-control', 'Nested case-control', 'Case-only', 'Case-crossover', 'Ecologic or community studies', 'Family-based',
-        'Twin study', 'Cohort', 'Case-cohort', ' Birth cohort', 'Trend', 'Panel',
+        'Twin study', 'Cohort', 'Case-cohort', 'Birth cohort', 'Trend', 'Panel',
         'Longitudinal', 'Cross-section', 'Cross-section ad-hoc follow-up', 'Time series',
         'Quality control', 'Registry', 'Other', 'Unknown']
 
