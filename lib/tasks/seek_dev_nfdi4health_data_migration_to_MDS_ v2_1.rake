@@ -529,14 +529,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
             sd['study_eligibility_exclusion_criteria']
         end
 
-        unless sd['study_eligibility_age_min'].blank?
+        unless sd['study_eligibility_age_min'].blank? || sd['study_eligibility_age_min'] == -1
           study_eligibility_age_min['number'] = sd['study_eligibility_age_min']
-          study_eligibility_age_min['time_unit'] = nil
+          study_eligibility_age_min['time_unit'] = 'Years'
         end
 
-        unless sd['study_eligibility_age_max'].blank?
+        unless sd['study_eligibility_age_max'].blank? || sd['study_eligibility_age_max'] == -1
           study_eligibility_age_max['number'] = sd['study_eligibility_age_max']
-          study_eligibility_age_max['time_unit'] = nil
+          study_eligibility_age_max['time_unit'] = 'Years'
         end
 
         unless study_eligibility_age_min.blank?
