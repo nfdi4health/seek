@@ -52,6 +52,10 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv = SampleControlledVocab.where(title: 'NFDI4Health Study Outcome Type').first
     scv.sample_controlled_vocab_terms.where(label: ' Secondary').first.update_attributes label: 'Secondary'
 
+    #update_study_study_phase
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Phase').first
+    scv.sample_controlled_vocab_terms.where(label: 'Not-application').first.update_attributes label: 'Not applicable'
+
     scv.save!
 
   end
@@ -613,9 +617,10 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_json['study_design']['study_design_interventional'] = {}
 
           #['study_design']['study_design_interventional']['study_phase']
-          unless sd['interventional_study_design']['study_phase'].blank?
-            new_json['study_design']['study_design_interventional']['study_phase'] =
-              sd['interventional_study_design']['study_phase']
+          if sd['interventional_study_design']['study_phase'] == 'Not-application'
+            new_json['study_design']['study_design_interventional']['study_phase'] = 'Not application'
+          else
+            new_json['study_design']['study_design_interventional']['study_phase'] = sd['interventional_study_design']['study_phase'].capitalize() unless sd['interventional_study_design']['study_phase'].blank?
           end
 
           #['study_design']['study_design_interventional']['study_masking']
