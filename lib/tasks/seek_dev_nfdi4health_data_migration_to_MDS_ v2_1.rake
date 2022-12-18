@@ -132,6 +132,8 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_id['type'] = id['id_type']
           new_id['date'] = id['id_date'] unless id['id_date'].blank?
           new_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A ' + id['id_relation_type'] + ' B'
+          new_id['relation_type'] = 'A references B' if new_id['relation_type'] == 'A has grant number B'
+          
           new_id['resource_type_general'] = id['id_resource_type_general'] unless id['id_resource_type_general'].blank?
           new_json['ids'] << new_id
         end
@@ -460,14 +462,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           new_json['study_design']['study_sampling']['study_sampling_method'] = 'Probability'
           unless sd['study_sampling'] == 'Probability'
             new_json['study_design']['study_sampling']['study_sampling_method_probability'] =
-              sd['study_sampling'].partition("(").last.partition(")").first
+              sd['study_sampling'].partition('(').last.partition(')').first
           end
 
         elsif sd['study_sampling'].start_with?('Non-probability')
           new_json['study_design']['study_sampling']['study_sampling_method'] = 'Non-probability'
           unless sd['study_sampling'] == 'Non-probability'
             new_json['study_design']['study_sampling']['study_sampling_method_non_probability'] =
-              sd['study_sampling'].partition("(").last.partition(")").first
+              sd['study_sampling'].partition('(').last.partition(')').first
           end
 
         else
