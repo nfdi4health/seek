@@ -140,7 +140,7 @@ max_studyhub_study_json_text = '{
 							"study_intervention_name":"Training session adressing information and health literacy",
 							"study_intervention_type":"Behavioral (e.g., psychotherapy, lifestyle counseling)",
 							"study_intervention_description":"",
-							"study_intervention_arms_groups_label":"Partial digital group: depression"
+							"study_intervention_arms_groups_label":["Partial digital group: depression"]
 						}
 					],
 					"study_centers_number":null,
