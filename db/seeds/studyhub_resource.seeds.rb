@@ -108,7 +108,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # role_type
   role_type_cv = SampleControlledVocab.where(title: 'NFDI4Health Role Type').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Contact', 'Principal investigator', 'Creator/Author', 'Funder(public)', 'Funder(private)',
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Contact', 'Principal investigator', 'Creator/Author', 'Funder (public)', 'Funder (private)',
                                                                                                'Sponsor (primary)', 'Sponsor (secondary)', 'Sponsor-Investigator', 'Data collector', 'Data curator',
                                                                                                'Data manager', 'Distributor', 'Editor', 'Hosting institution', 'Producer', 'Project leader', 'Project manager',
                                                                                                'Project member', 'Publisher', 'Registration agency', 'Registration authority', 'Related person', 'Researcher',
@@ -163,7 +163,7 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # study_status_when_intervention
   study_status_when_intervention_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Status When Intervention').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Intervention ongoing', 'Intervention completed', 'follow-up ongoing'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Intervention ongoing', 'Intervention completed, follow-up ongoing'])
   )
 
   # study_status_halted_stage
@@ -191,8 +191,9 @@ PURL URL URN w3id DRKS UTN ISRCTN EudraCT EUDAMED NCT(ClinicalTrials.gov) NFDI4H
 
   # study_primary_purpose
   study_primary_purpose_cv = SampleControlledVocab.where(title: 'NFDI4Health Study Primary Purpose').first_or_create!(
-    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Treatment', 'Prevention', 'Prognostic', 'Diagnostic', 'Supportive Care', 'Screening', 'Health Services Research',
-                                                                                               'Basic Science/Physiological study', 'Device Feasibility', 'Pharmacogenetics', 'Pharmacogenomics', 'Health Economics', 'Other'])
+    sample_controlled_vocab_terms_attributes: create_sample_controlled_vocab_terms_attributes(['Treatment', 'Prevention', 'Prognostic', 'Diagnostic', 'Supportive care', 'Screening', 'Health services research',
+                                                                                               'Basic science/Physiological study', 'Device feasibility', 'Pharmacogenetics', 'Pharmacogenomics',
+                                                                                               'Health economics','Not applicable','Other'])
   )
 
 
