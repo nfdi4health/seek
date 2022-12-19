@@ -637,7 +637,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
           study_interventions = []
           sd['interventional_study_design']['interventional_study_design_interventions']&.each do |old|
             new = {}
-            new['study_intervention_arms_groups_label'] = old['study_intervention_arm_group_label']
+            new['study_intervention_arms_groups_label'] = [old['study_intervention_arm_group_label']] unless old['study_intervention_arm_group_label'].blank?
             new['study_intervention_name'] = old['study_intervention_name']
             new['study_intervention_type'] = old['study_intervention_type']
             new['study_intervention_description'] = old['study_intervention_description']
