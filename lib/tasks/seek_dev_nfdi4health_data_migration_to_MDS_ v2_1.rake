@@ -129,7 +129,14 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         else
           new_id = {}
           new_id['identifier'] = id['id_identifier']
-          new_id['type'] = id['id_type']
+          new_id['type'] = case id['id_type']
+                           when 'DRKS'
+                             'Other'
+                           when 'NCT(ClinicalTrials.gov)'
+                             'Other'
+                           else
+                             id['id_type']
+                           end
           new_id['date'] = id['id_date'] unless id['id_date'].blank?
           new_id['relation_type'] = id['id_relation_type'].blank? ? '' : 'A ' + id['id_relation_type'] + ' B'
           new_id['relation_type'] = 'A references B' if new_id['relation_type'] == 'A has grant number B'
