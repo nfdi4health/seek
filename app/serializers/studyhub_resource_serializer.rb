@@ -78,7 +78,7 @@ class StudyhubResourceSerializer < PCSSerializer
             end
           end
 
-          if object.is_interventional_study? && key == 'study_masking' && study_design.key?('study_masking')
+          if object.is_interventional_study? && key == 'study_masking' && study_design.key?('study_design_interventional') && study_design['study_design_interventional'].key?('study_masking')
             unless study_design['study_design_interventional']['study_masking'][attr].blank?
               study_design['study_design_interventional']['study_masking'][attr]= convert_id_to_label_for_multi_select_attribute(study_design['study_design_interventional']['study_masking'][attr])
             end
