@@ -34,10 +34,13 @@ def create_cv_attr_terms(array)
   attributes
 end
 
-def create_cm_attr(cm_label:, title:, required:, type:, cv: nil)
-  CustomMetadataAttribute.where(title: "#{cm_label}/#{title}").first_or_create!(
-    title: "#{cm_label}/#{title}",
-    label: title,
+def sanitize_label(s)
+  s.downcase.gsub('(', '_').gsub(')', '_').gsub(' ', '_')
+end
+
+def create_cm_attr(namespace:, label:, required:, type:, cv: nil)
+  CustomMetadataAttribute.where(title: "#{namespace}/#{sanitize_label(label)}").first_or_create!(
+    label: label,
     required: required,
     sample_attribute_type: type,
     sample_controlled_vocab: cv
@@ -126,21 +129,21 @@ disable_authorization_checks do
   )
 end
 
-def create_generic_attributes(cm_label)
+def create_generic_attributes(namespace)
   [
-    create_cm_attr(cm_label: cm_label, title: 'Title (EN)', required: true, type: @string_type),
-    create_cm_attr(cm_label: cm_label, title: 'Description (EN)', required: true, type: @text_type),
-    create_cm_attr(cm_label: cm_label, title: 'Acronym (EN)', required: false, type: @string_type),
-    create_cm_attr(cm_label: cm_label, title: 'Acronym (DE)', required: false, type: @string_type),
-    create_cm_attr(cm_label: cm_label, title: 'Type', required: true, type: @cv_type, cv: @type_cv),
-    create_cm_attr(cm_label: cm_label, title: 'Status', required: true, type: @cv_type, cv: @status_cv),
-    create_cm_attr(cm_label: cm_label, title: 'Start Date', required: false, type: @date_type),
-    create_cm_attr(cm_label: cm_label, title: 'End Date', required: false, type: @date_type),
-    create_cm_attr(cm_label: cm_label, title: 'Web Page', required: false, type: @link_type),
-    create_cm_attr(cm_label: cm_label, title: 'Groups of Diseases', required: true, type: @cv_type, cv: @groups_of_diseases_cv),
-    create_cm_attr(cm_label: cm_label, title: 'Sample Size', required: false, type: @int_type),
-    create_cm_attr(cm_label: cm_label, title: 'Number of Sites', required: false, type: @int_type),
-    create_cm_attr(cm_label: cm_label, title: 'Data Sharing Plan', required: true, type: @cv_type, cv: @data_sharing_plan_cv),
+    create_cm_attr(namespace: namespace, label: 'Title (EN)', required: true, type: @string_type),
+    create_cm_attr(namespace: namespace, label: 'Description (EN)', required: true, type: @text_type),
+    create_cm_attr(namespace: namespace, label: 'Acronym (EN)', required: false, type: @string_type),
+    create_cm_attr(namespace: namespace, label: 'Acronym (DE)', required: false, type: @string_type),
+    create_cm_attr(namespace: namespace, label: 'Type', required: true, type: @cv_type, cv: @type_cv),
+    create_cm_attr(namespace: namespace, label: 'Status', required: true, type: @cv_type, cv: @status_cv),
+    create_cm_attr(namespace: namespace, label: 'Start Date', required: false, type: @date_type),
+    create_cm_attr(namespace: namespace, label: 'End Date', required: false, type: @date_type),
+    create_cm_attr(namespace: namespace, label: 'Web Page', required: false, type: @link_type),
+    create_cm_attr(namespace: namespace, label: 'Groups of Diseases', required: true, type: @cv_type, cv: @groups_of_diseases_cv),
+    create_cm_attr(namespace: namespace, label: 'Sample Size', required: false, type: @int_type),
+    create_cm_attr(namespace: namespace, label: 'Number of Sites', required: false, type: @int_type),
+    create_cm_attr(namespace: namespace, label: 'Data Sharing Plan', required: true, type: @cv_type, cv: @data_sharing_plan_cv),
   ]
   # Missing study_design.study_countries
   #                      study_groups_of_diseases_prevalent_outcomes
@@ -148,13 +151,14 @@ def create_generic_attributes(cm_label)
 end
 
 disable_authorization_checks do
-  CustomMetadataType.where(title: "MDS #{@mds_version} Non-Interventional Study", supported_type: 'Study').first_or_create!(
-    custom_metadata_attributes: create_generic_attributes('nis')
-  )
-
-  CustomMetadataType.where(title: "MDS #{@mds_version} Interventional Study", supported_type: 'Study').first_or_create!(
-    custom_metadata_attributes: create_generic_attributes('is')
-  )
+  ['Study', 'Investigation'].each do |isa_type|
+    CustomMetadataType.where(title: "MDS #{@mds_version} Non-Interventional Study", supported_type: isa_type).first_or_create!(
+      custom_metadata_attributes: create_generic_attributes("#{isa_type.downcase}.nis")
+    )
+    CustomMetadataType.where(title: "MDS #{@mds_version} Interventional Study", supported_type: isa_type).first_or_create!(
+      custom_metadata_attributes: create_generic_attributes("#{isa_type.downcase}.is")
+    )
+  end
 end
 
 puts "Seeded MDS #{@mds_version}"
