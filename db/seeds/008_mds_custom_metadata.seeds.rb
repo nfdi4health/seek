@@ -65,14 +65,14 @@ module MDS
     title: 'Study Status',
     sample_controlled_vocab_terms_attributes: create_cv_attr_terms(
       [
-        'At the planning stag',
-        'Ongoing (I): Recruitment ongoing, but data collection not yet starte',
+        'At the planning stage',
+        'Ongoing (I): Recruitment ongoing, but data collection not yet started',
         'Ongoing (II): Recruitment and data collection ongoing',
-        'Ongoing (III): Recruitment completed, but data collection ongoin',
-        'Ongoing (IV): Recruitment and data collection completed, but data quality management ongoin',
-        'Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resume',
-        'Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resum',
-        'Completed: Recruitment, data collection, and data quality management completed normall',
+        'Ongoing (III): Recruitment completed, but data collection ongoing',
+        'Ongoing (IV): Recruitment and data collection completed, but data quality management ongoing',
+        'Suspended: Recruitment, data collection, or data quality management, halted, but potentially will resumed',
+        'Terminated: Recruitment, data collection, data and quality management halted prematurely and will not resume',
+        'Completed: Recruitment, data collection, and data quality management completed normally',
         'Other',
       ]
     )
