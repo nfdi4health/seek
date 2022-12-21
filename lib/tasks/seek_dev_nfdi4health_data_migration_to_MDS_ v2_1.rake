@@ -1,4 +1,5 @@
 require 'json'
+require 'csv'
 
 namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
@@ -772,6 +773,16 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       sr.update_column(:resource_json, new_json)
     end
   end
+
+  task(generate_api_token_for_each_user: :environment) do
+    CSV.open('seek_user_api_tokens.csv', 'w') do |csv|
+      User.all.each do |user|
+        puts 'create an api token for the user id '+user.id.to_s
+        csv << [user.id, user.api_tokens.create!(title: 'csh_api_token').token]
+      end
+    end
+  end
+
 
 end
 
