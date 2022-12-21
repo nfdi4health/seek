@@ -1,243 +1,344 @@
 require 'json'
 
 max_studyhub_study_json_text = '{
-                "ids": [
+        "ids": [
           {
-            "date": "",
+            "date": "02.09.2021",
             "type": "DOI",
-            "identifier": "10.4232/cils4eu-de.6655.5.0.0",
-            "relation_type": "A is supplement to B",
-            "resource_type_general": "Dataset"
+            "identifier": "10.1002/14651858.CD013825.pub2",
+            "relation_type": "A is described by B",
+            "resource_type_general": "Text"
           },
           {
-            "date": "",
+            "date": "28.09.2020",
             "type": "DOI",
-            "identifier": "10.31235/osf.io/azsb3",
-            "relation_type": "A is supplement to B",
-            "resource_type_general": "Preprint"
-          },
-          {
-            "date": "",
-            "type": "DOI",
-            "identifier": "10.1080/14616696.2020.1825766",
-            "relation_type": "A is supplement to B",
+            "identifier": "10.1016/S2665-9913(20)30341-6",
+            "relation_type": "A is described by B",
             "resource_type_general": "Journal article"
           }
         ],
         "roles": [
           {
-            "role_email": "",
-            "role_phone": "",
-            "role_name_type": "Organisational",
-            "role_affiliations": [
-              {
-                "role_affiliation_name": "Mannheim Centre for European Social Research (MZES)",
-                "role_affiliation_address": "68159, Mannheim, Germany",
-                "role_affiliation_web_page": "https://www.mzes.uni-mannheim.de/d7/en",
-                "role_affiliation_identifiers": [
-                  {
-                    "scheme": "ROR",
-                    "identifier": ""
-                  }
-                ]
-              }
-            ],
-            "role_name_organisational_group": {
-              "type": "Creator/Author",
-              "role_name_organisational_group_name": "CILS4EU-DE",
-              "role_name_organisational_group_type_funding_id": ""
-            }
-          },
-          {
-            "role_email": "joerg.dollmann@mzes.uni-mannheim.de",
-            "role_phone": "+49(0)6211812851",
+            "role_email": "korinna.pilz@inflarx.de",
+            "role_phone": "+49 (0)89 41418978",
             "role_name_type": "Personal",
             "role_affiliations": [
               {
-                "role_affiliation_name": "Mannheim Centre for European Social Research (MZES)",
-                "role_affiliation_address": "68159, Mannheim, Germany",
-                "role_affiliation_web_page": "",
+                "role_affiliation_name": "InflaRx",
+                "role_affiliation_address": "Fraunhoferstraße 22, 82152, Martinsried, Germany",
+                "role_affiliation_web_page": "https://www.inflarx.de/",
                 "role_affiliation_identifiers": [
                   {
                     "scheme": "ROR",
-                    "identifier": "05bv91d86"
+                    "identifier": "00fm1n282"
+                  },
+                  {
+                    "scheme": "GRID",
+                    "identifier": "grid.476439.b"
                   }
                 ]
               }
             ],
             "role_name_personal": {
               "type": "Contact",
-              "role_name_identifiers": [],
               "role_name_personal_title": "Dr.",
-              "role_name_personal_given_name": "Jörg",
-              "role_name_personal_family_name": "Dollmann"
+              "role_name_personal_given_name": "Korinna",
+              "role_name_personal_family_name": "Pilz"
+            }
+          },
+          {
+            "role_email": "info@inflarx.de",
+            "role_phone": "+49 (0)89 4141897800",
+            "role_name_type": "Organisational",
+            "role_affiliations": [
+              {
+                "role_affiliation_name": "InflaRx GmbH",
+                "role_affiliation_address": "Fraunhoferstraße 22, 82152, Martinsried, Germany",
+                "role_affiliation_web_page": "https://www.inflarx.de/",
+                "role_affiliation_identifiers": [
+                  {
+                    "scheme": "ROR",
+                    "identifier": "00fm1n282"
+                  },
+                  {
+                    "scheme": "GRID",
+                    "identifier": "grid.476439.b"
+                  }
+                ]
+              }
+            ],
+            "role_name_organisational_group": {
+              "type": "Sponsor (primary)",
+              "role_name_organisational_group_name": "InflaRx GmbH"
+            }
+          },
+          {
+            "role_email": "a.p.vlaar@amsterdamumc.nl",
+            "role_name_type": "Personal",
+            "role_affiliations": [
+              {
+                "role_affiliation_name": "University of Amsterdam",
+                "role_affiliation_address": "Spui 21, 1012, WX Amsterdam, The Netherlands",
+                "role_affiliation_web_page": "https://www.uva.nl/en",
+                "role_affiliation_identifiers": [
+                  {
+                    "scheme": "ROR",
+                    "identifier": "04dkp9463"
+                  },
+                  {
+                    "scheme": "GRID",
+                    "identifier": "grid.7177.6"
+                  }
+                ]
+              }
+            ],
+            "role_name_personal": {
+              "type": "Principal investigator",
+              "role_name_identifiers": [
+                {
+                  "scheme": "ORCID",
+                  "identifier": "0000-0002-3453-7186"
+                }
+              ],
+              "role_name_personal_title": "Other",
+              "role_name_personal_given_name": "Alexander",
+              "role_name_personal_family_name": "Vlaar"
             }
           }
         ],
-				"provenance":{
-					"data_source":"Manually collected",
-					"resource_version":"",
-					"verification_date":"",
-					"verification_date_user":"",
-					"last_update_posted_date":"",
-					"last_update_posted_user":"",
-					"last_update_submitted_date":"",
-					"last_update_submitted_user":"",
-					"resource_first_posted_date":"",
-					"resource_first_posted_user":"",
-					"resource_first_submitted_date":"",
-					"resource_first_submitted_user":""
-				},
-				"study_design":{
-					"study_type":[
-						"Parallel"
-					],
-					"study_region":"",
-					"study_status":"Ongoing (II): Recruitment and data collection ongoing",
-					"study_centers":"Multicentric",
-					"study_subject":"Person",
-					"study_end_date":"31.12.2021",
-					"study_outcomes":[
-						{
-							"study_outcome_type":"Primary",
-							"study_outcome_title":"Interest in digital interventions (attitudes, behavioral intentions, behavioral experiences)",
-							"study_outcome_time_frame":"T1 (prior/beginning of rehab/clinic stay);\r\nT2 (end of rehab/clinic stay approx. 5 weeks after T1)",
-							"study_outcome_description":"Quantitative online questionnaire - Survey using UniPark"
-						}
-					],
-					"study_sampling":{
-						"study_sampling_method":"Unknown"
-					},
-					"study_countries":[
-						"Germany"
-					],
-					"study_conditions":[
-						{
-							"study_conditions_label":"Psychosomatic Disorder; Psychological Distress; Psychological Stress; Psychological Disease; Psychological Disorder; Psychological Impairment; Psychological Disability; Psychological Adjustment; Psychological Adaptation; Communication; Health Care Seeking Behavior; Anxiety; Behavior, Health; Health Risk Behaviors; Healthy Lifestyle",
-							"study_conditions_classification":"Other vocabulary",
-							"study_conditions_classification_code":""
-						}
-					],
-					"study_hypothesis":"",
-					"study_population":"",
-					"study_start_date":"01.07.2020",
-					"study_arms_groups":[
-						{
-							"study_arm_group_type":"Experimental",
-							"study_arm_group_label":"Partial digital group: depression",
-							"study_arm_group_description":""
-						}
-					],
-					"study_data_source":{
-						"study_data_sources_omics":[],
-						"study_data_sources_general":[],
-						"study_data_sources_imaging":[],
-						"study_data_source_description":"",
-						"study_data_sources_biosamples":[]
-					},
-					"study_interventions":[
-						{
-							"study_intervention_name":"Training session adressing information and health literacy",
-							"study_intervention_type":"Behavioral (e.g., psychotherapy, lifestyle counseling)",
-							"study_intervention_description":"",
-							"study_intervention_arms_groups_label":["Partial digital group: depression"]
-						}
-					],
-					"study_centers_number":null,
-					"study_design_comment":"",
-					"study_primary_design":"Interventional",
-					"study_primary_purpose":"Health services research",
-					"study_age_max_examined":{
-						"number":33,
-						"time_unit":""
-					},
-					"study_age_min_examined":{
-						"number":22,
-						"time_unit":""
-					},
-					"study_data_sharing_plan":{
-						"study_data_sharing_plan_url":"",
-						"study_data_sharing_plan_generally":"Yes, there is a plan to make data available",
-						"study_data_sharing_plan_datashield":"",
-						"study_data_sharing_plan_time_frame":"",
-						"study_data_sharing_plan_description":"Individual participant data (IPD) will not be published. Other researchers are welcome to get in contact with the PI to get access to anonymous data.",
-						"study_data_sharing_plan_access_criteria":"",
-						"study_data_sharing_plan_supporting_information":[]
-					},
-					"study_groups_of_diseases":{
-						"study_groups_of_diseases_generally":["Neoplasms (02)"],
-						"study_groups_of_diseases_incident_outcomes":"",
-						"study_groups_of_diseases_prevalent_outcomes":""
-					},
-					"study_target_sample_size":2000,
-					"study_eligibility_criteria":{
-						"study_eligibility_age_max":{
-							"number":-1,
-							"time_unit":""
-						},
-						"study_eligibility_age_min":{
-							"number":18,
-							"time_unit":""
-						},
-						"study_eligibility_genders":[
-							"Male",
-							"Female",
-							"Diverse"
-						],
-						"study_eligibility_exclusion_criteria":"1) Inability to read and write; 2) Severe dementia; 3) Unwillingness to participate in the study and to sign consent form",
-						"study_eligibility_inclusion_criteria":"1) Patients before the start of the treatment; 2) Selected by the clinic; 3) Invited to participate in the study"
-					},
-					"study_obtained_sample_size":null,
-					"study_design_interventional":{
-						"study_phase":"",
-						"study_masking":{
-							"study_masking_general":false
-						},
-						"study_allocation":"Randomized",
-						"study_off_label_use":"Not applicable"
-					},
-					"study_status_when_intervention":"",
-					"study_ethics_committee_approval":"Unknown status of request approval",
-					"study_recruitment_status_register":"Recruiting",
-					"study_status_enrolling_by_invitation":"No"
-				},
-				"ids_alternative":[
-					{
-						"type":"NCT (ClinicalTrials.gov)",
-						"identifier":"NCT04453475"
-					}
-				],
-				"ids_nfdi4health":[],
-				"resource_titles":[
-					{
-						"text":"Therapies to Achieve Treatment Goals While Being Exposed to Hygiene and Distance Rules: Feasibility and Benefits of Digital Services During the COVID19 Pandemic (Anhand-COVID19)",
-						"language":"EN (English)"
-					}
-				],
-				"resource_acronyms":[
-					{
-						"text":"Anhand-COV19",
-						"language":"EN (English)"
-					}
-				],
-				"resource_keywords":[
-					{
-						"resource_keywords_label":"",
-						"resource_keywords_label_code":""
-					}
-				],
-				"resource_web_page":"",
-				"resource_languages":[],
-				"resource_classification":{
-					"resource_type":"Study"
-				},
-				"resource_description_english":{
-  					"text":"As a result of the pandemic, hygiene and distancing rules must be followed in Health care/ rehabilitation clinics to ensure the safety of patients and staff. This has led to extensive changes in the therapy processes, including a reduction in group sizes and maintaining distances within the groups, resulting in a reduction in the range of therapies available to individuals, since the number of employees remains unchanged and cannot be increased at will and in the short term due to the lack of qualified staff. In order for the treatment/rehabilitation goals to be achieved nonetheless, new forms of implementation of therapy programs must be developed in addition to organizational adjustments. Digitalization can be a significant support in this respect. The majority of patients in psychosomatic rehabilitation possess smartphones, meaning that the necessary infrastructure for the utilization of digital offers is available and can be used to the greatest possible extent. The use of digital measures within the therapeutic services supports the independence of the patients, as they can use the digital offers independently and flexibly in their own time.\r\n\r\nHow should Health care/rehabilitation services be designed in light of the SARS-CoV-2 pandemic and which services have the potential to buffer future crises: What general recommendations can be derived for the design of such services for routine care? What are support measures to encourage social participation and return to work?",
-					"language":"EN (English)"
-				},
-				"resource_descriptions_non_english":[
-				]
-}'
+        "provenance": {
+          "data_source": "Manually collected"
+        },
+        "study_design": {
+          "study_type": [
+            "Parallel"
+          ],
+          "study_region": "Brussels, Leuven, Yvoir, Campinas, Criciúma, Porto Alegre, São José, Grenoble, Nantes, Nice, Paris, Saint-Étienne, Suresnes, Aachen, Augsburg, Berlin, Dresden, Greifswald, Hannover, Jena, Chihuahua, Culiacán, Mérida, Nuevo León, Amsterdam, Eindhoven, Enschede, Maastricht, Callao, Lima, Barnaul, Moscow",
+          "study_status": "Ongoing (II): Recruitment and data collection ongoing",
+          "study_centers": "Multicentric",
+          "study_subject": "Person",
+          "study_end_date": "31.12.2021",
+          "study_outcomes": [
+            {
+              "study_outcome_type": "Primary",
+              "study_outcome_title": "Mortality",
+              "study_outcome_time_frame": "Day 28",
+              "study_outcome_description": "28-day all-cause mortality"
+            },
+            {
+              "study_outcome_type": "Secondary",
+              "study_outcome_title": "Treatment Emergent Adverse Events",
+              "study_outcome_time_frame": "Day 1 to Day 60",
+              "study_outcome_description": "Frequency, severity, and relatedness to study drug of serious and non-serious TEAEs"
+            },
+            {
+              "study_outcome_type": "Secondary",
+              "study_outcome_title": "Safety Parameters",
+              "study_outcome_time_frame": "Day 15, Day 28",
+              "study_outcome_description": "Proportion of patients with an improvement in the 8-point ordinal scale"
+            }
+          ],
+          "study_sampling": {
+            "study_sampling_method": "Unknown"
+          },
+          "study_countries": [
+            "Belgium",
+            "Brazil",
+            "France",
+            "Germany",
+            "Mexico",
+            "Netherlands",
+            "Peru",
+            "Russian Federation",
+            "South Africa"
+          ],
+          "study_conditions": [
+            {
+              "study_conditions_label": "Severe COVID-19 Pneumonia",
+              "study_conditions_classification": "Free text",
+              "study_conditions_classification_code": ""
+            }
+          ],
+          "study_hypothesis": "Information is not provided.",
+          "study_population": "No additional information is provided.",
+          "study_start_date": "31.03.2020",
+          "study_arms_groups": [
+            {
+              "study_arm_group_type": "Experimental",
+              "study_arm_group_label": "Arm A",
+              "study_arm_group_description": "SOC + IFX-1"
+            },
+            {
+              "study_arm_group_type": "Experimental",
+              "study_arm_group_label": "Arm B",
+              "study_arm_group_description": "SOC + Placebo"
+            }
+          ],
+          "study_data_source": {
+            "study_data_sources_general": [
+              "Other"
+            ],
+            "study_data_source_description": "Data were collected from the hospital patient files. "
+          },
+          "study_interventions": [
+            {
+              "study_intervention_name": "SOC + IFX-1",
+              "study_intervention_type": "Drug (including placebo)",
+              "study_intervention_description": "No additional information is provided.",
+              "study_intervention_arms_groups_label": [
+                "Arm A"
+              ]
+            },
+            {
+              "study_intervention_name": "SOC + Placebo",
+              "study_intervention_type": "Drug (including placebo)",
+              "study_intervention_description": "No additional information is provided.",
+              "study_intervention_arms_groups_label": [
+                "Arm B"
+              ]
+            }
+          ],
+          "study_centers_number": 42,
+          "study_design_comment": "No additional information is provided.",
+          "study_primary_design": "Interventional",
+          "study_primary_purpose": "Treatment",
+          "study_age_max_examined": {
+            "number": 69,
+            "time_unit": "Years"
+          },
+          "study_age_min_examined": {
+            "number": 51,
+            "time_unit": "Years"
+          },
+          "study_data_sharing_plan": {
+            "study_data_sharing_plan_generally": "No, there is no plan to make data available",
+            "study_data_sharing_plan_description": "No additional information is provided."
+          },
+          "study_groups_of_diseases": {
+            "study_groups_of_diseases_generally": [
+              "Unknown"
+            ]
+          },
+          "study_target_sample_size": 390,
+          "study_eligibility_criteria": {
+            "study_eligibility_age_min": {
+              "number": 18,
+              "time_unit": "Years"
+            },
+            "study_eligibility_genders": [
+              "Male",
+              "Female",
+              "Diverse"
+            ],
+            "study_eligibility_exclusion_criteria": "- Known history of progressed COPD as evidenced by use of daily maintenance treatment with long-acting bronchodilators or inhaled/oral corticosteroids for > 2 months\r\n- Patient moribund or expected to die in next 24h according to the judgment of the investigator\r\n- Known severe congestive heart failure (New York Heart Association [NYHA] Class III- IV\r\n- Received organ or bone marrow transplantation in past 3 months\r\n- Known cardio-pulmonary mechanical resuscitation in past 14 days",
+            "study_eligibility_inclusion_criteria": "- At least 18 years of age or older\r\n- Clinically evident or otherwise confirmed severe pneumonia\r\n- SARS-CoV-2 infection confirmation (tested positive in last 14 days before randomization with locally available test system)"
+          },
+          "study_obtained_sample_size": -1,
+          "study_design_interventional": {
+            "study_phase": "Phase-2-phase-3",
+            "study_masking": {
+              "study_masking_roles": [
+                "Participant",
+                "Investigator"
+              ],
+              "study_masking_general": true,
+              "study_masking_description": "Phase II: Open label study (30 patients) Phase III: Double- blind; (360 patients)"
+            },
+            "study_allocation": "Randomized",
+            "study_off_label_use": "No"
+          },
+          "study_status_when_intervention": "Intervention completed, follow-up ongoing",
+          "study_ethics_committee_approval": "Unknown status of request approval",
+          "study_status_enrolling_by_invitation": "Not applicable"
+        },
+        "ids_alternative": [
+          {
+            "type": "NCT (ClinicalTrials.gov)",
+            "identifier": "NCT04333420"
+          },
+          {
+            "type": "Other",
+            "identifier": "IFX-1-P2.9"
+          }
+        ],
+        "resource_titles": [
+          {
+            "text": "A Pragmatic Adaptive Randomized, Controlled Phase II/III Multicenter Study of IFX-1 in Patients With Severe COVID-19 Pneumonia",
+            "language": "EN (English)"
+          }
+        ],
+        "resource_acronyms": [
+          {
+            "text": "PANAMO",
+            "language": "EN (English)"
+          }
+        ],
+        "resource_keywords": [
+          {
+            "resource_keywords_label": "COVID-19 related severe pneumonia",
+            "resource_keywords_label_code": ""
+          },
+          {
+            "resource_keywords_label": "COVID-19",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D000086382"
+          },
+          {
+            "resource_keywords_label": "Pneumonia",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D011014"
+          },
+          {
+            "resource_keywords_label": "Respiratory Tract Infections",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D012141"
+          },
+          {
+            "resource_keywords_label": "Infections",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D007239"
+          },
+          {
+            "resource_keywords_label": "Pneumonia, Viral",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D011024"
+          },
+          {
+            "resource_keywords_label": "Virus Diseases",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D014777"
+          },
+          {
+            "resource_keywords_label": "Coronavirus Infections",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D018352"
+          },
+          {
+            "resource_keywords_label": "Coronaviridae Infections",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D003333"
+          },
+          {
+            "resource_keywords_label": "Nidovirales Infections",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D030341"
+          },
+          {
+            "resource_keywords_label": "RNA Virus Infections",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D012327"
+          },
+          {
+            "resource_keywords_label": "Lung Diseases",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D008171"
+          },
+          {
+            "resource_keywords_label": "Respiratory Tract Diseases",
+            "resource_keywords_label_code": "http://id.nlm.nih.gov/mesh/D012140"
+          }
+        ],
+        "resource_web_page": "https://www.inflarx.de/Home/Investors/Press-Releases/03-2020-InflaRx-Doses-First-Patient-in-Multicenter-Randomized-Clinical-Trial-in-Severe-Progressed-COVID-19-Pneumonia-in-Europe-upon-Receipt-of-Initial-Positive-Human-Data-with-InflaRx-s-anti-C5a-Technology.html",
+        "resource_languages": [
+          "EN (English)"
+        ],
+        "resource_classification": {
+          "resource_type": "Study"
+        },
+        "resource_description_english": {
+          "text": "This is a pragmatic, adaptive, randomized, multicenter phase II/III study evaluating IFX-1 for the treatment of COVID-19 related severe pneumonia. The study consists of two parts: Phase II, an open-label, randomized, 2-arm phase evaluating best supportive care (BSC) + IFX-1 (Arm A) and BSC alone (Arm B); and Phase III, a double-blind, placebo-controlled, randomized phase comparing standard of care (SOC) + IFX-1 (Arm A) versus SOC + placebo-to-match (Arm B).",
+          "language": "EN (English)"
+        }
+      }'
 
 
 
