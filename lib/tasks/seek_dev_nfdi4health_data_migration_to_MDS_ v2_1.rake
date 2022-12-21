@@ -85,9 +85,16 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
     scv.sample_controlled_vocab_terms.where(label: 'No Intervention').first.update_attributes label: 'No intervention'
 
     #update_study_data_sources_imaging
-    SampleControlledVocabTerm.find_by(label: 'Imaging data (CT)').update_attributes label: 'Computed tomography (CT)'
-    SampleControlledVocabTerm.find_by(label: 'Imaging data (MRI)').update_attributes label: 'Magnetic resonance imaging (MRI)'
-    SampleControlledVocabTerm.find_by(label: 'Imaging data (ultrasound)').update_attributes label: 'Ultrasound'
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Data Source').first
+    scv.sample_controlled_vocab_terms.where(label: 'Imaging data (CT)').first.update_attributes label: 'Computed tomography (CT)'
+    scv.sample_controlled_vocab_terms.where(label: 'Imaging data (MRI)').first.update_attributes label: 'Magnetic resonance imaging (MRI)'
+    scv.sample_controlled_vocab_terms.where(label: 'Imaging data (ultrasound)').first.update_attributes label: 'Ultrasound'
+    scv.sample_controlled_vocab_terms.where(label: 'Imaging data (MRI, radiography)').first.update_attributes label: 'Radiography (x-ray)'
+
+
+    scv = SampleControlledVocab.where(title: 'NFDI4Health Study Masking Roles').first
+    scv.sample_controlled_vocab_terms.where(label: 'Care Provider').first.update_attributes label: 'Care provider'
+    scv.sample_controlled_vocab_terms.where(label: 'Outcomes Assessor').first.update_attributes label: 'Outcomes assessor'
 
     scv.save!
 
@@ -488,8 +495,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         #['study_design']['study_data_source']
         biological_samples = ['Blood', 'Buccal cells', 'Cord blood', 'DNA', 'Faeces', 'Hair', 'Immortalized cell lines',
                               'Isolated pathogen', 'Nail', 'Plasma', 'RNA', 'Saliva', 'Serum', 'Tissue (frozen)', 'Tissue (FFPE)', 'Urine', 'Other biological samples']
-        imaging_data = ['Imaging data (ultrasound)','Imaging data (MRI)','Imaging data (MRI, radiography)',
-'Imaging data (CT)','Other imaging data']
+        imaging_data = ['Ultrasound', 'Magnetic resonance imaging (MRI)', 'Radiography (x-ray)','Computed tomography (CT)', 'Other imaging data']
         proteomics = ['Genomics','Metabolomics','Transcriptomics','Proteomics','Other omics technology']
         new_json['study_design']['study_data_source'] = {}
         new_json['study_design']['study_data_source']['study_data_sources_general'] = []
@@ -696,7 +702,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
           #['study_design']['study_design_interventional']['study_phase']
           if sd['interventional_study_design']['study_phase'] == 'Not-application'
-            new_json['study_design']['study_design_interventional']['study_phase'] = 'Not application'
+            new_json['study_design']['study_design_interventional']['study_phase'] = 'Not applicable'
           else
             new_json['study_design']['study_design_interventional']['study_phase'] = sd['interventional_study_design']['study_phase'].capitalize() unless sd['interventional_study_design']['study_phase'].blank?
           end
@@ -709,7 +715,7 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
           if sd['interventional_study_design']['study_masking']
             new_json['study_design']['study_design_interventional']['study_masking']['study_masking_roles'] =
-              sd['interventional_study_design']['study_masking_roles']
+              sd['interventional_study_design']['study_masking_roles'] unless sd['interventional_study_design']['study_masking_roles'].blank?
           end
 
           if sd['interventional_study_design']['study_masking']
@@ -757,18 +763,6 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         new_json['study_design'].delete('study_design_non_interventional') if new_json['study_design']['study_design_non_interventional'].blank?
 
       end
-
-
-
-      # at the very end to print new_json and update the resource_json
-
-      # unless new_json.blank?
-      #   pp "________________: "+sr.id.to_s+" _________________"
-      #   # if sr.is_interventional_study?
-      #   pp '____________new_json___________________'
-      #   pp new_json
-      #   # end
-      # end
 
       sr.update_column(:resource_json, new_json)
     end
