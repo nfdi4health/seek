@@ -300,7 +300,7 @@ class StudyhubResource < ApplicationRecord
           end
         end
 
-        next unless is_interventional_study? && key == 'study_masking'
+        next unless is_interventional_study? && key == 'study_masking' && study_design.key?('study_design_interventional') && study_design['study_design_interventional'].key?('study_masking')
         unless study_design['study_design_interventional']['study_masking'][attr].blank?
           study_design['study_design_interventional']['study_masking'][attr]= covert_label_to_id(study_design['study_design_interventional']['study_masking'][attr])
         end

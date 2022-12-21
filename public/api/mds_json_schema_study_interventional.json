@@ -1044,9 +1044,7 @@
             }
           },
           "required": [
-            "study_groups_of_diseases_generally",
-            "study_groups_of_diseases_prevalent_outcomes",
-            "study_groups_of_diseases_incident_outcomes"
+            "study_groups_of_diseases_generally"
           ],
           "type": "object"
         },
