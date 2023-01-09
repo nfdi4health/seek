@@ -301,15 +301,20 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       new_json['resource_classification'] = {}
       new_json['resource_classification']['resource_type'] = sr.studyhub_resource_type.title
 
+      # 10.1. ['resource_classification']
+      new_json['resource_classification']['resource_type_general'] = if json['resource_type_general'].blank?
+                                                                       'Other'
+                                                                     else
+                                                                       json['resource_type_general']
+                                                                     end
+
+
       #11. ['resource_keywords']
       new_json['resource_keywords'] = json['resource_keywords'] unless json['resource_keywords'].blank?
 
       ###################non_study#####################
 
       unless sr.is_studytype?
-
-        # 10.1. ['resource_classification']
-        new_json['resource_classification']['resource_type_general'] = json['resource_type_general']
 
         # 11. ['resource_non_study_details']
         new_json['resource_non_study_details'] = {}
