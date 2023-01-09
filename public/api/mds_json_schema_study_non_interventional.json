@@ -743,7 +743,17 @@
           "$ref": "#/definitions/nonEmptyString"
         },
         "type": {
-          "enum": ["DRKS", "NCT (ClinicalTrials.gov)", "ISRCTN", "EudraCT", "EUDAMED", "UTN", "KonsortSWD", "MDM Portal", "Other"],
+          "enum": [
+            "DRKS",
+            "NCT (ClinicalTrials.gov)",
+            "ISRCTN",
+            "EudraCT",
+            "EUDAMED",
+            "UTN",
+            "KonsortSWD",
+            "MDM Portal",
+            "Other"
+          ],
           "type": "string"
         }
       },
@@ -791,10 +801,10 @@
       "additionalProperties": false,
       "properties": {
         "study_intervention_arms_groups_label": {
-            "items": {
-                "type": "string"
-                },
-                "type": "array"
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "study_intervention_description": {
           "type": "string"
@@ -1279,38 +1289,40 @@
           ]
         },
         "study_type": {
-          "items": {
-            "enum": [
-              "Single group ",
-              "Parallel ",
-              "Crossover ",
-              "Factorial ",
-              "Sequential ",
-              "Other",
-              "Unknown",
-              "Case-control",
-              "Nested case-control",
-              "Case-only",
-              "Case-crossover",
-              "Ecologic or community studies",
-              "Family-based",
-              "Twin study",
-              "Cohort",
-              "Case-cohort",
-              "Birth cohort",
-              "Trend",
-              "Panel",
-              "Longitudinal",
-              "Cross-section",
-              "Cross-section ad-hoc follow-up",
-              "Time series",
-              "Quality control",
-              "Registry"
-            ],
-            "type": "string"
+          "type": "object",
+          "properties": {
+            "study_type_non_interventional": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Case-control",
+                  "Nested case-control",
+                  "Case-only",
+                  "Case-crossover",
+                  "Ecologic or community studies",
+                  "Family-based",
+                  "Twin study",
+                  "Cohort",
+                  "Case-cohort",
+                  "Birth cohort",
+                  "Trend",
+                  "Panel",
+                  "Longitudinal",
+                  "Cross-section",
+                  "Cross-section ad-hoc follow-up",
+                  "Time series",
+                  "Quality control",
+                  "Registry",
+                  "Other",
+                  "Unknown"
+                ]
+              }
+            }
           },
-          "minItems": 1,
-          "type": "array"
+          "additionalProperties": false,
+          "required": []
         }
       },
       "required": [
