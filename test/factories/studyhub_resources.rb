@@ -110,9 +110,9 @@ max_studyhub_study_json_text = '{
           "data_source": "Manually collected"
         },
         "study_design": {
-          "study_type": [
-            "Parallel"
-          ],
+          "study_type": {
+                study_type_interventional:["Parallel"]
+          },
           "study_region": "Brussels, Leuven, Yvoir, Campinas, Criciúma, Porto Alegre, São José, Grenoble, Nantes, Nice, Paris, Saint-Étienne, Suresnes, Aachen, Augsburg, Berlin, Dresden, Greifswald, Hannover, Jena, Chihuahua, Culiacán, Mérida, Nuevo León, Amsterdam, Eindhoven, Enschede, Maastricht, Callao, Lima, Barnaul, Moscow",
           "study_status": "Ongoing (II): Recruitment and data collection ongoing",
           "study_centers": "Multicentric",
