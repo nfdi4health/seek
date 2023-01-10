@@ -1,6 +1,10 @@
 name: Continuous Integration
 
-on: [push, pull_request]
+on:
+  pull_request: { branches: [ "main", "csh", "lap" ] }
+  push:
+    branches: [ "main", "csh", "lap" ]
+    tags: [ "*" ]
 
 jobs:
   tests:
