@@ -564,10 +564,44 @@
                 "Other"
               ],
               "type": "string"
+            },
+            "resource_type_general": {
+              "enum": [
+                "Audiovisual",
+                "Book",
+                "Book chapter",
+                "Collection",
+                "Computational notebook",
+                "Conference paper",
+                "Conference proceeding",
+                "Data paper",
+                "Dataset",
+                "Dissertation",
+                "Event",
+                "Image",
+                "Interactive resource",
+                "Journal",
+                "Journal article",
+                "Model",
+                "Output management plan",
+                "Peer review",
+                "Physical object",
+                "Preprint",
+                "Report",
+                "Service",
+                "Software",
+                "Sound",
+                "Standard",
+                "Text",
+                "Workflow",
+                "Other"
+              ],
+              "type": "string"
             }
           },
           "required": [
-            "resource_type"
+            "resource_type",
+            "resource_type_general"
           ],
           "type": "object"
         },
