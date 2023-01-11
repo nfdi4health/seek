@@ -334,7 +334,8 @@ max_studyhub_study_json_text = '{
     "EN (English)"
   ],
   "resource_classification": {
-    "resource_type": "Study"
+    "resource_type": "Study",
+    "resource_type_general":"Other"
   },
   "resource_description_english": {
     "text": "This is a pragmatic, adaptive, randomized, multicenter phase II/III study evaluating IFX-1 for the treatment of COVID-19 related severe pneumonia. The study consists of two parts: Phase II, an open-label, randomized, 2-arm phase evaluating best supportive care (BSC) + IFX-1 (Arm A) and BSC alone (Arm B); and Phase III, a double-blind, placebo-controlled, randomized phase comparing standard of care (SOC) + IFX-1 (Arm A) versus SOC + placebo-to-match (Arm B).",
