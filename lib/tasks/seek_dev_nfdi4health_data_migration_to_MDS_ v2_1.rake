@@ -368,11 +368,15 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         # ['study_design']['study_type']
         new_json['study_design']['study_type'] = {}
         unless sd['study_type'].blank?
+          if sd['study_type'] == 'Single Group'
+            sd['study_type'] = 'Single group'
+          end
           if sr.is_interventional_study?
             new_json['study_design']['study_type']['study_type_interventional'] = [sd['study_type'].lstrip]
           else
             new_json['study_design']['study_type']['study_type_non_interventional'] = [sd['study_type'].lstrip]
           end
+
         end
 
         # ['study_design']['study_conditions']
