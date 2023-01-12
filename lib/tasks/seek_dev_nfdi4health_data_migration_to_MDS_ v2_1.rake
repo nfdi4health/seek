@@ -223,9 +223,9 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         role['role_affiliation_identifiers'].each do |id|
           new_id = {}
-          new_id['identifier'] = id['role_affiliation_identifier']
-          new_id['scheme'] = id['role_affiliation_identifier_scheme']
-          role_affiliations['role_affiliation_identifiers'] << new_id
+          new_id['identifier'] = id['role_affiliation_identifier'] unless id['role_affiliation_identifier'].blank?
+          new_id['scheme'] = id['role_affiliation_identifier_scheme'] unless id['role_affiliation_identifier_scheme'].blank?
+          role_affiliations['role_affiliation_identifiers'] << new_id unless new_id.blank?
         end
         if role_affiliations['role_affiliation_identifiers'].blank?
           role_affiliations.delete('role_affiliation_identifiers')
