@@ -278,8 +278,8 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       end
 
       if new_json['resource_description_english'].blank?
-        new_json['resource_description_english']['text'] = ''
-        new_json['resource_description_english']['language'] = ''
+        new_json['resource_description_english']['text'] = 'Missing'
+        new_json['resource_description_english']['language'] = 'EN (English)'
       end
 
       # 9.  ['resource_descriptions_non_english']
