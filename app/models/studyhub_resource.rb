@@ -23,8 +23,6 @@ class StudyhubResource < ApplicationRecord
   validate :check_nfdi_resource_id, on: [:create, :update]
 
 
-  # validate :final_error_check, on:  [:create, :update], if: :is_ui_request?
-
   attr_readonly :studyhub_resource_type_id
   attr_accessor :commit_button
   attr_accessor :ui_request
@@ -108,16 +106,17 @@ class StudyhubResource < ApplicationRecord
 
   def check_resource_use_rights
 
-    return unless is_ui_request?  || errors.messages.blank?
+    return unless is_ui_request? || errors.messages.blank?
     return if is_studytype?
 
-    resource_use_rights = resource_json['resource_non_study_details']['resource_use_rights']
-
-    if ['CC BY 4.0 (Creative Commons Attribution 4.0 International)',
-        'CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)',
-        'CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)',
-        'CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)'].include? resource_use_rights['resource_use_rights_label']
-        errors.add('resource_use_rights_confirmations'.to_sym, 'The attribute is needed.') unless resource_use_rights.keys.include? 'resource_use_rights_confirmations'
+    if resource_json['resource_non_study_details'].key?('resource_use_rights')
+      resource_use_rights = resource_json['resource_non_study_details']['resource_use_rights']
+      if ['CC BY 4.0 (Creative Commons Attribution 4.0 International)',
+          'CC BY-NC 4.0 (Creative Commons Attribution Non Commercial 4.0 International)',
+          'CC BY-SA 4.0 (Creative Commons Attribution Share Alike 4.0 International)',
+          'CC BY-NC-SA 4.0 (Creative Commons Attribution Non Commercial Share Alike 4.0 International)'].include? resource_use_rights['resource_use_rights_label']
+        errors.add('resource_use_rights_confirmations'.to_sym, 'The attribute is needed.') unless resource_use_rights.key? 'resource_use_rights_confirmations'
+      end
     end
   end
 
@@ -125,22 +124,22 @@ class StudyhubResource < ApplicationRecord
 
     return unless is_ui_request?  || errors.messages.blank?
 
-    unless validate_url(resource_json['resource_web_page']&.strip)
+    unless validate_url(resource_json['resource_web_page'])
       errors.add('resource_web_page'.to_sym, 'is not a url.')
     end
 
     resource_json['roles']&.each_with_index do |role,index_1|
       role_affiliations = role['role_affiliations']
       role_affiliations&.each_with_index do |affiliations,index_2|
-        unless validate_url(affiliations['role_affiliation_web_page'].strip)
+        unless validate_url(affiliations['role_affiliation_web_page'])
           errors.add("roles[#{index_1}]['role_affiliations'][#{index_2}]['role_affiliation_web_page']".to_sym, 'is not a url.')
         end
       end
     end
 
     if is_studytype?
-      return unless resource_json['study_design']['study_data_sharing_plan'].keys.include? 'study_data_sharing_plan_url'
-      unless validate_url(resource_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'].strip)
+      return unless resource_json['study_design']['study_data_sharing_plan'].key? 'study_data_sharing_plan_url'
+      unless validate_url(resource_json['study_design']['study_data_sharing_plan']['study_data_sharing_plan_url'])
         errors.add('study_data_sharing_plan_url'.to_sym, 'is not a url.')
       end
     end
@@ -272,14 +271,14 @@ class StudyhubResource < ApplicationRecord
         end
 
         if key == 'study_data_source'
-          unless study_design['study_data_source'][attr].blank?
+          unless study_design['study_data_source'].blank? || study_design['study_data_source'][attr].blank?
             study_design['study_data_source'][attr] =
               covert_label_to_id(study_design['study_data_source'][attr])
           end
         end
 
         if key == 'study_eligibility_criteria'
-          unless study_design['study_eligibility_criteria'][attr].blank?
+          unless study_design['study_eligibility_criteria'].blank? || study_design['study_eligibility_criteria'][attr].blank?
             study_design['study_eligibility_criteria'][attr] =
               covert_label_to_id(study_design['study_eligibility_criteria'][attr])
           end
@@ -293,7 +292,7 @@ class StudyhubResource < ApplicationRecord
         end
 
         if is_non_interventional_study? && key == 'study_design_non_interventional'
-          unless study_design['study_design_non_interventional'][attr].blank?
+          unless study_design['study_design_non_interventional'].blank? || study_design['study_design_non_interventional'][attr].blank?
             study_design['study_design_non_interventional'][attr] =
               covert_label_to_id(study_design['study_design_non_interventional'][attr])
 
@@ -325,12 +324,11 @@ class StudyhubResource < ApplicationRecord
     return true if url.blank?
 
     begin
-      uri = URI.parse(url)
+      uri = URI.parse(url.strip)
       resp = uri.kind_of?(URI::HTTP) || uri.kind_of?(URI::HTTPS)
     rescue URI::InvalidURIError
       resp = false
     end
-    # return true if url =~ /\A#{URI::regexp(['http', 'https'])}\z/
   end
 
 end
