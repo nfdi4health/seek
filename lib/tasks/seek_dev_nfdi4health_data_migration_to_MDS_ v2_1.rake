@@ -223,9 +223,9 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
 
         role['role_affiliation_identifiers'].each do |id|
           new_id = {}
-          new_id['identifier'] = id['role_affiliation_identifier']
-          new_id['scheme'] = id['role_affiliation_identifier_scheme']
-          role_affiliations['role_affiliation_identifiers'] << new_id
+          new_id['identifier'] = id['role_affiliation_identifier'] unless id['role_affiliation_identifier'].blank?
+          new_id['scheme'] = id['role_affiliation_identifier_scheme'] unless id['role_affiliation_identifier_scheme'].blank?
+          role_affiliations['role_affiliation_identifiers'] << new_id unless new_id.blank?
         end
         if role_affiliations['role_affiliation_identifiers'].blank?
           role_affiliations.delete('role_affiliation_identifiers')
@@ -278,8 +278,8 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
       end
 
       if new_json['resource_description_english'].blank?
-        new_json['resource_description_english']['text'] = ''
-        new_json['resource_description_english']['language'] = ''
+        new_json['resource_description_english']['text'] = 'Missing'
+        new_json['resource_description_english']['language'] = 'EN (English)'
       end
 
       # 9.  ['resource_descriptions_non_english']
@@ -368,11 +368,15 @@ namespace :seek_dev_nfdi4health_update_to_MDS_v2_1 do
         # ['study_design']['study_type']
         new_json['study_design']['study_type'] = {}
         unless sd['study_type'].blank?
+          if sd['study_type'] == 'Single Group'
+            sd['study_type'] = 'Single group'
+          end
           if sr.is_interventional_study?
             new_json['study_design']['study_type']['study_type_interventional'] = [sd['study_type'].lstrip]
           else
             new_json['study_design']['study_type']['study_type_non_interventional'] = [sd['study_type'].lstrip]
           end
+
         end
 
         # ['study_design']['study_conditions']
