@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 5.2.4.0'
+gem 'rails', '~> 6.1.7'
 gem 'rdoc'
 
 #database adaptors
 gem 'mysql2'
 gem 'pg'
-gem 'sqlite3'
+gem 'sqlite3', '~> 1.4'
 
 gem 'feedjira', '~>1'
 gem 'google-analytics-rails'
@@ -15,7 +15,8 @@ gem 'hpricot', '~>0.8.2'
 gem 'libxml-ruby', '~>2.9.0', require: 'libxml'
 gem 'uuid', '~>2.3'
 gem 'RedCloth', '>=4.3.0'
-gem 'simple-spreadsheet-extractor', '~>0.16.0'
+gem 'simple-spreadsheet-extractor', '~> 0.17.0'
+gem 'open4'
 gem 'sample-template-generator', '~>0.5'
 gem 'rmagick', '2.15.2'
 gem 'rest-client', '~>2.0'
@@ -24,19 +25,17 @@ gem 'bio', '~> 1.5.1'
 gem 'sunspot_rails'
 gem 'progress_bar'
 gem 'savon', '1.1.0'
-gem 'dynamic_form'
 gem 'delayed_job_active_record'
-gem 'daemons'
-gem 'linkeddata'
-gem 'rdf'
+gem 'daemons','1.1.9'
+gem 'linkeddata', '~> 3.2.0'
 gem 'indefinite_article'
 
 gem 'openseek-api'
 # for fancy content escaping in openbis integration
 gem 'loofah'
-gem 'jbuilder'
+gem 'jbuilder', '~> 2.7'
 gem 'jbuilder-json_api'
-gem 'active_model_serializers', '~> 0.10.2'
+gem 'active_model_serializers', '~> 0.10.13'
 gem 'json_schemer'
 gem 'rubyzip'
 
@@ -53,11 +52,14 @@ gem 'will_paginate', '~> 3.1'
 gem 'yaml_db'
 gem 'rails_autolink'
 gem 'rfc-822'
-gem 'nokogiri', '~> 1.13.4'
+gem 'nokogiri', '~> 1.13.10'
+#necessary for newer hashie dependency, original api_smith is no longer active
+gem 'api_smith', git: 'https://github.com/youroute/api_smith.git', ref: '1fb428cebc17b9afab25ac9f809bde87b0ec315b'
 gem 'rdf-virtuoso', '>= 0.2.0'
 gem 'terrapin'
 gem 'lograge'
 gem 'psych'
+gem 'stringio', '0.1.0' #locked to the default version for ruby 2.7
 gem 'validate_url'
 gem "attr_encrypted", "~> 3.0.0"
 gem 'libreconv'
@@ -80,7 +82,7 @@ gem 'mimemagic','~> 0.3.7'
 gem 'auto_strip_attributes'
 gem 'coffee-rails', '~> 4.2'
 gem 'bootstrap-sass', '>=3.4.1'
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '>= 6'
 gem 'sprockets-rails'
 
 gem 'ro-bundle', '~> 0.3.0'
@@ -90,21 +92,22 @@ gem 'zenodo-client', git: 'https://github.com/seek4science/zenodo-client.git'
 gem 'unicorn-rails'
 gem 'seedbank'
 
-gem 'rspec-rails','~> 3.6'
+gem 'rspec-rails','~> 5.1'
 
 gem 'citeproc-ruby', '~> 2.0.0'
 gem 'csl-styles', '~> 2.0.0'
 gem 'bibtex-ruby', '~> 5.1.0'
 
-gem 'omniauth', '~> 1.3.1'
-gem 'omniauth-ldap', '~> 1.0.5'
+gem 'omniauth', '~> 2.1.0'
+gem 'gitlab_omniauth-ldap', '~> 2.2.0'
 gem 'omniauth_openid_connect'
-gem 'omniauth-rails_csrf_protection', '~> 0.1'
-gem 'omniauth-github', '~> 1.2.0'
+gem 'openid_connect','1.3.0'
+gem 'omniauth-rails_csrf_protection'
+gem 'omniauth-github'
 
 gem 'ransack'
 
-gem 'uglifier'
+gem 'terser', '~> 1.1', '>= 1.1.1'
 
 # Rails 4 upgrade
 gem 'activerecord-session_store'
@@ -118,12 +121,11 @@ gem 'private_address_check'
 # Rails 5 upgrade
 gem 'rails-html-sanitizer'
 
-# Rails 5.2 upgrade
-gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'activerecord-import'
 
-gem "puma", "~>4.3"
+gem "puma", "~> 5.6"
 
 gem "doorkeeper", ">= 5.2.5"
 
@@ -131,9 +133,9 @@ gem 'request_store'
 
 gem 'bundler', '>= 1.8.4'
 
-gem 'ro-crate', '~> 0.4.16'
+gem 'ro-crate', '~> 0.5.1'
 
-gem 'git'
+gem 'rugged'
 gem 'i18n-js'
 gem 'whenever', '~> 1.0.0', require: false
 gem 'dotenv-rails', '~> 2.7.6'
@@ -141,7 +143,15 @@ gem 'commonmarker'
 
 gem 'rack-cors', require: 'rack/cors'
 
-gem 'addressable', '~> 2.8.0'
+gem 'addressable'
+
+gem 'json-schema'
+
+gem 'cff', '~> 0.9.0'
+
+gem 'remotipart', '~> 1.4.4' # Allows file upload in AJAX forms
+
+gem 'rails-static-router'
 
 group :production do
   gem 'passenger'
@@ -157,6 +167,10 @@ group :development do
   gem 'gem-licenses'
   gem 'better_errors','~> 2.5.1'
   gem "binding_of_caller"
+
+  gem 'web-console', '>= 4.1.0'
+  gem 'rack-mini-profiler', '~> 2.0'
+  gem 'listen', '~> 3.3'
 end
 
 group :test do
@@ -171,8 +185,8 @@ group :test do
   gem 'rails-controller-testing'
   gem 'simplecov'
   gem 'whenever-test'
-  gem 'json-schema'
-  gem 'json-diff'
+  # Easy installation and use of web drivers to run system tests with browsers
+  gem 'webdrivers'
 end
 
 group :test, :development do

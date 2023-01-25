@@ -22,7 +22,7 @@ class WorkflowClassesController < ApplicationController
   end
 
   def update
-    if @workflow_class.update_attributes(workflow_class_params)
+    if @workflow_class.update(workflow_class_params)
       flash[:notice] = "The #{WorkflowClass.model_name.human} was successfully updated."
       respond_to do |format|
         format.html { redirect_to workflow_classes_path }
@@ -59,6 +59,6 @@ class WorkflowClassesController < ApplicationController
   end
 
   def workflow_class_params
-    params.require(:workflow_class).permit(:title, :alternate_name, :identifier, :url)
+    params.require(:workflow_class).permit(:title, :alternate_name, :identifier, :url, :logo_image)
   end
 end

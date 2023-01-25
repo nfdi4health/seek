@@ -31,6 +31,11 @@ module Seek #:nodoc:
         def should_check_can?(action)
           instance_method("can_#{action}?").owner != Seek::Permissions::ActsAsAuthorized
         end
+
+        # Delegate this type's authorization to i.e. an associated object
+        def delegate_auth_to(authable)
+          delegate *AUTHORIZATION_ACTIONS.map { |a| :"can_#{a}?" }, to: authable
+        end
       end
 
       # Sets up the basic interface for authorization hooks. All AR instances get these methods, and by default they return true.
@@ -46,10 +51,6 @@ module Seek #:nodoc:
 
       def authorization_supported?
         self.class.authorization_supported?
-      end
-
-      def contributor_credited?
-        false
       end
 
       def title_is_public?

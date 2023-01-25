@@ -57,46 +57,38 @@ class ContentBlobTest < ActiveSupport::TestCase
   end
 
   test 'detects it is a webpage' do
-    as_not_virtualliver do
-      mock_remote_file "#{Rails.root}/test/fixtures/files/html_file.html", 'http://webpage.com', 'Content-Type' => 'text/html'
-      blob = ContentBlob.create url: 'http://webpage.com', original_filename: nil, content_type: nil, external_link: true
-      assert blob.is_webpage?
-      assert_equal 'text/html', blob.content_type
-    end
+    mock_remote_file "#{Rails.root}/test/fixtures/files/html_file.html", 'http://webpage.com', 'Content-Type' => 'text/html'
+    blob = ContentBlob.create url: 'http://webpage.com', original_filename: nil, content_type: nil, external_link: true
+    assert blob.is_webpage?
+    assert_equal 'text/html', blob.content_type
   end
 
   test 'detectes webpage if content-type includes charset info' do
-    as_not_virtualliver do
-      mock_remote_file "#{Rails.root}/test/fixtures/files/html_file.html", 'http://webpage.com', 'Content-Type' => 'text/html; charset=ascii'
-      blob = ContentBlob.create url: 'http://webpage.com', original_filename: nil, content_type: nil, external_link: true
-      assert blob.is_webpage?
-      assert_equal 'text/html', blob.content_type
-    end
+    mock_remote_file "#{Rails.root}/test/fixtures/files/html_file.html", 'http://webpage.com', 'Content-Type' => 'text/html; charset=ascii'
+    blob = ContentBlob.create url: 'http://webpage.com', original_filename: nil, content_type: nil, external_link: true
+    assert blob.is_webpage?
+    assert_equal 'text/html', blob.content_type
   end
 
   test 'only overrides url content-type if not already known' do
-    as_not_virtualliver do
-      mock_remote_file "#{Rails.root}/test/fixtures/files/html_file.html", 'http://webpage.com', 'Content-Type' => 'text/html'
-      mock_remote_file "#{Rails.root}/test/fixtures/files/file_picture.png", 'http://webpage.com/piccy.png', 'Content-Type' => 'image/png'
+    mock_remote_file "#{Rails.root}/test/fixtures/files/html_file.html", 'http://webpage.com', 'Content-Type' => 'text/html'
+    mock_remote_file "#{Rails.root}/test/fixtures/files/file_picture.png", 'http://webpage.com/piccy.png', 'Content-Type' => 'image/png'
 
-      blob = ContentBlob.create url: 'http://webpage.com', original_filename: nil, content_type: nil, external_link: true
-      assert_equal 'text/html', blob.content_type
+    blob = ContentBlob.create url: 'http://webpage.com', original_filename: nil, content_type: nil, external_link: true
+    assert_equal 'text/html', blob.content_type
 
-      blob = ContentBlob.create url: 'http://webpage.com/piccy.png', original_filename: nil, content_type: nil
-      assert_equal 'image/png', blob.content_type
+    blob = ContentBlob.create url: 'http://webpage.com/piccy.png', original_filename: nil, content_type: nil
+    assert_equal 'image/png', blob.content_type
 
-      blob = ContentBlob.create url: 'http://webpage.com/piccy.png', original_filename: nil, content_type: 'application/pdf'
-      assert_equal 'application/pdf', blob.content_type
-    end
+    blob = ContentBlob.create url: 'http://webpage.com/piccy.png', original_filename: nil, content_type: 'application/pdf'
+    assert_equal 'application/pdf', blob.content_type
   end
 
   test "detects it isn't a webpage" do
-    as_not_virtualliver do
-      mock_remote_file "#{Rails.root}/test/fixtures/files/file_picture.png", 'http://webpage.com/piccy.png', 'Content-Type' => 'image/png'
-      blob = ContentBlob.create url: 'http://webpage.com/piccy.png', original_filename: nil, content_type: nil
-      refute blob.is_webpage?
-      assert_equal 'image/png', blob.content_type
-    end
+    mock_remote_file "#{Rails.root}/test/fixtures/files/file_picture.png", 'http://webpage.com/piccy.png', 'Content-Type' => 'image/png'
+    blob = ContentBlob.create url: 'http://webpage.com/piccy.png', original_filename: nil, content_type: nil
+    refute blob.is_webpage?
+    assert_equal 'image/png', blob.content_type
   end
 
   test 'handles an unavailable url when checking for a webpage' do
@@ -114,6 +106,29 @@ class ContentBlobTest < ActiveSupport::TestCase
   def test_cache_key
     blob = Factory :rightfield_content_blob
     assert_equal "content_blobs/#{blob.id}-ffd634ac7564083ab7b66bc3eb2053cbc3d608f5", blob.cache_key
+  end
+
+  def test_cache_url
+    blob = Factory :url_content_blob
+    assert_equal "content_blobs/#{blob.id}--5891ceaaba77a89b06e4afb5d914fe716840765e", blob.cache_key
+  end
+
+  def test_cache_key_does_change
+    blob = Factory :rightfield_content_blob
+    assert_equal "content_blobs/#{blob.id}-ffd634ac7564083ab7b66bc3eb2053cbc3d608f5", blob.cache_key
+    blob2 = Factory :rightfield_content_blob
+    assert_equal "content_blobs/#{blob2.id}-ffd634ac7564083ab7b66bc3eb2053cbc3d608f5", blob2.cache_key
+    blob3 =  Factory :teusink_model_content_blob
+    assert_not_equal "content_blobs/#{blob3.id}-ffd634ac7564083ab7b66bc3eb2053cbc3d608f5", blob2.cache_key
+  end
+
+  def test_cache_key_url_does_change
+    blob = Factory :url_content_blob
+    assert_equal "content_blobs/#{blob.id}--5891ceaaba77a89b06e4afb5d914fe716840765e", blob.cache_key
+    blob.url = "http://bbc.co.uk"
+    assert_not_equal "content_blobs/#{blob.id}--5891ceaaba77a89b06e4afb5d914fe716840765e", blob.cache_key
+    blob2 =  Factory :url_content_blob
+    assert_not_equal "content_blobs/#{blob.id}--5891ceaaba77a89b06e4afb5d914fe716840765e", blob2.cache_key
   end
 
   def test_uuid_doesnt_change
@@ -501,7 +516,7 @@ class ContentBlobTest < ActiveSupport::TestCase
 
     content = File.open(content_blob.filepath('txt'), 'rb').read
 
-    assert content.mb_chars.normalize.include?('This is a rtf format')
+    assert content.mb_chars.unicode_normalize(:nfd).include?('This is a rtf format')
   end
 
   test 'convert_office should convert txt to pdf' do
@@ -992,5 +1007,11 @@ class ContentBlobTest < ActiveSupport::TestCase
     assert_nothing_raised do
       ContentBlob.new.destroy
     end
+  end
+
+  test 'is_image_convertable?' do
+    assert Factory(:image_content_blob).is_image_convertable?
+    refute Factory(:svg_content_blob).is_image_convertable?
+    refute Factory(:pdf_content_blob).is_image_convertable?
   end
 end

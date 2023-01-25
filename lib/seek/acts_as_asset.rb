@@ -23,12 +23,15 @@ module Seek
       is_asset? && is_downloadable?
     end
 
+    def have_misc_links?
+      self.class.have_misc_links?
+    end
+
     module ClassMethods
       def acts_as_asset
         attr_accessor :parent_name
         include Seek::Taggable
 
-        acts_as_scalable
         acts_as_authorized
         acts_as_uniquely_identifiable
         acts_as_favouritable
@@ -37,7 +40,6 @@ module Seek
         title_trimmer
 
         attr_writer :original_filename, :content_type
-        does_not_require_can_edit :last_used_at
 
         validates :title, presence: true
         validates :title, length: { maximum: 255 }, unless: -> { is_a?(Publication) || is_a?(StudyhubResource)}
@@ -61,6 +63,10 @@ module Seek
 
       def is_asset?
         include?(Seek::ActsAsAsset::InstanceMethods)
+      end
+
+      def have_misc_links?
+        include?(Seek::ActsAsHavingMiscLinks::InstanceMethods)
       end
     end
 
@@ -94,11 +100,6 @@ module Seek
       include Seek::ActsAsAsset::Relationships::InstanceMethods
       include Seek::ActsAsAsset::Folders::InstanceMethods
       include Seek::ResearchObjects::Packaging
-
-      # sets the last_used_at time to the current time
-      def just_used
-        update_column(:last_used_at, Time.now)
-      end
 
       # whether a new version is allowed for this asset.
       # for example if it has come from openbis or has extracted samples then it is not allowed

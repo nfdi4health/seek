@@ -3,22 +3,27 @@ module Seek
     class RendererFactory
       include Singleton
 
-      def renderer(content_blob)
-        detect_renderer(content_blob) || Seek::Renderers::BlankRenderer.new
+      def renderer(blob, url_options: {})
+        renderer_class = cache.fetch(blob.cache_key) { detect_renderer(blob).name }.constantize
+
+        renderer_class.new(blob, url_options: url_options)
       end
 
       private
 
-      def detect_renderer(content_blob)
-        type = renderer_instances.detect do |type|
-          type.new(content_blob).can_render?
-        end
-        type.new(content_blob) if type
+      def cache
+        @cache ||= ActiveSupport::Cache::MemoryStore.new(size: 1.megabytes)
       end
 
+      def detect_renderer(blob)
+        renderer_instances.detect do |type|
+          type.new(blob).can_render?
+        end
+      end
+
+      # Ordered list of Renderer classes. More generic renderers appear last.
       def renderer_instances
-        # Seek::Renderers::Renderer.descendants
-        [Seek::Renderers::SlideshareRenderer, Seek::Renderers::YoutubeRenderer]
+        [SlideshareRenderer, YoutubeRenderer, MarkdownRenderer, NotebookRenderer, TextRenderer, PdfRenderer, ImageRenderer, BlankRenderer]
       end
     end
   end

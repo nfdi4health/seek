@@ -7,7 +7,7 @@
     <label>Sample type: </label> <%= link_to(h(@sample.sample_type.title), @sample.sample_type) %>
     <% if @sample.new_record? %>
       <span style="font-size:smaller">
-        (<%= link_to('change', select_sample_types_path) %>)
+        (<%= link_to('change', select_sample_types_path(act: :create)) %>)
       </span>
     <% end %>
     <%= f.hidden_field(:sample_type_id) %>
@@ -19,7 +19,7 @@
 
   <div id="sample_extra_details">
     <% if show_form_manage_specific_attributes? && @sample.can_manage? -%>
-      <%= render :partial => "projects/project_selector", :locals => { :resource => @sample,:allow_nil=> false} %>
+      <%= render :partial => "projects/project_selector", :locals => { :resource => @sample } %>
       <%= render :partial => "assets/asset_form_bottom", :locals=>{:f=>f,attribution_enable:false,show_publications:false,sharing_link:false} %>
     <% end %>
   </div>

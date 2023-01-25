@@ -24,7 +24,7 @@ module CountryCodes
 
   def self.code(country)
     return nil if country.nil?
-    ISO3166::Country.find_country_by_name(country)&.alpha2
+    ISO3166::Country.find_country_by_any_name(country)&.alpha2
   end
 
   def self.valid_code?(code)

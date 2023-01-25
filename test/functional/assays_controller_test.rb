@@ -4,7 +4,6 @@ class AssaysControllerTest < ActionController::TestCase
   fixtures :all
 
   include AuthenticatedTestHelper
-  include RestTestCases
   include SharingFormTestHelper
   include RdfTestCases
   include GeneralAuthorizationTestCases
@@ -12,21 +11,6 @@ class AssaysControllerTest < ActionController::TestCase
 
   def setup
     login_as(:quentin)
-  end
-
-  def rest_api_test_object
-    @object = Factory(:experimental_assay, policy: Factory(:public_policy))
-  end
-
-  test "shouldn't show unauthorized assays" do
-    login_as Factory(:user)
-    hidden = Factory(:experimental_assay, policy: Factory(:private_policy)) # ensure at least one hidden assay exists
-    get :index, params: { page: 'all', format: 'xml' }
-    assert_response :success
-    assert_equal assigns(:assays).sort_by(&:id),
-                 assigns(:assays).authorized_for('view', users(:aaron)).sort_by(&:id),
-                 "#{t('assays.assay').downcase.pluralize} haven't been authorized"
-    assert !assigns(:assays).include?(hidden)
   end
 
   def test_title
@@ -565,16 +549,17 @@ class AssaysControllerTest < ActionController::TestCase
   end
 
   test 'should not delete assay with publication' do
-    login_as(:model_owner)
-    a = assays(:assay_with_a_publication)
+    login_as(Factory(:user))
+    one_assay_with_publication = Factory :assay, contributor: User.current_user.person, publications: [Factory(:publication)]
+
     assert_no_difference('ActivityLog.count') do
       assert_no_difference('Assay.count') do
-        delete :destroy, params: { id: a }
+        delete :destroy, params: { id: one_assay_with_publication.id }
       end
     end
 
     assert flash[:error]
-    assert_redirected_to a
+    assert_redirected_to one_assay_with_publication
   end
 
   test 'should not delete assay with sops' do
@@ -1255,40 +1240,6 @@ class AssaysControllerTest < ActionController::TestCase
     end
   end
 
-  test 'faceted browsing config for Assay' do
-    Factory(:assay, policy: Factory(:public_policy))
-    with_config_value :faceted_browsing_enabled, true do
-      get :index, params: { user_enable_facet: 'true' }
-      assert_select "div[data-ex-facet-class='TextSearch']", count: 1
-      assert_select "div[data-ex-role='facet'][data-ex-expression='.organism']", count: 1
-      assert_select "div[data-ex-role='facet'][data-ex-expression='.assay_type'][data-ex-facet-class='Exhibit.HierarchicalFacet']", count: 1
-      assert_select "div[data-ex-role='facet'][data-ex-expression='.technology_type'][data-ex-facet-class='Exhibit.HierarchicalFacet']", count: 1
-      assert_select "div[data-ex-role='facet'][data-ex-expression='.project']", count: 1
-      assert_select "div[data-ex-role='facet'][data-ex-expression='.for_test']", count: 0
-    end
-  end
-
-  test 'content config for Assay' do
-    with_config_value :faceted_browsing_enabled, true do
-      get :index, params: { user_enable_facet: 'true' }
-      assert_select "div[data-ex-role='exhibit-view'][data-ex-label='Tiles'][data-ex-paginate='true']", count: 1
-    end
-  end
-
-  test 'show only authorized items for faceted browsing' do
-    with_config_value :faceted_browsing_enabled, true do
-      assay1 = Factory(:assay, policy: Factory(:public_policy))
-      assay2 = Factory(:assay, policy: Factory(:private_policy))
-      assert assay1.can_view?
-      assert !assay2.can_view?
-      @request.env['HTTP_REFERER'] = '/assays/items_for_result'
-      post :items_for_result, xhr: true, params: { items: "Assay_#{assay1.id},Assay_#{assay2.id}" }
-      items_for_result = ActiveSupport::JSON.decode(@response.body)['items_for_result']
-      assert items_for_result.include?(assay1.title)
-      assert !items_for_result.include?(assay2.title)
-    end
-  end
-
   test 'should add creators' do
     assay = Factory(:assay, policy: Factory(:public_policy))
     creator = Factory(:person)
@@ -1429,14 +1380,6 @@ class AssaysControllerTest < ActionController::TestCase
     assert_response :success
     assert_select 'a[href=?]', edit_assay_path, count: 1 # Can manage
     assert_select 'a[href=?]', assay_nels_path(assay_id: assay.id), count: 0 # But not browse NeLS
-  end
-
-  def edit_max_object(assay)
-    add_tags_to_test_object(assay)
-    add_creator_to_test_object(assay)
-
-    org = Factory(:organism)
-    assay.associate_organism(org)
   end
 
   test 'can delete an assay with subscriptions' do
@@ -1915,6 +1858,67 @@ class AssaysControllerTest < ActionController::TestCase
       get :show, params: { id: assay.id }
       assert_select 'ul#item-admin-menu li a',text: /add new document/i, count:0
     end
+  end
+
+  test 'last updated by - content' do
+    person1 = Factory(:person)
+    person2 = Factory(:person)
+    a = Factory :assay, policy: Factory(:public_policy), created_at: 15.minute.ago, contributor: person1
+    Factory :activity_log, activity_loggable: a, action: 'create', created_at: 15.minute.ago, culprit: person1
+    login_as(person1)
+    get :show, params: { id: a.id }
+    assert_response :success
+    assert_select 'span.updated_last_by a', false, 'Last editor should not be shown just after creation'
+    Factory :activity_log, activity_loggable: a, action: 'update', created_at: 10.minute.ago, culprit: person1
+    get :show, params: { id: a.id }
+    assert_response :success
+    assert_select 'span.updated_last_by a', person1.name
+    assert_select 'span.updated_last_by a[href=?]', person_path(person1)
+    Factory :activity_log, activity_loggable: a, action: 'update', created_at: 5.minute.ago, culprit: person1.user
+    get :show, params: { id: a.id }
+    assert_response :success
+    assert_select 'span.updated_last_by a', person1.name
+    assert_select 'span.updated_last_by a[href=?]', person_path(person1)
+    Factory :activity_log, activity_loggable: a, action: 'update', created_at: 1.minute.ago, culprit: person2
+    get :show, params: { id: a.id }
+    assert_response :success
+    assert_select 'span.updated_last_by a', person2.name, 'Correct last editor is being shown'
+    assert_select 'span.updated_last_by a[href=?]', person_path(person2)
+  end
+
+  test 'last updated by - only shown to members' do
+    person1 = Factory(:person)
+    person2 = Factory(:person)
+    a = Factory :assay, policy: Factory(:public_policy), created_at: 15.minute.ago, contributor: person1
+    Factory :activity_log, activity_loggable: a, action: 'create', created_at: 15.minute.ago, culprit: person1
+    Factory :activity_log, activity_loggable: a, action: 'update', created_at: 10.minute.ago, culprit: person1
+    login_as(person1)
+    get :show, params: { id: a.id }
+    assert_response :success
+    assert_select 'span.updated_last_by a', person1.name, 'Last editor should be visible to member'
+    login_as(person2)
+    get :show, params: { id: a.id }
+    assert_response :success, 'Should render ok with non-member user'
+    assert_select 'span.updated_last_by a', false, 'Last editor should not be visible to non-member user'
+    logout
+    get :show, params: { id: a.id }
+    assert_response :success, 'Should render ok without user'
+    assert_select 'span.updated_last_by a', false, 'Last editor should not be visible to public'
+    login_as(person1)
+  end
+
+  test 'last updated by - deleted user' do
+    person1 = Factory(:person)
+    person2 = Factory(:person)
+    a = Factory :assay, policy: Factory(:public_policy), created_at: 15.minute.ago, contributor: person1
+    Factory :activity_log, activity_loggable: a, action: 'create', created_at: 15.minute.ago, culprit: person1
+    Factory :activity_log, activity_loggable: a, action: 'update', created_at: 10.minute.ago, culprit: person1
+    Factory :activity_log, activity_loggable: a, action: 'update', created_at: 1.minute.ago, culprit: person2
+    login_as(person1)
+    person2.delete
+    get :show, params: { id: a.id }
+    assert_response :success
+    assert_select 'span.updated_last_by a', false, 'Last editor should not be shown if editor user has been deleted'
   end
 
 end

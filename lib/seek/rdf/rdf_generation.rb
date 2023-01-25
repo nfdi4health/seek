@@ -104,7 +104,7 @@ module Seek
       end
 
       def queue_rdf_generation(force = false, refresh_dependents = true)
-        unless !force && (saved_changes.keys - %w[updated_at last_used_at]).empty?
+        unless !force && (saved_changes.keys - ['updated_at']).empty?
           RdfGenerationQueue.enqueue(self, refresh_dependents: refresh_dependents)
         end
       end
@@ -126,7 +126,7 @@ module Seek
                      data_file_masters sop_masters model_masters
                      assets
                      assays studies investigations
-                     institutions creators owners owner contributors contributor projects events presentations compounds organisms strains]
+                     institutions creators owners owner contributors contributor projects events presentations organisms strains]
         methods.each do |method|
           next unless respond_to?(method)
           deps = Array(send(method))

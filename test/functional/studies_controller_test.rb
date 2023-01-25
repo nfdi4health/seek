@@ -4,17 +4,12 @@ class StudiesControllerTest < ActionController::TestCase
   fixtures :all
 
   include AuthenticatedTestHelper
-  include RestTestCases
   include SharingFormTestHelper
   include RdfTestCases
   include GeneralAuthorizationTestCases
 
   def setup
     login_as Factory(:admin).user
-  end
-
-  def rest_api_test_object
-    @object = Factory :study, policy: Factory(:public_policy)
   end
   
   test 'should get index' do
@@ -493,10 +488,6 @@ class StudiesControllerTest < ActionController::TestCase
     end
   end
 
-  def edit_max_object(study)    
-    add_creator_to_test_object(study)
-  end
-
   test 'can delete a study with subscriptions' do
     study = Factory(:study, policy: Factory(:public_policy, access_type: Policy::VISIBLE))
     p = Factory(:person)
@@ -838,6 +829,38 @@ class StudiesControllerTest < ActionController::TestCase
     assert_equal 'name(name)',cm.get_attribute_value('name(name)')
   end
 
+  test 'create a study with custom metadata cv type' do
+    cmt = Factory(:study_custom_metadata_type_with_cv_and_cv_list_type)
+    login_as(Factory(:person))
+
+    assert_difference('Study.count') do
+      investigation = Factory(:investigation,projects:User.current_user.person.projects,contributor:User.current_user.person)
+      study_attributes = { title: 'test', investigation_id: investigation.id }
+      cm_attributes = {custom_metadata_attributes:{custom_metadata_type_id: cmt.id,
+                                                   data:{
+                                                     "apple name":"Newton's Apple",
+                                                     "apple list":['Granny Smith','Bramley'],
+                                                     "apple controlled vocab": 'Granny Smith'}}}
+
+      put :create, params: { study: study_attributes.merge(cm_attributes), sharing: valid_sharing }
+    end
+
+    assert study=assigns(:study)
+
+    assert cm = study.custom_metadata
+
+    assert_equal cmt, cm.custom_metadata_type
+    assert_equal "Newton's Apple",cm.get_attribute_value('apple name')
+    assert_equal 'Granny Smith',cm.get_attribute_value('apple controlled vocab')
+    assert_equal ['Granny Smith','Bramley'],cm.get_attribute_value('apple list')
+
+    pp get :show, params:{id:study}
+    get :show, params:{id:study}
+    assert_response :success
+
+    assert_select 'p',text:/Granny Smith/, count:2
+  end
+
   test 'experimentalists only shown if set' do
     person = Factory(:person)
     login_as(person)
@@ -979,5 +1002,47 @@ class StudiesControllerTest < ActionController::TestCase
     assert_select 'a[href=?]',
                   order_assays_study_path(study), count: 0
   end
- 
+
+  test 'sample type studies through nested routing' do
+    person = Factory(:person)
+    login_as(person)
+    assert_routing 'sample_types/2/studies', controller: 'studies', action: 'index', sample_type_id: '2'
+    study = Factory(:study, contributor: person)
+    study2 = Factory(:study, contributor: person)
+    sample_type = Factory(:patient_sample_type, studies: [study], contributor: person)
+
+    assert_equal [study], sample_type.studies
+    study.reload
+    assert_equal [sample_type], study.sample_types
+
+    get :index, params: { sample_type_id: sample_type.id }
+
+    assert_response :success
+    assert_select 'div.list_item_title' do
+      assert_select 'a[href=?]', study_path(study), text: study.title
+      assert_select 'a[href=?]', study_path(study2), text: study2.title, count: 0
+    end
+  end
+
+  test 'shows "New Investigation" button if no investigations available' do
+    Investigation.delete_all
+    person = Factory(:person)
+    login_as(person)
+    assert Investigation.authorized_for('view', person.user).none?
+
+    get :new
+
+    assert_select 'a.btn[href=?]', new_investigation_path, count: 1
+  end
+
+  test 'does not show "New Investigation" button if investigations available' do
+    person = Factory(:person)
+    login_as(person)
+    Factory(:investigation, contributor: person)
+    assert Investigation.authorized_for('view', person.user).any?
+
+    get :new
+
+    assert_select 'a.btn[href=?]', new_investigation_path, count: 0
+  end
 end

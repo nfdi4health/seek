@@ -2,11 +2,15 @@ module Seek
   module Renderers
     class SlideshareRenderer < BlobRenderer
       def can_render?
-        content_blob && content_blob.url && is_slideshare_url?(content_blob.url)
+        blob.url && is_slideshare_url?(blob.url)
+      end
+
+      def external_embed?
+        true
       end
 
       def render_content
-        api_url = "http://www.slideshare.net/api/oembed/2?url=#{content_blob.url}&format=json"
+        api_url = "http://www.slideshare.net/api/oembed/2?url=#{blob.url}&format=json"
         json = JSON.parse(RestClient.get(api_url))
         json['html']
       end

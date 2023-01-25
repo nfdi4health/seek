@@ -9,7 +9,8 @@ class UtilTest < ActiveSupport::TestCase
 
   test 'creatable types' do
     types = Seek::Util.user_creatable_types
-    expected = [Collection, DataFile, Document, Model, Node, Presentation, Publication, Sample, Sop, Assay, Investigation, Study, Event, SampleType, Strain, Workflow, StudyhubResource]
+    # How to enable Placeholder?
+    expected = [Collection, DataFile, Document, FileTemplate, Model, Placeholder, Presentation, Publication, Sample, Sop, Assay, Investigation, Study, Event, SampleType, Strain, Workflow, StudyhubResource, Template]
 
     # first as strings for more readable failed assertion message
     assert_equal expected.map(&:to_s).sort, types.map(&:to_s).sort
@@ -19,20 +20,21 @@ class UtilTest < ActiveSupport::TestCase
   end
 
   test 'authorized types' do
-    expected = [Assay, Collection, DataFile, Document, Event, Investigation, Model, Node, Presentation, Publication, Sample, Sop, Strain, Study, Workflow, StudyhubResource].map(&:name).sort
+    # How to enable Placeholder?
+    expected = [Assay, Collection, DataFile, Document, Event, FileTemplate, Investigation, Model, Placeholder, Presentation, Publication, Sample, Sop, Strain, Study, Workflow, StudyhubResource, Template].map(&:name).sort
     actual = Seek::Util.authorized_types.map(&:name).sort
     assert_equal expected, actual
   end
 
   test 'rdf capable types' do
     types = Seek::Util.rdf_capable_types
-    expected = %w[Assay Compound DataFile Investigation Model Organism Person Programme Project Publication Sop Strain Study]
+    expected = %w[Assay DataFile Investigation Model Organism Person Programme Project Publication Sop Strain Study]
     assert_equal expected, types.collect(&:name).sort
   end
 
   test 'searchable types' do
     types = Seek::Util.searchable_types
-    expected = [Assay, Collection, DataFile, Document, Event, HumanDisease, Institution, Investigation, Model, Node, Organism, Person, Presentation, Programme, Project, Publication, Sample, SampleType, Sop, Strain, Study, Workflow, StudyhubResource]
+    expected = [Assay, Collection, DataFile, Document, Event, FileTemplate, HumanDisease, Institution, Investigation, Model, Organism, Person, Placeholder, Presentation, Programme, Project, Publication, Sample, SampleType, Sop, Strain, Study, Workflow, StudyhubResource, Template]
 
     # first as strings for more readable failed assertion message
     assert_equal expected.map(&:to_s).sort, types.map(&:to_s).sort
@@ -69,7 +71,7 @@ class UtilTest < ActiveSupport::TestCase
   test 'doiable asset types' do
     types = Seek::Util.doiable_asset_types
 
-    expected = [DataFile, Document, Model, Sop, Investigation, Study, Assay, Node, Workflow]
+    expected = [DataFile, Document, FileTemplate, Model, Sop, Investigation, Study, Assay, Workflow]
 
     # first as strings for more readable failed assertion message
     assert_equal expected.map(&:to_s).sort, types.map(&:to_s).sort
@@ -92,12 +94,6 @@ class UtilTest < ActiveSupport::TestCase
               assert Seek::Util.asset_types.include?(Workflow)
               assert Seek::Util.user_creatable_types.include?(Workflow)
               assert Seek::Util.searchable_types.include?(Workflow)
-
-              assert Seek::Util.persistent_classes.include?(Node)
-              assert Seek::Util.authorized_types.include?(Node)
-              assert Seek::Util.asset_types.include?(Node)
-              assert Seek::Util.user_creatable_types.include?(Node)
-              assert Seek::Util.searchable_types.include?(Node)
 
               assert Seek::Util.persistent_classes.include?(Event)
               assert Seek::Util.authorized_types.include?(Event)
@@ -126,12 +122,6 @@ class UtilTest < ActiveSupport::TestCase
                 refute Seek::Util.asset_types.include?(Workflow)
                 refute Seek::Util.user_creatable_types.include?(Workflow)
                 refute Seek::Util.searchable_types.include?(Workflow)
-
-                refute Seek::Util.persistent_classes.include?(Node)
-                refute Seek::Util.authorized_types.include?(Node)
-                refute Seek::Util.asset_types.include?(Node)
-                refute Seek::Util.user_creatable_types.include?(Node)
-                refute Seek::Util.searchable_types.include?(Node)
               end
 
               with_config_value :events_enabled, false do

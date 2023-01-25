@@ -10,6 +10,8 @@ class SampleType < ApplicationRecord
 
   include Seek::ActsAsAsset::Searching
   include Seek::Search::BackgroundReindexing
+  include Seek::Stats::ActivityCounts
+  include Seek::Creators
 
   include Seek::ProjectAssociation
 
@@ -26,14 +28,20 @@ class SampleType < ApplicationRecord
 
   has_many :samples, inverse_of: :sample_type
 
+  has_filter :contributor
+
   has_many :sample_attributes, -> { order(:pos) }, inverse_of: :sample_type, dependent: :destroy, after_add: :detect_link_back_to_self
   alias_method :metadata_attributes, :sample_attributes
 
   has_many :linked_sample_attributes, class_name: 'SampleAttribute', foreign_key: 'linked_sample_type_id'
 
   belongs_to :contributor, class_name: 'Person'
+  belongs_to :isa_template, class_name: 'Template', foreign_key: 'template_id'
 
   has_many :assays
+  has_and_belongs_to_many :studies
+
+  scope :without_template, -> { where(template_id: nil) }
 
   validates :title, presence: true
   validates :title, length: { maximum: 255 }
@@ -59,6 +67,10 @@ class SampleType < ApplicationRecord
     [contributor]
   end
 
+  def related_templates
+    [isa_template].compact
+  end
+
   # refreshes existing samples following a change to the sample type. For example when changing the title field
   def refresh_samples
     Sample.record_timestamps = false
@@ -72,14 +84,6 @@ class SampleType < ApplicationRecord
       Sample.record_timestamps = true
       Sample.set_callback :save, :after, :queue_sample_type_update_job
     end
-  end
-
-  # Returns the columns to be shown on the table view for the resource
-  def columns_default
-    super + ['uploaded_template']
-  end
-  def columns_allowed
-    columns_default + []
   end
 
   # fixes inconsistencies following form submission that could cause validation errors
@@ -116,13 +120,24 @@ class SampleType < ApplicationRecord
       end.nil?
   end
 
-  def can_view?(user = User.current_user, referring_sample = nil)
-    project_membership = (user && user.person && (user.person.projects & projects).any?)
-    project_membership || public_samples? || check_referring_sample_permission(user, referring_sample)
+  def can_view?(user = User.current_user, referring_sample = nil, view_in_single_page = false)
+    return false if Seek::Config.project_single_page_advanced_enabled && template_id.present? && !view_in_single_page
+
+    project_membership = user&.person && (user.person.projects & projects).any?
+    is_creator = creators.include?(user&.person)
+    project_membership || public_samples? || is_creator || check_referring_sample_permission(user, referring_sample)
   end
 
   def editing_constraints
     Seek::Samples::SampleTypeEditingConstraints.new(self)
+  end
+
+  def contributing_user
+    contributor&.user
+  end
+
+  def can_see_hidden_item?(user)
+    can_view?(user)
   end
 
   private

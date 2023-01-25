@@ -77,6 +77,10 @@ class SampleAttributeType < ApplicationRecord
     base_type == Seek::Samples::BaseType::CV
   end
 
+  def seek_cv_list?
+    base_type == Seek::Samples::BaseType::CV_LIST
+  end
+
   def seek_resource?
     base_type_handler.is_a?(Seek::Samples::AttributeTypeHandlers::SeekResourceAttributeTypeHandler)
   end
@@ -95,6 +99,10 @@ class SampleAttributeType < ApplicationRecord
 
   def seek_data_file?
     base_type == Seek::Samples::BaseType::SEEK_DATA_FILE
+  end
+
+  def ontology?
+    controlled_vocab? && title == 'Ontology'
   end
 
   def base_type_handler(additional_options = {})
